@@ -232,7 +232,8 @@ This function takes a long time(it makes many calls to lynx) to finish"
 	    (jquery-doc-insert-blocks example)
 	    (newline))))
 
-      (setq buffer-read-only)
+      (setq buffer-read-only t)
+      (goto-char (point-min))
       )))
 
 (defun jquery-doc (&optional jquery-method)
