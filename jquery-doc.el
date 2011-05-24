@@ -1,7 +1,6 @@
 ;; jQuery api documentation interface for emacs
 
 (require 'jquery-doc-data)
-;(jquery-doc-generate-data "/home/ananth/dotfiles/.emacs.d/js/jquery.api.xml")
 
 ;; xml helpers
 (defun xml-get-first-children (node name)
@@ -30,7 +29,8 @@
       (insert xml))
     (with-temp-buffer
       (call-process "lynx" temp-file t nil "-dump" "-stdin" "-nolist")
-      (setq dump (buffer-string)))
+      (setq dump
+	    (replace-regexp-in-string "^\s\s\s" "" (buffer-string))))
     (delete-file temp-file)
     dump))
 
@@ -49,21 +49,33 @@
 
 (defun jquery-doc-method-name (entry)
   (replace-regexp-in-string "^jQuery\." "$." (xml-get-attribute entry 'name)))
-
 (defun jquery-doc-desc (entry)
   (list (jquery-doc-format-node
 	 (xml-get-first-children entry 'desc))))
 
-(defun jquery-doc-signature (entry)
+
+(defun jquery-doc-argument-options-list (argument)
+  (let ((options (xml-get-children argument 'option)))
+    (if options
+	(mapcar (lambda (option)
+		  (list (xml-get-attribute option 'name)
+			(xml-get-attribute option 'type)
+			(xml-get-attribute option 'default)
+			(jquery-doc-lynx-dump
+			 (xml-string (xml-get-children argument 'desc)))))
+		options))))
+
+(defun jquery-doc-singatures (entry)
   (cons (jquery-doc-method-name entry)
 	(mapcar
 	 (lambda (signature)
 	   (mapcar
 	    (lambda (argument)
 	      (list (xml-get-attribute argument 'name)
-		    (xml-node-first-children
-		     (xml-get-first-children argument 'desc))
-		    (xml-get-attribute-or-nil argument 'optional)))
+		    (jquery-doc-lynx-dump
+		     (xml-string (xml-get-children argument 'desc)))
+		    (xml-get-attribute-or-nil argument 'optional)
+		    (jquery-doc-argument-options-list argument)))
 	    (xml-get-children signature 'argument)))
 	 (xml-get-children entry 'signature))))
 
@@ -81,7 +93,7 @@
 (defun jquery-doc-entry (entry)
   `(puthash ,(jquery-doc-method-name entry)
 	    '(("name" . ,(jquery-doc-method-name entry))
-	      ("signatures" . ,(jquery-doc-signature entry))
+	      ("signatures" . ,(jquery-doc-singatures entry))
 	      ("desc" . ,(jquery-doc-desc entry))
 	      ("longdesc" . ,(jquery-doc-longdesc entry))
 	      ("examples" . ,(jquery-doc-examples entry)))
@@ -100,7 +112,7 @@
   "Extracts data from jQuery api documentation xml dump and writes it
 to `jquery-doc-data.el' in some convenient format
 
-This function takes a long time(it makes many calls to lynx) to finish"
+This function takes long time(it makes many calls to lynx) to finish"
   (let* ((api (car (xml-parse-file file)))
 	 (entries (jquery-doc-entries api)))
     (with-temp-file "jquery-doc-data.el"
@@ -113,7 +125,6 @@ This function takes a long time(it makes many calls to lynx) to finish"
 	   (print `(push ,(jquery-doc-method-name entry) jquery-methods))
 	   (print (jquery-doc-entry entry)))
 	 (print `(provide 'jquery-doc-data)))))))
-
 
 (defgroup jquery-doc-faces nil
   "Customize the appearance of jQuery docs"
@@ -154,7 +165,7 @@ This function takes a long time(it makes many calls to lynx) to finish"
 (defun jquery-doc-insert-with-fill-region (text)
   "Insert text and justifies the text"
   (let ((beg (point)))
-    (insert text)
+    (insert (replace-regexp-in-string "\n+" "\n" text))
     (fill-region beg (point))))
 
 ;; argument accessors
@@ -164,6 +175,8 @@ This function takes a long time(it makes many calls to lynx) to finish"
   (cadr argument))
 (defun jquery-doc-argument-optional-p (argument)
   (caddr argument))
+(defun jquery-doc-argument-options (argument)
+  (cadddr argument))
 
 (defun jquery-doc-insert-header (text)
   (jquery-doc-insert-with-face text 'jquery-doc-header))
@@ -208,14 +221,35 @@ This function takes a long time(it makes many calls to lynx) to finish"
 	  (insert ")")
 	  (newline)
 	  (insert "\n")
+
+	  ;; arguments
 	  (dolist (argument signature)
 	    (jquery-doc-insert-argument
 	     (concat (jquery-doc-argument-name argument)
 		     " : "))
 	    (jquery-doc-insert-with-fill-region
 	     (jquery-doc-argument-desc argument))
-	    (newline))
-	  (insert "\n")))
+	    (insert "\n")
+	    (let ((options (jquery-doc-argument-options argument)))
+	      (when options
+	       (insert "options for ")
+	       (jquery-doc-insert-argument
+		(jquery-doc-argument-name argument))
+	       (newline)
+	       (dolist (option options)
+		 (let ((name (car option))
+		       (type (cadr option))
+		       (default (caddr option))
+		       (desc (cadddr option)))
+		   (jquery-doc-insert-argument name)
+		   (newline)
+		   (unless (equal "" default)
+		     (jquery-doc-insert-header "Default : ")
+		     (jquery-doc-insert-with-fill-region default)
+		     (newline))
+		   (jquery-doc-insert-header "Desc : ")
+		   (jquery-doc-insert-with-fill-region desc)
+		   (insert "\n")))))))
 
       ;; long descriptions
       (let ((long-desc (cdr (assoc "longdesc" method))))
@@ -233,8 +267,7 @@ This function takes a long time(it makes many calls to lynx) to finish"
 	    (newline))))
 
       (setq buffer-read-only t)
-      (goto-char (point-min))
-      )))
+      (goto-char (point-min))))))
 
 (defun jquery-doc (&optional jquery-method)
   "Displays the jquery doc in a buffer"
@@ -249,11 +282,11 @@ This function takes a long time(it makes many calls to lynx) to finish"
 				   nil
 				   t)))
 	 (buffer-name (format "*jQuery doc %s" method-name)))
-    (unless (get-buffer buffer-name)
+    (if (get-buffer buffer-name)
+	(display-buffer buffer-name)
       (let ((buffer (get-buffer-create buffer-name)))
 	(jquery-doc-insert buffer method-name)
-	(display-buffer buffer))
-      (display-buffer buffer-name))))
+	(display-buffer buffer)))))
 
 (defun jquery-documentation (method)
   "Returns the documentation for method as String"
