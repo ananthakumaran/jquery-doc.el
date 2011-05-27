@@ -3,18 +3,18 @@
 (require 'jquery-doc-data)
 
 ;; xml helpers
-(defun xml-get-first-children (node name)
+(defun jquery-doc-xml-get-first-children (node name)
   (car (xml-get-children node name)))
 
-(defun xml-node-first-children (node)
+(defun jquery-doc-xml-node-first-children (node)
   (car (xml-node-children node)))
 
-(defun xml-string (node)
-  (with-temp-buffer-as-string
+(defun jquery-doc-xml-string (node)
+  (jquery-doc-with-temp-buffer-as-string
     (xml-print node)))
 
 ;; utils
-(defmacro with-temp-buffer-as-string (&rest body)
+(defmacro jquery-doc-with-temp-buffer-as-string (&rest body)
   "Evaluate BODY inside a temp buffer and returns the buffer string."
   (declare (indent 0))
   `(with-temp-buffer
@@ -39,19 +39,19 @@
       (cons 'text "") ;; XXX remove this
     (let ((tag (xml-node-name node)))
       (cond ((memq tag '(code pre))
-	     (cons 'js (xml-node-first-children node)))
+	     (cons 'js (jquery-doc-xml-node-first-children node)))
 	    ((eq tag 'html)
-	     (cons 'html (xml-node-first-children node)))
+	     (cons 'html (jquery-doc-xml-node-first-children node)))
 	    ((eq tag 'css)
-	     (cons 'css (xml-node-first-children node)))
+	     (cons 'css (jquery-doc-xml-node-first-children node)))
 	    (t (cons 'text
-		     (jquery-doc-lynx-dump (xml-string (list node)))))))))
+		     (jquery-doc-lynx-dump (jquery-doc-xml-string (list node)))))))))
 
 (defun jquery-doc-method-name (entry)
   (replace-regexp-in-string "^jQuery\." "$." (xml-get-attribute entry 'name)))
 (defun jquery-doc-desc (entry)
   (list (jquery-doc-format-node
-	 (xml-get-first-children entry 'desc))))
+	 (jquery-doc-xml-get-first-children entry 'desc))))
 
 
 (defun jquery-doc-argument-options-list (argument)
@@ -62,7 +62,7 @@
 			(xml-get-attribute option 'type)
 			(xml-get-attribute option 'default)
 			(jquery-doc-lynx-dump
-			 (xml-string (xml-get-children argument 'desc)))))
+			 (jquery-doc-xml-string (xml-get-children argument 'desc)))))
 		options))))
 
 (defun jquery-doc-singatures (entry)
@@ -73,7 +73,7 @@
 	    (lambda (argument)
 	      (list (xml-get-attribute argument 'name)
 		    (jquery-doc-lynx-dump
-		     (xml-string (xml-get-children argument 'desc)))
+		     (jquery-doc-xml-string (xml-get-children argument 'desc)))
 		    (xml-get-attribute-or-nil argument 'optional)
 		    (jquery-doc-argument-options-list argument)))
 	    (xml-get-children signature 'argument)))
@@ -81,7 +81,7 @@
 
 (defun jquery-doc-longdesc (entry)
   (mapcar #'jquery-doc-format-node
-	  (xml-node-children (xml-get-first-children entry 'longdesc))))
+	  (xml-node-children (jquery-doc-xml-get-first-children entry 'longdesc))))
 
 (defun jquery-doc-examples (entry)
   (mapcar
@@ -120,9 +120,9 @@ This function takes long time(it makes many calls to lynx) to finish"
        (with-output-to-string
 	 (print `(setq jquery-doc-hash
 		       (make-hash-table :size 500 :test 'equal)))
-	 (print `(setq jquery-methods '()))
+	 (print `(setq jquery-doc-methods '()))
 	 (dolist (entry entries)
-	   (print `(push ,(jquery-doc-method-name entry) jquery-methods))
+	   (print `(push ,(jquery-doc-method-name entry) jquery-doc-methods))
 	   (print (jquery-doc-entry entry)))
 	 (print `(provide 'jquery-doc-data)))))))
 
@@ -143,7 +143,7 @@ This function takes long time(it makes many calls to lynx) to finish"
   :group 'jquery-doc-faces)
 
 ;; utils
-(defun insert-with-mode (mode text)
+(defun jquery-doc-insert-with-mode (mode text)
   "Applies the mode to the text and inserts it in the current buffer"
   (let ((temp-buffer (generate-new-buffer "*temp*")))
     (with-current-buffer temp-buffer
@@ -190,9 +190,9 @@ This function takes long time(it makes many calls to lynx) to finish"
 	  (block-str (cdr block)))
       (case block-type
 	('text (insert block-str))
-	('js (insert-with-mode #'javascript-mode block-str))
-	('css (insert-with-mode #'css-mode block-str))
-	('html (insert-with-mode #'html-mode block-str))))))
+	('js (jquery-doc-insert-with-mode #'javascript-mode block-str))
+	('css (jquery-doc-insert-with-mode #'css-mode block-str))
+	('html (jquery-doc-insert-with-mode #'html-mode block-str))))))
 
 (defun jquery-doc-insert (buffer method-name)
   (let ((method (gethash method-name jquery-doc-hash)))
@@ -278,7 +278,7 @@ This function takes long time(it makes many calls to lynx) to finish"
 	 (method-name (or jquery-method
 			  (funcall completing-read-func
 				   "jQuery doc: "
-				   jquery-methods
+				   jquery-doc-methods
 				   nil
 				   t)))
 	 (buffer-name (format "*jQuery doc %s" method-name)))
@@ -288,10 +288,10 @@ This function takes long time(it makes many calls to lynx) to finish"
 	(jquery-doc-insert buffer method-name)
 	(display-buffer buffer)))))
 
-(defun jquery-documentation (method)
+(defun jquery-doc-documentation (method)
   "Returns the documentation for method as String"
   (let ((method (substring-no-properties method)))
-    (with-temp-buffer-as-string
+    (jquery-doc-with-temp-buffer-as-string
       (jquery-doc-insert (current-buffer) method))))
 
 
@@ -304,9 +304,9 @@ This function takes long time(it makes many calls to lynx) to finish"
 (ac-define-prefix 'jquery-doc 'jquery-doc-ac-prefix)
 
 (ac-define-source jquery
-  '((candidates . jquery-methods)
+  '((candidates . jquery-doc-methods)
     (symbol . "f")
-    (document . jquery-documentation)
+    (document . jquery-doc-documentation)
     (prefix . jquery-doc)
     (cache)))
 

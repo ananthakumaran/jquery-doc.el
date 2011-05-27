@@ -1,9 +1,9 @@
 
 (setq jquery-doc-hash (make-hash-table :size 500 :test (quote equal)))
 
-(setq jquery-methods (quote nil))
+(setq jquery-doc-methods (quote nil))
 
-(push "deferred.pipe" jquery-methods)
+(push "deferred.pipe" jquery-doc-methods)
 
 (puthash "deferred.pipe" (quote (("name" . "deferred.pipe") ("signatures" "deferred.pipe" (("doneFilter" "An optional function that is called when the Deferred is resolved.
 
@@ -59,7 +59,7 @@ values as the original.
 	
 	") (text . ""))))) jquery-doc-hash)
 
-(push "deferred.always" jquery-methods)
+(push "deferred.always" jquery-doc-methods)
 
 (puthash "deferred.always" (quote (("name" . "deferred.always") ("signatures" "deferred.always" (("alwaysCallbacks" "A function, or array of functions, that is called when the Deferred is
 resolved or rejected.
@@ -85,7 +85,7 @@ error using the deferred.always() method.
 	} );
 	") (text . ""))))) jquery-doc-hash)
 
-(push "promise" jquery-methods)
+(push "promise" jquery-doc-methods)
 
 (puthash "promise" (quote (("name" . "promise") ("signatures" "promise" (("type" "The type of queue that needs to be observed.
 
@@ -177,7 +177,7 @@ method makes it possible to do this with jQuery collections):
 	
 	") (text . ""))))) jquery-doc-hash)
 
-(push "removeProp" jquery-methods)
+(push "removeProp" jquery-doc-methods)
 
 (puthash "removeProp" (quote (("name" . "removeProp") ("signatures" "removeProp" (("propertyName" "The name of the property to set.
 
@@ -215,7 +215,7 @@ completely and, once removed, cannot be added again to element. Use
 	
 	") (text . ""))))) jquery-doc-hash)
 
-(push "prop" jquery-methods)
+(push "prop" jquery-doc-methods)
 
 (puthash "prop" (quote (("name" . "prop") ("signatures" "prop" (("propertyName" "The name of the property to get.
 
@@ -274,7 +274,7 @@ value of the checked property.
 	<p></p>
 	") (text . ""))))) jquery-doc-hash)
 
-(push "prop" jquery-methods)
+(push "prop" jquery-doc-methods)
 
 (puthash "prop" (quote (("name" . "prop") ("signatures" "prop" (("propertyName" "The name of the property to set.
 
@@ -322,7 +322,7 @@ added again. See .removeProp() for more information.
 	  
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "$.ajaxPrefilter" jquery-methods)
+(push "$.ajaxPrefilter" jquery-doc-methods)
 
 (puthash "$.ajaxPrefilter" (quote (("name" . "$.ajaxPrefilter") ("signatures" "$.ajaxPrefilter" (("dataTypes" "An optional string containing one or more space-separated dataTypes
 
@@ -393,7 +393,7 @@ also that all the prefilters specifically attached to the script
 dataType would be applied to it.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "$.holdReady" jquery-methods)
+(push "$.holdReady" jquery-doc-methods)
 
 (puthash "$.holdReady" (quote (("name" . "$.holdReady") ("signatures" "$.holdReady" (("hold" "Indicates whether the ready hold is being requested or released
 
@@ -422,7 +422,7 @@ information.)
 	  });
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "$.hasData" jquery-methods)
+(push "$.hasData" jquery-doc-methods)
 
 (puthash "$.hasData" (quote (("name" . "$.hasData") ("signatures" "$.hasData" (("element" "A DOM element to be checked for data.
 
@@ -450,7 +450,7 @@ to the caller, creating one if no data object previously existed.
 	  });
 	  ") (text . "") (html . "<p>Results: </p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.now" jquery-methods)
+(push "$.now" jquery-doc-methods)
 
 (puthash "$.now" (quote (("name" . "$.now") ("signatures" "$.now" nil) ("desc" (text . "Return a number representing the current time.
 
@@ -459,7 +459,7 @@ expression (new Date).getTime().
 
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.promise" jquery-methods)
+(push "deferred.promise" jquery-doc-methods)
 
 (puthash "deferred.promise" (quote (("name" . "deferred.promise") ("signatures" "deferred.promise" (("target" "Object onto which the promise methods have to be attached
 
@@ -533,7 +533,7 @@ rejected state) from the first timeout action.
 	  }).hello( \"Karl\" ); // will alert \"Hello Karl\"
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "$.parseXML" jquery-methods)
+(push "$.parseXML" jquery-doc-methods)
 
 (puthash "$.parseXML" (quote (("name" . "$.parseXML") ("signatures" "$.parseXML" (("data" "a well-formed XML string to be parsed
 
@@ -567,7 +567,7 @@ title node.
 	  $( \"#anotherElement\" ).append( $title.text() );
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "$.when" jquery-methods)
+(push "$.when" jquery-doc-methods)
 
 (puthash "$.when" (quote (("name" . "$.when") ("signatures" "$.when" (("deferreds" "One or more Deferred objects, or plain JavaScript objects.
 
@@ -625,7 +625,7 @@ myFailure if either one has an error.
 	  .then(myFunc, myFailure);
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "deferred.resolveWith" jquery-methods)
+(push "deferred.resolveWith" jquery-doc-methods)
 
 (puthash "deferred.resolveWith" (quote (("name" . "deferred.resolveWith") ("signatures" "deferred.resolveWith" (("context" "Context passed to the doneCallbacks as the this object.
 
@@ -646,7 +646,7 @@ passed to the .resolve() call. For more information, see the
 documentation for Deferred object.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.rejectWith" jquery-methods)
+(push "deferred.rejectWith" jquery-doc-methods)
 
 (puthash "deferred.rejectWith" (quote (("name" . "deferred.rejectWith") ("signatures" "deferred.rejectWith" (("context" "Context passed to the failCallbacks as the this object.
 
@@ -667,7 +667,7 @@ that were passed to the .reject() call. For more information, see the
 documentation for Deferred object.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.fail" jquery-methods)
+(push "deferred.fail" jquery-doc-methods)
 
 (puthash "deferred.fail" (quote (("name" . "deferred.fail") ("signatures" "deferred.fail" (("failCallbacks" "A function, or array of functions, that are called when the Deferred is
 rejected.
@@ -696,7 +696,7 @@ the deferred.done() and deferred.fail() methods.
 	  .fail(function(){ alert(\"$.get failed!\"); });
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "deferred.done" jquery-methods)
+(push "deferred.done" jquery-doc-methods)
 
 (puthash "deferred.done" (quote (("name" . "deferred.done") ("signatures" "deferred.done" (("doneCallbacks" "A function, or array of functions, that are called when the Deferred is
 resolved.
@@ -759,7 +759,7 @@ number of callback functions:
 	  <p>Ready...</p>
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "deferred.then" jquery-methods)
+(push "deferred.then" jquery-doc-methods)
 
 (puthash "deferred.then" (quote (("name" . "deferred.then") ("signatures" "deferred.then" (("doneCallbacks" "A function, or array of functions, called when the Deferred is
 resolved.
@@ -790,7 +790,7 @@ from a Deferred object, we can attach handlers using the .then method.
 	  );
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "deferred.reject" jquery-methods)
+(push "deferred.reject" jquery-doc-methods)
 
 (puthash "deferred.reject" (quote (("name" . "deferred.reject") ("signatures" "deferred.reject" (("args" "Optional arguments that are passed to the failCallbacks.
 
@@ -809,7 +809,7 @@ that were passed to the .reject() call. For more information, see the
 documentation for Deferred object.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.isRejected" jquery-methods)
+(push "deferred.isRejected" jquery-doc-methods)
 
 (puthash "deferred.isRejected" (quote (("name" . "deferred.isRejected") ("signatures" "deferred.isRejected" nil) ("desc" (text . "Determine whether a Deferred object has been rejected.
 
@@ -825,7 +825,7 @@ Deferred has already been resolved even though you are inside code that
 intended to reject it.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.isResolved" jquery-methods)
+(push "deferred.isResolved" jquery-doc-methods)
 
 (puthash "deferred.isResolved" (quote (("name" . "deferred.isResolved") ("signatures" "deferred.isResolved" nil) ("desc" (text . "Determine whether a Deferred object has been resolved.
 
@@ -841,7 +841,7 @@ Deferred has already been resolved even though you are inside code that
 intended to reject it.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "deferred.resolve" jquery-methods)
+(push "deferred.resolve" jquery-doc-methods)
 
 (puthash "deferred.resolve" (quote (("name" . "deferred.resolve") ("signatures" "deferred.resolve" (("args" "Optional arguments that are passed to the doneCallbacks.
 
@@ -857,7 +857,7 @@ passed to the .resolve() call. For more information, see the
 documentation for Deferred object.
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "$.sub" jquery-methods)
+(push "$.sub" jquery-doc-methods)
 
 (puthash "$.sub" (quote (("name" . "$.sub") ("signatures" "$.sub" nil) ("desc" (text . "Creates a new copy of jQuery whose properties and methods can be
 modified without affecting the original jQuery object.
@@ -953,7 +953,7 @@ some examples.
 	  // Note: Calling just $(\"#main\").open() won't work as open doesn't exist!
 	  });") (text . ""))))) jquery-doc-hash)
 
-(push "fadeToggle" jquery-methods)
+(push "fadeToggle" jquery-doc-methods)
 
 (puthash "fadeToggle" (quote (("name" . "fadeToggle") ("signatures" "fadeToggle" (("duration" "A string or number determining how long the animation will run.
 
@@ -1004,7 +1004,7 @@ for 200 milliseconds, inserting a \"finished\" message upon completion.
 	  <div id=\"log\"></div>
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "$.type" jquery-methods)
+(push "$.type" jquery-doc-methods)
 
 (puthash "$.type" (quote (("name" . "$.type") ("signatures" "$.type" (("obj" "Object to get the internal JavaScript [[Class]] of.
 
@@ -1030,7 +1030,7 @@ an object. The [[Class]] is determined as follows:
 
 ") (text . "") (js . "$(\"b\").append( \"\" + jQuery.type(/test/) );") (text . "") (html . "Is it a RegExp? <b></b>") (text . ""))))) jquery-doc-hash)
 
-(push "$.isWindow" jquery-methods)
+(push "$.isWindow" jquery-doc-methods)
 
 (puthash "$.isWindow" (quote (("name" . "$.isWindow") ("signatures" "$.isWindow" (("obj" "Object to test whether or not it is a window.
 
@@ -1043,7 +1043,7 @@ iframe).
 
 ") (text . "") (js . "$(\"b\").append( \"\" + $.isWindow(window) );") (text . "") (html . "Is 'window' a window? <b></b>") (text . ""))))) jquery-doc-hash)
 
-(push "toggle" jquery-methods)
+(push "toggle" jquery-doc-methods)
 
 (puthash "toggle" (quote (("name" . "toggle") ("signatures" "toggle" (("handler(eventObject)" "A function to execute every even time the element is clicked.
 
@@ -1129,7 +1129,7 @@ called on the element.
 	  }
 	  );") (text . ""))))) jquery-doc-hash)
 
-(push "undelegate" jquery-methods)
+(push "undelegate" jquery-doc-methods)
 
 (puthash "undelegate" (quote (("name" . "undelegate") ("signatures" "undelegate" nil (("selector" "A selector which will be used to filter the event results.
 
@@ -1208,7 +1208,7 @@ as the third argument:
 	  
 	  $(\"form\").undelegate(\".whatever\");") (text . ""))))) jquery-doc-hash)
 
-(push "delegate" jquery-methods)
+(push "delegate" jquery-doc-methods)
 
 (puthash "delegate" (quote (("name" . "delegate") ("signatures" "delegate" (("selector" "A selector to filter the elements that trigger the event.
 
@@ -1298,7 +1298,7 @@ false:
 	  <button>Trigger custom event</button>
 	  <span style=\"display:none;\"></span>") (text . ""))))) jquery-doc-hash)
 
-(push "$.error" jquery-methods)
+(push "$.error" jquery-doc-methods)
 
 (puthash "$.error" (quote (("name" . "$.error") ("signatures" "$.error" (("message" "The message to send out.
 
@@ -1311,7 +1311,7 @@ messages.
 
 ") (text . "") (js . "jQuery.error = console.error;") (text . ""))))) jquery-doc-hash)
 
-(push "$.parseJSON" jquery-methods)
+(push "$.parseJSON" jquery-doc-methods)
 
 (puthash "$.parseJSON" (quote (("name" . "$.parseJSON") ("signatures" "$.parseJSON" (("json" "The JSON string to parse.
 
@@ -1333,7 +1333,7 @@ the string. For details on the JSON format, see http://json.org/.
 ") (text . "") (js . "var obj = jQuery.parseJSON('{\"name\":\"John\"}');
 	    alert( obj.name === \"John\" );") (text . ""))))) jquery-doc-hash)
 
-(push "$.proxy" jquery-methods)
+(push "$.proxy" jquery-doc-methods)
 
 (puthash "$.proxy" (quote (("name" . "$.proxy") ("signatures" "$.proxy" (("function" "The function whose context will be changed.
 
@@ -1386,7 +1386,7 @@ signature. Unbind the handler after first click.
 	    $(\"#test\").click( jQuery.proxy( obj, \"test\" ) );
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "focusout" jquery-methods)
+(push "focusout" jquery-doc-methods)
 
 (puthash "focusout" (quote (("name" . "focusout") ("signatures" "focusout" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -1438,7 +1438,7 @@ difference between the focusout count and the blur count.
 	    <div id=\"b\">blur fire</div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "focusin" jquery-methods)
+(push "focusin" jquery-doc-methods)
 
 (puthash "focusin" (quote (("name" . "focusin") ("signatures" "focusin" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -1467,7 +1467,7 @@ it supports event bubbling).
 	    ") (text . "") (html . "<p><input type=\"text\" /> <span>focusin fire</span></p>
 	    <p><input type=\"password\" /> <span>focusin fire</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "has" jquery-methods)
+(push "has" jquery-doc-methods)
 
 (puthash "has" (quote (("name" . "has") ("signatures" "has" (("selector" "A string containing a selector expression to match elements against.
 
@@ -1513,7 +1513,7 @@ only <li> that has a <ul> among its descendants.
 	    <ul><li>Does the UL contain an LI?</li></ul>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "$.contains" jquery-methods)
+(push "$.contains" jquery-doc-methods)
 
 (puthash "$.contains" (quote (("name" . "$.contains") ("signatures" "$.contains" (("container" "The DOM element that may contain the other element.
 
@@ -1526,7 +1526,7 @@ only <li> that has a <ul> among its descendants.
 ") (text . "") (js . "jQuery.contains(document.documentElement, document.body); // true
 	    jQuery.contains(document.body, document.documentElement); // false") (text . ""))))) jquery-doc-hash)
 
-(push "$.noop" jquery-methods)
+(push "$.noop" jquery-doc-methods)
 
 (puthash "$.noop" (quote (("name" . "$.noop") ("signatures" "$.noop" nil) ("desc" (text . "An empty function.
 
@@ -1538,7 +1538,7 @@ case that no callback is given, something like jQuery.noop could
 execute.
 ")) ("examples"))) jquery-doc-hash)
 
-(push "delay" jquery-methods)
+(push "delay" jquery-doc-methods)
 
 (puthash "delay" (quote (("name" . "delay") ("signatures" "delay" (("duration" "An integer indicating the number of milliseconds to delay execution of
 the next item in the queue.
@@ -1587,7 +1587,7 @@ showing it.
 	    <div class=\"second\"></div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "parentsUntil" jquery-methods)
+(push "parentsUntil" jquery-doc-methods)
 
 (puthash "parentsUntil" (quote (("name" . "parentsUntil") ("signatures" "parentsUntil" (("selector" "A string containing a selector expression to indicate where to stop
 matching ancestor elements.
@@ -1660,7 +1660,7 @@ and give them a red background color.
 	    <li class=\"item-iii\">III</li>
 	    </ul>") (text . ""))))) jquery-doc-hash)
 
-(push "prevUntil" jquery-methods)
+(push "prevUntil" jquery-doc-methods)
 
 (puthash "prevUntil" (quote (("name" . "prevUntil") ("signatures" "prevUntil" (("selector" "A string containing a selector expression to indicate where to stop
 matching preceding sibling elements.
@@ -1727,7 +1727,7 @@ after it until a preceding <dt>.
 	    <dd>definition 3-b</dd>
 	    </dl>") (text . ""))))) jquery-doc-hash)
 
-(push "nextUntil" jquery-methods)
+(push "nextUntil" jquery-doc-methods)
 
 (puthash "nextUntil" (quote (("name" . "nextUntil") ("signatures" "nextUntil" (("selector" "A string containing a selector expression to indicate where to stop
 matching following sibling elements.
@@ -1793,7 +1793,7 @@ give them a red background color.
 	    <dd>definition 3-b</dd>
 	    </dl>") (text . ""))))) jquery-doc-hash)
 
-(push "event.isImmediatePropagationStopped" jquery-methods)
+(push "event.isImmediatePropagationStopped" jquery-doc-methods)
 
 (puthash "event.isImmediatePropagationStopped" (quote (("name" . "event.isImmediatePropagationStopped") ("signatures" "event.isImmediatePropagationStopped" nil) ("desc" (text . "Returns whether event.stopImmediatePropagation() was ever called on
 this event object.
@@ -1825,7 +1825,7 @@ this event object.
 	    <div id=\"stop-log\"></div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "event.stopImmediatePropagation" jquery-methods)
+(push "event.stopImmediatePropagation" jquery-doc-methods)
 
 (puthash "event.stopImmediatePropagation" (quote (("name" . "event.stopImmediatePropagation") ("signatures" "event.stopImmediatePropagation" nil) ("desc" (text . "Keeps the rest of the handlers from being executed and prevents the
 event from bubbling up the DOM tree.
@@ -1857,7 +1857,7 @@ was ever called (on that event object).
 	    });") (text . "") (html . "<p>paragraph</p>
 	    <div>division</div>") (text . ""))))) jquery-doc-hash)
 
-(push "event.isPropagationStopped" jquery-methods)
+(push "event.isPropagationStopped" jquery-doc-methods)
 
 (puthash "event.isPropagationStopped" (quote (("name" . "event.isPropagationStopped") ("signatures" "event.isPropagationStopped" nil) ("desc" (text . "Returns whether event.stopPropagation() was ever called on this event
 object.
@@ -1889,7 +1889,7 @@ object.
 	    <div id=\"stop-log\"></div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "event.stopPropagation" jquery-methods)
+(push "event.stopPropagation" jquery-doc-methods)
 
 (puthash "event.stopPropagation" (quote (("name" . "event.stopPropagation") ("signatures" "event.stopPropagation" nil) ("desc" (text . "Prevents the event from bubbling up the DOM tree, preventing any parent
 handlers from being notified of the event.
@@ -1910,7 +1910,7 @@ running.
 	    // do something
 	    });  ") (text . ""))))) jquery-doc-hash)
 
-(push "event.isDefaultPrevented" jquery-methods)
+(push "event.isDefaultPrevented" jquery-doc-methods)
 
 (puthash "event.isDefaultPrevented" (quote (("name" . "event.isDefaultPrevented") ("signatures" "event.isDefaultPrevented" nil) ("desc" (text . "Returns whether event.preventDefault() was ever called on this event
 object.
@@ -1923,7 +1923,7 @@ object.
 	    alert( event.isDefaultPrevented() ); // true
 	    });  ") (text . ""))))) jquery-doc-hash)
 
-(push "event.preventDefault" jquery-methods)
+(push "event.preventDefault" jquery-doc-methods)
 
 (puthash "event.preventDefault" (quote (("name" . "event.preventDefault") ("signatures" "event.preventDefault" nil) ("desc" (text . "If this method is called, the default action of the event will not be
 triggered.
@@ -1945,7 +1945,7 @@ called by an event handler that was triggered by this event.
 	    <div id=\"log\"></div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "each" jquery-methods)
+(push "each" jquery-doc-methods)
 
 (puthash "each" (quote (("name" . "each") ("signatures" "each" (("function(index, Element)" "A function to execute for each matched element.
 
@@ -2048,7 +2048,7 @@ element, use the $(this) function, for example:
 	    <div></div>
 	    <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "pushStack" jquery-methods)
+(push "pushStack" jquery-doc-methods)
 
 (puthash "pushStack" (quote (("name" . "pushStack") ("signatures" "pushStack" (("elements" "An array of elements to push onto the stack and make into a new jQuery
 object.
@@ -2070,7 +2070,7 @@ serialization).
 	    .remove()
 	    .end();") (text . ""))))) jquery-doc-hash)
 
-(push "$.globalEval" jquery-methods)
+(push "$.globalEval" jquery-doc-methods)
 
 (puthash "$.globalEval" (quote (("name" . "$.globalEval") ("signatures" "$.globalEval" (("code" "The JavaScript code to execute.
 
@@ -2087,7 +2087,7 @@ loading external scripts dynamically).
 	    test();
 	    // newVar === true") (text . ""))))) jquery-doc-hash)
 
-(push "$.isXMLDoc" jquery-methods)
+(push "$.isXMLDoc" jquery-doc-methods)
 
 (puthash "$.isXMLDoc" (quote (("name" . "$.isXMLDoc") ("signatures" "$.isXMLDoc" (("node" "The DOM node that will be checked to see if itʼs in an XML document.
 
@@ -2099,7 +2099,7 @@ document).
 ") (text . "") (js . "jQuery.isXMLDoc(document) // false
 	    jQuery.isXMLDoc(document.body) // false") (text . ""))))) jquery-doc-hash)
 
-(push "$.removeData" jquery-methods)
+(push "$.removeData" jquery-doc-methods)
 
 (puthash "$.removeData" (quote (("name" . "$.removeData") ("signatures" "$.removeData" (("element" "A DOM element from which to remove data.
 
@@ -2132,7 +2132,7 @@ with no arguments, all values are removed.
 	    <div>value1 after removal: <span></span></div>
 	    <div>value2 after removal: <span></span></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.data" jquery-methods)
+(push "$.data" jquery-doc-methods)
 
 (puthash "$.data" (quote (("name" . "$.data") ("signatures" "$.data" (("element" "The DOM element to associate with the data.
 
@@ -2173,7 +2173,7 @@ to be attached via expando properties.
 	    <span></span>
 	    </div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.data" jquery-methods)
+(push "$.data" jquery-doc-methods)
 
 (puthash "$.data" (quote (("name" . "$.data") ("signatures" "$.data" (("element" "The DOM element to query for the data.
 
@@ -2245,7 +2245,7 @@ to be attached via expando properties.
 	    <button>Remove \"blah\" from the div</button>
 	    <p>The \"blah\" value of this div is <span>?</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.dequeue" jquery-methods)
+(push "$.dequeue" jquery-doc-methods)
 
 (puthash "$.dequeue" (quote (("name" . "$.dequeue") ("signatures" "$.dequeue" (("element" "A DOM element from which to remove and execute a queued function.
 
@@ -2277,7 +2277,7 @@ keep going.
 	    background-color:yellow; }
 	    div.red { background-color:red; }  ") (text . "") (html . "<button>Start</button>  <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.queue" jquery-methods)
+(push "$.queue" jquery-doc-methods)
 
 (puthash "$.queue" (quote (("name" . "$.queue") ("signatures" "$.queue" (("element" "A DOM element to inspect for an attached queue.
 
@@ -2313,7 +2313,7 @@ instead.
 	    <span></span>
 	    <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.queue" jquery-methods)
+(push "$.queue" jquery-doc-methods)
 
 (puthash "$.queue" (quote (("name" . "$.queue") ("signatures" "$.queue" (("element" "A DOM element where the array of queued functions is attached.
 
@@ -2398,7 +2398,7 @@ line executes.
 	    <button id=\"stop\">Stop</button>
 	    <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "clearQueue" jquery-methods)
+(push "clearQueue" jquery-doc-methods)
 
 (puthash "clearQueue" (quote (("name" . "clearQueue") ("signatures" "clearQueue" (("queueName" "A string containing the name of the queue. Defaults to fx, the standard
 effects queue.
@@ -2440,7 +2440,7 @@ that has been added to a generic jQuery queue with the .queue() method.
 	    <button id=\"stop\">Stop</button>
 	    <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "toArray" jquery-methods)
+(push "toArray" jquery-doc-methods)
 
 (puthash "toArray" (quote (("name" . "toArray") ("signatures" "toArray" nil) ("desc" (text . "Retrieve all the DOM elements contained in the jQuery set, as an array.
 
@@ -2476,7 +2476,7 @@ Array, then uses the built-in reverse-method to reverse that array.
 	    <div>Two</div>
 	    <div>Three</div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.isEmptyObject" jquery-methods)
+(push "$.isEmptyObject" jquery-doc-methods)
 
 (puthash "$.isEmptyObject" (quote (("name" . "$.isEmptyObject") ("signatures" "$.isEmptyObject" (("object" "The object that will be checked to see if itʼs empty.
 
@@ -2494,7 +2494,7 @@ $.isPlainObject()
 ") (text . "") (js . "jQuery.isEmptyObject({}) // true
 	    jQuery.isEmptyObject({ foo: \"bar\" }) // false") (text . ""))))) jquery-doc-hash)
 
-(push "$.isPlainObject" jquery-methods)
+(push "$.isPlainObject" jquery-doc-methods)
 
 (puthash "$.isPlainObject" (quote (("name" . "$.isPlainObject") ("signatures" "$.isPlainObject" (("object" "The object that will be checked to see if itʼs a plain object.
 
@@ -2506,7 +2506,7 @@ Object\").
 ") (text . "") (js . "jQuery.isPlainObject({}) // true
 	    jQuery.isPlainObject(\"test\") // false") (text . ""))))) jquery-doc-hash)
 
-(push "keydown" jquery-methods)
+(push "keydown" jquery-doc-methods)
 
 (puthash "keydown" (quote (("name" . "keydown") ("signatures" "keydown" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -2606,7 +2606,7 @@ the input.
 	    </button>
 	    <script type=\"text/javascript\" src=\"/scripts/events.js\"></script>") (text . ""))))) jquery-doc-hash)
 
-(push "index" jquery-methods)
+(push "index" jquery-doc-methods)
 
 (puthash "index" (quote (("name" . "index") ("signatures" "index" nil (("selector" "A selector representing a jQuery collection in which to look for an
 element.
@@ -2753,7 +2753,7 @@ siblings.
 	    </ul>
 	    <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "removeData" jquery-methods)
+(push "removeData" jquery-doc-methods)
 
 (puthash "removeData" (quote (("name" . "removeData") ("signatures" "removeData" (("name" "A string naming the piece of data to delete.
 
@@ -2788,7 +2788,7 @@ undefined.
 	    
 	    <div>value2 after removal: <span></span></div>") (text . ""))))) jquery-doc-hash)
 
-(push "data" jquery-methods)
+(push "data" jquery-doc-methods)
 
 (puthash "data" (quote (("name" . "data") ("signatures" "data" (("key" "A string naming the piece of data to set.
 
@@ -2840,7 +2840,7 @@ also set data.
 	    <span></span>
 	    </div>") (text . ""))))) jquery-doc-hash)
 
-(push "data" jquery-methods)
+(push "data" jquery-doc-methods)
 
 (puthash "data" (quote (("name" . "data") ("signatures" "data" (("key" "Name of the data stored.
 
@@ -2938,7 +2938,7 @@ directly to get or set values is faster than making individual calls to
 	    <button>Remove \"blah\" from the div</button>
 	    <p>The \"blah\" value of this div is <span>?</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "get" jquery-methods)
+(push "get" jquery-doc-methods)
 
 (puthash "get" (quote (("name" . "get") ("signatures" "get" (("index" "A zero-based integer indicating which element to retrieve.
 
@@ -3019,7 +3019,7 @@ Array, then uses the built-in reverse-method to reverse that array.
 	      
 	      <div><input type=\"text\" /></div>") (text . ""))))) jquery-doc-hash)
 
-(push "size" jquery-methods)
+(push "size" jquery-doc-methods)
 
 (puthash "size" (quote (("name" . "size") ("signatures" "size" nil) ("desc" (text . "Return the number of elements in the jQuery object.
 
@@ -3068,7 +3068,7 @@ overhead of a function call.
 	      <div></div>
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "$.noConflict" jquery-methods)
+(push "$.noConflict" jquery-doc-methods)
 
 (puthash "$.noConflict" (quote (("name" . "$.noConflict") ("signatures" "$.noConflict" (("removeAll" "A Boolean indicating whether to remove all jQuery variables from the
 global scope (including jQuery itself).
@@ -3144,7 +3144,7 @@ something with another libraryʼs $() $(\"content\").style.display =
 p\").hide();
 ") (text . ""))))) jquery-doc-hash)
 
-(push "scroll" jquery-methods)
+(push "scroll" jquery-doc-methods)
 
 (puthash "scroll" (quote (("name" . "scroll") ("signatures" "scroll" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3224,7 +3224,7 @@ mouseʼs scroll wheel could cause this event.
 	      ") (text . "") (html . "<div>Try scrolling the iframe.</div>
 	      <p>Paragraph - <span>Scroll happened!</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "resize" jquery-methods)
+(push "resize" jquery-doc-methods)
 
 (puthash "resize" (quote (("name" . "resize") ("signatures" "resize" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3261,7 +3261,7 @@ behavior in Firefox).
 	      });
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "dequeue" jquery-methods)
+(push "dequeue" jquery-doc-methods)
 
 (puthash "dequeue" (quote (("name" . "dequeue") ("signatures" "dequeue" (("queueName" "A string containing the name of the queue. Defaults to fx, the standard
 effects queue.
@@ -3293,7 +3293,7 @@ keep going.
 	      ") (text . "") (html . "<button>Start</button>  
 	      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "queue" jquery-methods)
+(push "queue" jquery-doc-methods)
 
 (puthash "queue" (quote (("name" . "queue") ("signatures" "queue" (("queueName" "A string containing the name of the queue. Defaults to fx, the standard
 effects queue.
@@ -3324,7 +3324,7 @@ effects queue.
 	      <p></p>
 	      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "queue" jquery-methods)
+(push "queue" jquery-doc-methods)
 
 (puthash "queue" (quote (("name" . "queue") ("signatures" "queue" (("queueName" "A string containing the name of the queue. Defaults to fx, the standard
 effects queue.
@@ -3422,7 +3422,7 @@ item and keeps the queue moving. You would use it like so:
 	      <button id=\"stop\">Stop</button>
 	      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "keyup" jquery-methods)
+(push "keyup" jquery-doc-methods)
 
 (puthash "keyup" (quote (("name" . "keyup") ("signatures" "keyup" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3523,7 +3523,7 @@ the input.
 	      </button>
 	      <script type=\"text/javascript\" src=\"/scripts/events.js\"></script>") (text . ""))))) jquery-doc-hash)
 
-(push "keypress" jquery-methods)
+(push "keypress" jquery-doc-methods)
 
 (puthash "keypress" (quote (("name" . "keypress") ("signatures" "keypress" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3637,7 +3637,7 @@ the input.
 	      </button>
 	      <script type=\"text/javascript\" src=\"/scripts/events.js\"></script>") (text . ""))))) jquery-doc-hash)
 
-(push "submit" jquery-methods)
+(push "submit" jquery-doc-methods)
 
 (puthash "submit" (quote (("name" . "submit") ("signatures" "submit" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3725,7 +3725,7 @@ variable is set, try:
 
 ") (text . "") (js . "$(\"form:first\").submit();") (text . ""))))) jquery-doc-hash)
 
-(push "select" jquery-methods)
+(push "select" jquery-doc-methods)
 
 (puthash "select" (quote (("name" . "select") ("signatures" "select" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3793,7 +3793,7 @@ the entire text field will be selected.
 
 ") (text . "") (js . "$(\"input\").select();") (text . ""))))) jquery-doc-hash)
 
-(push "change" jquery-methods)
+(push "change" jquery-doc-methods)
 
 (puthash "change" (quote (("name" . "change") ("signatures" "change" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3874,7 +3874,7 @@ for the initial text draw.
 	      // check input ($(this).val()) for validity here
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "blur" jquery-methods)
+(push "blur" jquery-doc-methods)
 
 (puthash "blur" (quote (("name" . "blur") ("signatures" "blur" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -3929,7 +3929,7 @@ its event delegation methods, .live() and .delegate() .
 
 ") (text . "") (js . "$(\"p\").blur();") (text . ""))))) jquery-doc-hash)
 
-(push "focus" jquery-methods)
+(push "focus" jquery-doc-methods)
 
 (puthash "focus" (quote (("name" . "focus") ("signatures" "focus" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4008,7 +4008,7 @@ its event delegation methods, .live() and .delegate() .
 	      $(\"#login\").focus();
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "mousemove" jquery-methods)
+(push "mousemove" jquery-doc-methods)
 
 (puthash "mousemove" (quote (("name" . "mousemove") ("signatures" "mousemove" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4110,7 +4110,7 @@ iframe.
 	      
 	      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "hover" jquery-methods)
+(push "hover" jquery-doc-methods)
 
 (puthash "hover" (quote (("name" . "hover") ("signatures" "hover" (("handlerIn(eventObject)" "A function to execute when the mouse pointer enters the element.
 
@@ -4169,7 +4169,7 @@ details.
 
 ") (text . "") (js . "$(\"td\").unbind('mouseenter mouseleave');") (text . ""))))) jquery-doc-hash)
 
-(push "hover" jquery-methods)
+(push "hover" jquery-doc-methods)
 
 (puthash "hover" (quote (("name" . "hover") ("signatures" "hover" (("handlerInOut(eventObject)" "A function to execute when the mouse pointer enters or leaves the
 element.
@@ -4217,7 +4217,7 @@ details.
 	      <li>Green</li>
 	      </ul>") (text . ""))))) jquery-doc-hash)
 
-(push "mouseleave" jquery-methods)
+(push "mouseleave" jquery-doc-methods)
 
 (puthash "mouseleave" (quote (("name" . "mouseleave") ("signatures" "mouseleave" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4318,7 +4318,7 @@ element.
 
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "mouseenter" jquery-methods)
+(push "mouseenter" jquery-doc-methods)
 
 (puthash "mouseenter" (quote (("name" . "mouseenter") ("signatures" "mouseenter" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4418,7 +4418,7 @@ mouseenter fires only when the pointer moves into the bound element.
 
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "mouseout" jquery-methods)
+(push "mouseout" jquery-doc-methods)
 
 (puthash "mouseout" (quote (("name" . "mouseout") ("signatures" "mouseout" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4514,7 +4514,7 @@ element.
 
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "mouseover" jquery-methods)
+(push "mouseover" jquery-doc-methods)
 
 (puthash "mouseover" (quote (("name" . "mouseover") ("signatures" "mouseover" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4604,7 +4604,7 @@ element.
 	      </div>
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "dblclick" jquery-methods)
+(push "dblclick" jquery-doc-methods)
 
 (puthash "dblclick" (quote (("name" . "dblclick") ("signatures" "dblclick" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4683,7 +4683,7 @@ paragraph on the page:
 	      div.dbl { background:yellow;color:black; }
 	      ") (text . "") (html . "<div></div><span>Double click the block</span>") (text . ""))))) jquery-doc-hash)
 
-(push "click" jquery-methods)
+(push "click" jquery-doc-methods)
 
 (puthash "click" (quote (("name" . "click") ("signatures" "click" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4758,7 +4758,7 @@ is not required, the mousedown or mouseup event may be more suitable.
 
 ") (text . "") (js . "$(\"p\").click();") (text . ""))))) jquery-doc-hash)
 
-(push "mouseup" jquery-methods)
+(push "mouseup" jquery-doc-methods)
 
 (puthash "mouseup" (quote (("name" . "mouseup") ("signatures" "mouseup" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4823,7 +4823,7 @@ mouseup event is preferable for a particular situation.
 	      ") (text . "") (html . "<p>Press mouse and release here.</p>
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "mousedown" jquery-methods)
+(push "mousedown" jquery-doc-methods)
 
 (puthash "mousedown" (quote (("name" . "mousedown") ("signatures" "mousedown" (("handler(eventObject)" "A function to execute each time the event is triggered.
 
@@ -4898,7 +4898,7 @@ know that the mousedown event is preferable for a particular situation.
 	      ") (text . "") (html . "<p>Press mouse and release here.</p>
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "error" jquery-methods)
+(push "error" jquery-doc-methods)
 
 (puthash "error" (quote (("name" . "error") ("signatures" "error" (("handler(eventObject)" "A function to execute when the event is triggered.
 
@@ -4950,7 +4950,7 @@ handlers. Use window.onerror instead.
 	      })
 	      .attr(\"src\", \"missing.png\");") (text . ""))))) jquery-doc-hash)
 
-(push "unload" jquery-methods)
+(push "unload" jquery-doc-methods)
 
 (puthash "unload" (quote (("name" . "unload") ("signatures" "unload" (("handler(eventObject)" "A function to execute when the event is triggered.
 
@@ -4989,7 +4989,7 @@ scripts can perform cleanup when the user leaves the page.
 
 ") (text . "") (js . "$(window).unload( function () { alert(\"Bye now!\"); } );") (text . ""))))) jquery-doc-hash)
 
-(push "load" jquery-methods)
+(push "load" jquery-doc-methods)
 
 (puthash "load" (quote (("name" . "load") ("signatures" "load" (("handler(eventObject)" "A function to execute when the event is triggered.
 
@@ -5048,7 +5048,7 @@ each image load.
 	      }
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ready" jquery-methods)
+(push "ready" jquery-doc-methods)
 
 (puthash "ready" (quote (("name" . "ready") ("signatures" "ready" (("handler" "A function to execute after the DOM is ready.
 
@@ -5115,7 +5115,7 @@ of our .ready() handler without affecting other code:
 	      $(\"p\").text(\"The DOM is now loaded and can be manipulated.\");
 	      });") (text . "") (css . "p { color:red; }") (text . "") (html . "<p>Not loaded yet.</p>") (text . ""))))) jquery-doc-hash)
 
-(push "die" jquery-methods)
+(push "die" jquery-doc-methods)
 
 (puthash "die" (quote (("name" . "die") ("signatures" "die" nil) ("desc" (text . "Remove all event handlers previously attached using .live() from the
 elements.
@@ -5129,7 +5129,7 @@ the selector used with it must match exactly the selector initially
 used with .live().
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
-(push "die" jquery-methods)
+(push "die" jquery-doc-methods)
 
 (puthash "die" (quote (("name" . "die") ("signatures" "die" (("eventType" "A string containing a JavaScript event type, such as click or keydown.
 
@@ -5186,7 +5186,7 @@ the second argument:
 	      
 	      $(\"p\").die(\"click\", foo); // ... foo will no longer be called.") (text . ""))))) jquery-doc-hash)
 
-(push "live" jquery-methods)
+(push "live" jquery-doc-methods)
 
 (puthash "live" (quote (("name" . "live") ("signatures" "live" (("eventType" "A string containing a JavaScript event type, such as \"click\" or
 \"keydown.\" As of jQuery 1.4 the string can contain multiple,
@@ -5400,7 +5400,7 @@ ones.
 	      <span></span>
 	      ") (text . ""))))) jquery-doc-hash)
 
-(push "triggerHandler" jquery-methods)
+(push "triggerHandler" jquery-doc-methods)
 
 (puthash "triggerHandler" (quote (("name" . "triggerHandler") ("signatures" "triggerHandler" (("eventType" "A string containing a JavaScript event type, such as click or submit.
 
@@ -5445,7 +5445,7 @@ bound to the focus event.
 	      
 	      <input type=\"text\" value=\"To Be Focused\"/>") (text . ""))))) jquery-doc-hash)
 
-(push "trigger" jquery-methods)
+(push "trigger" jquery-doc-methods)
 
 (puthash "trigger" (quote (("name" . "trigger") ("signatures" "trigger" (("eventType" "A string containing a JavaScript event type, such as click or submit.
 
@@ -5545,7 +5545,7 @@ is bound.
 
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxComplete" jquery-methods)
+(push "ajaxComplete" jquery-doc-methods)
 
 (puthash "ajaxComplete" (quote (("name" . "ajaxComplete") ("signatures" "ajaxComplete" (("handler(event, XMLHttpRequest, ajaxOptions)" "The function to be invoked.
 
@@ -5599,7 +5599,7 @@ xhr.responseXML or xhr.responseHTML for xml and html respectively.
 	      $(this).append(\"<li>Request Complete.</li>\");
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "one" jquery-methods)
+(push "one" jquery-doc-methods)
 
 (puthash "one" (quote (("name" . "one") ("signatures" "one" (("eventType" "A string containing one or more JavaScript event types, such as \"click\"
 or \"submit,\" or custom event names.
@@ -5664,7 +5664,7 @@ each of them is clicked:
 	      alert( $(this).text() );
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "serializeArray" jquery-methods)
+(push "serializeArray" jquery-doc-methods)
 
 (puthash "serializeArray" (quote (("name" . "serializeArray") ("signatures" "serializeArray" nil) ("desc" (text . "Encode a set of form elements as an array of names and values.
 
@@ -5774,7 +5774,7 @@ results display.
 	      <label for=\"r2\">radio2</label>
 	      </form>") (text . ""))))) jquery-doc-hash)
 
-(push "serialize" jquery-methods)
+(push "serialize" jquery-doc-methods)
 
 (puthash "serialize" (quote (("name" . "serialize") ("signatures" "serialize" nil) ("desc" (text . "Encode a set of form elements as a string for submission.
 
@@ -5868,7 +5868,7 @@ an Ajax request.
 	      </form>
 	      <p><tt id=\"results\"></tt></p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.ajaxSetup" jquery-methods)
+(push "$.ajaxSetup" jquery-doc-methods)
 
 (puthash "$.ajaxSetup" (quote (("name" . "$.ajaxSetup") ("signatures" "$.ajaxSetup" (("options" "A set of key/value pairs that configure the default Ajax request. All
 options are optional.
@@ -5907,7 +5907,7 @@ requests then sends some data without having to set anything else.
 	      });
 	      $.ajax({ data: myData });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxSuccess" jquery-methods)
+(push "ajaxSuccess" jquery-doc-methods)
 
 (puthash "ajaxSuccess" (quote (("name" . "ajaxSuccess") ("signatures" "ajaxSuccess" (("handler(event, XMLHttpRequest, ajaxOptions)" "The function to be invoked.
 
@@ -5959,7 +5959,7 @@ xhr.responseXML or xhr.responseHTML for xml and html respectively.
 	      $(this).append(\"<li>Successful Request!</li>\");
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxStop" jquery-methods)
+(push "ajaxStop" jquery-doc-methods)
 
 (puthash "ajaxStop" (quote (("name" . "ajaxStop") ("signatures" "ajaxStop" (("handler()" "The function to be invoked.
 
@@ -5999,7 +5999,7 @@ selected elements within the callback function.
 	      $(this).hide();
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxStart" jquery-methods)
+(push "ajaxStart" jquery-doc-methods)
 
 (puthash "ajaxStart" (quote (("name" . "ajaxStart") ("signatures" "ajaxStart" (("handler()" "The function to be invoked.
 
@@ -6038,7 +6038,7 @@ already active).
 	      $(this).show();
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxSend" jquery-methods)
+(push "ajaxSend" jquery-doc-methods)
 
 (puthash "ajaxSend" (quote (("name" . "ajaxSend") ("signatures" "ajaxSend" (("handler(event, jqXHR, ajaxOptions)" "The function to be invoked.
 
@@ -6086,7 +6086,7 @@ callback to only handling events dealing with a particular URL:
 	      $(this).append(\"<li>Starting request at \" + settings.url + \"</li>\");
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "ajaxError" jquery-methods)
+(push "ajaxError" jquery-doc-methods)
 
 (puthash "ajaxError" (quote (("name" . "ajaxError") ("signatures" "ajaxError" (("handler(event, jqXHR, ajaxSettings, thrownError)" "The function to be invoked.
 
@@ -6136,7 +6136,7 @@ handling events dealing with a particular URL:
 	      $(this).append(\"<li>Error requesting page \" + settings.url + \"</li>\");
 	      });") (text . ""))))) jquery-doc-hash)
 
-(push "unbind" jquery-methods)
+(push "unbind" jquery-doc-methods)
 
 (puthash "unbind" (quote (("name" . "unbind") ("signatures" "unbind" (("eventType" "A string containing a JavaScript event type, such as click or submit.
 
@@ -6268,7 +6268,7 @@ the second argument:
 
 	      $(\"p\").unbind(\"click\", foo); // ... foo will no longer be called.") (text . ""))))) jquery-doc-hash)
 
-(push "bind" jquery-methods)
+(push "bind" jquery-doc-methods)
 
 (puthash "bind" (quote (("name" . "bind") ("signatures" "bind" (("eventType" "A string containing one or more JavaScript event types, such as \"click\"
 or \"submit,\" or custom event names.
@@ -6532,7 +6532,7 @@ using the .stopPropagation() method.
 	    }
 	    });") (text . ""))))) jquery-doc-hash)
 
-(push "first" jquery-methods)
+(push "first" jquery-doc-methods)
 
 (puthash "first" (quote (("name" . "first") ("signatures" "first" nil) ("desc" (text . "Reduce the set of matched elements to the first in the set.
 
@@ -6560,7 +6560,7 @@ element.
 
 ") (text . "") (css . ".highlight{background-color: yellow}") (text . "") (js . "$(\"p span\").first().addClass('highlight');") (text . "") (html . "<p><span>Look:</span> <span>This is some text in a paragraph.</span> <span>This is a note about it.</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "last" jquery-methods)
+(push "last" jquery-doc-methods)
 
 (puthash "last" (quote (("name" . "last") ("signatures" "last" nil) ("desc" (text . "Reduce the set of matched elements to the final one in the set.
 
@@ -6588,7 +6588,7 @@ element.
 
 ") (text . "") (css . ".highlight{background-color: yellow}") (text . "") (js . "$(\"p span\").last().addClass('highlight');") (text . "") (html . "<p><span>Look:</span> <span>This is some text in a paragraph.</span> <span>This is a note about it.</span></p>") (text . ""))))) jquery-doc-hash)
 
-(push "slice" jquery-methods)
+(push "slice" jquery-doc-methods)
 
 (puthash "slice" (quote (("name" . "slice") ("signatures" "slice" (("start" "An integer indicating the 0-based position at which the elements begin
 to be selected. If negative, it indicates an offset from the end of the
@@ -6699,7 +6699,7 @@ third element.
 
 ") (text . "") (js . "$(\"p\").slice(-1).wrapInner(\"<b></b>\");") (text . ""))))) jquery-doc-hash)
 
-(push "jQuery" jquery-methods)
+(push "jQuery" jquery-doc-methods)
 
 (puthash "jQuery" (quote (("name" . "jQuery") ("signatures" "jQuery" (("selector" "A string containing a selector expression
 
@@ -6787,7 +6787,7 @@ border to them.
 
 ") (text . "") (js . "$(myForm.elements).hide()") (text . ""))))) jquery-doc-hash)
 
-(push "jQuery" jquery-methods)
+(push "jQuery" jquery-doc-methods)
 
 (puthash "jQuery" (quote (("name" . "jQuery") ("signatures" "jQuery" (("html" "A string of HTML to create on the fly. Note that this parses HTML, not
 XML.
@@ -6863,7 +6863,7 @@ innerHTML property set to the given markup.
 	    }
 	    }).appendTo(\"body\");") (text . ""))))) jquery-doc-hash)
 
-(push "jQuery" jquery-methods)
+(push "jQuery" jquery-doc-methods)
 
 (puthash "jQuery" (quote (("name" . "jQuery") ("signatures" "jQuery" (("callback" "The function to execute when the DOM is ready.
 
@@ -6885,7 +6885,7 @@ alias.
 	    // Your code using failsafe $ alias here...
 	    });") (text . ""))))) jquery-doc-hash)
 
-(push "stop" jquery-methods)
+(push "stop" jquery-doc-methods)
 
 (puthash "stop" (quote (("name" . "stop") ("signatures" "stop" (("clearQueue" "A Boolean indicating whether to remove queued animation as well.
 Defaults to false.
@@ -6962,7 +6962,7 @@ currently playing one.
 	    }
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "end" jquery-methods)
+(push "end" jquery-doc-methods)
 
 (puthash "end" (quote (("name" . "end") ("signatures" "end" nil) ("desc" (text . "End the most recent filtering operation in the current chain and return
 the set of matched elements to its previous state.
@@ -7067,7 +7067,7 @@ the selection back to the paragraphs.
 
 ") (text . "") (js . "$(\"p\").find(\"span\").end().css(\"border\", \"2px red solid\");") (text . "") (css . "p { margin:10px; padding:10px; }") (text . "") (html . "<p><span>Hello</span>, how are you?</p>") (text . ""))))) jquery-doc-hash)
 
-(push "andSelf" jquery-methods)
+(push "andSelf" jquery-doc-methods)
 
 (puthash "andSelf" (quote (("name" . "andSelf") ("signatures" "andSelf" nil) ("desc" (text . "Add the previous set of elements on the stack to the current set.
 
@@ -7114,7 +7114,7 @@ color since it didnʼt use .andSelf().
 	    <p>Second Paragraph</p>
 	    </div>") (text . ""))))) jquery-doc-hash)
 
-(push "siblings" jquery-methods)
+(push "siblings" jquery-doc-methods)
 
 (puthash "siblings" (quote (("name" . "siblings") ("signatures" "siblings" (("selector" "A string containing a selector expression to match elements against.
 
@@ -7191,7 +7191,7 @@ level of the DOM tree.
 	    <p class=\"selected\">Hello Again</p>
 	    <p>And Again</p>") (text . ""))))) jquery-doc-hash)
 
-(push "animate" jquery-methods)
+(push "animate" jquery-doc-methods)
 
 (puthash "animate" (quote (("name" . "animate") ("signatures" "animate" (("properties" "A map of CSS properties that the animation will move toward.
 
@@ -7549,7 +7549,7 @@ the fourth argument is an anonymous callback function.
 	    }, 1000, \"linear\", function(){ alert(\"all done\"); });
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "prevAll" jquery-methods)
+(push "prevAll" jquery-doc-methods)
 
 (puthash "prevAll" (quote (("name" . "prevAll") ("signatures" "prevAll" (("selector" "A string containing a selector expression to match elements against.
 
@@ -7594,7 +7594,7 @@ the elements would be tested for a match before they were included.
     <div></div>
     <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "prev" jquery-methods)
+(push "prev" jquery-doc-methods)
 
 (puthash "prev" (quote (("name" . "prev") ("signatures" "prev" (("selector" "A string containing a selector expression to match elements against.
 
@@ -7661,7 +7661,7 @@ the element would be tested for a match before it was included.
     <p class=\"selected\">Hello Again</p>
     <p>And Again</p>") (text . ""))))) jquery-doc-hash)
 
-(push "fadeTo" jquery-methods)
+(push "fadeTo" jquery-doc-methods)
 
 (puthash "fadeTo" (quote (("name" . "fadeTo") ("signatures" "fadeTo" (("duration" "A string or number determining how long the animation will run.
 
@@ -7781,7 +7781,7 @@ various styles when it completes.
     <p>Right!</p>
     <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "fadeOut" jquery-methods)
+(push "fadeOut" jquery-doc-methods)
 
 (puthash "fadeOut" (quote (("name" . "fadeOut") ("signatures" "fadeOut" (("duration" "A string or number determining how long the animation will run.
 
@@ -7903,7 +7903,7 @@ default, \"swing,\" easing.
       <div id=\"box2\" class=\"box\">swing</div>
       ") (text . ""))))) jquery-doc-hash)
 
-(push "parents" jquery-methods)
+(push "parents" jquery-doc-methods)
 
 (puthash "parents" (quote (("name" . "parents") ("signatures" "parents" (("selector" "A string containing a selector expression to match elements against.
 
@@ -8007,7 +8007,7 @@ supplied one, only the matching items among these would be included.
 	
 	<b>Click Hellos to toggle their parents.</b>") (text . ""))))) jquery-doc-hash)
 
-(push "fadeIn" jquery-methods)
+(push "fadeIn" jquery-doc-methods)
 
 (puthash "fadeIn" (quote (("name" . "fadeIn") ("signatures" "fadeIn" (("duration" "A string or number determining how long the animation will run.
 
@@ -8102,7 +8102,7 @@ quickly fades in more text on top.
 	
 	</p>") (text . ""))))) jquery-doc-hash)
 
-(push "parent" jquery-methods)
+(push "parent" jquery-doc-methods)
 
 (puthash "parent" (quote (("name" . "parent") ("signatures" "parent" (("selector" "A string containing a selector expression to match elements against.
 
@@ -8183,7 +8183,7 @@ Source to see the raw html.
 	  <div class=\"selected\"><p>Hello Again</p></div>
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "offsetParent" jquery-methods)
+(push "offsetParent" jquery-doc-methods)
 
 (puthash "offsetParent" (quote (("name" . "offsetParent") ("signatures" "offsetParent" nil) ("desc" (text . "Get the closest ancestor element that is positioned.
 
@@ -8245,7 +8245,7 @@ element:
 	  </ul>
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "slideToggle" jquery-methods)
+(push "slideToggle" jquery-doc-methods)
 
 (puthash "slideToggle" (quote (("name" . "slideToggle") ("signatures" "slideToggle" (("duration" "A string or number determining how long the animation will run.
 
@@ -8354,7 +8354,7 @@ some disappear.
 	  <div></div>
 	  <p><button id=\"aa\">Toggle</button> There have been <span>0</span> toggled divs.</p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.post" jquery-methods)
+(push "$.post" jquery-doc-methods)
 
 (puthash "$.post" (quote (("name" . "$.post") ("signatures" "$.post" (("url" "A string containing the URL to which the request is sent.
 
@@ -8485,7 +8485,7 @@ json_encode(array(\"name\"=>\"John\",\"time\"=>\"2pm\")); ?>).
 	    <div id=\"result\"></div>
 	    ") (text . ""))))) jquery-doc-hash)
 
-(push "slideUp" jquery-methods)
+(push "slideUp" jquery-doc-methods)
 
 (puthash "slideUp" (quote (("name" . "slideUp") ("signatures" "slideUp" (("duration" "A string or number determining how long the animation will run.
 
@@ -8588,7 +8588,7 @@ alert.
 	      </div>
 	      <div id=\"msg\"></div>") (text . ""))))) jquery-doc-hash)
 
-(push "nextAll" jquery-methods)
+(push "nextAll" jquery-doc-methods)
 
 (puthash "nextAll" (quote (("name" . "nextAll") ("signatures" "nextAll" (("selector" "A string containing a selector expression to match elements against.
 
@@ -8654,7 +8654,7 @@ them a class.
 		<p>p</p>
 		<div>div</div>") (text . ""))))) jquery-doc-hash)
 
-(push "next" jquery-methods)
+(push "next" jquery-doc-methods)
 
 (puthash "next" (quote (("name" . "next") ("signatures" "next" (("selector" "A string containing a selector expression to match elements against.
 
@@ -8705,7 +8705,7 @@ class \"selected\".
 		<p class=\"selected\">Hello Again</p>
 		<div><span>And Again</span></div>") (text . ""))))) jquery-doc-hash)
 
-(push "slideDown" jquery-methods)
+(push "slideDown" jquery-doc-methods)
 
 (puthash "slideDown" (quote (("name" . "slideDown") ("signatures" "slideDown" (("duration" "A string or number determining how long the animation will run.
 
@@ -8800,7 +8800,7 @@ especially if it is the middle input which gets the focus.
 		
 		<input type=\"text\" />") (text . ""))))) jquery-doc-hash)
 
-(push "find" jquery-methods)
+(push "find" jquery-doc-methods)
 
 (puthash "find" (quote (("name" . "find") ("signatures" "find" (("selector" "A string containing a selector expression to match elements against.
 
@@ -8916,7 +8916,7 @@ the letter t.
 		  or stop believing
 		  </p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.getScript" jquery-methods)
+(push "$.getScript" jquery-doc-methods)
 
 (puthash "$.getScript" (quote (("name" . "$.getScript") ("signatures" "$.getScript" (("url" "A string containing the URL to which the request is sent.
 
@@ -8965,7 +8965,7 @@ message when the execution is complete.
 		  alert(\"Script loaded and executed.\");
 		  });") (text . ""))))) jquery-doc-hash)
 
-(push "contents" jquery-methods)
+(push "contents" jquery-doc-methods)
 
 (puthash "contents" (quote (("name" . "contents") ("signatures" "contents" nil) ("desc" (text . "Get the children of each element in the set of matched elements,
 including text and comment nodes.
@@ -9016,7 +9016,7 @@ tag.
 
 ") (text . "") (js . "$(\"#frameDemo\").contents().find(\"a\").css(\"background-color\",\"#BADA55\");") (text . "") (html . "<iframe src=\"http://api.jquery.com/\" width=\"80%\" height=\"600\" id='frameDemo'></iframe> ") (text . ""))))) jquery-doc-hash)
 
-(push "closest" jquery-methods)
+(push "closest" jquery-doc-methods)
 
 (puthash "closest" (quote (("name" . "closest") ("signatures" "closest" (("selector" "A string containing a selector expression to match elements against.
 
@@ -9121,7 +9121,7 @@ yellow background when it or its descendent is clicked.
 		  <li>You can also <b>Click me!</b></li>
 		  </ul>") (text . ""))))) jquery-doc-hash)
 
-(push "closest" jquery-methods)
+(push "closest" jquery-doc-methods)
 
 (puthash "closest" (quote (("name" . "closest") ("signatures" "closest" (("selectors" "An array or string containing a selector expression to match elements
 against (can also be a jQuery object).
@@ -9143,7 +9143,7 @@ authors.
 		  $(\"li\").eq(i).html( this.selector + \": \" + this.elem.nodeName );
 		  });") (text . "") (css . "") (text . "") (html . "<ul><li></li><li></li></ul>") (text . ""))))) jquery-doc-hash)
 
-(push "$.getJSON" jquery-methods)
+(push "$.getJSON" jquery-doc-methods)
 
 (puthash "$.getJSON" (quote (("name" . "$.getJSON") ("signatures" "$.getJSON" (("url" "A string containing the URL to which the request is sent.
 
@@ -9266,7 +9266,7 @@ access a name from the returned JSON data.
 		  alert(\"JSON Data: \" + json.users[3].name);
 		  });") (text . ""))))) jquery-doc-hash)
 
-(push "$.get" jquery-methods)
+(push "$.get" jquery-doc-methods)
 
 (puthash "$.get" (quote (("name" . "$.get") ("signatures" "$.get" (("url" "A string containing the URL to which the request is sent.
 
@@ -9359,7 +9359,7 @@ payload of data (HTML or XML, depending on what was returned).
 		    console.log(data.time); //  2pm
 		    }, \"json\");") (text . ""))))) jquery-doc-hash)
 
-(push "load" jquery-methods)
+(push "load" jquery-doc-methods)
 
 (puthash "load" (quote (("name" . "load") ("signatures" "load" (("url" "A string containing the URL to which the request is sent.
 
@@ -9452,7 +9452,7 @@ and a callback that is executed when the server is finished responding.
 		      alert(\"The last 25 entries in the feed have been loaded\");
 		      });") (text . ""))))) jquery-doc-hash)
 
-(push "$.ajax" jquery-methods)
+(push "$.ajax" jquery-doc-methods)
 
 (puthash "$.ajax" (quote (("name" . "$.ajax") ("signatures" "$.ajax" (("url" "A string containing the URL to which the request is sent.
 
@@ -9833,7 +9833,7 @@ the result of the call into a variable - requires a synchronous
 			}
 			).responseText;") (text . ""))))) jquery-doc-hash)
 
-(push "children" jquery-methods)
+(push "children" jquery-doc-methods)
 
 (puthash "children" (quote (("name" . "children") ("signatures" "children" (("selector" "A string containing a selector expression to match elements against.
 
@@ -9956,7 +9956,7 @@ matching items among these three would be included.
 			  <p>And One Last Time</p>
 			  </div>") (text . ""))))) jquery-doc-hash)
 
-(push "add" jquery-methods)
+(push "add" jquery-doc-methods)
 
 (puthash "add" (quote (("name" . "add") ("signatures" "add" (("selector" "A string representing a selector expression to find additional elements
 to add to the set of matched elements.
@@ -10053,7 +10053,7 @@ matched elements.
 			  collection = collection.add(document.getElementById(\"a\"));
 			  collection.css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p><span id=\"a\">Hello Again</span>") (text . ""))))) jquery-doc-hash)
 
-(push "not" jquery-methods)
+(push "not" jquery-doc-methods)
 
 (puthash "not" (quote (("name" . "not") ("signatures" "not" (("selector" "A string containing a selector expression to match elements against.
 
@@ -10144,7 +10144,7 @@ all paragraphs.
 
 ") (text . "") (js . "$(\"p\").not($(\"div p.selected\"))") (text . ""))))) jquery-doc-hash)
 
-(push "outerWidth" jquery-methods)
+(push "outerWidth" jquery-doc-methods)
 
 (puthash "outerWidth" (quote (("name" . "outerWidth") ("signatures" "outerWidth" (("includeMargin" "A Boolean indicating whether to include the elementʼs margin in the
 calculation.
@@ -10173,7 +10173,7 @@ these, use .width() instead.
 			  p { margin:10px;padding:5px;border:2px solid #666; }
 			  ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "outerHeight" jquery-methods)
+(push "outerHeight" jquery-doc-methods)
 
 (puthash "outerHeight" (quote (("name" . "outerHeight") ("signatures" "outerHeight" (("includeMargin" "A Boolean indicating whether to include the elementʼs margin in the
 calculation.
@@ -10195,7 +10195,7 @@ these, use .height() instead.
 ") (text . "") (js . "var p = $(\"p:first\");
 			  $(\"p:last\").text( \"outerHeight:\" + p.outerHeight() + \" , outerHeight(true):\" + p.outerHeight(true) );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; } ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "toggle" jquery-methods)
+(push "toggle" jquery-doc-methods)
 
 (puthash "toggle" (quote (("name" . "toggle") ("signatures" "toggle" (("duration" "A string or number determining how long the animation will run.
 
@@ -10317,7 +10317,7 @@ they are visible, completing the animation within 600 milliseconds.
 			  <p>Hello</p>
 			  <p style=\"display: none\">Good Bye</p>") (text . ""))))) jquery-doc-hash)
 
-(push "innerWidth" jquery-methods)
+(push "innerWidth" jquery-doc-methods)
 
 (puthash "innerWidth" (quote (("name" . "innerWidth") ("signatures" "innerWidth" nil) ("desc" (text . "Get the current computed width for the first element in the set of
 matched elements, including padding but not border.
@@ -10336,7 +10336,7 @@ these, use .width() instead.
 ") (text . "") (js . "var p = $(\"p:first\");
 			    $(\"p:last\").text( \"innerWidth:\" + p.innerWidth() );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; } ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "innerHeight" jquery-methods)
+(push "innerHeight" jquery-doc-methods)
 
 (puthash "innerHeight" (quote (("name" . "innerHeight") ("signatures" "innerHeight" nil) ("desc" (text . "Get the current computed height for the first element in the set of
 matched elements, including padding but not border.
@@ -10355,7 +10355,7 @@ these, use .height() instead.
 ") (text . "") (js . "var p = $(\"p:first\");
 			    $(\"p:last\").text( \"innerHeight:\" + p.innerHeight() );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; }") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "$.param" jquery-methods)
+(push "$.param" jquery-doc-methods)
 
 (puthash "$.param" (quote (("name" . "$.param") ("signatures" "$.param" (("obj" "An array or object to serialize.
 
@@ -10454,7 +10454,7 @@ a=[object+Object]&b=1&b=2&b=3
 
 			    ") (text . "") (css . "div { color:red; }") (text . ""))))) jquery-doc-hash)
 
-(push "hide" jquery-methods)
+(push "hide" jquery-doc-methods)
 
 (puthash "hide" (quote (("name" . "hide") ("signatures" "hide" nil (("duration" "A string or number determining how long the animation will run.
 
@@ -10578,7 +10578,7 @@ element when its hidden. Try clicking on more than one box at a time.
 			    height:40px; margin:2px; float:left; }
 			    ") (text . "") (html . "<div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "width" jquery-methods)
+(push "width" jquery-doc-methods)
 
 (puthash "width" (quote (("name" . "width") ("signatures" "width" nil) ("desc" (text . "Get the current computed width for the first element in the set of
 matched elements.
@@ -10630,7 +10630,7 @@ smaller than you expected. The yellow highlight shows the iframe body.
 			      Sample paragraph to test width
 			      </p>") (text . ""))))) jquery-doc-hash)
 
-(push "width" jquery-methods)
+(push "width" jquery-doc-methods)
 
 (puthash "width" (quote (("name" . "width") ("signatures" "width" (("value" "An integer representing the number of pixels, or an integer along with
 an optional unit of measure appended (as a string).
@@ -10672,7 +10672,7 @@ content width.
 			      <div>d</div>
 			      <div>d</div>") (text . ""))))) jquery-doc-hash)
 
-(push "height" jquery-methods)
+(push "height" jquery-doc-methods)
 
 (puthash "height" (quote (("name" . "height") ("signatures" "height" nil) ("desc" (text . "Get the current computed height for the first element in the set of
 matched elements.
@@ -10724,7 +10724,7 @@ smaller than you expected. The yellow highlight shows the iframe body.
 			      Sample paragraph to test height
 			      </p>") (text . ""))))) jquery-doc-hash)
 
-(push "height" jquery-methods)
+(push "height" jquery-doc-methods)
 
 (puthash "height" (quote (("name" . "height") ("signatures" "height" (("value" "An integer representing the number of pixels, or an integer with an
 optional unit of measure appended (as a string).
@@ -10760,7 +10760,7 @@ content height.
 			      <div></div>
 			      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "show" jquery-methods)
+(push "show" jquery-doc-methods)
 
 (puthash "show" (quote (("name" . "show") ("signatures" "show" nil (("duration" "A string or number determining how long the animation will run.
 
@@ -10889,7 +10889,7 @@ is done, it changes the text.
 			      <p style=\"display:none;\">I'm hidden...</p>
 			      ") (text . ""))))) jquery-doc-hash)
 
-(push "scrollLeft" jquery-methods)
+(push "scrollLeft" jquery-doc-methods)
 
 (puthash "scrollLeft" (quote (("name" . "scrollLeft") ("signatures" "scrollLeft" nil) ("desc" (text . "Get the current horizontal position of the scroll bar for the first
 element in the set of matched elements.
@@ -10907,7 +10907,7 @@ the very left, or if the element is not scrollable, this number will be
 				p { margin:10px;padding:5px;border:2px solid #666; }
 				") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "scrollLeft" jquery-methods)
+(push "scrollLeft" jquery-doc-methods)
 
 (puthash "scrollLeft" (quote (("name" . "scrollLeft") ("signatures" "scrollLeft" (("value" "An integer indicating the new position to set the scroll bar to.
 
@@ -10934,7 +10934,7 @@ positions the horizontal scroll of each matched element.
 				p { margin:10px;padding:5px;border:2px solid #666;width:1000px;height:1000px; }
 				") (text . "") (html . "<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.trim" jquery-methods)
+(push "$.trim" jquery-doc-methods)
 
 (puthash "$.trim" (quote (("name" . "$.trim") ("signatures" "$.trim" (("str" "The string to trim.
 
@@ -10962,7 +10962,7 @@ the string, they are preserved.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.isFunction" jquery-methods)
+(push "$.isFunction" jquery-doc-methods)
 
 (puthash "$.isFunction" (quote (("name" . "$.isFunction") ("signatures" "$.isFunction" (("obj" "Object to test whether or not it is a function.
 
@@ -11005,7 +11005,7 @@ detected as functions in browsers such as Internet Explorer.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.isArray" jquery-methods)
+(push "$.isArray" jquery-doc-methods)
 
 (puthash "$.isArray" (quote (("name" . "$.isArray") ("signatures" "$.isArray" (("obj" "Object to test whether or not it is an array.
 
@@ -11018,7 +11018,7 @@ JavaScript array (not an array-like object, such as a jQuery object).
 
 ") (text . "") (js . "$(\"b\").append( \"\" + $.isArray([]) );") (text . "") (html . "Is [] an Array? <b></b>") (text . ""))))) jquery-doc-hash)
 
-(push "$.unique" jquery-methods)
+(push "$.unique" jquery-doc-methods)
 
 (puthash "$.unique" (quote (("name" . "$.unique") ("signatures" "$.unique" (("array" "The Array of DOM elements.
 
@@ -11056,7 +11056,7 @@ internally by jQuery.
 				<div class=\"dup\"></div>
 				<div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.merge" jquery-methods)
+(push "$.merge" jquery-doc-methods)
 
 (puthash "$.merge" (quote (("name" . "$.merge") ("signatures" "$.merge" (("first" "The first array to merge, the elements of second added.
 
@@ -11095,7 +11095,7 @@ objects; use $.makeArray if they are not.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.inArray" jquery-methods)
+(push "$.inArray" jquery-doc-methods)
 
 (puthash "$.inArray" (quote (("name" . "$.inArray") ("signatures" "$.inArray" (("value" "The value to search for.
 
@@ -11126,7 +11126,7 @@ array, we need to check if itʼs not equal to (or greater than) -1.
 				<div>4 found at <span></span></div>
 				<div>\"Karl\" not found, so <span></span></div>") (text . ""))))) jquery-doc-hash)
 
-(push "$.map" jquery-methods)
+(push "$.map" jquery-doc-methods)
 
 (puthash "$.map" (quote (("name" . "$.map") ("signatures" "$.map" (("array" "The Array to translate.
 
@@ -11244,7 +11244,7 @@ function.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.makeArray" jquery-methods)
+(push "$.makeArray" jquery-doc-methods)
 
 (puthash "$.makeArray" (quote (("name" . "$.makeArray") ("signatures" "$.makeArray" (("obj" "Any object to turn into a native Array.
 
@@ -11282,7 +11282,7 @@ The object is now a plain array.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.grep" jquery-methods)
+(push "$.grep" jquery-doc-methods)
 
 (puthash "$.grep" (quote (("name" . "$.grep") ("signatures" "$.grep" (("array" "The array to search through.
 
@@ -11341,7 +11341,7 @@ zero.
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.extend" jquery-methods)
+(push "$.extend" jquery-doc-methods)
 
 (puthash "$.extend" (quote (("name" . "$.extend") ("signatures" "$.extend" (("target" "An object that will receive the new properties if additional objects
 are passed in or that will extend the jQuery namespace if it is the
@@ -11432,7 +11432,7 @@ validate: true, limit: 5, name: \"bar\" }
 
 ") (text . ""))))) jquery-doc-hash)
 
-(push "$.each" jquery-methods)
+(push "$.each" jquery-doc-methods)
 
 (puthash "$.each" (quote (("name" . "$.each") ("signatures" "$.each" (("collection" "The object or array to iterate over.
 
@@ -11515,7 +11515,7 @@ item and its key.
 				alert( \"Key: \" + k + \", Value: \" + v );
 				});") (text . ""))))) jquery-doc-hash)
 
-(push "scrollTop" jquery-methods)
+(push "scrollTop" jquery-doc-methods)
 
 (puthash "scrollTop" (quote (("name" . "scrollTop") ("signatures" "scrollTop" nil) ("desc" (text . "Get the current vertical position of the scroll bar for the first
 element in the set of matched elements.
@@ -11533,7 +11533,7 @@ the very top, or if the element is not scrollable, this number will be
 				p { margin:10px;padding:5px;border:2px solid #666; }
 				") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "scrollTop" jquery-methods)
+(push "scrollTop" jquery-doc-methods)
 
 (puthash "scrollTop" (quote (("name" . "scrollTop") ("signatures" "scrollTop" (("value" "An integer indicating the new position to set the scroll bar to.
 
@@ -11560,7 +11560,7 @@ positions the vertical scroll of each matched element.
 				p { margin:10px;padding:5px;border:2px solid #666;width:1000px;height:1000px; }
 				") (text . "") (html . "<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>") (text . ""))))) jquery-doc-hash)
 
-(push "position" jquery-methods)
+(push "position" jquery-doc-methods)
 
 (puthash "position" (quote (("name" . "position") ("signatures" "position" nil) ("desc" (text . "Get the current coordinates of the first element in the set of matched
 elements, relative to the offset parent.
@@ -11590,7 +11590,7 @@ containing DOM element, .position() is the more useful.
 				<p></p>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "offset" jquery-methods)
+(push "offset" jquery-doc-methods)
 
 (puthash "offset" (quote (("name" . "offset") ("signatures" "offset" nil) ("desc" (text . "Get the current coordinates of the first element in the set of matched
 elements, relative to the document.
@@ -11639,7 +11639,7 @@ is the more useful.
 				</div>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "offset" jquery-methods)
+(push "offset" jquery-doc-methods)
 
 (puthash "offset" (quote (("name" . "offset") ("signatures" "offset" (("coordinates" "An object containing the properties top and left, which are integers
 indicating the new top and left coordinates for the elements.
@@ -11659,7 +11659,7 @@ to relative to allow for this repositioning.
 
 ") (text . "") (js . "$(\"p:last\").offset({ top: 10, left: 30 });") (text . "") (css . "p { margin-left:10px; } ") (text . "") (html . "<p>Hello</p><p>2nd Paragraph</p>") (text . ""))))) jquery-doc-hash)
 
-(push "css" jquery-methods)
+(push "css" jquery-doc-methods)
 
 (puthash "css" (quote (("name" . "css") ("signatures" "css" (("propertyName" "A CSS property.
 
@@ -11707,7 +11707,7 @@ on.
 				<div style=\"background-color:#123456;\"></div>
 				<div style=\"background-color:#f11;\"></div>") (text . ""))))) jquery-doc-hash)
 
-(push "css" jquery-methods)
+(push "css" jquery-doc-methods)
 
 (puthash "css" (quote (("name" . "css") ("signatures" "css" (("propertyName" "A CSS property name.
 
@@ -11836,7 +11836,7 @@ larger values.
 				<div>click</div>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "unwrap" jquery-methods)
+(push "unwrap" jquery-doc-methods)
 
 (puthash "unwrap" (quote (("name" . "unwrap") ("signatures" "unwrap" nil) ("desc" (text . "Remove the parents of the set of matched elements from the DOM, leaving
 the matched elements in their place.
@@ -11859,7 +11859,7 @@ siblings, if any) replace their parents within the DOM structure.
 				<p>cruel</p>
 				<p>World</p>") (text . ""))))) jquery-doc-hash)
 
-(push "detach" jquery-methods)
+(push "detach" jquery-doc-methods)
 
 (puthash "detach" (quote (("name" . "detach") ("signatures" "detach" (("selector" "A selector expression that filters the set of matched elements to be
 removed.
@@ -11889,7 +11889,7 @@ later time.
 				<p>you?</p>
 				<button>Attach/detach paragraphs</button>") (text . ""))))) jquery-doc-hash)
 
-(push "clone" jquery-methods)
+(push "clone" jquery-doc-methods)
 
 (puthash "clone" (quote (("name" . "clone") ("signatures" "clone" (("withDataAndEvents" "A Boolean indicating whether event handlers should be copied along with
 the elements. As of jQuery 1.4, element data will be copied as well.
@@ -11961,7 +11961,7 @@ paragraphs.
 				<b>Hello</b><p>, how are you?</p>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "remove" jquery-methods)
+(push "remove" jquery-doc-methods)
 
 (puthash "remove" (quote (("name" . "remove") ("signatures" "remove" (("selector" "A selector expression that filters the set of matched elements to be
 removed.
@@ -12024,7 +12024,7 @@ doing $(\"p\").filter(\":contains(ʼHelloʼ)\").remove().
 				
 				<button>Call remove(\":contains('Hello')\") on paragraphs</button>") (text . ""))))) jquery-doc-hash)
 
-(push "empty" jquery-methods)
+(push "empty" jquery-doc-methods)
 
 (puthash "empty" (quote (("name" . "empty") ("signatures" "empty" nil) ("desc" (text . "Remove all child nodes of the set of matched elements from the DOM.
 
@@ -12065,7 +12065,7 @@ themselves.
 
 				<button>Call empty() on above paragraph</button>") (text . ""))))) jquery-doc-hash)
 
-(push "replaceAll" jquery-methods)
+(push "replaceAll" jquery-doc-methods)
 
 (puthash "replaceAll" (quote (("name" . "replaceAll") ("signatures" "replaceAll" (("target" "A selector expression indicating which element(s) to replace.
 
@@ -12106,7 +12106,7 @@ target by being moved from its old location, not by being cloned.
 				<p>cruel</p>
 				<p>World</p>") (text . ""))))) jquery-doc-hash)
 
-(push "replaceWith" jquery-methods)
+(push "replaceWith" jquery-doc-methods)
 
 (puthash "replaceWith" (quote (("name" . "replaceWith") ("signatures" "replaceWith" (("newContent" "The content to insert. May be an HTML string, DOM element, or jQuery
 object.
@@ -12244,7 +12244,7 @@ append the class name of the selected element to the paragraph.
 				</div>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "wrapInner" jquery-methods)
+(push "wrapInner" jquery-doc-methods)
 
 (puthash "wrapInner" (quote (("name" . "wrapInner") ("signatures" "wrapInner" (("wrappingElement" "An HTML snippet, selector expression, jQuery object, or DOM element
 specifying the structure to wrap around the content of the matched
@@ -12332,7 +12332,7 @@ contents.
 				<p>cruel</p>
 				<p>World</p>") (text . ""))))) jquery-doc-hash)
 
-(push "wrapAll" jquery-methods)
+(push "wrapAll" jquery-doc-methods)
 
 (puthash "wrapAll" (quote (("name" . "wrapAll") ("signatures" "wrapAll" (("wrappingElement" "An HTML snippet, selector expression, jQuery object, or DOM element
 specifying the structure to wrap around the matched elements.
@@ -12402,7 +12402,7 @@ target.
 				<p>World</p>
 				<div class=\"doublediv\"><div></div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "wrap" jquery-methods)
+(push "wrap" jquery-doc-methods)
 
 (puthash "wrap" (quote (("name" . "wrap") ("signatures" "wrap" (("wrappingElement" "An HTML snippet, selector expression, jQuery object, or DOM element
 specifying the structure to wrap around the matched elements.
@@ -12494,7 +12494,7 @@ target.
 				<p>World</p>
 				<div class=\"doublediv\"><div></div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "insertBefore" jquery-methods)
+(push "insertBefore" jquery-doc-methods)
 
 (puthash "insertBefore" (quote (("name" . "insertBefore") ("signatures" "insertBefore" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
 elements will be inserted before the element(s) specified by this
@@ -12545,7 +12545,7 @@ $(\"#foo\").before(\"p\")
 
 ") (text . "") (js . "$(\"p\").insertBefore(\"#foo\"); // check before() examples") (text . "") (css . "#foo { background:yellow; }") (text . "") (html . "<div id=\"foo\">FOO!</div><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
 
-(push "before" jquery-methods)
+(push "before" jquery-doc-methods)
 
 (puthash "before" (quote (("name" . "before") ("signatures" "before" (("content" "HTML string, DOM element, or jQuery object to insert before each
 element in the set of matched elements.
@@ -12633,7 +12633,7 @@ all paragraphs.
 
 ") (text . "") (js . "$(\"p\").before( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what I said...</p><b>Hello</b>") (text . ""))))) jquery-doc-hash)
 
-(push "insertAfter" jquery-methods)
+(push "insertAfter" jquery-doc-methods)
 
 (puthash "insertAfter" (quote (("name" . "insertAfter") ("signatures" "insertAfter" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
 elements will be inserted after the element(s) specified by this
@@ -12684,7 +12684,7 @@ $(\"#foo\").after(\"p\")
 
 ") (text . "") (js . "$(\"p\").insertAfter(\"#foo\"); // check after() examples") (text . "") (css . "#foo { background:yellow; }") (text . "") (html . "<p> is what I said... </p><div id=\"foo\">FOO!</div>") (text . ""))))) jquery-doc-hash)
 
-(push "after" jquery-methods)
+(push "after" jquery-doc-methods)
 
 (puthash "after" (quote (("name" . "after") ("signatures" "after" (("content" "HTML string, DOM element, or jQuery object to insert after each element
 in the set of matched elements.
@@ -12795,7 +12795,7 @@ paragraphs.
 
 ") (text . "") (js . "$(\"p\").after( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<b>Hello</b><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
 
-(push "prependTo" jquery-methods)
+(push "prependTo" jquery-doc-methods)
 
 (puthash "prependTo" (quote (("name" . "prependTo") ("signatures" "prependTo" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
 elements will be inserted at the beginning of the element(s) specified
@@ -12852,7 +12852,7 @@ inserted element will be created for each target after the first.
 			      
 			      <span>I have something to say... </span>") (text . ""))))) jquery-doc-hash)
 
-(push "prepend" jquery-methods)
+(push "prepend" jquery-doc-methods)
 
 (puthash "prepend" (quote (("name" . "prepend") ("signatures" "prepend" (("content" "DOM element, array of elements, HTML string, or jQuery object to insert
 at the beginning of each element in the set of matched elements.
@@ -12945,7 +12945,7 @@ paragraphs.
 
 ") (text . "") (js . "$(\"p\").prepend( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what was said.</p><b>Hello</b>") (text . ""))))) jquery-doc-hash)
 
-(push "appendTo" jquery-methods)
+(push "appendTo" jquery-doc-methods)
 
 (puthash "appendTo" (quote (("name" . "appendTo") ("signatures" "appendTo" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
 elements will be inserted at the end of the element(s) specified by
@@ -13007,7 +13007,7 @@ inserted element will be created for each target after the first.
 
 			      <div id=\"foo\">FOO! </div>") (text . ""))))) jquery-doc-hash)
 
-(push "append" jquery-methods)
+(push "append" jquery-doc-methods)
 
 (puthash "append" (quote (("name" . "append") ("signatures" "append" (("content" "DOM element, HTML string, or jQuery object to insert at the end of each
 element in the set of matched elements.
@@ -13115,7 +13115,7 @@ paragraphs.
 			      p { background:yellow; }
 			      ") (text . "") (html . "<strong>Hello world!!!</strong><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
 
-(push "val" jquery-methods)
+(push "val" jquery-doc-methods)
 
 (puthash "val" (quote (("name" . "val") ("signatures" "val" nil) ("desc" (text . "Get the current value of the first element in the set of matched
 elements.
@@ -13172,7 +13172,7 @@ multiple select and display their values.
 			      ") (text . "") (html . "<input type=\"text\" value=\"some text\"/>
 			      <p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "val" jquery-methods)
+(push "val" jquery-doc-methods)
 
 (puthash "val" (quote (("name" . "val") ("signatures" "val" (("value" "A string of text or an array of strings corresponding to the value of
 each matched element to set as selected/checked.
@@ -13254,7 +13254,7 @@ elementʼs index and its current value:
 			      <input type=\"radio\"  name=\"r\" value=\"radio1\"/> radio1
 			      <input type=\"radio\"  name=\"r\" value=\"radio2\"/> radio2") (text . ""))))) jquery-doc-hash)
 
-(push "text" jquery-methods)
+(push "text" jquery-doc-methods)
 
 (puthash "text" (quote (("name" . "text") ("signatures" "text" nil) ("desc" (text . "Get the combined text contents of each element in the set of matched
 elements, including their descendants.
@@ -13296,7 +13296,7 @@ gone).
 
 			      <p></p>") (text . ""))))) jquery-doc-hash)
 
-(push "text" jquery-methods)
+(push "text" jquery-doc-methods)
 
 (puthash "text" (quote (("name" . "text") ("signatures" "text" (("textString" "A string of text to set as the content of each matched element.
 
@@ -13352,7 +13352,7 @@ produce the following DOM output:
 			      p { color:blue; margin:8px; }
 			      ") (text . "") (html . "<p>Test Paragraph.</p>") (text . ""))))) jquery-doc-hash)
 
-(push "html" jquery-methods)
+(push "html" jquery-doc-methods)
 
 (puthash "html" (quote (("name" . "html") ("signatures" "html" nil) ("desc" (text . "Get the HTML contents of the first element in the set of matched
 elements.
@@ -13401,7 +13401,7 @@ characters.
 			      This <button name=\"nada\">button</button> does nothing.
 			      </p>") (text . ""))))) jquery-doc-hash)
 
-(push "html" jquery-methods)
+(push "html" jquery-doc-methods)
 
 (puthash "html" (quote (("name" . "html") ("signatures" "html" (("htmlString" "A string of HTML to set as the content of each matched element.
 
@@ -13466,7 +13466,7 @@ the inserted html.
 			      <div></div>
 			      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "map" jquery-methods)
+(push "map" jquery-doc-methods)
 
 (puthash "map" (quote (("name" . "map") ("signatures" "map" (("callback(index, domElement)" "A function object that will be invoked for each element in the current
 set.
@@ -13592,7 +13592,7 @@ inserted.
 
 			      ") (text . ""))))) jquery-doc-hash)
 
-(push "is" jquery-methods)
+(push "is" jquery-doc-methods)
 
 (puthash "is" (quote (("name" . "is") ("signatures" "is" (("selector" "A string containing a selector expression to match elements against.
 
@@ -13749,7 +13749,7 @@ while others turn red.
 			      <li>Opera</li>
 			      </ul>") (text . ""))))) jquery-doc-hash)
 
-(push "eq" jquery-methods)
+(push "eq" jquery-doc-methods)
 
 (puthash "eq" (quote (("name" . "eq") ("signatures" "eq" (("index" "An integer indicating the 0-based position of the element.
 
@@ -13813,7 +13813,7 @@ sixth of five list items.
 			      <div></div>
 			      <div></div>") (text . ""))))) jquery-doc-hash)
 
-(push "filter" jquery-methods)
+(push "filter" jquery-doc-methods)
 
 (puthash "filter" (quote (("name" . "filter") ("signatures" "filter" (("selector" "A string containing a selector expression to match the current set of
 elements against.
@@ -13932,7 +13932,7 @@ them.
 			      return $(\"ol\", this).length == 0;
 			      });") (text . ""))))) jquery-doc-hash)
 
-(push "toggleClass" jquery-methods)
+(push "toggleClass" jquery-doc-methods)
 
 (puthash "toggleClass" (quote (("name" . "toggleClass") ("signatures" "toggleClass" (("className" "One or more class names (separated by spaces) to be toggled for each
 element in the matched set.
@@ -14035,7 +14035,7 @@ of that paragraph, remove it every first and second click.
 
 			      <p class=\"blue\">paragraphs (<span>clicks: 0</span>)</p>") (text . ""))))) jquery-doc-hash)
 
-(push "removeClass" jquery-methods)
+(push "removeClass" jquery-doc-methods)
 
 (puthash "removeClass" (quote (("name" . "removeClass") ("signatures" "removeClass" (("className" "One or more space-separated classes to be removed from the class
 attribute of each matched element.
@@ -14108,7 +14108,7 @@ last <li>.
 
 			      <p class=\"blue under\">Goodbye</p>") (text . ""))))) jquery-doc-hash)
 
-(push "hasClass" jquery-methods)
+(push "hasClass" jquery-doc-methods)
 
 (puthash "hasClass" (quote (("name" . "hasClass") ("signatures" "hasClass" (("className" "The class name to search for.
 
@@ -14144,7 +14144,7 @@ above, the following will return true:
 			      <div id=\"result2\">Second paragraph has selected class: </div>
 			      <div id=\"result3\">At least one paragraph has selected class: </div>") (text . ""))))) jquery-doc-hash)
 
-(push "removeAttr" jquery-methods)
+(push "removeAttr" jquery-doc-methods)
 
 (puthash "removeAttr" (quote (("name" . "removeAttr") ("signatures" "removeAttr" (("attributeName" "An attribute to remove.
 
@@ -14165,7 +14165,7 @@ across browsers.
 			      ") (text . "") (html . "<button>Enable</button>
 			      <input type=\"text\" disabled=\"disabled\" value=\"can't edit this\" />") (text . ""))))) jquery-doc-hash)
 
-(push "attr" jquery-methods)
+(push "attr" jquery-doc-methods)
 
 (puthash "attr" (quote (("name" . "attr") ("signatures" "attr" (("attributeName" "The name of the attribute to get.
 
@@ -14204,7 +14204,7 @@ attribute has two main benefits:
 			      The title of the emphasis is:<div></div>
 			      ") (text . ""))))) jquery-doc-hash)
 
-(push "attr" jquery-methods)
+(push "attr" jquery-doc-methods)
 
 (puthash "attr" (quote (("name" . "attr") ("signatures" "attr" (("attributeName" "The name of the attribute to set.
 
@@ -14322,7 +14322,7 @@ something.
 			      <img title=\"hat.gif\"/>
 			      ") (text . ""))))) jquery-doc-hash)
 
-(push "addClass" jquery-methods)
+(push "addClass" jquery-doc-methods)
 
 (puthash "addClass" (quote (("name" . "addClass") ("signatures" "addClass" (("className" "One or more class names to be added to the class attribute of each
 matched element.
@@ -14400,7 +14400,7 @@ that already has a \"red\" class.
 			      <p>There are zero green divs</p>
 			      ") (text . ""))))) jquery-doc-hash)
 
-(push "$.tmpl" jquery-methods)
+(push "$.tmpl" jquery-doc-methods)
 
 (puthash "$.tmpl" (quote (("name" . "$.tmpl") ("signatures" "$.tmpl" (("template" "The HTML markup or text to use as a template.
 
@@ -14620,7 +14620,7 @@ so be available to the template as in the following example:
 				<ul id=\"movieList\"></ul>
 				") (text . ""))))) jquery-doc-hash)
 
-(push "tmplItem" jquery-methods)
+(push "tmplItem" jquery-doc-methods)
 
 (puthash "tmplItem" (quote (("name" . "tmplItem") ("signatures" "tmplItem" nil) ("desc" (text . "Return the tmplItem data structure for the rendered template that the
 matched element is part of.
@@ -14840,7 +14840,7 @@ CSS styles on the rendered template.
 				      <div id=\"personDetail\"></div>
 				      ") (text . ""))))) jquery-doc-hash)
 
-(push "template" jquery-methods)
+(push "template" jquery-doc-methods)
 
 (puthash "template" (quote (("name" . "template") ("signatures" "template" (("name" "A string naming the compiled template.
 
@@ -14997,7 +14997,7 @@ template.
     <table><tbody id=\"movieList\"></tbody></table>
     ") (text . ""))))) jquery-doc-hash)
 
-(push "unlink" jquery-methods)
+(push "unlink" jquery-doc-methods)
 
 (puthash "unlink" (quote (("name" . "unlink") ("signatures" "unlink" (("target" "An object to unlink.
 
@@ -15077,7 +15077,7 @@ those elements.
 	  Object.lastName <span id=\"objLast\"></span>
 	  ") (text . ""))))) jquery-doc-hash)
 
-(push "link" jquery-methods)
+(push "link" jquery-doc-methods)
 
 (puthash "link" (quote (("name" . "link") ("signatures" "link" (("target" "An object to link changes to.
 
@@ -15288,7 +15288,7 @@ of the person object to the height of the target DOM element.
 	Object.lastName: <span id=\"objLast\"></span>
 	") (text . ""))))) jquery-doc-hash)
 
-(push "$.tmplItem" jquery-methods)
+(push "$.tmplItem" jquery-doc-methods)
 
 (puthash "$.tmplItem" (quote (("name" . "$.tmplItem") ("signatures" "$.tmplItem" (("element" "An HTML element (or jQuery object that wraps an element)
 
@@ -15519,7 +15519,7 @@ following:
     <table><tbody id=\"movieList\"></tbody></table>
     ") (text . ""))))) jquery-doc-hash)
 
-(push "$.template" jquery-methods)
+(push "$.template" jquery-doc-methods)
 
 (puthash "$.template" (quote (("name" . "$.template") ("signatures" "$.template" (("name" "A string naming the compiled template.
 
@@ -15724,7 +15724,7 @@ named template.
       <table><tbody id=\"movieList\"></tbody></table>
       ") (text . ""))))) jquery-doc-hash)
 
-(push "$.template" jquery-methods)
+(push "$.template" jquery-doc-methods)
 
 (puthash "$.template" (quote (("name" . "$.template") ("signatures" "$.template" (("template" "The template markup to be compiled, or a string corresponding to a
 named template.
@@ -15824,7 +15824,7 @@ template.
     <table><tbody id=\"movieList\"></tbody></table>
     ") (text . ""))))) jquery-doc-hash)
 
-(push ".tmpl" jquery-methods)
+(push ".tmpl" jquery-doc-methods)
 
 (puthash ".tmpl" (quote (("name" . ".tmpl") ("signatures" ".tmpl" (("data" "The data to render. This can be any JavaScript type, including Array or
 Object.
