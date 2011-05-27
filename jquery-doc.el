@@ -1,4 +1,28 @@
-;; jQuery api documentation interface for emacs
+;;; jquery-doc.el --- jQuery api documentation interface for emacs
+
+;; Copyright (C) 2011 Anantha Kumaran.
+
+;; Author: Anantha kumaran <ananthakumaran@gmail.com>
+;; Keywords: docs, jquery
+
+;; This program is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; provides completion source for autocomplete, documentation lookup
+
+;;; Code:
 
 (require 'jquery-doc-data)
 
@@ -15,14 +39,14 @@
 
 ;; utils
 (defmacro jquery-doc-with-temp-buffer-as-string (&rest body)
-  "Evaluate BODY inside a temp buffer and returns the buffer string."
+  "Evaluate BODY inside a temp buffer and return the buffer string."
   (declare (indent 0))
   `(with-temp-buffer
      ,@body
      (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun jquery-doc-lynx-dump (xml)
-  "Returns the lynx dump of the xml as String"
+  "Return the lynx dump of the XML as String."
   (let ((temp-file (make-temp-file "temp"))
 	(dump ""))
     (with-temp-file temp-file
@@ -109,8 +133,7 @@
 			     'entry))))
 
 (defun jquery-doc-generate-data (file)
-  "Extracts data from jQuery api documentation xml dump and writes it
-to `jquery-doc-data.el' in some convenient format
+  "Extract data from FILE and write it to `jquery-doc-data.el'.
 
 This function takes long time(it makes many calls to lynx) to finish"
   (let* ((api (car (xml-parse-file file)))
@@ -144,7 +167,7 @@ This function takes long time(it makes many calls to lynx) to finish"
 
 ;; utils
 (defun jquery-doc-insert-with-mode (mode text)
-  "Applies the mode to the text and inserts it in the current buffer"
+  "Apply the MODE to the TEXT and insert it in the current buffer."
   (let ((temp-buffer (generate-new-buffer "*temp*")))
     (with-current-buffer temp-buffer
       (insert "\n")
@@ -157,13 +180,13 @@ This function takes long time(it makes many calls to lynx) to finish"
     (kill-buffer temp-buffer)))
 
 (defun jquery-doc-insert-with-face (text face)
-  "Insert text in current buffer and color it with face"
+  "Insert TEXT in current buffer and color it with FACE."
   (let ((start (point)))
     (insert text)
     (set-text-properties start (point) `(face ,face))))
 
 (defun jquery-doc-insert-with-fill-region (text)
-  "Insert text and justifies the text"
+  "Insert TEXT and justifies the text."
   (let ((beg (point)))
     (insert (replace-regexp-in-string "\n+" "\n" text))
     (fill-region beg (point))))
@@ -270,7 +293,8 @@ This function takes long time(it makes many calls to lynx) to finish"
       (goto-char (point-min))))))
 
 (defun jquery-doc (&optional jquery-method)
-  "Displays the jquery doc in a buffer"
+  "Displays the jquery doc in a buffer.
+Optional argument JQUERY-METHOD method-name."
   (interactive (list nil))
   (let* ((completing-read-func (if (null ido-mode)
 				   'completing-read
@@ -289,7 +313,7 @@ This function takes long time(it makes many calls to lynx) to finish"
 	(display-buffer buffer)))))
 
 (defun jquery-doc-documentation (method)
-  "Returns the documentation for method as String"
+  "Return the documentation for METHOD as String."
   (let ((method (substring-no-properties method)))
     (jquery-doc-with-temp-buffer-as-string
       (jquery-doc-insert (current-buffer) method))))
@@ -314,3 +338,7 @@ This function takes long time(it makes many calls to lynx) to finish"
   (setq ac-sources (append '(ac-source-jquery) ac-sources)))
 
 (provide 'jquery-doc)
+
+(provide 'jquery-doc)
+
+;;; jquery-doc.el ends here
