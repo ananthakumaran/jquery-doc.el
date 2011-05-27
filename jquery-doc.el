@@ -339,6 +339,4 @@ Optional argument JQUERY-METHOD method-name."
 
 (provide 'jquery-doc)
 
-(provide 'jquery-doc)
-
 ;;; jquery-doc.el ends here
