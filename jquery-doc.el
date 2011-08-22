@@ -222,7 +222,6 @@ This function takes long time(it makes many calls to lynx) to finish"
     (with-current-buffer buffer
       (erase-buffer)
       (font-lock-mode -1)
-      (help-mode)
 
       ;; short desc
       (jquery-doc-insert-blocks (cdr (assoc "desc" method)))
@@ -290,14 +289,15 @@ This function takes long time(it makes many calls to lynx) to finish"
 	    (jquery-doc-insert-blocks example)
 	    (newline))))
 
-      (setq buffer-read-only t)
+      (help-mode)
       (goto-char (point-min))))))
 
 (defun jquery-doc (&optional jquery-method)
   "Displays the jquery doc in a buffer.
 Optional argument JQUERY-METHOD method-name."
   (interactive (list nil))
-  (let* ((def (current-word))
+  (let* ((def (and (member (current-word) jquery-doc-methods)
+		   (current-word)))
          (completing-read-func (if (null ido-mode)
 				   'completing-read
 				 'ido-completing-read))
