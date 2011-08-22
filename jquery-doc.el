@@ -306,7 +306,7 @@ Optional argument JQUERY-METHOD method-name."
 				   (if def
                                        (format "jQuery doc (default %s): " def)
                                      "jQuery doc: ")
-				   jquery-doc-methods
+				   (copy-list jquery-doc-methods)
 				   nil
 				   t nil nil def)))
 	 (buffer-name (format "*jQuery doc %s" method-name)))
