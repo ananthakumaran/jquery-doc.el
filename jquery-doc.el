@@ -3,7 +3,7 @@
 ;; Copyright (C) 2011 Anantha Kumaran.
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
-;; Version: 1.6
+;; Version: 1.7
 ;; Keywords: docs, jquery
 
 ;; This program is free software: you can redistribute it and/or
