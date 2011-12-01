@@ -173,7 +173,8 @@ This function takes long time(it makes many calls to lynx) to finish"
     (with-current-buffer temp-buffer
       (insert "\n")
       (insert text)
-      (funcall mode)
+      (ignore-errors
+	(funcall mode))
       (indent-region (point-min) (point-max))
       (insert "\n\n")
       (font-lock-fontify-region (point-min) (point-max)))
