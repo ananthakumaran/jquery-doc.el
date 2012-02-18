@@ -25,6 +25,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'auto-complete))
+
 (require 'jquery-doc-data)
 
 ;; xml helpers
