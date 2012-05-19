@@ -25,10 +25,18 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'auto-complete))
-
+(require 'auto-complete)
 (require 'jquery-doc-data)
+(require 'cl)
+(require 'xml)
+
+;; utils
+(defmacro jquery-doc-with-temp-buffer-as-string (&rest body)
+  "Evaluate BODY inside a temp buffer and return the buffer string."
+  (declare (indent 0))
+  `(with-temp-buffer
+     ,@body
+     (buffer-substring-no-properties (point-min) (point-max))))
 
 ;; xml helpers
 (defun jquery-doc-xml-get-first-children (node name)
@@ -41,14 +49,6 @@
   (jquery-doc-with-temp-buffer-as-string
     (xml-print node)))
 
-;; utils
-(defmacro jquery-doc-with-temp-buffer-as-string (&rest body)
-  "Evaluate BODY inside a temp buffer and return the buffer string."
-  (declare (indent 0))
-  `(with-temp-buffer
-     ,@body
-     (buffer-substring-no-properties (point-min) (point-max))))
-
 (defun jquery-doc-lynx-dump (xml)
   "Return the lynx dump of the XML as String."
   (let ((temp-file (make-temp-file "temp"))
@@ -56,7 +56,7 @@
     (with-temp-file temp-file
       (insert xml))
     (with-temp-buffer
-      (call-process "lynx" temp-file t nil "-dump" "-stdin" "-nolist")
+      (call-process "lynx" temp-file t nil "-dump" "-stdin" "-nolist" "-assume-charset=utf-8")
       (setq dump
 	    (replace-regexp-in-string "^\s\s\s" "" (buffer-string))))
     (delete-file temp-file)
@@ -145,6 +145,8 @@ This function takes long time(it makes many calls to lynx) to finish"
     (with-temp-file "jquery-doc-data.el"
       (insert
        (with-output-to-string
+	 (print `(defvar jquery-doc-hash))
+	 (print `(defvar jquery-doc-methods))
 	 (print `(setq jquery-doc-hash
 		       (make-hash-table :size 500 :test 'equal)))
 	 (print `(setq jquery-doc-methods '()))
