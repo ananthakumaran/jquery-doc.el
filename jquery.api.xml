@@ -839,7 +839,7 @@ callbacks.fireWith( window, ['foo','bar']);
     <argument name="selector" type="String" optional="true">
       <desc>A selector which should match the one originally passed to <code>.on()</code> when attaching event handlers.</desc>
     </argument>
-    <argument name="handler" type="Function" optional="true">
+    <argument name="handler(eventObject)" type="Function" optional="true">
       <desc>A handler function previously attached for the event(s), or the special value <code>false</code>.</desc>
     </argument>
   </signature>
@@ -957,9 +957,9 @@ $("form").off(".validator");]]></code>
       <desc>A selector string to filter the descendants of the selected elements that trigger the event. If the selector is <code>null</code> or omitted, the event is always triggered when it reaches the selected element.</desc>
     </argument>
     <argument name="data" type="Anything" optional="true">
-      <desc>Data to be passed to the handler in <a href="/event.data"><code>event.data</code></a> when an event is triggered.</desc>
+      <desc>Data to be passed to the handler in <a href="http://api.jquery.com/event.data/"><code>event.data</code></a> when an event is triggered.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute when the event is triggered. The value <code>false</code> is also allowed as a shorthand for a function that simply does <code>return false</code>.</desc>
     </argument>
   </signature>
@@ -972,16 +972,16 @@ $("form").off(".validator");]]></code>
       <desc>A selector string to filter the descendants of the selected elements that will call the handler. If the selector is null or omitted, the handler is always called when it reaches the selected element.</desc>
     </argument>
     <argument name="data" type="Anything" optional="true">
-      <desc>Data to be passed to the handler in <a href="http://api.jquery.com/event.data"><code>event.data</code></a> when an event occurs.</desc>
+      <desc>Data to be passed to the handler in <a href="http://api.jquery.com/event.data/"><code>event.data</code></a> when an event occurs.</desc>
     </argument>
   </signature>
 <longdesc>
 
-<p>The <code>.on()</code> method attaches event handlers to the currently selected set of elements in the jQuery object. As of jQuery 1.7, the <code>.on()</code> method provides all functionality required for attaching event handlers. For help in converting from older jQuery event methods, see <a href="http://api.jquery.com/bind"><code>.bind()</code></a>,  <a href="http://api.jquery.com/delegate"><code>.delegate()</code></a>, and <a href="http://api.jquery.com/live"><code>.live()</code></a>. To remove events bound with <code>.on()</code>, see <a href="http://api.jquery.com/off"><code>.off()</code></a>. To attach an event that runs only once and then removes itself, see <a href="http://api.jquery.com/one"><code>.one()</code></a></p>
+<p>The <code>.on()</code> method attaches event handlers to the currently selected set of elements in the jQuery object. As of jQuery 1.7, the <code>.on()</code> method provides all functionality required for attaching event handlers. For help in converting from older jQuery event methods, see <a href="http://api.jquery.com/bind/"><code>.bind()</code></a>,  <a href="http://api.jquery.com/delegate/"><code>.delegate()</code></a>, and <a href="http://api.jquery.com/live/"><code>.live()</code></a>. To remove events bound with <code>.on()</code>, see <a href="http://api.jquery.com/off/"><code>.off()</code></a>. To attach an event that runs only once and then removes itself, see <a href="http://api.jquery.com/one/"><code>.one()</code></a></p>
 
 <h2 id="event-names">Event names and namespaces</h2>
 
-<p>Any event names can be used for the <code>events</code> argument. jQuery will pass through the browser's standard JavaScript event types, calling the <code>handler</code> function when the browser generates events due to user actions such as <code>click</code>. In addition, the <a href="http://api.jquery.com/trigger"><code>.trigger()</code></a> method can trigger both standard browser event names and custom event names to call attached handlers.</p>
+<p>Any event names can be used for the <code>events</code> argument. jQuery will pass through the browser's standard JavaScript event types, calling the <code>handler</code> function when the browser generates events due to user actions such as <code>click</code>. In addition, the <a href="http://api.jquery.com/trigger/"><code>.trigger()</code></a> method can trigger both standard browser event names and custom event names to call attached handlers.</p>
 
 <p>An event name can be qualified by <em>event namespaces</em> that simplify removing or triggering the event. For example, <code>"click.myPlugin.simple"</code> defines both the myPlugin and simple namespaces for this particular click event. A click event handler attached via that string could be removed with <code>.off("click.myPlugin")</code> or <code>.off("click.simple")</code> without disturbing other click handlers attached to the elements. Namespaces are similar to CSS classes in that they are not hierarchical; only one name needs to match. Namespaces beginning with an underscore are reserved for jQuery's use.</p>
 
@@ -989,7 +989,7 @@ $("form").off(".validator");]]></code>
 
 <h2 id="direct-and-delegated-events">Direct and delegated events</h2>
 
-<p>The majority of browser events <em>bubble</em>, or <em>propagate</em>, from the deepest, innermost element (the <strong>event target</strong>) in the document where they occur all the way up to the body and the <code>document</code> element. In Internet Explorer 8 and lower, a few events such as <code>change</code> and <code>submit</code> do not natively bubble but jQuery patches these to bubble and create consistent cross-browser behavior. The <code>focus</code> and <code>blur</code> events are specified by the W3C to not bubble, but jQuery defines cross-browser <code>focusin</code> and <code>focusout</code> events that do bubble.</p>
+<p>The majority of browser events <em>bubble</em>, or <em>propagate</em>, from the deepest, innermost element (the <strong>event target</strong>) in the document where they occur all the way up to the body and the <code>document</code> element. In Internet Explorer 8 and lower, a few events such as <code>change</code> and <code>submit</code> do not natively bubble but jQuery patches these to bubble and create consistent cross-browser behavior.</p>
 
 <p>If <code>selector</code> is omitted or is null, the event handler is referred to as <em>direct</em> or <em>directly-bound</em>. The handler is called every time an event occurs on the selected elements, whether it occurs directly on the element or bubbles from a descendant (inner) element.</p>
 
@@ -1020,7 +1020,7 @@ function notify() { alert("clicked"); }
 $("button").on("click", notify);
 </pre>
 
-<p>When the browser triggers an event or other JavaScript calls jQuery's <code>.trigger()</code> method, jQuery passes the handler an <a href="http://api.jquery.com/event-object"><code>event object</code></a> it can use to analyze and change the status of the event. This object is a <em>normalized subset</em> of data provided by the browser; the browser's unmodified native event object is available in <a href="http://api.jquery.com/event.originalEvent"><code>event.originalEvent</code></a>. For example, <a href="http://api.jquery.com/event.type"><code>event.type</code></a> contains the event name (e.g., "resize") and <a href="http://api.jquery.com/event.target"><code>event.target</code></a> indicates the deepest (innermost) element where the event occurred.</p>
+<p>When the browser triggers an event or other JavaScript calls jQuery's <code>.trigger()</code> method, jQuery passes the handler an <a href="http://api.jquery.com/category/event-object/"><code>event object</code></a> it can use to analyze and change the status of the event. This object includes a <em>normalized subset</em> of data provided by the browser; the browser's unmodified native event object is available in <code>event.originalEvent</code>. For example, <a href="http://api.jquery.com/event.type"><code>event.type</code></a> contains the event name (e.g., "resize") and <a href="http://api.jquery.com/event.target"><code>event.target</code></a> indicates the deepest (innermost) element where the event occurred.</p>
 
 <p>By default, most events bubble up from the original event target to the <code>document</code> element. At each element along the way, jQuery calls any matching event handlers that have been attached. A handler can prevent the event from bubbling further up the document tree (and thus prevent handlers on those elements from running) by calling <code>event.stopPropagation()</code>. Any other handlers attached on the current element <em>will</em> run however. To prevent that, call <code>event.stopImmediatePropagation()</code>. (Event handlers bound to an element are called in the same order that they were bound.)</p>
 
@@ -1032,9 +1032,9 @@ $("button").on("click", notify);
 
 <h2 id="passing-data">Passing data to the handler</h2>
 
-<p>If a <code>data</code> argument is provided to <code>.on()</code> and is not <code>null</code> or <code>undefined</code>, it is passed to the handler in the <a href="http://api.jquery.com/event.data"><code>event.data</code></a> property each time an event is triggered. The <code>data</code> argument can be any type, but if a string is used the <code>selector</code> must either be provided or explicitly passed as <code>null</code> so that the data is not mistaken for a selector. Best practice is to use an object (map) so that multiple values can be passed as properties.</p>
+<p>If a <code>data</code> argument is provided to <code>.on()</code> and is not <code>null</code> or <code>undefined</code>, it is passed to the handler in the <a href="http://api.jquery.com/event.data/"><code>event.data</code></a> property each time an event is triggered. The <code>data</code> argument can be any type, but if a string is used the <code>selector</code> must either be provided or explicitly passed as <code>null</code> so that the data is not mistaken for a selector. Best practice is to use an object (map) so that multiple values can be passed as properties.</p>
 
-<p>The same event handler can be bound to an element multiple times. This is especially useful when the <code>event.data</code> feature is being used, or when other unique data resides in a closure around the event handler function. For example:</p>
+<p>As of jQuery 1.4, the same event handler can be bound to an element multiple times. This is especially useful when the <code>event.data</code> feature is being used, or when other unique data resides in a closure around the event handler function. For example:</p>
 <pre>
 function greet(event) { alert("Hello "+event.data.name); }
 $("button").on("click", { name: "Karl" }, greet);
@@ -1042,7 +1042,7 @@ $("button").on("click", { name: "Addy" }, greet);
 </pre>
 <p>The above code will generate two different alerts when the button is clicked.</p>
 
-<p>As an alternative or in addition to the <code>data</code> argument provided to the <code>.on()</code> method, you can also pass data to an event handler using a second argument to <a href="http://api.jquery.com/trigger">.trigger()</a> or <a href="http://api.jquery.com/triggerHandler">.triggerHandler()</a>.</p>
+<p>As an alternative or in addition to the <code>data</code> argument provided to the <code>.on()</code> method, you can also pass data to an event handler using a second argument to <a href="http://api.jquery.com/trigger/">.trigger()</a> or <a href="http://api.jquery.com/triggerHandler/">.triggerHandler()</a>.</p>
 
 <h2 id="event-performance">Event performance</h2>
 
@@ -1054,15 +1054,21 @@ $("button").on("click", { name: "Addy" }, greet);
 
 <h2 id="additional-notes">Additional notes</h2>
 
-<p>There are shorthand methods for some events such as <a href="/click"><code>.click()</code></a> that can be used to attach or trigger event handlers. For a complete list of shorthand methods, see the <a href="http://api.jquery.com/category/events/">events category</a>.</p>
+<p>There are shorthand methods for some events such as <a href="http://api.jquery.com/click/"><code>.click()</code></a> that can be used to attach or trigger event handlers. For a complete list of shorthand methods, see the <a href="http://api.jquery.com/category/events/">events category</a>.</p>
 
-<p>Although not recommended, the pseudo-event-name <code>"hover"</code> can be used as a shorthand for <code>"mouseenter mouseleave"</code>. Do not confuse it with the <a href="http://api.jquery.com/hover/"><code>.hover()</code></a> method, which accepts <em>two</em> functions. There is only one handler function attached by the pseudo-event-name <code>"hover"</code>; the handler should examine <code>event.type</code> to determine whether the event is <code>mouseenter</code> or <code>mouseleave</code>.</p>
+<p>Although strongly discouraged for new code, you may see the pseudo-event-name <code>"hover"</code> used as a shorthand for the string <code>"mouseenter mouseleave"</code>. It attaches a <em>single event handler</em> for those two events, and the handler must examine <code>event.type</code> to determine whether the event is <code>mouseenter</code> or <code>mouseleave</code>. Do not confuse the "hover" pseudo-event-name with the <a href="http://api.jquery.com/hover/"><code>.hover()</code></a> method, which accepts <em>one or two</em> functions.</p>
 
 <p>jQuery's event system requires that a DOM element allow attaching data via a property on the element, so that events can be tracked and delivered. The <code>object</code>, <code>embed</code>, and <code>applet</code> elements cannot attach data, and therefore cannot have jQuery events bound to them.</p>
 
-<p>The <code>error</code> event on the <code>window</code> object uses nonstandard arguments and return value conventions, so it is not supported by jQuery. Instead, assign a handler function directly to the <code>window.onerror</code> property.</p>
+<p>The <code>focus</code> and <code>blur</code> events are specified by the W3C to not bubble, but jQuery defines cross-browser <code>focusin</code> and <code>focusout</code> events that do bubble. When <code>focus</code> and <code>blur</code> are used to attach delegated event handlers, jQuery maps the names and delivers them as <code>focusin</code> and <code>focusout</code> respectively. For consistency and clarity, use the bubbling event type names.</p>
+
+<p>jQuery also specifically prevents right and middle clicks from bubbling as they don't occur on the element being clicked. Should working with the middle click be required, the <code>mousedown</code> or <code>mouseup</code> events should be used with <code>.on()</code> instead.</p>
 
 <p>In all browsers, the <code>load</code> event does not bubble. In Internet Explorer 8 and lower, the <code>paste</code> and <code>reset</code> events do not bubble. Such events are not supported for use with delegation, but they <em>can</em> be used when the event handler is directly attached to the element generating the event.</p>
+
+<p>The <code>error</code> event on the <code>window</code> object uses nonstandard arguments and return value conventions, so it is not supported by jQuery. Instead, assign a handler function directly to the <code>window.onerror</code> property.</p>
+
+
 
 </longdesc>
 
@@ -1119,10 +1125,16 @@ span { color:blue; }
 <span style="display:none;"></span>]]></html>
 </example>
 <example>
-<desc>Attach multiple event handlers simultaneously using a map.</desc>
-<code><![CDATA[$("div.test").on({
+  <desc>Attach multiple event handlers simultaneously using a map.</desc>
+  <html><![CDATA[<div class="test">test div</div>]]></html>
+  <css><![CDATA[
+.test { color: #000; padding: .5em; border: 1px solid #444; }
+.active { color: #900;}
+.inside { background-color: aqua; }
+]]></css>
+  <code><![CDATA[$("div.test").on({
   click: function(){
-    $(this).addClass("active");
+    $(this).toggleClass("active");
   },
   mouseenter: function(){
     $(this).addClass("inside");
@@ -1141,7 +1153,7 @@ span { color:blue; }
     });
 ]]></code>
   <css><![CDATA[
-  p { background:yellow; font-weight:bold; cursor:pointer; 
+  p { background:yellow; font-weight:bold; cursor:pointer;
       padding:5px; }
   p.over { background: #ccc; }
   span { color:red; }
@@ -1163,7 +1175,6 @@ span { color:blue; }
 });]]></code>
 </example>
 <category name="Event Handler Attachment"/>
-<category name="Events"/>
 <category name="Version 1.7"/>
 </entry>
 <entry type='method' name="jQuery.isNumeric" return="Boolean">
@@ -1266,7 +1277,7 @@ $( "#content" ).delegate( "*", "focus blur", function( event ) {
     </argument>
     <argument name="progressFilter" type="Function" optional="true">
       <desc>
-        An optional function that is called when the Deferred is rejected.
+        An optional function that is called when progress notifications are sent to the Deferred.
       </desc>
     </argument>
   </signature>
@@ -1739,18 +1750,27 @@ $.getScript("myplugin.js", function() {
 	<longdesc><p>The <code>jQuery.hasData()</code> method provides a way to determine if an element currently has any values that were set using <code><a href='/jQuery.data'>jQuery.data()</a></code>. If no data is associated with an element (there is no data object at all or the data object is empty), the method returns <code>false</code>; otherwise it returns <code>true</code>.</p>
 <p>The primary advantage of <code>jQuery.hasData(element)</code> is that it does not create and associate a data object with the element if none currently exists. In contrast, <code>jQuery.data(element)</code> always returns a data object to the caller, creating one if no data object previously existed.
 </p>
+<p>Note that jQuery's event system uses the jQuery data API to store event handlers. Therefore, binding an event to an element using <code>.on()</code>, <code>.bind()</code>, <code>.live()</code>, <code>.delegate()</code>, or one of the shorthand event methods also associates a data object with that element.
+</p>
 </longdesc>
 	<example>
 		<desc>Set data on an element and see the results of hasData.</desc>
 		<code><![CDATA[
-$(function(){
-  var $p = jQuery("p"), p = $p[0];
-  $p.append(jQuery.hasData(p)+" "); /* false */
-  jQuery.data(p, "testing", 123);
-  $p.append(jQuery.hasData(p)+" "); /* true*/
-  jQuery.removeData(p, "testing");
-  $p.append(jQuery.hasData(p)+" "); /* false */
-});
+var $p = jQuery("p"), p = $p[0];
+$p.append(jQuery.hasData(p)+" "); /* false */
+
+$.data(p, "testing", 123);
+$p.append(jQuery.hasData(p)+" "); /* true*/
+
+$.removeData(p, "testing");
+$p.append(jQuery.hasData(p)+" "); /* false */
+
+$p.on('click', function() {});
+$p.append(jQuery.hasData(p)+" "); /* true */
+
+$p.off('click');
+$p.append(jQuery.hasData(p)+" "); /* false */
+
 ]]></code>
 	<html><![CDATA[<p>Results: </p>]]></html>
 	</example>
@@ -1807,7 +1827,7 @@ alert( 'You are running jQuery version: ' + $.fn.jquery );
         </argument>
     </signature>
     <desc> Return a Deferred's Promise object. </desc>
-    <longdesc> <p>The <code>deferred.promise()</code> method allows an asynchronous function to prevent other code from interfering with the progress or status of its internal request. The Promise exposes only the Deferred methods needed to attach additional handlers or determine the state (<code>then</code>, <code>done</code>, <code>fail</code>, <code>always</code>,<code>pipe</code>, <code>progress</code>, and <code>state</code>), but not ones that change the state (<code>resolve</code>, <code>reject</code>, <code>progress</code>, <code>resolveWith</code>, <code>rejectWith</code>, and <code>progressWith</code>).</p>
+    <longdesc> <p>The <code>deferred.promise()</code> method allows an asynchronous function to prevent other code from interfering with the progress or status of its internal request. The Promise exposes only the Deferred methods needed to attach additional handlers or determine the state (<code>then</code>, <code>done</code>, <code>fail</code>, <code>always</code>, <code>pipe</code>, <code>progress</code>, and <code>state</code>), but not ones that change the state (<code>resolve</code>, <code>reject</code>, <code>notify</code>, <code>resolveWith</code>, <code>rejectWith</code>, and <code>notifyWith</code>).</p>
 
 <p>If <code>target</code> is provided, <code>deferred.promise()</code> will attach the methods onto it and then return this object rather than create a new one. This can be useful to attach the Promise behavior to an object that already exists.</p>
 
@@ -1890,9 +1910,9 @@ obj.done(function( name ) {
   </signature>
     <desc>Hook directly into jQuery to override how particular CSS properties are retrieved or set, normalize CSS property naming, or create custom properties.</desc>
     <longdesc><p>The <code>$.cssHooks</code> object provides a way to define functions for getting and setting particular CSS values. It can also be used to create new cssHooks for normalizing CSS3 features such as box shadows and gradients. </p>
-<p>For example, some versions of Webkit-based browsers require <code>-webkit-border-radius</code> to set the <code>border-radius</code> on an element, while earlier Firefox versions require <code>-moz-border-radius</code>. A cssHook can normalize these vendor-prefixed properties to let <code>.css()</code> accept a single, standard property name (<code>border-radius</code>, or with DOM property syntax, <code>borderRadius</code>).</p>
+<p>For example, some versions of Webkit-based browsers require <code>-webkit-border-radius</code> to set the <code>border-radius</code> on an element, while earlier Firefox versions require <code>-moz-border-radius</code>. A css hook can normalize these vendor-prefixed properties to let <code>.css()</code> accept a single, standard property name (<code>border-radius</code>, or with DOM property syntax, <code>borderRadius</code>).</p>
 <p>In addition to providing fine-grained control over how specific style properties are handled, <code>$.cssHooks</code> also extends the set of properties available to the <code>.animate()</code> method.</p>
-  <p>Defining a new cssHook is straight-forward. The skeleton template below can serve as a guide to creating your own. </p>
+  <p>Defining a new css hook is straight-forward. The skeleton template below can serve as a guide to creating your own. </p>
 <pre class="prettyprint">(function($) {
   // first, check to see if cssHooks are supported
   if ( !$.cssHooks ) {
@@ -1951,8 +1971,8 @@ obj.done(function( name ) {
   styleSupport( "borderRadius" );
 })(jQuery);
 </pre>
-<h4 id="defining-complete-csshook">Defining a complete cssHook</h4>
-<p>To define a complete cssHook, combine the support test with a filled-out version of the skeleton template provided in the first example:</p>
+<h4 id="defining-complete-csshook">Defining a complete css hook</h4>
+<p>To define a complete css hook, combine the support test with a filled-out version of the skeleton template provided in the first example:</p>
 <pre class="prettyprint">(function($) {
   if ( !$.cssHooks ) {
     throw("jQuery 1.4.3+ is needed for this plugin to work");
@@ -1987,7 +2007,7 @@ obj.done(function( name ) {
   // Set cssHooks only for browsers that
   // support a vendor-prefixed border radius
   if ( borderRadius &amp;&amp; borderRadius !== "borderRadius" ) {
-    $.cssHook.borderRadius = {
+    $.cssHooks.borderRadius = {
       get: function( elem, computed, extra ) {
         return $.css( elem, borderRadius );
       },
@@ -2016,7 +2036,7 @@ $("#another").css("border-radius", "20px");
 
     // Set cssHooks for browsers that
     // support only a vendor-prefixed someCSSProp
-    $.cssHook.someCSSProp = {
+    $.cssHooks.someCSSProp = {
       get: function( elem, computed, extra ) {
         return $.css( elem, $.support.someCSSProp );
       },
@@ -2025,7 +2045,7 @@ $("#another").css("border-radius", "20px");
       }
     };
   } else if ( supportsProprietaryAlternative ) {
-    $.cssHook.someCSSProp = {
+    $.cssHooks.someCSSProp = {
       get: function( elem, computed, extra ) {
         // Handle crazy conversion from the proprietary alternative 
       },
@@ -2043,7 +2063,7 @@ $("#another").css("border-radius", "20px");
 <pre class="prettyprint">$.cssNumber["someCSSProp"] = true;</pre>
 
   <h4 id="animating">Animating with cssHooks</h4>
-  <p>A cssHook can also hook into jQuery's animation mechanism by adding a property to the <code>jQuery.fx.step</code> object:</p>
+  <p>A css hook can also hook into jQuery's animation mechanism by adding a property to the <code>jQuery.fx.step</code> object:</p>
 <pre class="prettyprint">$.fx.step["someCSSProp"] = function(fx){
   $.cssHooks["someCSSProp"].set( fx.elem, fx.now + fx.unit );
 };
@@ -2385,9 +2405,11 @@ $.get("test.php").then(
 <entry type='method' name="jQuery.sub" return="jQuery">
     <signature>
       <added>1.5</added>
+      <deprecated>1.7</deprecated>
     </signature>
     <desc>Creates a new copy of jQuery whose properties and methods can be modified without affecting the original jQuery object.</desc>
-    <longdesc><p>There are two specific use cases for which jQuery.sub() was created. The first was for providing a painless way of overriding jQuery methods without completely destroying the original methods and another was for helping to do encapsulation and basic namespacing for jQuery plugins.</p>
+    <longdesc><p><strong>This method is deprecated as of jQuery 1.7 and will be moved to a plugin in jQuery 1.8.</strong></p>
+<p>There are two specific use cases for which jQuery.sub() was created. The first was for providing a painless way of overriding jQuery methods without completely destroying the original methods and another was for helping to do encapsulation and basic namespacing for jQuery plugins.</p>
 <p>Note that jQuery.sub() doesn't attempt to do any sort of isolation - that's not its intention. All the methods on the sub'd version of jQuery will still point to the original jQuery (events bound and triggered will still be through the main jQuery, data will be bound to elements through the main jQuery, Ajax queries and events will run through the main jQuery, etc.).</p>
 <p>Note that if you're looking to use this for plugin development you should first <i>strongly</i> consider using something like the jQuery UI widget factory which manages both state and plugin sub-methods. <a href="http://blog.nemikor.com/2010/05/15/building-stateful-jquery-plugins/">Some examples of using the jQuery UI widget factory</a> to build a plugin.</p>
 <p>The particular use cases of this method can be best described through some examples.</p></longdesc>
@@ -2470,6 +2492,7 @@ $(document).ready(function() {
 });]]></code>
     </example>
 <category name="Core"/>
+<category name="Deprecated"/>
 <category name="Version 1.5"/>
 </entry>
 <entry type='method' name="fadeToggle" return="jQuery">
@@ -2521,8 +2544,7 @@ $("button:last").click(function () {
 <category name="Effects"/>
 <category name="Fading"/>
 <category name="Version 1.4.4"/>
-<note type="additional">All jQuery effects, including <code>.fadeToggle()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.fadeToggle()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
   <entry type='method' name="jQuery.type" return="String">
                 <signature>
                   <added>1.4.3</added>
@@ -2533,7 +2555,14 @@ $("button:last").click(function () {
                 <desc>Determine the internal JavaScript [[Class]] of an object.</desc>
                 <longdesc><p>A number of techniques are used to determine the exact return value for an object. The [[Class]] is determined as follows:</p>
 <ul>
-<li>If the object is undefined or null, then "undefined" or "null" is returned accordingly.</li>
+<li>If the object is undefined or null, then "undefined" or "null" is returned accordingly.
+  <ul>
+    <li>jQuery.type(undefined) === "undefined"</li>
+    <li>jQuery.type() === "undefined"</li>
+    <li>jQuery.type(window.notDefined) === "undefined"</li>
+    <li>jQuery.type(null) === "null"</li>
+  </ul>
+</li>
 <li>If the object has an internal [[Class]] equivalent to one of the browser's built-in objects, the associated name is returned. (<a href="http://perfectionkills.com/instanceof-considered-harmful-or-how-to-write-a-robust-isarray/">More details about this technique.</a>)<ul>
 <li>jQuery.type(true) === "boolean"</li>
 <li>jQuery.type(3) === "number"</li>
@@ -2587,14 +2616,14 @@ $("button:last").click(function () {
   </signature>
 
 <longdesc>
+<blockquote><p>Note: jQuery also provides an animation method named <a href="http://api.jquery.com/toggle/">.toggle()</a> that toggles the visibility of elements. Whether the animation or the event method is fired depends on the set of arguments passed.</p></blockquote>
+
 <p>The <code>.toggle()</code> method binds a handler for the <code>click</code> event, so the rules outlined for the triggering of <code>click</code> apply here as well.</p>
 <pre>For example, consider the HTML:
 &lt;div id="target"&gt;
   Click here
 &lt;/div&gt;</pre>
  
-<p class="image"><img src="/images/0042_05_05.png" alt="" />
-</p>
 <p>Event handlers can then be bound to the <code>&lt;div&gt;</code>:</p>
 <pre>$('#target').toggle(function() {
   alert('First handler for .toggle() called.');
@@ -2610,8 +2639,6 @@ $("button:last").click(function () {
   <span class="output">First handler for .toggle() called.</span>
 </p>
 <p>If more than two handlers are provided, <code>.toggle()</code> will cycle among all of them. For example, if there are three handlers, then the first handler will be called on the first click, the fourth click, the seventh click, and so on.</p>
-<blockquote><p>Note: jQuery also provides an animation method named <a href="http://api.jquery.com/toggle/">.toggle()</a> that toggles the visibility of elements. Whether the animation or the event method is fired depends on the set of arguments passed.</p></blockquote>
-
 <p>The <code>.toggle()</code> method is provided for convenience. It is relatively straightforward to implement the same behavior by hand, and this can be necessary if the assumptions built into <code>.toggle()</code> prove limiting. For example, <code>.toggle()</code> is not guaranteed to work correctly if applied twice to the same element. Since <code>.toggle()</code> internally uses a <code>click</code> handler to do its work, we must unbind <code>click</code> to remove a behavior attached with <code>.toggle()</code>, so other <code>click</code> handlers can be caught in the crossfire. The implementation also calls <code>.preventDefault()</code> on the event, so links will not be followed and buttons will not be clicked if <code>.toggle()</code> has been called on the element.</p>
 </longdesc>
                 <example>
@@ -2734,7 +2761,7 @@ $("button").click(function(event) {
     <argument name="eventType" type="String">
       <desc>A string containing a JavaScript event type, such as "click" or "keydown"</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -2832,7 +2859,7 @@ $("form").undelegate(".whatever");]]></code>
     <argument name="eventType" type="String">
       <desc>A string containing one or more space-separated JavaScript event types, such as "click" or "keydown," or custom event names.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -2847,7 +2874,7 @@ $("form").undelegate(".whatever");]]></code>
     <argument name="eventData" type="Object">
       <desc>A map of data that will be passed to the event handler.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -3230,7 +3257,8 @@ $("p").focusout(function() {
                   </argument>
                 </signature>
                 <desc>Check to see if a DOM element is within another DOM element.</desc>
-                <longdesc></longdesc>
+                <longdesc>
+<blockquote><p><strong>Note:</strong> The first argument <em>must</em> be a DOM element, not a jQuery object or plain JavaScript object.</p></blockquote></longdesc>
                 <example>
                     <desc>Check if an element is inside another. Text and comment nodes are not supported.</desc>
                     <code><![CDATA[jQuery.contains(document.documentElement, document.body); // true
@@ -3629,8 +3657,10 @@ $("a").click(function(event) {
   <signature>
     <added>1.2.6</added>
   </signature>
-  <desc>The difference in milliseconds between the time an event is triggered and January 1, 1970.</desc>
-  <longdesc><p>This property can be useful for profiling the performance of certain jQuery functions by getting the <code>event.timeStamp</code> value at two points in the code and noting the difference.</p> </longdesc>
+  <desc>The difference in milliseconds between the time the browser created the event and January 1, 1970.</desc>
+  <longdesc><p>This property can be useful for profiling event performance by getting the <code>event.timeStamp</code> value at two points in the code and noting the difference. To simply determine the current time inside an event handler, use <code>(new Date).getTime()</code> instead.</p> 
+<p>Note: Due to a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=238041">bug open since 2004</a>, this value is not populated correctly in Firefox and it is not possible to know the time the event was created in that browser.</p>
+</longdesc>
   <example>
     <desc>Display the time since the click handler last executed.</desc>
 <css><![CDATA[
@@ -3684,17 +3714,28 @@ $("button").click(function(event) {
     <signature>
         <added>1.1.3</added>
     </signature>
-    <desc> For key or button events, this attribute indicates the specific button or key that was pressed.  </desc>
-    <longdesc> <p><code>event.which</code> normalizes <code>event.keyCode</code> and <code>event.charCode</code>. It is recommended to watch <code>event.which</code> for keyboard key input. For more detail, read about <a href="https://developer.mozilla.org/en/DOM/event.charCode#Notes">event.charCode on the MDC</a>. </p> </longdesc>
+    <desc> For key or mouse events, this property indicates the specific key or button that was pressed.  </desc>
+    <longdesc><p>The <code>event.which</code> property normalizes <code>event.keyCode</code> and <code>event.charCode</code>. It is recommended to watch <code>event.which</code> for keyboard key input. For more detail, read about <a href="https://developer.mozilla.org/en/DOM/event.charCode#Notes">event.charCode on the MDC</a>. </p>
+      <p><code>event.which</code> also normalizes button presses (<code>mousedown</code> and <code>mouseup</code>events), reporting <code>1</code> for left button, <code>2</code> for middle, and <code>3</code> for right. Use <code>event.which</code> instead of <code>event.button</code>.  </p></longdesc>
     <example>
-        <desc>Log what key was depressed.</desc>
-        <code><![CDATA[$('#whichkey').bind('keydown',function(e){ 
+        <desc>Log which key was depressed.</desc>
+        <code><![CDATA[$('#whichkey').bind('keydown',function(e){
   $('#log').html(e.type + ': ' +  e.which );
 });  ]]></code>
         <html><![CDATA[
 <input id="whichkey" value="type something">
 <div id="log"></div>]]></html>
-        <results><![CDATA["keydown" 74  ]]></results>
+    </example>
+    <example>
+        <desc>Log which mouse button was depressed.</desc>
+        <code><![CDATA[
+$('#whichkey').bind('mousedown',function(e){
+  $('#log').html(e.type + ': ' +  e.which );
+});
+]]></code>
+        <html><![CDATA[
+<input id="whichkey" value="type something">
+<div id="log"></div>]]></html>
     </example>
 <category name="Event Object"/>
 <category name="Version 1.1.3"/>
@@ -3768,20 +3809,39 @@ div { padding: 20px; }</css>
 <category name="Event Object"/>
 <category name="Version 1.1.4"/>
 </entry>
-<entry type='property' name="event.data" return="Anything">
+<entry type='property' name="event.data">
     <signature>
         <added>1.1</added>
     </signature>
-    <desc> The optional data passed to jQuery.fn.bind when the current executing handler was bound.  </desc>
+    <desc>An optional data map passed to an event method when the current executing handler is bound.  </desc>
     <longdesc>   </longdesc>
-    <example>
-        <desc>The description of the example.</desc>
-        <code><![CDATA[$("a").each(function(i) {
-  $(this).bind('click', {index:i}, function(e){
-     alert('my index is ' + e.data.index);
+<example>
+  <desc>Within a <code>for</code> loop, pass the value of <code>i</code> to the <code>.on()</code> method so that the current iteration's value is preserved. </desc>
+<html><![CDATA[
+<button> 0 </button>
+<button> 1 </button>
+<button> 2 </button>
+<button> 3 </button>
+<button> 4 </button>
+
+<div id="log"></div>
+]]></html>
+<code><![CDATA[
+var logDiv = $("#log");
+
+/* Note: This code is for demonstration purposes only. */
+for (var i = 0; i < 5; i++) {
+  $("button").eq(i).on("click", {value: i}, function(event) {
+    var msgs = [
+      "button = " + $(this).index(),
+      "event.data.value = " + event.data.value,
+      "i = " + i
+    ];
+    logDiv.append( msgs.join(", ") + "<br>" );
   });
-});   ]]></code>
-    </example>
+}
+]]></code>
+</example>
 <category name="Event Object"/>
 <category name="Version 1.1"/>
 </entry>
@@ -4228,7 +4288,7 @@ span { color:red; }
 <category name="Version 1.4.3"/>
 </entry>
 
-<entry type='method' name="jQuery.dequeue" return="jQuery">
+<entry type='method' name="jQuery.dequeue" return="undefined">
   <signature>
     <added>1.3</added>
     <argument name="element" type="Element">
@@ -4243,7 +4303,7 @@ span { color:red; }
                 <longdesc><p><strong>Note:</strong> This is a low-level method, you should probably use <code><a href='/dequeue'>.dequeue()</a></code> instead.</p>
 <p>When <code>jQuery.dequeue()</code> is called, the next function on the queue is removed from the queue, and then executed. This function should in turn (directly or indirectly) cause <code>jQuery.dequeue()</code> to be called, so that the sequence can continue.</p></longdesc>
                 <example>
-                    <desc>Use dequeue to end a custom queue function which allows the queue to keep going.</desc>
+                    <desc>Use jQuery.dequeue() to end a custom queue function which allows the queue to keep going.</desc>
                     <code><![CDATA[$("button").click(function () {
       $("div").animate({left:'+=200px'}, 2000);
       $("div").animate({top:'0px'}, 600);
@@ -4575,7 +4635,7 @@ jQuery.isPlainObject("test") // false]]></code>
     <code><![CDATA[
 var xTriggered = 0;
 $('#target').keydown(function(event) {
-  if (event.keyCode == '13') {
+  if (event.which == 13) {
      event.preventDefault();
    }
    xTriggered++;
@@ -4777,12 +4837,13 @@ $('div').html('Index: ' + foobar);]]></code>
                     <desc>An array or space-separated string naming the pieces of data to delete.</desc>
                 </argument>
               </signature>
-              
+
               <desc>Remove a previously-stored piece of data.</desc>
-              <longdesc><p>The <code>.removeData()</code> method allows us to remove values that were previously set using <code>.data()</code>. When called with the name of a key, <code>.removeData()</code> deletes that particular value; when called with no arguments, all values are removed. Removing data from jQuery's internal <code>.data()</code> cache does not effect any HTML5 <code>data-</code> attributes in a document; use <code>.removeAttr()</code> to remove those.</p>
+              <longdesc>
+                <p>The <code>.removeData()</code> method allows us to remove values that were previously set using <code>.data()</code>. When called with the name of a key, <code>.removeData()</code> deletes that particular value; when called with no arguments, all values are removed. Removing data from jQuery's internal <code>.data()</code> cache does not effect any HTML5 <code>data-</code> attributes in a document; use <code>.removeAttr()</code> to remove those.</p>
+<p>When using <code>.removeData("name")</code>, jQuery will attempt to locate a <code>data-</code> attribute on the element if no property by that name is in the internal data cache. To avoid a re-query of the <code>data-</code> attribute, set the name to a value of either <code>null</code> or <code>undefined</code> (e.g. <code>.data("name", undefined)</code>) rather than using <code>.removeData()</code>.</p>
 <p><strong>As of jQuery 1.7</strong>, when called with an array of keys or a string of space-separated keys, <code>.removeData()</code> deletes the value of each key in that array or string.</p>
 <p><strong>As of jQuery 1.4.3</strong>, calling <code>.removeData()</code> will cause the value of the property being removed to revert to the value of the data attribute of the same name in the DOM, rather than being set to <code>undefined</code>.</p>
-              
               </longdesc>
                 <example>
                     <desc>Set a data store for 2 names then remove one of them.</desc>
@@ -4855,8 +4916,8 @@ $("span:last").text($("div").data("test").last);
   div { color:blue; }
   span { color:red; }
   ]]></css>
-                    <html><![CDATA[<div>
-    The values stored were 
+<html><![CDATA[<div>
+    The values stored were
     <span></span>
     and
     <span></span>
@@ -4891,7 +4952,8 @@ alert( $("body").data("foo")); //undefined
 $("body").data("bar", "foobar");
 alert( $("body").data("bar")); //foobar
 </pre>
-<p><strong>HTML 5 data- Attributes</strong></p>
+
+<h4 id="data-html5"><a href="#data-html5">HTML5 data-* Attributes</a></h4>
 <p>As of jQuery 1.4.3 <a href="http://ejohn.org/blog/html-5-data-attributes/">HTML 5 data- attributes</a> will be automatically pulled in to jQuery's data object. The treatment of attributes with embedded dashes was changed in jQuery 1.6 to conform to the <a href="http://www.w3.org/TR/html5/elements.html#embedding-custom-non-visible-data-with-the-data-attributes">W3C HTML5 specification</a>.</p>
 
 <p>For example, given the following HTML:</p>
@@ -5215,7 +5277,7 @@ jQuery("div > p").hide();]]></results>
     <code><![CDATA[
 function countChecked() {
   var n = $("input:checked").length;
-  $("div").text(n + (n <= 1 ? " is" : " are") + " checked!");
+  $("div").text(n + (n === 1 ? " is" : " are") + " checked!");
 }
 countChecked();
 $(":checkbox").click(countChecked);
@@ -5346,25 +5408,28 @@ input, label { line-height: 1.5em; }
 <category name="jQuery Extensions"/>
 <category name="Version 1.0"/>
 <note type="additional">Because <code>:file</code> is a jQuery extension and not part of the CSS specification, queries using <code>:file</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. For better performance in modern browsers, use <code>[type="file"]</code> instead.</note></entry>
-            <entry type='selector'   name="button" return="">
-                <sample>:button</sample>
-                 <signature><added>1.0</added> </signature>
-                <desc>Selects all button elements and elements of type button.</desc>
-                <longdesc></longdesc>
-                <example>
-                    <desc>Finds all button inputs.</desc>
-                    <code><![CDATA[
-
-    var input = $(":button").css({background:"yellow", border:"3px red solid"});
-    $("div").text("For this type jQuery found " + input.length + ".")
-            .css("color", "red");
-    $("form").submit(function () { return false; }); // so it won't submit
-
+<entry type='selector'   name="button" return="">
+  <sample>:button</sample>
+   <signature><added>1.0</added> </signature>
+  <desc>Selects all button elements and elements of type button.</desc>
+  <longdesc>
+    <p>An equivalent selector to <code>$(":button")</code> using valid CSS is <code>$("button, input[type='button']")</code>.</p>
+  </longdesc>
+<example>
+  <desc>Find all button inputs and mark them.</desc>
+  <code><![CDATA[
+  var input = $(":button").addClass("marked");
+  $("div").text( "For this type jQuery found " + input.length + "." );
+  $("form").submit(function () { return false; }); // so it won't submit
 ]]></code>
-                    <css><![CDATA[
-  textarea { height:45px; }
-  ]]></css>
-                    <html><![CDATA[<form>
+<css><![CDATA[
+  textarea { height:35px; }
+  div { color: red; }
+  fieldset { margin: 0; padding: 0; border-width: 0; }
+  .marked { background-color: yellow; border: 3px red solid; }
+]]></css>
+<html><![CDATA[<form>
+  <fieldset>
     <input type="button" value="Input Button"/>
     <input type="checkbox" />
 
@@ -5382,9 +5447,11 @@ input, label { line-height: 1.5em; }
 
     <textarea></textarea>
     <button>Button</button>
-  </form>
-  <div>
-  </div>]]></html>
+  </fieldset>
+</form>
+
+<div>
+</div>]]></html>
                 </example>
             <category name="Form"/>
 <category name="jQuery Extensions"/>
@@ -5755,8 +5822,11 @@ input, label { line-height: 1.5em; }
                 <sample>:text</sample>
                  <signature><added>1.0</added> </signature>
                 <desc>Selects all elements of type text.</desc>
-                <longdesc><p><code>$(':text')</code> is equivalent to <code>$('[type=text]')</code> and thus selects all <code>&lt;input type="text"&gt;</code> elements. As with other pseudo-class selectors (those that begin with a ":") it is recommended to precede it with a tag name or some other selector; otherwise, the universal selector ("*") is implied. In other words, the bare <code>$(':text')</code> is equivalent to <code>$('*:text')</code>, so <code>$('input:text')</code> should be used instead. </p>
+                <longdesc><p><code>$(':text')</code> allows us to select all <code>&lt;input type="text"&gt;</code> elements. As with other pseudo-class selectors (those that begin with a ":") it is recommended to precede it with a tag name or some other selector; otherwise, the universal selector ("*") is implied. In other words, the bare <code>$(':text')</code> is equivalent to <code>$('*:text')</code>, so <code>$('input:text')</code> should be used instead. </p>
 <p><strong>Note:</strong> As of jQuery 1.5.2, <code>:text</code> selects <code>input</code> elements that have no specified <code>type</code> attribute (in which case <code>type="text"</code> is implied).  </p>
+<p>This difference in behavior between <code>$(':text')</code> and <code>$('[type=text]')</code>, can be seen below:</p><pre>$(&#39;&lt;input&gt;&#39;).is(&#39;[type=text]&#39;); // false
+$(&#39;&lt;input&gt;&#39;).is(&#39;:text&#39;); // true
+</pre>
 </longdesc>
                 <example>
                     <desc>Finds all text inputs.</desc>
@@ -6068,7 +6138,7 @@ input, label { line-height: 1.5em; }
       <desc>An attribute name.</desc>
   </argument>
   <argument name="value" type="String">
-      <desc>An attribute value. Quotes are mandatory.</desc>
+      <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
   </argument> </signature>
   <desc>Selects elements that have the specified attribute with a value either equal to a given string or starting with that string followed by a hyphen (-).</desc>
   <longdesc><p>This selector was introduced into the CSS specification to handle language attributes.</p></longdesc>
@@ -6100,7 +6170,7 @@ a { display: inline-block; }
                     <desc>An attribute name.</desc>
                 </argument>
                 <argument name="value" type="String">
-                    <desc>An attribute value. Quotes are mandatory.</desc>
+                    <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
                 </argument></signature>
                 <desc>Selects elements that have the specified attribute with a value containing a given word, delimited by spaces.</desc>
                 <longdesc><p>This selector matches the test string against each word in the attribute value, where a "word" is defined as a string delimited by whitespace. The selector matches if the test string is exactly equal to any of the words.</p> </longdesc>
@@ -6149,7 +6219,7 @@ a { display: inline-block; }
                     <desc>An attribute name.</desc>
                 </argument>
                 <argument name="value" type="String">
-                    <desc>An attribute value. Quotes are mandatory.</desc>
+                    <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
                 </argument></signature>
                 <desc>Selects elements that have the specified attribute with a value containing the a given substring.</desc>
                 <longdesc><p>This is the most generous of the jQuery attribute selectors that match against a value. It will select an element if the selector's string appears anywhere within the element's attribute value. Compare this selector with the Attribute Contains Word selector (e.g. [attr~="word"]), which is more appropriate in many cases.</p></longdesc>
@@ -6172,7 +6242,7 @@ a { display: inline-block; }
                     <desc>An attribute name.</desc>
                 </argument>
                 <argument name="value" type="String">
-                    <desc>An attribute value. Quotes are mandatory.</desc>
+                    <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
                 </argument></signature>
                 <desc>Selects elements that have the specified attribute with a value ending exactly with a given string. The comparison is case sensitive.</desc>
                 <longdesc></longdesc>
@@ -6194,7 +6264,7 @@ a { display: inline-block; }
                     <desc>An attribute name.</desc>
                 </argument>
                 <argument name="value" type="String">
-                    <desc>An attribute value. Quotes are mandatory.</desc>
+                    <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
                 </argument></signature>
                 <desc>Selects elements that have the specified attribute with a value beginning exactly with a given string.</desc>
                 <longdesc><p>This selector can be useful for identifying elements in pages produced by server-side frameworks that produce HTML with systematic element IDs. However it will be slower than using a class selector so leverage classes, if you can, to group like elements.</p></longdesc>
@@ -6216,7 +6286,7 @@ a { display: inline-block; }
                     <desc>An attribute name.</desc>
                 </argument>
                 <argument name="value" type="String">
-                    <desc>An attribute value. Quotes are mandatory.</desc>
+                    <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
                 </argument></signature>
                 <desc>Select elements that either don't have the specified attribute, or do have the specified attribute but not with a certain value.</desc>
                 <longdesc><p>This selector is equivalent to <code>:not([attr="value"])</code>.</p> </longdesc>
@@ -6252,7 +6322,7 @@ a { display: inline-block; }
 			<desc>An attribute name.</desc>
 		</argument>
 		<argument name="value" type="String">
-			<desc>An attribute value. <strong>Quotes are mandatory.</strong></desc>
+			<desc>An attribute value. <strong>Can be either an unquoted single word or a quoted string.</strong></desc>
 		</argument>
 	</signature>
 	<desc>Selects elements that have the specified attribute with a value exactly equal to a certain value.</desc>
@@ -6313,14 +6383,8 @@ a { display: inline-block; }
                 <sample>:visible</sample>
                 <signature> <added>1.0</added> </signature>
                 <desc>Selects all elements that are visible.</desc>
-                <longdesc> <p>Elements can be considered hidden for several reasons:</p>
-<ul>
-<li>They have a CSS <code>display</code> value of <code>none</code>.</li>
-<li>They are form elements with <code>type="hidden"</code>.</li>
-<li>Their width and height are explicitly set to 0.</li>
-<li>An ancestor element is hidden, so the element is not shown on the page.</li>
-</ul>
-<p>Elements with <code>visibility: hidden</code> or <code>opacity: 0</code> are considered to be visible, since they still consume space in the layout. During animations that hide an element, the element is considered to be visible until the end of the animation. During animations to show an element, the element is considered to be visible at the start at the animation.</p>
+                <longdesc> <p>Elements are considered visible if they consume space in the document. Visible elements have a width or height that is greater than zero.</p>
+<p>Elements with <code>visibility: hidden</code> or <code>opacity: 0</code> are considered visible, since they still consume space in the layout. During animations that hide an element, the element is considered to be visible until the end of the animation. During animations to show an element, the element is considered to be visible at the start at the animation.</p>
 <p>How <code>:visible</code> is calculated was changed in jQuery 1.3.2. The <a href="http://docs.jquery.com/Release:jQuery_1.3.2#:visible.2F:hidden_Overhauled">release notes</a> outline the changes in more detail.</p></longdesc>
                 <example>
                     <desc>Make all visible divs turn yellow on click.</desc>
@@ -6485,7 +6549,7 @@ $("span:last").text("Found " + $("input:hidden").length + " hidden inputs.");
       </argument>
   </signature>
   <desc>Select all elements that contain the specified text.</desc>
-  <longdesc><p>The matching text can appear directly within the selected element, in any of that element's descendants, or a combination thereof. As with attribute value selectors, text inside the parentheses of <code>:contains()</code> can be written as bare words or surrounded by quotation marks. The text must have matching case to be selected.</p></longdesc>
+  <longdesc><p>The matching text can appear directly within the selected element, in any of that element's descendants, or a combination thereof. As with attribute value selectors, text inside the parentheses of <code>:contains()</code> can be written as a bare word or surrounded by quotation marks. The text must have matching case to be selected.</p></longdesc>
   
   <example>
     <desc>Finds all divs containing "John" and underlines them.</desc>
@@ -6693,7 +6757,7 @@ $("ul.nav li:nth-child(2)").css( "color", "red" );
             <category name="Basic Filter"/>
 <category name="jQuery Extensions"/>
 <category name="Version 1.0"/>
-<note type="additional">Because <code>:odd</code> is a jQuery extension and not part of the CSS specification, queries using <code>:odd</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:odd</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":odd")</code></a>.</note></entry>
+<note type="additional">Because <code>:odd</code> is a jQuery extension and not part of the CSS specification, queries using <code>:odd</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:odd</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":odd")</code></a>.</note><note type="additional">Selected elements are in the order of their appearance in the document.</note></entry>
             <entry type='selector'   name="even" return="" >
                 <sample>:even</sample>
                  <signature><added>1.0</added> </signature>
@@ -6719,7 +6783,7 @@ $("ul.nav li:nth-child(2)").css( "color", "red" );
             <category name="Basic Filter"/>
 <category name="jQuery Extensions"/>
 <category name="Version 1.0"/>
-<note type="additional">Because <code>:even</code> is a jQuery extension and not part of the CSS specification, queries using <code>:even</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:even</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":even")</code></a>.</note></entry>
+<note type="additional">Because <code>:even</code> is a jQuery extension and not part of the CSS specification, queries using <code>:even</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:even</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":even")</code></a>.</note><note type="additional">Selected elements are in the order of their appearance in the document.</note></entry>
 <entry type='selector'  name="not" return=""  >
     <sample>:not(selector)</sample>
     <signature>
@@ -6798,7 +6862,7 @@ $("ul.nav li:nth-child(2)").css( "color", "red" );
             <category name="Basic Filter"/>
 <category name="jQuery Extensions"/>
 <category name="Version 1.0"/>
-<note type="additional">Because <code>:first</code> is a jQuery extension and not part of the CSS specification, queries using <code>:first</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:first</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":first")</code></a>.</note></entry>
+<note type="additional">Because <code>:first</code> is a jQuery extension and not part of the CSS specification, queries using <code>:first</code> cannot take advantage of the performance boost provided by the native DOM <code>querySelectorAll()</code> method. To achieve the best performance when using <code>:first</code> to select elements, first select the elements using a pure CSS selector, then use <a href="http://api.jquery.com/filter/"><code>.filter(":first")</code></a>.</note><note type="additional">Selected elements are in the order of their appearance in the document.</note></entry>
 <entry type='selector'   name="next siblings" return=""  >
     <sample>prev ~ siblings</sample>
     <signature>
@@ -7452,7 +7516,7 @@ $('#foo').queue(function() {
   alert('Animation complete.');
 });</pre>
 <p>Note that when adding a function with <code>.queue()</code>, we should ensure that <code>.dequeue()</code> is eventually called so that the next function in line executes.</p>
-<p>In jQuery 1.4 the function that's called is passed in another function, as the first argument, that when called automatically dequeues the next item and keeps the queue moving. You would use it like so:</p>
+<p><strong>As of jQuery 1.4</strong>, the function that's called is passed another function as the first argument. When called, this automatically dequeues the next item and keeps the queue moving. We use it as follows:</p>
 <pre>$("#test").queue(function(next) {
     // Do some stuff...
     next();
@@ -8043,6 +8107,7 @@ $('#target').blur(function() {
 <li>The <code>focus</code> event is sent to an element when it gains focus. This event is implicitly applicable to a limited set of elements, such as  form elements (<code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, etc.) and links (<code>&lt;a href&gt;</code>). In recent browser versions, the event can be extended to include all element types by explicitly setting the element's <code>tabindex</code> property. An element can gain focus via keyboard commands, such as the Tab key, or by mouse clicks on the element.</li>
 <li>Elements with focus are usually highlighted in some way by the browser, for example with a dotted line surrounding the element. The focus is used to determine which element is the first to receive keyboard-related events.</li>
 </ul>
+<blockquote><p>Attempting to set focus to a hidden element causes an error in Internet Explorer. Take care to only use <code>.focus()</code> on elements that are visible. To run an element's focus event handlers without setting focus to the element, use <code>.triggerHandler("focus")</code> instead of <code>.focus()</code>.</p></blockquote>
 <p>For example, consider the HTML:</p>
 <pre>&lt;form&gt;
   &lt;input id="target" type="text" value="Field 1" /&gt;
@@ -8064,7 +8129,6 @@ $('#target').blur(function() {
 });</pre>
 <p>After this code executes, clicks on <span class="output">Trigger the handler</span> will also alert the message.</p>
 <p>The <code>focus</code> event does not bubble in Internet Explorer. Therefore, scripts that rely on event delegation with the <code>focus</code> event will not work consistently across browsers. As of version 1.4.2, however, jQuery works around this limitation by mapping <code>focus</code> to the <code>focusin</code> event in its event delegation methods, <a href="http://api.jquery.com/live/"><code>.live()</code></a> and <a href="http://api.jquery.com/delegate/"><code>.delegate()</code></a>.</p>
-<blockquote><p>Triggering the focus on hidden elements causes an error in Internet Explorer. Take care to only call <code>.focus()</code> without parameters on elements that are visible.</p></blockquote>
 </longdesc>
                 <example>
                     <desc>Fire focus.</desc>
@@ -8158,22 +8222,21 @@ $('#target').blur(function() {
     $("div").mousemove(function(e){
       var pageCoords = "( " + e.pageX + ", " + e.pageY + " )";
       var clientCoords = "( " + e.clientX + ", " + e.clientY + " )";
-      $("span:first").text("( e.pageX, e.pageY ) - " + pageCoords);
-      $("span:last").text("( e.clientX, e.clientY ) - " + clientCoords);
+      $("span:first").text("( e.pageX, e.pageY ) : " + pageCoords);
+      $("span:last").text("( e.clientX, e.clientY ) : " + clientCoords);
     });
 
 ]]></code>
                     <height>300</height>
                     <css><![CDATA[
-  div { width:220px; height:170px; margin;10px; margin-right:50px;
+  div { width:220px; height:170px; margin: 10px 50px 10px 10px;
         background:yellow; border:2px groove; float:right; }
   p { margin:0; margin-left:10px; color:red; width:220px;
       height:120px; padding-top:70px;
       float:left; font-size:14px; }
   span { display:block; }
   ]]></css>
-                    <html><![CDATA[<p>   
-    Try scrolling too.
+                    <html><![CDATA[<p>
     <span>Move the mouse over the div.</span>
     <span>&nbsp;</span>
   </p>
@@ -8815,7 +8878,7 @@ For example, consider the HTML:</p>
   </signature>
 
 <longdesc>
-<p>This method is a shortcut for <code>.bind('click', handler)</code> in the first two variations, and <code>.trigger('click')</code> in the third.</p>
+<p>In the first two variations, this method is a shortcut for <code>.bind("click", handler)</code>, as well as for <code>.on("click", handler)</code> as of jQuery 1.7. In the third variation, when <code>.click()</code> is called without arguments, it is a shortcut for <code>.trigger("click")</code>. </p>
 <p>The <code>click</code> event is sent to an element when the mouse pointer is over the element, and the mouse button is pressed and released. Any HTML element can receive this event.</p>
 <pre>For example, consider the HTML:
 &lt;div id="target"&gt;
@@ -8824,17 +8887,17 @@ For example, consider the HTML:</p>
 &lt;div id="other"&gt;
   Trigger the handler
 &lt;/div&gt;</pre>
- 
+
 <p class="image"><img src="/images/0042_05_03.png" alt="" /></p>
 <p>The event handler can be bound to any <code>&lt;div&gt;</code>:</p>
-<pre>$('#target').click(function() {
-  alert('Handler for .click() called.');
+<pre>$("#target").click(function() {
+  alert("Handler for .click() called.");
 });</pre>
 <p>Now if we click on this element, the alert is displayed:</p>
 <p><span class="output">Handler for .click() called.</span></p>
 <p>We can also trigger the event when a different element is clicked:</p>
-<pre>$('#other').click(function() {
-  $('#target').click();
+<pre>$("#other").click(function() {
+  $("#target").click();
 });</pre>
 <p>After this code executes, clicks on <span class="output">Trigger the handler</span> will also alert the message.</p>
 <p>The <code>click</code> event is only triggered after this exact series of events:</p>
@@ -8845,20 +8908,15 @@ For example, consider the HTML:</p>
 <p>This is usually the desired sequence before taking an action. If this is not required, the <code>mousedown</code> or <code>mouseup</code> event may be more suitable.</p>
 </longdesc>
                 <example>
-                    <desc>To hide paragraphs on a page when they are clicked:</desc>
+                    <desc>Hide paragraphs on a page when they are clicked:</desc>
                     <code><![CDATA[
-    $("p").click(function () { 
-      $(this).slideUp(); 
-    });
-    $("p").hover(function () {
-      $(this).addClass("hilite");
-    }, function () {
-      $(this).removeClass("hilite");
+    $("p").click(function () {
+      $(this).slideUp();
     });
 ]]></code>
                     <css><![CDATA[
   p { color:red; margin:5px; cursor:pointer; }
-  p.hilite { background:yellow; }
+  p:hover { background:yellow; }
   ]]></css>
                     <html><![CDATA[<p>First Paragraph</p>
 
@@ -8866,7 +8924,7 @@ For example, consider the HTML:</p>
   <p>Yet one more Paragraph</p>]]></html>
                 </example>
                 <example>
-                    <desc>To trigger the click event on all of the paragraphs on the page:</desc>
+                    <desc>Trigger the click event on all of the paragraphs on the page:</desc>
                     <code><![CDATA[$("p").click();]]></code>
                 </example>
 
@@ -9214,6 +9272,7 @@ See the discussions of <code>.live()</code> and <code>.unbind()</code> for furth
 <p><strong>As of jQuery 1.7</strong>, use of <code>.die()</code> (and its complementary method, <code>.live()</code>) is not recommended. Instead, use <a href="http://api.jquery.com/off/"><code>.off()</code></a> to remove event handlers bound with <a href="http://api.jquery.com/on/"><code>.on()</code></a></p>
 <p><strong>Note:</strong> In order for .die() to function correctly, the selector used with it must match exactly the selector initially used with .live().</p>
 </longdesc>
+<category name="Deprecated"/>
 <category name="Event Handler Attachment"/>
 <category name="Version 1.3"/>
 <category name="Version 1.4.1"/>
@@ -9287,6 +9346,7 @@ $("p").live("click", foo); // ... now foo will be called when paragraphs are cli
 
 $("p").die("click", foo); // ... foo will no longer be called.]]></code>
             </example>
+<category name="Deprecated"/>
 <category name="Event Handler Attachment"/>
 <category name="Version 1.3"/>
 <category name="Version 1.4.1"/>
@@ -9363,6 +9423,7 @@ The <code>$.browser</code> property is deprecated in jQuery 1.3, and its functio
  }
 ]]></code>
   </example>
+<category name="Deprecated"/>
 <category name="Properties of the Global jQuery Object"/>
 <category name="Utilities"/>
 <category name="Version 1.0"/>
@@ -9411,6 +9472,7 @@ if ( $.browser.msie ) {
 }
 ]]></code>
   </example>
+<category name="Deprecated"/>
 <category name="Properties of the Global jQuery Object"/>
 <category name="Utilities"/>
 <category name="Version 1.0"/>
@@ -9425,7 +9487,7 @@ if ( $.browser.msie ) {
     <argument name="events" type="String">
       <desc>A string containing a JavaScript event type, such as "click" or "keydown." As of jQuery 1.4 the string can contain multiple, space-separated event types or custom event names.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -9437,7 +9499,7 @@ if ( $.browser.msie ) {
     <argument name="data" type="Object">
       <desc>A map of data that will be passed to the event handler.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -9470,9 +9532,16 @@ $(document).on("click", "a.offsite", function(){ alert("Goodbye!"); });        /
 
 <p>Use of the <code>.live()</code> method is no longer recommended since later versions of jQuery offer better methods that do not have its drawbacks. In particular, the following issues arise with the use of <code>.live()</code>:</p>
 <ul>
-        <li>jQuery attempts to retrieve the elements specified by the selector before calling the <code>.live()</code> method, which may be time-consuming on large documents.</li>
-        <li>Chaining methods is not supported. For example, <code>$("a").find(".offsite, .external").live( ... ); </code> is <em>not</em> valid and does not work as expected.</li>
-        <li>Since all <code>.live()</code> events are attached at the <code>document</code> element, events take the longest and slowest possible path before they are handled.</li>
+  <li>jQuery attempts to retrieve the elements specified by the selector before calling the <code>.live()</code> method, which may be time-consuming on large documents.</li>
+  <li>Chaining methods is not supported. For example, <code>$("a").find(".offsite, .external").live( ... ); </code> is <em>not</em> valid and does not work as expected.</li>
+  <li>Since all <code>.live()</code> events are attached at the <code>document</code> element, events take the longest and slowest possible path before they are handled.</li>
+  <li>On mobile iOS (iPhone, iPad and iPod Touch) the <code>click</code> event does not bubble to the document body for most elements and cannot be used with <code>.live()</code> without applying one of the following workarounds:
+<ol>
+    <li>Use natively clickable elements such as <code>a</code> or <code>button</code>, as both of these do bubble to <code>document</code>.</li>
+    <li>Use <code>.on()</code> or <code>.delegate()</code> attached to an element below the level of <code>document.body</code>, since mobile iOS does bubble within the body.</li>
+    <li>Apply the CSS style <code>cursor:pointer</code> to the element that needs to bubble clicks (or a parent including <code>document.documentElement</code>). Note however, this will disable copy\paste on the element and cause it to be highlighted when touched.</li>
+</ol>
+</li>
         <li>Calling <a href="http://api.jquery.com/event.stopPropagation"><code>event.stopPropagation()</code></a> in the event handler is ineffective in stopping event handlers attached lower in the document; the event has already propagated to <code>document</code>.</li>
         <li>The <code>.live()</code> method interacts with other event methods in ways that can be surprising, e.g., <code>$(document).unbind("click")</code> removes all click handlers attached by any call to <code>.live()</code>!</li>
 </ul>
@@ -9480,7 +9549,7 @@ $(document).on("click", "a.offsite", function(){ alert("Goodbye!"); });        /
 <p>For pages still using <code>.live()</code>, this list of version-specific differences may be helpful:</p>
 <ul>
         <li>Before jQuery 1.7, to stop further handlers from executing after one bound using <code>.live()</code>, the handler must return <code>false</code>. Calling <code>.stopPropagation()</code> will not accomplish this.</li>
-        <li>As of <b>jQuery 1.4</b> the <code>.live()</code> method supports custom events as well as <em>all JavaScript events that bubble</em>.</li>
+        <li>As of <b>jQuery 1.4</b> the <code>.live()</code> method supports custom events as well as <em>all JavaScript events that bubble</em>. It also supports certain events that don't bubble, including <code>change</code>, <code>submit</code>, <code>focus</code> and <code>blur</code>.</li>
         <li>In <b>jQuery 1.3.x</b> only the following JavaScript events could be bound: <code>click</code>, <code>dblclick</code>, <code>keydown</code>, <code>keypress</code>, <code>keyup</code>, <code>mousedown</code>, <code>mousemove</code>, <code>mouseout</code>, <code>mouseover</code>, and <code>mouseup</code>.</li>
  </ul>
 </longdesc>
@@ -9559,10 +9628,10 @@ $("p").live({
   <span></span>
   ]]></html>
 </example>
+<category name="Deprecated"/>
 <category name="Event Handler Attachment"/>
 <category name="Version 1.3"/>
 </entry>
-
 <entry type='method' name="triggerHandler" return="Object">
   <desc>Execute all handlers attached to an element for an event.</desc>
   <signature>
@@ -9570,7 +9639,7 @@ $("p").live({
     <argument name="eventType" type="String">
       <desc>A string containing a JavaScript event type, such as <code>click</code> or <code>submit</code>.</desc>
     </argument>
-    <argument name="extraParameters" type="Array">
+    <argument name="extraParameters" optional="true" type="Array">
       <desc>An array of additional parameters to pass along to the event handler.</desc>
     </argument>
   </signature>
@@ -9615,7 +9684,7 @@ $("<span>Focused!</span>").appendTo("body").fadeOut(1000);
     <argument name="eventType" type="String">
       <desc>A string containing a JavaScript event type, such as <code>click</code> or <code>submit</code>.</desc>
     </argument>
-    <argument name="extraParameters" type="Object">
+    <argument name="extraParameters" optional="true" type="Object">
       <desc>Additional parameters to pass along to the event handler.</desc>
     </argument>
   </signature>
@@ -9640,7 +9709,9 @@ $("<span>Focused!</span>").appendTo("body").fadeOut(1000);
 $('#foo').trigger('custom', ['Custom', 'Event']);
 </pre>
     <p>The event object is always passed as the first parameter to an event handler, but if additional parameters are specified during a <code>.trigger()</code> call, these parameters will be passed along to the handler as well. To pass more than one parameter, use an array as shown here. As of jQuery 1.6.2, a single parameter can be passed without using an array.</p>
-    <p>Note the difference between the extra parameters we're passing here and the <code>eventData</code> parameter to the <a href="/bind/">.bind()</a> method. Both are mechanisms for passing information to an event handler, but the <code>extraParameters</code> argument to <code>.trigger()</code> allows information to be determined at the time the event is triggered, while the <code>eventData</code> argument to <code>.bind()</code> requires the information to be already computed at the time the handler is bound.</p>    
+    <p>Note the difference between the extra parameters we're passing here and the <code>eventData</code> parameter to the <a href="/bind/">.bind()</a> method. Both are mechanisms for passing information to an event handler, but the <code>extraParameters</code> argument to <code>.trigger()</code> allows information to be determined at the time the event is triggered, while the <code>eventData</code> argument to <code>.bind()</code> requires the information to be already computed at the time the handler is bound.</p>
+   <p>The <code>.trigger()</code> method can be used on jQuery collections that wrap plain JavaScript objects similar to a pub/sub mechanism; any event handlers bound to the object will be called when the event is triggered. </p>
+<blockquote><strong>Note:</strong> For both plain objects and DOM objects, if a triggered event name matches the name of a property on the object, jQuery will attempt to invoke the property as a method if no event handler calls <code>event.preventDefault()</code>. If this behavior is not desired, use <code>.triggerHandler()</code> instead.</blockquote>
   </longdesc>
    <example>
         <desc>Clicks to button #2 also trigger a click for button #1.</desc>
@@ -9733,7 +9804,7 @@ pass:"bar"
 				<pre>$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
 });</pre>
-				<p>When the user clicks the button and the Ajax request completes, the log message is displayed.</p>
+				<p>When the user clicks the element with class <code>trigger</code> and the Ajax request completes, the log message is displayed.</p>
 
 				<p><strong>Note:</strong> Because <code>.ajaxComplete()</code> is implemented as a method of jQuery object instances, we can use the <code>this</code> keyword as we do here to refer to the selected elements within the callback function.</p>
 
@@ -9766,7 +9837,7 @@ pass:"bar"
     <argument name="data" type="Object" optional="true">
       <desc>A map of data that will be passed to the event handler.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute at the time the event is triggered.</desc>
     </argument>
   </signature>
@@ -9781,7 +9852,7 @@ pass:"bar"
     <argument name="data" type="Anything" optional="true">
       <desc>Data to be passed to the handler in <a href="/event.data"><code>event.data</code></a> when an event is triggered.</desc>
     </argument>
-    <argument name="handler" type="Function">
+    <argument name="handler(eventObject)" type="Function">
       <desc>A function to execute when the event is triggered. The value <code>false</code> is also allowed as a shorthand for a function that simply does <code>return false</code>.</desc>
     </argument>
   </signature>
@@ -9798,9 +9869,12 @@ pass:"bar"
     </argument>
   </signature>
 <longdesc>
-<p>The first form of this method is identical to <code>.bind()</code>, except that the handler is unbound after its first invocation. The second two forms, introduced in jQuery 1.7, are identical to <code>.on()</code> except that the handler is removed after its first invocation. For example:</p>
+<p>The first form of this method is identical to <code>.bind()</code>, except that the handler is unbound after its first invocation. The second two forms, introduced in jQuery 1.7, are identical to <code>.on()</code> except that the handler is removed after the first time a selector match occurs at the delegated element. For example:</p>
 <pre>$("#foo").one("click", function() {
   alert("This will be displayed only once.");
+});
+$("body").one("click", ".foo", function() {
+  alert("This displays once for the first .foo clicked in the body.");
 });
 </pre>
 <p>After the code is executed, a click on the element with ID <code>foo</code> will display the alert. Subsequent clicks will do nothing. This code is equivalent to:</p>
@@ -10109,19 +10183,19 @@ alert( $(this).text() );
     <pre>$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
 });</pre>
-		<p>When the user clicks the button and the Ajax request completes successfully, the log message is displayed.</p>
+		<p>When the user clicks the element with class <code>trigger</code> and the Ajax request completes successfully, the log message is displayed.</p>
 
 
     <p><strong>Note:</strong> Because <code>.ajaxSuccess()</code> is implemented as a method of jQuery object instances, we can use the <code>this</code> keyword as we do here to refer to the selected elements within the callback function.</p>
 
 		<p>All <code>ajaxSuccess</code> handlers are invoked, regardless of what Ajax request was completed. If we must differentiate between the requests, we can use the parameters passed to the handler. Each time an <code>ajaxSuccess</code> handler is executed, it is passed the event object, the <code>XMLHttpRequest</code> object, and the settings object that was used in the creation of the request. For example, we can restrict our callback to only handling events dealing with a particular URL:</p>
 
-<p><strong>Note:</strong> You can get the returned ajax contents by looking at <code>xhr.responseXML</code> or <code>xhr.responseHTML</code> for xml and html respectively.</p>
+<p><strong>Note:</strong> You can get the returned ajax contents by looking at <code>xhr.responseXML</code> or <code>xhr.responseText</code> for xml and html respectively.</p>
 
 	  <pre>$('.log').ajaxSuccess(function(e, xhr, settings) {
   if (settings.url == 'ajax/test.html') {
     $(this).text('Triggered ajaxSuccess handler. The ajax response was:' 
-                     + xhr.responseHTML );
+                     + xhr.responseText );
   }
 });</pre>
   </longdesc>
@@ -10135,7 +10209,6 @@ alert( $(this).text() );
 <category name="Global Ajax Event Handlers"/>
 <category name="Version 1.0"/>
 </entry>
-
 
 <entry type='method' name="ajaxStop" return="jQuery">
   <desc>Register a handler to be called when all Ajax requests have completed. This is an <a href='http://docs.jquery.com/Ajax_Events'>Ajax Event</a>.</desc>
@@ -10159,14 +10232,14 @@ alert( $(this).text() );
     <pre>$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
 });</pre>
-    <p>When the user clicks the button and the Ajax request completes, the log message is displayed.</p>
+    <p>When the user clicks the element with class <code>trigger</code> and the Ajax request completes, the log message is displayed.</p>
   	<p>Because <code>.ajaxStop()</code> is implemented as a method of jQuery object instances, we can use the <code>this</code> keyword as we do here to refer to the selected elements within the callback function.</p>
   </longdesc>
   <example>
     <desc>Hide a loading message after all the Ajax requests have stopped.</desc>
     <code><![CDATA[$("#loading").ajaxStop(function(){
       $(this).hide();
-      });]]></code>
+});]]></code>
   </example>
 <category name="Global Ajax Event Handlers"/>
 <category name="Version 1.0"/>
@@ -10192,7 +10265,7 @@ alert( $(this).text() );
 				<pre>$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
 });</pre>
-				<p>When the user clicks the button and the Ajax request is sent, the log message is displayed.</p>
+				<p>When the user clicks the element with class <code>trigger</code> and the Ajax request is sent, the log message is displayed.</p>
 
 				<p><strong>Note:</strong> Because <code>.ajaxStart()</code> is implemented as a method of jQuery object instances, we can use the <code>this</code> keyword as we do here to refer to the selected elements within the callback function.</p>
 </longdesc>
@@ -10227,7 +10300,7 @@ alert( $(this).text() );
     <pre>$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
 });</pre>
-    <p>When the user clicks the button and the Ajax request is about to begin, the log message is displayed.</p>
+    <p>When the user clicks the element with class <code>trigger</code> and the Ajax request is about to begin, the log message is displayed.</p>
 
     <p><strong>Note:</strong> Because <code>.ajaxSend()</code> is implemented as a method of jQuery instances, we can use the <code>this</code> keyword as we do here to refer to the selected elements within the callback function.</p>
 
@@ -10838,6 +10911,7 @@ span { color:blue; }
     <longdesc>
       <p>In the first formulation listed above,  <code>jQuery()</code> &#8212; which can also be written as <code>$()</code> &#8212; searches through the DOM for any elements that match the provided selector and creates a new jQuery object that references these elements:</p>
 <pre>$('div.foo');</pre>
+<p>If no elements match the provided selector, the new jQuery object is "empty"; that is, it contains no elements and has <code><a href="http://api.jquery.com/length/">.length</a></code> property of 0.</p>
 <h4 id="selector-context">Selector Context</h4>
 <p>By default, selectors perform their searches within the DOM starting at the document root. However, an alternate context can be given for the search by using the optional second parameter to the  <code>$()</code> function. For example, to do a search within an event handler, the search can be restricted like so:</p>
 <pre>
@@ -10869,7 +10943,7 @@ $.post('url.xml', function(data) {
 
 <h4 id="working-with-plain-objects">Working With Plain Objects</h4>
 
-<p>At present, the only operations supported on plain JavaScript objects wrapped in jQuery are: <code>.data()</code>,<code>.prop()</code>,<code>.bind()</code>, <code>.unbind()</code>,<code>.trigger()</code> and <code>.triggerHandler()</code>. The use of <code>.data()</code> (or any method requiring <code>.data()</code>) on a plain object will result in a new property on the object called jQuery{randomNumber} (eg. jQuery123456789).</p>
+<p>At present, the only operations supported on plain JavaScript objects wrapped in jQuery are: <code>.data()</code>,<code>.prop()</code>,<code>.bind()</code>, <code>.unbind()</code>, <code>.trigger()</code> and <code>.triggerHandler()</code>. The use of <code>.data()</code> (or any method requiring <code>.data()</code>) on a plain object will result in a new property on the object called jQuery{randomNumber} (eg. jQuery123456789).</p>
 
 <pre>
 // define a plain object
@@ -11395,12 +11469,12 @@ $('ul.first').find('.foo')
 <h4 id="animation-properties">Animation Properties and Values</h4>
 <p>All animated properties should be animated to a <em>single numeric value</em>, except as noted below; most properties that are non-numeric cannot be animated using basic jQuery functionality (For example, <code>width</code>, <code>height</code>, or <code>left</code> can be animated but <code>background-color</code> cannot be, unless the <a href="https://github.com/jquery/jquery-color">jQuery.Color()</a> plugin is used). Property values are treated as a number of pixels unless otherwise specified. The units <code>em</code> and <code>%</code> can be specified where applicable.</p>
 <p>In addition to style properties, some non-style properties such as <code>scrollTop</code> and <code>scrollLeft</code>, as well as custom properties, can be animated.</p>
-<p>Shorthand CSS properties (e.g. margin, background, border) are not supported. For example, if you want to retrieve the rendered margin, use: <code>$(elem).css('marginTop')</code> and <code>$(elem).css('marginRight')</code>, and so on.</p>
+<p>Shorthand CSS properties (e.g. font, background, border) are not fully supported. For example, if you want to animate the rendered border width, at least a border style and border width other than "auto" must be set in advance. Or, if you want to animate font size, you would use <code>fontSize</code> or the CSS equivalent <code>'font-size'</code> rather than simply <code>'font'</code>. </p>
 <p>In addition to numeric values, each property can take the strings <code>'show'</code>, <code>'hide'</code>, and <code>'toggle'</code>. These shortcuts allow for custom hiding and showing animations that take into account the display type of the element.</p>
 <p>Animated properties can also be relative. If a value is supplied with a leading <code>+=</code> or <code>-=</code> sequence of characters, then the target value is computed by adding or subtracting the given number from the current value of the property.</p>
 <blockquote><p><strong>Note:</strong> Unlike shorthand animation methods such as <code>.slideDown()</code> and <code>.fadeIn()</code>, the <code>.animate()</code> method does <em>not</em> make hidden elements visible as part of the effect. For example, given <code>$('someElement').hide().animate({height:'20px'}, 500)</code>, the animation will run, but <em>the element will remain hidden</em>.</p></blockquote>
 <h4 id="duration">Duration</h4>
-<p>Durations are given in milliseconds; higher values indicate slower animations, not faster ones. The strings <code>'fast'</code> and <code>'slow'</code> can be supplied to indicate durations of <code>200</code> and <code>600</code> milliseconds, respectively.</p>
+<p>Durations are given in milliseconds; higher values indicate slower animations, not faster ones. The default duration is <code>400</code> milliseconds. The strings <code>'fast'</code> and <code>'slow'</code> can be supplied to indicate durations of <code>200</code> and <code>600</code> milliseconds, respectively.</p>
 
 <h4 id="complete">Complete Function</h4>
 <p>If supplied, the <code>complete</code> callback function is fired once the animation is complete. This can be useful for stringing different animations together in sequence. The callback is not sent any arguments, but <code>this</code> is set to the DOM element being animated. If multiple elements are animated, the callback is executed once per matched element, not once for the animation as a whole.</p>
@@ -11626,53 +11700,55 @@ div {
 ]]></html>
 </example>
 <example>
-  <desc>Animates all paragraphs to toggle both height and opacity, completing the animation within 600 milliseconds.</desc>
+  <desc>Animate all paragraphs to toggle both height and opacity, completing the animation within 600 milliseconds.</desc>
   <code><![CDATA[$( "p" ).animate({
-  "height": "toggle", "opacity": "toggle"
+  height: "toggle", opacity: "toggle"
 }, "slow" );]]></code>
 </example>
 <example>
-  <desc>Animates all paragraph to a left style of 50 and opacity of 1 (opaque, visible), completing the animation within 500 milliseconds.</desc>
+  <desc>Animate all paragraphs to a left style of 50 and opacity of 1 (opaque, visible), completing the animation within 500 milliseconds.</desc>
   <code><![CDATA[$( "p" ).animate({
-  "left": "50", "opacity": 1
+  left: 50, opacity: 1
 }, 500 );
 ]]></code>
 </example>
+  <example>
+      <desc>Animate the left and opacity style properties of all paragraphs; run the animation <em>outside</em> the queue, so that it will automatically start without waiting for its turn.</desc>
+      <code><![CDATA[$( "p" ).animate({
+  left: "50px", opacity: 1
+}, { duration: 500, queue: false });]]></code>
+  </example>
+
 <example>
   <desc>An example of using an 'easing' function to provide a different style of animation. This will only work if you have a plugin that provides this easing function.  Note, this code will do nothing unless the paragraph element is hidden.</desc>
   <code><![CDATA[$( "p" ).animate({
-  "opacity": "show"
+  opacity: "show"
 }, "slow", "easein" );]]></code>
 </example>
 <example>
       <desc>Animates all paragraphs to toggle both height and opacity, completing the animation within 600 milliseconds.</desc>
       <code><![CDATA[$( "p" ).animate({
-  "height": "toggle", "opacity": "toggle"
+  height: "toggle", opacity: "toggle"
 }, { duration: "slow" });]]></code>
   </example>
   <example>
-      <desc>Animates all paragraph to a left style of 50 and opacity of 1 (opaque, visible), completing the animation within 500 milliseconds.  It also will do it <em>outside</em> the queue, meaning it will automatically start without waiting for its turn.</desc>
+      <desc>Use an easing function to provide a different style of animation. This will only work if you have a plugin that provides this easing function.</desc>
       <code><![CDATA[$( "p" ).animate({
-  left: "50px", opacity: 1
-}, { duration: 500, queue: false });]]></code>
+  opacity: "show"
+}, { duration: "slow", easing: "easein" });]]></code>
   </example>
   <example>
-      <desc>An example of using an 'easing' function to provide a different style of animation. This will only work if you have a plugin that provides this easing function.</desc>
+      <desc>Animate all paragraphs and execute a callback function when the animation is complete.  The first argument is a map of CSS properties, the second specifies that the animation should take 1000 milliseconds to complete, the third states the easing type, and the fourth argument is an anonymous callback function. </desc>
       <code><![CDATA[$( "p" ).animate({
-  "opacity": "show"
-}, { "duration": "slow", "easing": "easein" });]]></code>
-  </example>
-  <example>
-      <desc>An example of using a callback function.  The first argument is an array of CSS properties, the second specifies that the animation should take 1000 milliseconds to complete, the third states the easing type, and the fourth argument is an anonymous callback function. </desc>
-      <code><![CDATA[$( "p" ).animate({
-  height:200, width:400, opacity: .5
-}, 1000, "linear", function(){ alert("all done"); });
+  height: 200, width: 400, opacity: 0.5
+}, 1000, "linear", function() {
+  alert("all done");
+});
 ]]></code>
   </example>
 <category name="Custom"/>
 <category name="Version 1.0"/>
-<note type="additional">All jQuery effects, including <code>.animate()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.animate()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
             <entry type='method' name="prevAll" return="jQuery">
               <signature>
                 <added>1.2</added>
@@ -11912,8 +11988,7 @@ div { background:blue; }
 <category name="Fading"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.fadeTo()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.fadeTo()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
 
 <entry type='method' name="fadeOut" return="jQuery">
   <desc>Hide the matched elements by fading them to transparent.</desc>
@@ -12050,8 +12125,7 @@ button { float:left; margin:5px 10px 5px 0; }
 <category name="Fading"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.fadeOut()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.fadeOut()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
 <entry type='method' name="parents" return="jQuery">
   <signature>
     <added>1.0</added>
@@ -12255,8 +12329,7 @@ $("span").click(function () {
 <category name="Fading"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.fadeIn()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.fadeIn()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
             <entry type='method' name="parent" return="jQuery">
               <signature>
                 <added>1.0</added>
@@ -12503,8 +12576,7 @@ $("span").click(function () {
 <category name="Sliding"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.slideToggle()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.slideToggle()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
 <entry type='method' name="jQuery.post" return="jqXHR">
   <signature>
     <added>1.0</added>
@@ -12518,7 +12590,7 @@ $("span").click(function () {
       <desc>A callback function that is executed if the request succeeds.</desc>
     </argument>
     <argument name="dataType" optional="true" type="String">
-      <desc>The type of data expected from the server. Default: Intelligent Guess (xml, json, script, or html).</desc>
+      <desc>The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).</desc>
     </argument>
   </signature>
   <desc>Load data from the server using a HTTP POST request.</desc>
@@ -12638,7 +12710,7 @@ $("span").click(function () {
           <category name="Shorthand Methods"/>
 <category name="Version 1.0"/>
 <category name="Version 1.5"/>
-<note type="additional">Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.</note><note type="additional">If a request with jQuery.post() returns an error code, it will fail silently unless the script has also called the global <a href="http://api.jquery.com/ajaxError/">.ajaxError() </a> method or. As of jQuery 1.5, the <code>.error()</code> method of the <code>jqXHR</code> object returned by jQuery.post() is also available for error handling.</note></entry>
+<note type="additional">Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.</note><note type="additional">If a request with jQuery.post() returns an error code, it will fail silently unless the script has also called the global <a href="http://api.jquery.com/ajaxError/">.ajaxError() </a> method. Alternatively, as of jQuery 1.5, the <code>.error()</code> method of the <code>jqXHR</code> object returned by jQuery.post() is also available for error handling.</note></entry>
 <entry type='method' name="slideUp" return="jQuery">
   <desc>Hide the matched elements with a sliding motion.</desc>
   <signature>
@@ -12746,8 +12818,7 @@ $("span").click(function () {
 <category name="Sliding"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.slideUp()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.slideUp()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
             <entry type='method' name="nextAll" return="jQuery">
               <signature>
                 <added>1.2</added>
@@ -12959,8 +13030,7 @@ margin:10px; }
 <category name="Sliding"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.3"/>
-<note type="additional">All jQuery effects, including <code>.slideDown()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note><note type="additional">Because of the nature of <a href="https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame"><code>requestAnimationFrame()</code></a>, you should never queue animations using a <code>setInterval</code> or <code>setTimeout</code> loop. In order to preserve CPU resources, browsers that support <code>requestAnimationFrame</code> will not update animations when the window/tab is not displayed. If you continue to queue animations via <code>setInterval</code> or <code>setTimeout</code> while animation is paused, all of the queued animations will begin playing when the window/tab regains focus. To avoid this potential problem, use the callback of your last animation in the loop, or append a function to the elements <a href="http://api.jquery.com/queue"><code>.queue()</code></a> to set the timeout to start the next animation.
-</note></entry>
+<note type="additional">All jQuery effects, including <code>.slideDown()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
 <entry type='method' name="find" return="jQuery">
   <signature>
     <added>1.0</added>
@@ -13080,33 +13150,50 @@ $('li.item-ii').find( item1 ).css('background-color', 'red');
 <category name="Version 1.6"/>
 </entry>
 
-            <entry type='method' name="jQuery.getScript" return="jqXHR">
-        <signature>
-                  <added>1.0</added>
-                  <argument name="url" type="String">
-                      <desc>A string containing the URL to which the request is sent.</desc>
-                  </argument>
-                  <argument name="success(data, textStatus)" optional="true" type="Function">
-                      <desc>A callback function that is executed if the request succeeds.</desc>
-                  </argument>
-        </signature>
-                <desc>Load a JavaScript file from the server using a GET HTTP request, then execute it.</desc>
-                <longdesc><p>This is a shorthand Ajax function, which is equivalent to:</p>
-        <pre>$.ajax({
+<entry type='method' name="jQuery.getScript" return="jqXHR">
+  <signature>
+    <added>1.0</added>
+      <argument name="url" type="String">
+        <desc>A string containing the URL to which the request is sent.</desc>
+      </argument>
+      <argument name="success(script, textStatus, jqXHR)" optional="true" type="Function">
+        <desc>A callback function that is executed if the request succeeds.</desc>
+      </argument>
+    </signature>
+    <desc>Load a JavaScript file from the server using a GET HTTP request, then execute it.</desc>
+    <longdesc><p>This is a shorthand Ajax function, which is equivalent to:</p>
+<pre>$.ajax({
   url: <em>url</em>,
   dataType: "script",
   success: <em>success</em>
 });
 </pre>
+        <p>The script is executed in the global context, so it can refer to other variables and use jQuery functions. Included scripts can have some impact on the current page.</p>
+        <h4 id="success-callback">
+          Success Callback
+        </h4>
         <p>The callback is passed the returned JavaScript file. This is generally not useful as the script will already have run at this point.</p>
-        <p>The script is executed in the global context, so it can refer to other variables and use jQuery functions. Included scripts can have some impact on the current page:</p>
         <pre>$(".result").html("&lt;p&gt;Lorem ipsum dolor sit amet.&lt;/p&gt;");</pre>
         <p>Scripts are included and run by referencing the file name:</p>
-<pre>$.getScript('ajax/test.js', function(data, textStatus){
+<pre>$.getScript("ajax/test.js", function(data, textStatus, jqxhr) {
    console.log(data); //data returned
    console.log(textStatus); //success
+   console.log(jqxhr.status); //200
    console.log('Load was performed.');
-});</pre><p><strong>Note:</strong> Should you require an additional callback for errors when using the <code>getScript()</code> method, the global <code>ajaxError()</code> callback event may be used to achieve this as follows:</p>
+});</pre>
+
+        <h4 id="handling-errors">Handling Errors</h4>
+        <p>As of jQuery 1.5, you may use <a href="http://api.jquery.com/deferred.fail/"><code>.fail()</code></a> to account for errors:</p>
+<pre>
+$.getScript("ajax/test.js")
+.done(function(script, textStatus) {
+  console.log( textStatus );
+})
+.fail(function(jqxhr, settings, exception) {
+  $( "div.log" ).text( "Triggered ajaxError handler." );
+});  
+</pre>
+        <p>Prior to jQuery 1.5, the global <code>.ajaxError()</code> callback event had to be used in order to handle <code>$.getScript()</code> errors:</p>
 <pre>
 $( "div.log" ).ajaxError(function(e, jqxhr, settings, exception) {
   if (settings.dataType=='script') {
@@ -13114,11 +13201,41 @@ $( "div.log" ).ajaxError(function(e, jqxhr, settings, exception) {
   }
 });
 </pre>
+        <h4 id="caching-requests">Caching Responses</h4>
+        <p>Be default, <code>$.getScript()</code> sets the cache setting to <code>false</code>. This appends a timestamped query parameter to the request URL to ensure that the browser downloads the script each time it is requested. You can override this feature by setting the cache property globally using <a href="http://api.jquery.com/jquery.ajaxsetup/"><code>$.ajaxSetup()</code></a>: </p>
+<pre>
+$.ajaxSetup({
+  cache: true
+});
+</pre>
+        <p>Alternatively, you could define a new method that uses the more flexible <code>$.ajax()</code> method.</p>
 </longdesc>
+<example>
+  <desc>Define a $.cachedScript() method that allows fetching a cached script:</desc>
+  <code>jQuery.cachedScript = function(url, options) {
+
+  // allow user to set any option except for dataType, cache, and url
+  options = $.extend(options || {}, {
+    dataType: "script",
+    cache: true,
+    url: url
+  });
+
+  // Use $.ajax() since it is more flexible than $.getScript
+  // Return the jqXHR object so we can chain callbacks
+  return jQuery.ajax(options);
+};
+
+// Usage
+$.cachedScript("ajax/test.js").done(function(script, textStatus) {
+  console.log( textStatus );
+});
+</code>
+</example>
                 <example>
                     <desc>Load the <a href="http://github.com/jquery/jquery-color">official jQuery Color Animation plugin</a> dynamically and bind some color animations to occur once the new functionality is loaded.</desc>
                     <code><![CDATA[
-$.getScript("http://dev.jquery.com/view/trunk/plugins/color/jquery.color.js", function() {
+$.getScript("/scripts/jquery.color.js", function() {
   $("#go").click(function(){
     $(".block").animate( { backgroundColor: "pink" }, 1000)
       .delay(500)
@@ -13328,6 +13445,7 @@ $('li.item-a').closest('#one', listItemII)
 <entry type='method' name="closest" return="Array">
   <signature>
     <added>1.4</added>
+    <deprecated>1.7</deprecated>
     <argument name="selectors" type="Array">
       <desc>An array or string containing a selector expression to match elements against (can also be a jQuery object).</desc>
     </argument>
@@ -13336,7 +13454,7 @@ $('li.item-a').closest('#one', listItemII)
     </argument>
   </signature>
   <desc>Gets an array of all the elements and selectors matched against the current element up through the DOM tree.</desc>
-  <longdesc><p>This method is primarily meant to be used internally or by plugin authors.</p></longdesc>
+  <longdesc><p><strong>This signature (only!) is deprecated as of jQuery 1.7.</strong> This method is primarily meant to be used internally or by plugin authors.</p></longdesc>
 
 <example>
   <desc>Show how event delegation can be done with closest.</desc>
@@ -13553,7 +13671,7 @@ alert("Data Loaded: " + data);
 <category name="Shorthand Methods"/>
 <category name="Version 1.0"/>
 <category name="Version 1.5"/>
-<note type="additional">Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.</note><note type="additional">If a request with jQuery.get() returns an error code, it will fail silently unless the script has also called the global <a href="http://api.jquery.com/ajaxError/">.ajaxError() </a> method or. As of jQuery 1.5, the <code>.error()</code> method of the <code>jqXHR</code> object returned by jQuery.get() is also available for error handling.</note><note type="additional">Script and JSONP requests are not subject to the same origin policy restrictions.</note></entry>
+<note type="additional">Due to browser security restrictions, most "Ajax" requests are subject to the <a title="Same Origin Policy on Wikipedia" href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>; the request can not successfully retrieve data from a different domain, subdomain, or protocol.</note><note type="additional">If a request with jQuery.get() returns an error code, it will fail silently unless the script has also called the global <a href="http://api.jquery.com/ajaxError/">.ajaxError() </a> method. Alternatively, as of jQuery 1.5, the <code>.error()</code> method of the <code>jqXHR</code> object returned by jQuery.get() is also available for error handling.</note><note type="additional">Script and JSONP requests are not subject to the same origin policy restrictions.</note></entry>
 <entry type='method' name="load" return="jQuery">
   <signature>
     <added>1.0</added>
@@ -13569,30 +13687,31 @@ alert("Data Loaded: " + data);
   </signature>
   <desc>Load data from the server and place the returned HTML into the matched element.</desc>
   <longdesc>
+    <blockquote><p>Note: The event handling suite also has a method named <code><a href='/load-event'>.load()</a></code>. jQuery determines which method to fire based on the set of arguments passed to it.</p></blockquote>
     <p>This method is the simplest way to fetch data from the server. It is roughly equivalent to <code>$.get(url, data, success)</code> except that it is a method rather than global function and it has an implicit callback function.  When a successful response is detected (i.e. when <code>textStatus</code> is "success" or "notmodified"), <code>.load()</code> sets the HTML contents of the matched element to the returned data. This means that most uses of the method can be quite simple:</p>
     <pre>$('#result').load('ajax/test.html');</pre>
-    <p>The provided callback, if any, is executed after this post-processing has been performed:</p>
+    <h4 id="callback-function">Callback Function</h4>
+    <p>If a "complete" callback is provided, it is executed after post-processing and HTML insertion has been performed. The callback is fired once for each element in the jQuery collection, and <code>this</code> is set to each DOM element in turn.</p>
     <pre>$('#result').load('ajax/test.html', function() {
   alert('Load was performed.');
 });</pre>
     <p>In the two examples above, if the current document does not contain an element with an ID of "result," the <code>.load()</code> method is not executed.</p>
+    <h4 id="request-method">Request Method</h4>
     <p>The POST method is used if data is provided as an object; otherwise, GET is assumed.</p>
-
-    <blockquote><p>Note: The event handling suite also has a method named <code><a href='/load-event'>.load()</a></code>. Which one is fired depends on the set of arguments passed.</p></blockquote>
-    <h4>Loading Page Fragments</h4>
+    <h4 id="loading-page-fragments">Loading Page Fragments</h4>
     <p>The <code>.load()</code> method, unlike <code><a href='/jQuery.get'>$.get()</a></code>, allows us to specify a portion of the remote document to be inserted. This is achieved with a special syntax for the <code>url</code> parameter. If one or more space characters are included in the string, the portion of the string following the first space is assumed to be a jQuery selector that determines the content to be loaded.   </p>
     <p>We could modify the example above to use only part of the document that is fetched:</p>
     <pre>$('#result').load('ajax/test.html #container');</pre>
     <p>When this method executes, it retrieves the content of <code>ajax/test.html</code>, but then jQuery parses the returned document to find the element with an ID of <code>container</code>. This element, along with its contents, is inserted into the element with an ID of <code>result</code>, and the rest of the retrieved document is discarded.</p>
 <p>jQuery uses the browser's <code>.innerHTML</code> property to parse the retrieved document and insert it into the current document. During this process, browsers often filter elements from the document such as <code>&lt;html&gt;</code>, <code>&lt;title&gt;</code>, or <code>&lt;head&gt;</code> elements. As a result, the elements retrieved by <code>.load()</code> may not be exactly the same as if the document were retrieved directly by the browser.</p>
-
-<blockquote><p><strong>Note:</strong> When calling <code>.load()</code> using a URL without a suffixed selector expression, the content is passed to <code>.html()</code> prior to scripts being removed. This executes the script blocks before they are discarded. If <code>.load()</code> is however called with a selector expression appended to the URL, the scripts are stripped out prior to the DOM being updated, which is why they are never executed. An example of both cases can be seen below:
-</p></blockquote>
+  <h4 id="script-execution">Script Execution</h4>
+<p> When calling <code>.load()</code> using a URL without a suffixed selector expression, the content is passed to <code>.html()</code> prior to scripts being removed. This executes the script blocks before they are discarded. If <code>.load()</code> is called with a selector expression appended to the URL, however, the scripts are stripped out prior to the DOM being updated, and thus are <em>not</em> executed. An example of both cases can be seen below:
+</p>
 <p>Here, any JavaScript loaded into <code>#a</code> as a part of the document will successfully execute.</p>
 <pre>
 $('#a').load('article.html');
 </pre>
-<p>However in this case, script blocks in the document being loaded into <code>#b</code> are stripped out prior to being executed:</p>
+<p>However, in the following case, script blocks in the document being loaded into <code>#b</code> are stripped out and not executed:</p>
 <pre>
 $('#b').load('article.html #target');
 </pre>
@@ -13665,7 +13784,7 @@ alert("The last 25 entries in the feed have been loaded");
     <argument name="settings" type="Map">
       <desc>A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with <a href="/jQuery.ajaxSetup">$.ajaxSetup()</a>.</desc>
       <option default="depends on DataType" name="accepts" type="Map">
-        <desc>The content type sent in the request header that tells the server what kind of response it will accept in return. If the <code>accepts</code> setting needs modification, it is recommended to do so once in the <code>$.ajaxSetup()</code> method</desc>
+        <desc>The content type sent in the request header that tells the server what kind of response it will accept in return. If the <code>accepts</code> setting needs modification, it is recommended to do so once in the <code>$.ajaxSetup()</code> method.</desc>
       </option>
       <option default="true" name="async" type="Boolean">
         <desc>By default, all requests are sent asynchronously (i.e. this is set to <code>true</code> by default). If you need synchronous requests, set this option to <code>false</code>. Cross-domain requests and <code>dataType: "jsonp"</code> requests do not support synchronous operation. Note that synchronous requests may temporarily lock the browser, disabling any actions while the request is active.</desc>
@@ -13686,22 +13805,21 @@ alert("The last 25 entries in the feed have been loaded");
         <desc>When sending data to the server, use this content-type. Default is "application/x-www-form-urlencoded", which is fine for most cases. If you explicitly pass in a content-type to <code>$.ajax()</code> then it'll always be sent to the server (even if no data is sent). Data will always be transmitted to the server using UTF-8 charset; you must decode this appropriately on the server side.</desc>
       </option>
       <option name="context" type="Object">
-        <desc>This object will be made the context of all Ajax-related callbacks. By default, the context is an object that represents the ajax settings used in the call (<code>$.ajaxSettings</code> merged with the settings passed to <code>$.ajax</code>). For example specifying a DOM element as the context will make that the context for the <code>complete</code> callback of a request, like so: <pre>$.ajax({
+        <desc>This object will be made the context of all Ajax-related callbacks. By default, the context is an object that represents the ajax settings used in the call (<code>$.ajaxSettings</code> merged with the settings passed to <code>$.ajax</code>). For example,  specifying a DOM element as the context will make that the context for the <code>complete</code> callback of a request, like so: <pre>$.ajax({
   url: "test.html",
-  context: document.body,
-  success: function(){
-    $(this).addClass("done");
-  }
+  context: document.body
+}).done(function() { 
+  $(this).addClass("done");
 });</pre></desc>
       </option>
       <option name="converters" type="Map" default='{"* text": window.String, "text html": true, "text json": jQuery.parseJSON, "text xml": jQuery.parseXML}' added="1.5">
-        <desc>A map of dataType-to-dataType converters. Each converter's value is a function that returns the transformed value of the response</desc>
+        <desc>A map of dataType-to-dataType converters. Each converter's value is a function that returns the transformed value of the response.</desc>
       </option>
-      <option name="crossDomain" default="false for same-domain requests, true for cross-domain requests" added="1.5">
-        <desc>If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to <code>true</code>. This allows, for example, server-side redirection to another domain</desc>
+      <option name="crossDomain" type="Boolean" default="false for same-domain requests, true for cross-domain requests" added="1.5">
+        <desc>If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to <code>true</code>. This allows, for example, server-side redirection to another domain.</desc>
       </option>
       <option name="data" type="Object, String">
-        <desc>Data to be sent to the server. It is converted to a query string, if not already a string. It's appended to the url for GET-requests. See processData option to prevent this automatic processing. Object must be Key/Value pairs. If value is an Array, jQuery serializes multiple values with same key based on the value of the <code>traditional</code> setting (described below).</desc>
+        <desc>Data to be sent to the server. It is converted to a query string, if not already a string. It's appended to the url for GET-requests. See <code>processData</code> option to prevent this automatic processing. Object must be Key/Value pairs. If value is an Array, jQuery serializes multiple values with same key based on the value of the <code>traditional</code> setting (described below).</desc>
       </option>
       <option name="dataFilter(data, type)" type="Function">
         <desc>A function to be used to handle the raw response data of XMLHttpRequest.This is a pre-filtering function to sanitize the response. You should return the sanitized data. The function accepts two arguments: The raw data returned from the server and the 'dataType' parameter.</desc>
@@ -13758,7 +13876,7 @@ alert("The last 25 entries in the feed have been loaded");
 <pre>$.ajax({
   statusCode: {
     404: function() {
-      alert('page not found');
+      alert("page not found");
     }
   }
 });</pre>
@@ -13816,14 +13934,13 @@ alert("The last 25 entries in the feed have been loaded");
      <p><strong>As of jQuery 1.5.1</strong>, the <code>jqXHR</code> object also contains the <code>overrideMimeType()</code> method (it was available in jQuery 1.4.x, as well, but was temporarily removed in jQuery 1.5). The <code>.overrideMimeType()</code> method may be used in the <code>beforeSend()</code> callback function, for example, to modify the response content-type header:</p>
 <pre>
 $.ajax({
-  url: 'http://fiddle.jshell.net/favicon.png',
-  beforeSend: function( xhr ) {
-    xhr.overrideMimeType( 'text/plain; charset=x-user-defined' );
-  },
-  success: function( data ) {
-    if (console &amp;&amp; console.log){
-      console.log( 'Sample of data:', data.slice(0,100) );
-    }
+  url: "http://fiddle.jshell.net/favicon.png",
+  beforeSend: function ( xhr ) {
+    xhr.overrideMimeType("text/plain; charset=x-user-defined");
+  }
+}).done(function ( data ) {
+  if( console &amp;&amp; console.log ) {
+    console.log("Sample of data:", data.slice(0, 100));
   }
 });
 </pre>
@@ -13944,7 +14061,7 @@ jQuery.ajaxSettings.xhr = function () {
   <code><![CDATA[$.ajax({
   type: "POST",
   url: "some.php",
-  data: "name=John&location=Boston",
+  data: { name: "John", location: "Boston" }
 }).done(function( msg ) {
   alert( "Data Saved: " + msg );
 });]]></code>
@@ -13954,10 +14071,9 @@ jQuery.ajaxSettings.xhr = function () {
   <desc>Retrieve the latest version of an HTML page.</desc>
   <code><![CDATA[$.ajax({
   url: "test.html",
-  cache: false,
-  success: function(html){
-    $("#results").append(html);
-  }
+  cache: false
+}).done(function( html ) {
+  $("#results").append(html);
 });]]></code>
 </example>
 
@@ -14042,8 +14158,8 @@ request.fail(function(jqXHR, textStatus) {
                 </argument>
               </signature>
               <desc>Get the children of each element in the set of matched elements, optionally filtered by a selector.</desc>
-              <longdesc><p>Given a jQuery object that represents a set of DOM elements, the <code>.children()</code> method allows us to search through the immediate children of these elements in the DOM tree and construct a new jQuery object from the matching elements. The <code>.find()</code> and <code>.children()</code> methods are similar, except that the latter only travels a single level down the DOM tree. Note also that like most jQuery methods, <code>.children()</code> does not return text nodes; to get <em>all</em> children including text and comment nodes, use <code>.contents()</code>.</p>
-<p>The method optionally accepts a selector expression of the same type that we can pass to the <code>$()</code> function. If the selector is supplied, the elements will be filtered by testing whether they match it.</p>
+              <longdesc><p>Given a jQuery object that represents a set of DOM elements, the <code>.children()</code> method allows us to search through the children of these elements in the DOM tree and construct a new jQuery object from the matching elements. The <code>.children()</code> method differs from <code><a href="http://api.jquery.com/find/">.find()</a></code> in that <code>.children()</code> only travels a single level down the DOM tree while <code>.find()</code> can traverse down multiple levels to select descendant elements (grandchildren, etc.) as well. Note also that like most jQuery methods, <code>.children()</code> does not return text nodes; to get <em>all</em> children including text and comment nodes, use <code><a href="http://api.jquery.com/contents">.contents()</a></code>.</p>
+<p>The <code>.children()</code> method optionally accepts a selector expression of the same type that we can pass to the <code>$()</code> function. If the selector is supplied, the elements will be filtered by testing whether they match it.</p>
 <p>Consider a page with a basic nested list on it:</p>
 <pre>
 &lt;ul class="level-1"&gt;
@@ -14317,6 +14433,12 @@ The value of this property is typically equal to <code>document</code>, as this 
                     <desc>A function used as a test for each element in the set. <code>this</code> is the current DOM element.</desc>
                 </argument>
               </signature>
+              <signature>
+                <added>1.4</added>
+                <argument name="jQuery object" type="Object">
+                  <desc>An existing jQuery object to match the current set of elements against.</desc>
+                </argument>
+              </signature>
               <desc>Remove elements from the set of matched elements.</desc>
                 <longdesc><p>Given a jQuery object that represents a set of DOM elements, the <code>.not()</code> method constructs a new jQuery object from a subset of the matching elements. The supplied selector is tested against each element; the elements that don't match the selector will be included in the result.</p>
 <p>Consider a page with a simple list on it:</p>
@@ -14472,13 +14594,14 @@ $("p:last").text( "outerHeight:" + p.outerHeight() + " , outerHeight(true):" + p
   </argument>
 </signature>
 
-<longdesc><p>With no parameters, the <code>.toggle()</code> method simply toggles the visibility of elements:</p>
+<longdesc>
+<blockquote><p>Note: The event handling suite also has a method named <a href="http://api.jquery.com/toggle-event/">.toggle()</a>. Which one is fired depends on the set of arguments passed.</p></blockquote>
+<p>With no parameters, the <code>.toggle()</code> method simply toggles the visibility of elements:</p>
 <pre>$('.target').toggle();
 </pre>
 <p>The matched elements will be revealed or hidden immediately, with no animation, by changing the CSS <code>display</code> property. If the element is initially displayed, it will be hidden; if hidden, it will be shown. The <code>display</code> property is saved and restored as needed. If an element has a <code>display</code> value of <code>inline</code>, then is hidden and shown, it will once again be displayed <code>inline</code>.</p>
 <p>When a duration is provided, <code>.toggle()</code> becomes an animation method. The <code>.toggle()</code> method animates the width, height, and opacity of the matched elements simultaneously. When these properties reach 0 after a hiding animation, the <code>display</code> style property is set to <code>none</code> to ensure that the element no longer affects the layout of the page.</p>
 <p>Durations are given in milliseconds; higher values indicate slower animations, not faster ones. The strings <code>'fast'</code> and <code>'slow'</code> can be supplied to indicate durations of <code>200</code> and <code>600</code> milliseconds, respectively.</p>
-<blockquote><p>Note: The event handling suite also has a method named <a href="http://api.jquery.com/toggle-event/">.toggle()</a>. Which one is fired depends on the set of arguments passed.</p></blockquote>
     <p>As of jQuery 1.4.3, an optional string naming an easing function may be used. Easing functions specify the speed at which the animation progresses at different points within the animation. The only easing implementations in the jQuery library are the default, called <code>swing</code>, and one that progresses at a constant pace, called <code>linear</code>. More easing functions are available with the use of plug-ins, most notably the <a href="http://jqueryui.com">jQuery UI suite</a>.</p>
 <p>If supplied, the callback is fired once the animation is complete. This can be useful for stringing different animations together in sequence. The callback is not sent any arguments, but <code>this</code> is set to the DOM element being animated. If multiple elements are animated, it is important to note that the callback is executed once per matched element, not once for the animation as a whole.</p>
 <p>We can animate any element, such as a simple image:</p>
@@ -14746,7 +14869,8 @@ $.param({ a: { b:1,c:2 }, d: [3,4,{ e:5 }] }) // "a[b]=1&a[c]=2&d[]=3&d[]=4&d[2]
 <p>The matched elements will be hidden immediately, with no animation. This is roughly equivalent to calling <code>.css('display', 'none')</code>, except that the value of the <code>display</code> property is saved in jQuery's data cache so that <code>display</code> can later be restored to its initial value. If an element has a <code>display</code> value of <code>inline</code>, then is hidden and shown, it will once again be displayed <code>inline</code>.</p>
 <p>When a duration is provided, <code>.hide()</code> becomes an animation method. The <code>.hide()</code> method animates the width, height, and opacity of the matched elements simultaneously. When these properties reach 0, the <code>display</code> style property is set to <code>none</code> to ensure that the element no longer affects the layout of the page.</p>
 <p>Durations are given in milliseconds; higher values indicate slower animations, not faster ones. The strings <code>'fast'</code> and <code>'slow'</code> can be supplied to indicate durations of <code>200</code> and <code>600</code> milliseconds, respectively.</p>
-    <p>As of jQuery 1.4.3, an optional string naming an easing function may be used. Easing functions specify the speed at which the animation progresses at different points within the animation. The only easing implementations in the jQuery library are the default, called <code>swing</code>, and one that progresses at a constant pace, called <code>linear</code>. More easing functions are available with the use of plug-ins, most notably the <a href="http://jqueryui.com">jQuery UI suite</a>.</p>
+<p>Note that <code>.hide()</code> is fired immediately and will override the animation queue if no duration or a duration of 0 is specified.</p>
+    <p>As of jQuery <strong>1.4.3</strong>, an optional string naming an easing function may be used. Easing functions specify the speed at which the animation progresses at different points within the animation. The only easing implementations in the jQuery library are the default, called <code>swing</code>, and one that progresses at a constant pace, called <code>linear</code>. More easing functions are available with the use of plug-ins, most notably the <a href="http://jqueryui.com">jQuery UI suite</a>.</p>
 <p>If supplied, the callback is fired once the animation is complete. This can be useful for stringing different animations together in sequence. The callback is not sent any arguments, but <code>this</code> is set to the DOM element being animated. If multiple elements are animated, it is important to note that the callback is executed once per matched element, not once for the animation as a whole.</p>
 <p>We can animate any element, such as a simple image:</p>
 <pre>&lt;div id="clickme"&gt;
@@ -14771,7 +14895,6 @@ $('#clickme').click(function() {
                 <example>
                     <desc>Hides all paragraphs then the link on click.</desc>
                     <code><![CDATA[
-
     $("p").hide();
     $("a").click(function ( event ) {
       event.preventDefault();
@@ -14847,45 +14970,46 @@ $('#clickme').click(function() {
 <category name="Version 1.4.3"/>
 <note type="additional">All jQuery effects, including <code>.hide()</code>, can be turned off globally by setting  <code>jQuery.fx.off = true</code>, which effectively sets the duration to 0. For more information, see <a href="http://api.jquery.com/jquery.fx.off">jQuery.fx.off</a>.</note></entry>
 
-
-            <entry type='method' name="width" return="Integer">
-				<signature>
-                	<added>1.0</added>
-				</signature>
-                <desc>Get the current computed width for the first element in the set of matched elements.</desc>
-                <longdesc><p>The difference between <code>.css(width)</code> and <code>.width()</code> is that the latter returns a unit-less pixel value (for example, <code>400</code>) while the former returns a value with units intact (for example, <code>400px</code>). The <code>.width()</code> method is recommended when an element's width needs to be used in a mathematical calculation.</p>
-<p class="image"><img src="/images/0042_04_04.png"/></p>
-<p>This method is also able to find the width of the window and document.</p>
+  <entry type='method' name="width" return="Integer">
+  <signature>
+    <added>1.0</added>
+  </signature>
+   <desc>Get the current computed width for the first element in the set of matched elements.</desc>
+   <longdesc>
+     <p>The difference between <code>.css(width)</code> and <code>.width()</code> is that the latter returns a unit-less pixel value (for example, <code>400</code>) while the former returns a value with units intact (for example, <code>400px</code>). The <code>.width()</code> method is recommended when an element's width needs to be used in a mathematical calculation.</p>
+    <p class="image"><img src="/images/0042_04_04.png"/></p>
+    <p>This method is also able to find the width of the window and document.</p>
 
 <pre>$(window).width();   // returns width of browser viewport
 $(document).width(); // returns width of HTML document</pre>
 
-<p>Note that <code>.width()</code> will always return the content width, regardless of the value of the CSS <code>box-sizing</code> property.</p></longdesc>
-                <example>
-                    <desc>Show various widths.  Note the values are from the iframe so might be smaller than you expected.  The yellow highlight shows the iframe body.</desc>
-                    <code><![CDATA[
-    function showWidth(ele, w) {
-      $("div").text("The width for the " + ele + 
-                    " is " + w + "px.");
-    }
-    $("#getp").click(function () { 
-      showWidth("paragraph", $("p").width()); 
-    });
-    $("#getd").click(function () { 
-      showWidth("document", $(document).width()); 
-    });
-    $("#getw").click(function () { 
-      showWidth("window", $(window).width()); 
-    });
+<p>Note that <code>.width()</code> will always return the content width, regardless of the value of the CSS <code>box-sizing</code> property.</p>
+</longdesc>
+<example>
+  <desc>Show various widths.  Note the values are from the iframe so might be smaller than you expected.  The yellow highlight shows the iframe body.</desc>
+<code><![CDATA[
+function showWidth(ele, w) {
+  $("div").text("The width for the " + ele + 
+                " is " + w + "px.");
+}
+$("#getp").click(function () { 
+  showWidth("paragraph", $("p").width()); 
+});
+$("#getd").click(function () { 
+  showWidth("document", $(document).width()); 
+});
+$("#getw").click(function () { 
+  showWidth("window", $(window).width()); 
+});
 
 ]]></code>
-                    <css><![CDATA[
+<css><![CDATA[
   body { background:yellow; }
   button { font-size:12px; margin:2px; }
   p { width:150px; border:1px red solid; }
   div { color:red; font-weight:bold;  }
   ]]></css>
-                    <html><![CDATA[<button id="getp">Get Paragraph Width</button>
+<html><![CDATA[<button id="getp">Get Paragraph Width</button>
   <button id="getd">Get Document Width</button>
   <button id="getw">Get Window Width</button>
 
@@ -14893,53 +15017,57 @@ $(document).width(); // returns width of HTML document</pre>
   <p>
     Sample paragraph to test width
   </p>]]></html>
-                </example>
-            <category name="CSS"/>
+</example>
+<category name="CSS"/>
 <category name="Dimensions"/>
 <category name="Style Properties"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4.1"/>
 </entry>
-            <entry type='method' name="width" return="jQuery">
-				<signature>
-                	<added>1.0</added>
-	                <argument name="value" type="String, Number">
-	                    <desc>An integer representing the number of pixels, or an integer along with an optional unit of measure appended (as a string).</desc>
-	                </argument>
-				</signature>
-    <signature>
-      <added>1.4.1</added>
+<entry type='method' name="width" return="jQuery">
+  <signature>
+    <added>1.0</added>
+    <argument name="value" type="String, Number">
+      <desc>An integer representing the number of pixels, or an integer along with an optional unit of measure appended (as a string).</desc>
+    </argument>
+  </signature>
+  <signature>
+    <added>1.4.1</added>
       <argument name="function(index, width)" type="Function">
         <desc>A function returning the width to set. Receives the index position of the element in the set and the old width as arguments. Within the function, <code>this</code> refers to the current element in the set.</desc>
       </argument>
     </signature>
-                <desc>Set the CSS width of each element in the set of matched elements.</desc>
-                <longdesc><p>When calling <code>.width('value')</code>, the value can be either a string (number and unit) or a number. If only a number is provided for the value, jQuery assumes a pixel unit. If a string is provided, however, any valid CSS measurement may be used for the width (such as <code>100px</code>, <code>50%</code>, or <code>auto</code>). Note that in modern browsers, the CSS width property does not include padding, border, or margin, unless the <code>box-sizing</code> CSS property is used.</p>
-
-<p>If no explicit unit was specified (like 'em' or '%') then "px" is concatenated to the value.</p>
-
-<p>Note that <code>.width('value')</code> sets the width of the box in accordance with the CSS <code>box-sizing</code> property. Changing this property to <code>border-box</code> will cause this function to change the outerWidth of the box instead of the content width.</p></longdesc>
-                <example>
-                    <desc>To set the width of each div on click to 30px plus a color change.</desc>
-                    <code><![CDATA[
-
-    $("div").one('click', function () {
-      $(this).width(30)
-             .css({cursor:"auto", "background-color":"blue"});
-    });
+    <desc>Set the CSS width of each element in the set of matched elements.</desc>
+    <longdesc>
+      <p>When calling <code>.width("value")</code>, the value can be either a string (number and unit) or a number. If only a number is provided for the value, jQuery assumes a pixel unit. If a string is provided, however, any valid CSS measurement may be used for the width (such as <code>100px</code>, <code>50%</code>, or <code>auto</code>). Note that in modern browsers, the CSS width property does not include padding, border, or margin, unless the <code>box-sizing</code> CSS property is used.</p>
+    <p>If no explicit unit is specified (like "em" or "%") then "px" is assumed.</p>
+    <p>Note that <code>.width("value")</code> sets the width of the box in accordance with the CSS <code>box-sizing</code> property. Changing this property to <code>border-box</code> will cause this function to change the <code>outerWidth</code> of the box instead of the content width.</p>
+  </longdesc>
+<example>
+<desc>Change the width of each div the first time it is clicked (and change its color).</desc>
+<code><![CDATA[
+(function() {
+  var modWidth = 50;
+  $("div").one('click', function () {
+    $(this).width(modWidth).addClass("mod");
+  modWidth -= 8;
+  });
+})();
 ]]></code>
-                    <css><![CDATA[
-  div { width:70px; height:50px; float:left; margin:5px;
-        background:red; cursor:pointer; }
+<css><![CDATA[
+div { width: 70px; height: 50px; float:left; margin: 5px;
+        background: red; cursor: pointer; }
+.mod { background: blue; cursor: default; }
   ]]></css>
-                    <html><![CDATA[<div></div>
-  <div>d</div>
-
+<html><![CDATA[
   <div>d</div>
   <div>d</div>
-  <div>d</div>]]></html>
-                </example>
-            <category name="CSS"/>
+  <div>d</div>
+  <div>d</div>
+  <div>d</div>
+]]></html>
+</example>
+<category name="CSS"/>
 <category name="Dimensions"/>
 <category name="Style Properties"/>
 <category name="Version 1.0"/>
@@ -14960,7 +15088,10 @@ $(document).width(); // returns width of HTML document</pre>
 <pre>$(window).height();   // returns height of browser viewport
 $(document).height(); // returns height of HTML document</pre>
 
-<p>Note that <code>.height()</code> will always return the content height, regardless of the value of the CSS <code>box-sizing</code> property.</p></longdesc>
+<p>Note that <code>.height()</code> will always return the content height, regardless of the value of the CSS <code>box-sizing</code> property.</p>
+
+<blockquote><p><strong>Note:</strong> Although <code>style</code> and <code>script</code> tags will report a value for <code>.width()</code> or <code>height()</code> when absolutely positioned and given <code>display:block</code>, it is strongly discouraged to call those methods on these tags. In addition to being a bad practice, the results may also prove unreliable.</p></blockquote>
+</longdesc>
                 <example>
                     <desc>Show various heights.  Note the values are from the iframe so might be smaller than you expected.  The yellow highlight shows the iframe body.</desc>
                     <code><![CDATA[
@@ -15041,7 +15172,7 @@ $(document).height(); // returns height of HTML document</pre>
 </entry>
 
 <entry type='method' name="show" return="jQuery">
-  <desc>Display the matched elements.</desc>  
+  <desc>Display the matched elements.</desc>
 <signature>
   <added>1.0</added>
 </signature>
@@ -15052,7 +15183,7 @@ $(document).height(); // returns height of HTML document</pre>
   </argument>
   <argument name="callback" type="Callback" optional="true">
     <desc>A function to call once the animation is complete.</desc>
-  </argument>  
+  </argument>
 </signature>
   <signature>
     <added>1.4.3</added>
@@ -15113,21 +15244,20 @@ $('#clickme').click(function() {
       <p style="display: none">Hello  2</p>]]></html>
     </example>
     <example>
-      <desc>Animates all hidden divs to show fastly in order, completing each animation within 200 milliseconds. Once each animation is done, it starts the next one.</desc>
+      <desc>Show the first div, followed by each next adjacent sibling div in order, with a 200ms animation. Each animation starts when the previous sibling div's animation ends.</desc>
       <code><![CDATA[
 $("#showr").click(function () {
-  $("div:eq(0)").show("fast", function () {
-    /* use callee so don't have to name the function */
-    $(this).next("div").show("fast", arguments.callee);
+  $("div").first().show("fast", function showNext() {
+    $(this).next("div").show("fast", showNext);
   });
 });
-$("#hidr").click(function () {
-  $("div").hide(2000);
-});
 
+$("#hidr").click(function () {
+  $("div").hide(1000);
+});
 ]]></code>
 <css><![CDATA[
-  div { background:#def3ca; margin:3px; width:80px; 
+  div { background:#def3ca; margin:3px; width:80px;
   display:none; float:left; text-align:center; }
   ]]></css>
   <html><![CDATA[
@@ -15140,7 +15270,7 @@ $("#hidr").click(function () {
   <div>you?</div>]]></html>
 </example>
 <example>
-  <desc>Shows all span and input elements with an animation. Once the animation is done, it changes the text.</desc>
+  <desc>Show all span and input elements with an animation. Change the text once the animation is done.</desc>
   <code><![CDATA[
 function doIt() {
   $("span,div").show("slow");
@@ -15156,7 +15286,7 @@ $("form").submit(function () {
   }
   $("span,div").hide("fast");
   /* to stop the submit */
-  return false; 
+  return false;
 });
 ]]></code>
 <css><![CDATA[
@@ -15164,15 +15294,16 @@ $("form").submit(function () {
   div { display:none; }
   p { font-weight:bold; background-color:#fcd; }
   ]]></css>
-  <html><![CDATA[<button>Do it!</button>
-  <span>Are you sure? (type 'yes' if you are) </span>
-  <div>
-    <form>
-      <input type="text"  value="as;ldkfjalsdf"/>
-    </form>
-  </div>
-  <p style="display:none;">I'm hidden...</p>
-  ]]></html>
+  <html><![CDATA[
+<button>Do it!</button>
+<span>Are you sure? (type 'yes' if you are) </span>
+<div>
+  <form>
+    <input type="text"  value="as;ldkfjalsdf"/>
+  </form>
+</div>
+<p style="display:none;">I'm hidden...</p>
+]]></html>
 </example>
 
 <category name="Basics"/>
@@ -15185,7 +15316,9 @@ $("form").submit(function () {
     <added>1.2.6</added>
   </signature>
   <desc>Get the current horizontal position of the scroll bar for the first element in the set of matched elements.</desc>
-  <longdesc><p>The horizontal scroll position is the same as the number of pixels that are hidden from view above the scrollable area. If the scroll bar is at the very left, or if the element is not scrollable, this number will be <code>0</code>.</p><blockquote><p><strong>Note:</strong> <code>.scrollLeft()</code>, when called directly or animated as a property using <code>.animate()</code> will not work if the element(s) it is being applied to are hidden.</p></blockquote></longdesc>
+  <longdesc><p>The horizontal scroll position is the same as the number of pixels that are hidden from view to the left of the scrollable area. If the scroll bar is at the very left, or if the element is not scrollable, this number will be <code>0</code>.</p>
+<blockquote><p><strong>Note:</strong> <code>.scrollLeft()</code>, when called directly or animated as a property using <code>.animate()</code>, will not work if the element it is being applied to is hidden.</p></blockquote>
+  </longdesc>
 
   <example>
     <desc>Get the scrollLeft of a paragraph.</desc>
@@ -15739,11 +15872,11 @@ $("span").text(arr.join(", "));
   <p>Keep in mind that the target object (first argument) will be modified, and will also be returned from <code>$.extend()</code>. If, however, we want to preserve both of the original objects, we can do so by passing an empty object as the target:</p>
   <pre>var object = $.extend({}, object1, object2);</pre>
 
-  <p>The merge performed by <code>$.extend()</code> is not recursive by default; if a property of the first object is itself an object or array, it will be completely overwritten by a property with the same key in the second object. The values are not merged. This can be seen in the example below by examining the value of banana. However, by passing <code>true</code> for the first function argument, objects will be recursively merged.</p>
-  <p>Undefined properties are not copied. However, properties inherited from the object's prototype <em>will</em> be copied over. For performance reasons, properties that have values of built-in JavaScript types such as Date or RegExp are not re-constructed, and will appear as plain Objects in the resulting object or array.</p>
-<blockquote>
-<p><strong>Note:</strong> When performing a deep extend, Object and Array are extended, however primitive types such string, boolean and number are not. For specific needs that fall outside of this behaviour, it is recommended to write a custom extend method as this will be significantly faster from a performance perspective. </p>
-</blockquote>
+  <p>The merge performed by <code>$.extend()</code> is not recursive by default; if a property of the first object is itself an object or array, it will be completely overwritten by a property with the same key in the second object. The values are not merged. This can be seen in the example below by examining the value of banana. However, by passing <code>true</code> for the first function argument, objects will be recursively merged. (Passing <code>false</code> for the first argument is not supported.)</p>
+  <p>Undefined properties are not copied. However, properties inherited from the object's prototype <em>will</em> be copied over. Properties that are an object constructed via <code>new MyCustomObject(args)</code>, or built-in JavaScript types such as Date or RegExp, are not re-constructed and will appear as plain Objects in the resulting object or array.</p>
+  <p>On a <code>deep</code> extend, Object and Array are extended, but object wrappers on primitive types such as String, Boolean, and Number are not.</p>
+  <p>For needs that fall outside of this behavior, write a custom extend method instead. </p>
+
 
   </longdesc>
 
@@ -15763,7 +15896,7 @@ var object2 = {
 /* merge object2 into object1 */
 $.extend(object1, object2);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != "undefined" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + ": ";
@@ -15796,7 +15929,7 @@ var object2 = {
 /* merge object2 into object1, recursively */
 $.extend(true, object1, object2);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != "undefined" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + ": ";
@@ -15823,7 +15956,7 @@ var options = { validate: true, name: "bar" };
 /* merge defaults and options, without modifying defaults */
 var settings = $.extend({}, defaults, options);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != "undefined" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + ": ";
@@ -15834,8 +15967,9 @@ var printObj = function(obj) {
 };
 
 
-$("#log").append( "<div><b>settings -- </b>" + printObj(settings) + "</div>" );
+$("#log").append( "<div><b>defaults -- </b>" + printObj(defaults) + "</div>" );
 $("#log").append( "<div><b>options -- </b>" + printObj(options) + "</div>" );
+$("#log").append( "<div><b>settings -- </b>" + printObj(settings) + "</div>" );
 
 ]]></code>
 <html><![CDATA[
@@ -15845,6 +15979,7 @@ $("#log").append( "<div><b>options -- </b>" + printObj(options) + "</div>" );
 <category name="Utilities"/>
 <category name="Version 1.0"/>
 </entry>
+
 <entry type='method' name="jQuery.each" return="Object">
   <signature>
     <added>1.0</added>
@@ -15948,7 +16083,8 @@ $.each(map, function(key, value) {
                     <code><![CDATA[$.boxModel]]></code>
                     <results><![CDATA[false]]></results>
                 </example>
-            <category name="Utilities"/>
+            <category name="Deprecated"/>
+<category name="Utilities"/>
 <category name="Version 1.0"/>
 </entry>
 
@@ -16010,7 +16146,7 @@ overflow:auto;
 
 <entry type='property' name="jQuery.support" return="Object">
   <signature><added>1.3</added></signature>
-  <desc>A collection of properties that represent the presence of different browser features or bugs.</desc>
+  <desc>A collection of properties that represent the presence of different browser features or bugs. Primarily intended for jQuery's internal use; specific properties may be removed when they are no longer needed internally to improve page startup performance.</desc>
   <longdesc>
     <p>Rather than using <code>$.browser</code> to detect the current user agent and alter the page presentation based on which browser is running, it is a good practice to perform <strong>feature detection</strong>. This means that prior to executing code which relies on a browser feature, we test to ensure that the feature works properly. To make this process simpler, jQuery performs many such tests and makes the results available to us as properties of the <code>jQuery.support</code> object.</p>
     <p>The values of all the support properties are determined using feature detection (and do not use any form of browser sniffing). </p>
@@ -16083,7 +16219,9 @@ overflow:auto;
 				</signature>
                 <desc>Get the current coordinates of the first element in the set of matched elements, relative to the offset parent.</desc>
                 <longdesc><p>The <code>.position()</code> method allows us to retrieve the current position of an element <em>relative to the offset parent</em>. Contrast this with <code><a href='/offset'>.offset()</a></code>, which retrieves the current position <em>relative to the document</em>. When positioning a new element near another one and within the same containing DOM element, <code>.position()</code> is the more useful.</p>
-<p>Returns an object containing the properties <code>top</code> and <code>left</code>.</p></longdesc>
+<p>Returns an object containing the properties <code>top</code> and <code>left</code>.</p>
+<blockquote><p><strong>Note:</strong> jQuery does not support getting the position coordinates of hidden elements or accounting for borders, margins, or padding set on the body element.</p></blockquote>
+</longdesc>
                 <example>
                     <desc>Access the position of the second paragraph:</desc>
                     <code><![CDATA[
@@ -16117,7 +16255,8 @@ $("p:last").text( "left: " + position.left + ", top: " + position.top );
     <longdesc><p>The <code>.offset()</code> method allows us to retrieve the current position of an element <em>relative to the document</em>. Contrast this with <code>.position()</code>, which retrieves the current position <em>relative to the offset parent</em>. When positioning a new element on top of an existing one for global manipulation (in particular, for implementing drag-and-drop), <code>.offset()</code> is the more useful.</p>
 
     <p><code>.offset()</code> returns an object containing the properties <code>top</code> and <code>left</code>.</p>
-<blockquote><p><strong>Note:</strong> jQuery does not support getting the offset coordinates of hidden elements or accounting for borders, margins, or padding set on the body element.</p></blockquote>    
+<blockquote><p><strong>Note:</strong> jQuery does not support getting the offset coordinates of hidden elements or accounting for borders, margins, or padding set on the body element.</p>
+<p>While it is possible to get the coordinates of elements with <code>visibility:hidden</code> set, <code>display:none</code> is excluded from the rendering tree and thus has a position that is undefined.</p></blockquote>    
     </longdesc>
     <example>
       <desc>Access the offset of the second paragraph:</desc>
@@ -16481,7 +16620,7 @@ $("button").toggle(function(){
     &lt;div class="hello"&gt;Hello&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre>
-        <blockquote><p>Note that when using the <code>.clone()</code> method, you can modify the cloned elements or their contents before (re-)inserting them into the document.</p></blockquote>
+        <blockquote><p><strong>Note:</strong> When using the <code>.clone()</code> method, you can modify the cloned elements or their contents before (re-)inserting them into the document.</p></blockquote>
         <p>Normally, any event handlers bound to the original element are <em>not</em> copied to the clone. The optional <code>withDataAndEvents</code> parameter allows us to change this behavior, and to instead make copies of all of the event handlers as well, bound to the new copy of the element. As of jQuery 1.4, all element data (attached by the <code>.data()</code> method) is also copied to the new copy. </p>
 <p>However, objects and arrays within element data are not copied and will continue to be shared between the cloned element and the original element. To deep copy all data, copy each one manually:</p>
 <pre>var $elem = $('#elem').data( "arr": [ 1 ] ), // Original element with attached data
@@ -16489,6 +16628,7 @@ $("button").toggle(function(){
     .data( "arr", $.extend( [], $elem.data("arr") ) ); // Deep copy to prevent data sharing
 </pre>
     <p>As of jQuery 1.5, <code>withDataAndEvents</code> can be optionally enhanced with <code>deepWithDataAndEvents </code> to copy the events and data for all children of the cloned element.</p>
+<blockquote><p><strong>Note:</strong> Using <code>.clone()</code> has the side-effect of producing elements with duplicate <code>id</code> attributes, which are supposed to be unique. Where possible, it is recommended to avoid cloning elements with this attribute or using <code>class</code> attributes as identifiers instead.</p></blockquote>
   </longdesc>
 <example>
 <desc>Clones all b elements (and selects the clones) and prepends them to all paragraphs.</desc>
@@ -16619,6 +16759,7 @@ $('#copy-correct')
 &lt;/div&gt;</pre>
 <p>If we had any number of nested elements inside <code>&lt;div class="hello"&gt;</code>, they would be removed, too. </p>
   <p>To avoid memory leaks, jQuery removes other constructs such as data and event handlers from the child elements before removing the elements themselves.</p>
+  <p>If you want to remove elements without destroying their data or event handlers (so they can be re-added later), use .detach() instead.</p>
   </longdesc>
   <example>
     <desc>Removes all child nodes (including text nodes) from all paragraphs</desc>
@@ -17330,7 +17471,7 @@ $('p').first().before($newdiv1, [newdiv2, existingdiv1]);
 
 $('p').first().after($newdiv1, [newdiv2, existingdiv1]);
 </pre>
-<p>Since <code>.after()</code> can accept any number of additional arguments, the same result can be achieved by passing in the three <code>&lt;div&gt;</code>s as three separate arguments, like so: <code>$('p').first().after($newdiv1, newdiv2, existingdiv1)</code>. The type and number of arguments will largely depend on the elements are collected in the code.</p>
+<p>Since <code>.after()</code> can accept any number of additional arguments, the same result can be achieved by passing in the three <code>&lt;div&gt;</code>s as three separate arguments, like so: <code>$('p').first().after($newdiv1, newdiv2, existingdiv1)</code>. The type and number of arguments will largely depend on the elements that are collected in the code.</p>
 
 </longdesc>
   <example>
@@ -17650,7 +17791,7 @@ $('body').append($newdiv1, [newdiv2, existingdiv1]);
     </signature>
     <desc>Get the current value of the first element in the set of matched elements.</desc>
     <longdesc>
-      <p>The <code>.val()</code> method is primarily used to get the values of form elements such as <code>input</code>, <code>select</code> and <code>textarea</code>. In the case of <code>&lt;select multiple="multiple"&gt;</code> elements, the <code>.val()</code> method returns an array containing each selected option.</p>
+      <p>The <code>.val()</code> method is primarily used to get the values of form elements such as <code>input</code>, <code>select</code> and <code>textarea</code>. In the case of <code>&lt;select multiple="multiple"&gt;</code> elements, the <code>.val()</code> method returns an array containing each selected option; if no option is selected, it returns <code>null</code>. </p>
 
 <p>For selects and checkboxes, you can also use the <a href='/selected'>:selected</a> and <a href='/checked'>:checked</a> selectors to get at values, for example:</p>
 <pre>$('select.foo option:selected').val();    // get the value from a dropdown select
@@ -17998,6 +18139,8 @@ $.valHooks.textarea = {
 <p>Given a document with six paragraphs, this example will set the HTML of <code>&lt;div class="demo-container"&gt;</code> to <code>&lt;p&gt;All new content for &lt;em&gt;6 paragraphs!&lt;/em&gt;&lt;/p&gt;</code>.</p>
 
   <p>This method uses the browser's <code>innerHTML</code> property. Some browsers may not generate a DOM that exactly replicates the HTML source provided. For example, Internet Explorer prior to version 8 will convert all <code>href</code> properties on links to absolute URLs, and Internet Explorer prior to version 9 will not correctly handle HTML5 elements without the addition of a separate <a href="http://code.google.com/p/html5shiv/">compatibility layer</a>.</p>
+
+   <p><strong>Note:</strong> In Internet Explorer up to and including version 9, setting the text content of an HTML element may corrupt the text nodes of its children that are being removed from the document as a result of the operation. If you are keeping references to these DOM elements and need them to be unchanged, use <code>.empty().html(string)</code> instead of <code>.html(string)</code> so that the elements are removed from the document before the new string is assigned to the element.</p>
 
 </longdesc>
                 <example>
@@ -18847,7 +18990,7 @@ $("div#result3").append($("p").hasClass("selected").toString());
   <signature>
     <added>1.0</added>
     <argument name="attributeName" type="String">
-      <desc>An attribute to remove.</desc>
+      <desc>An attribute to remove; as of version 1.7, it can be a space-separated list of attributes.</desc>
     </argument>
   </signature>
   <desc>Remove an attribute from each element in the set of matched elements.</desc>
@@ -18857,8 +19000,6 @@ $("div#result3").append($("p").hasClass("selected").toString());
 $element.prop("onclick", null);
 console.log("onclick property: ", $element[0].onclick);
 </pre>
-<p>The behavior of <code>.removeAttr()</code> may be updated to better handle this in the future. For the time being, however, setting <code>.prop("onclick", null)</code> should be considered the standard cross-browser solution.</p>
-<p></p>
 </longdesc>
   <example>
     <desc>Clicking the button enables the input next to it.</desc>
@@ -18887,6 +19028,7 @@ console.log("onclick property: ", $element[0].onclick);
 <category name="General Attributes"/>
 <category name="Version 1.0"/>
 <category name="Version 1.4"/>
+<category name="Version 1.7"/>
 </entry>
 
 <entry type='method' name="attr" return="String">
@@ -19066,8 +19208,8 @@ $("img").attr("src", function() {
   <pre>$("p").removeClass("myClass noClass").addClass("yourClass");</pre>
   <p>Here, the <code>myClass</code> and <code>noClass</code> classes are removed from all paragraphs, while <code>yourClass</code> is added.</p>
 <p>As of jQuery 1.4, the <code>.addClass()</code> method's argument can receive a function.</p>
-<pre>$("ul li:last").addClass(function() {
-  return "item-" + $(this).index();
+<pre>$("ul li:last").addClass(function(index) {
+  return "item-" + index;
 });</pre>
 <p>Given an unordered list with five <code>&lt;li&gt;</code> elements, this example adds the class "item-4" to the last <code>&lt;li&gt;</code>.</p>
 
@@ -22186,3 +22328,7 @@ $( "#dramaBtn" ).click( function() {
 </note><note type="banner"> The jQuery team has decided not to take this plugin past beta. It is no longer being actively developed or maintained.</note></entry>
   </plugins>
   </api>
+
+<!-- Dynamic page generated in 0.491 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2012-05-14 04:44:16 -->
+<!-- super cache -->

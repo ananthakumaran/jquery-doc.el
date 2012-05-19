@@ -730,7 +730,7 @@ just namespaces, such as \"click\", \"keydown.myPlugin\", or \".myPlugin\".
 " nil nil) ("selector" "A selector which should match the one originally passed to .on() when
 attaching event handlers.
 
-" "true" nil) ("handler" "A handler function previously attached for the event(s), or the special
+" "true" nil) ("handler(eventObject)" "A handler function previously attached for the event(s), or the special
 value false.
 
 " "true" nil)) (("events-map" "A map where the string keys represent one or more space-separated event
@@ -857,7 +857,7 @@ is always triggered when it reaches the selected element.
 " "true" nil) ("data" "Data to be passed to the handler in event.data when an event is
 triggered.
 
-" "true" nil) ("handler" "A function to execute when the event is triggered. The value false is
+" "true" nil) ("handler(eventObject)" "A function to execute when the event is triggered. The value false is
 also allowed as a shorthand for a function that simply does return
 false.
 " nil nil)) (("events-map" "A map in which the string keys represent one or more space-separated
@@ -911,9 +911,7 @@ innermost element (the event target) in the document where they occur
 all the way up to the body and the document element. In Internet
 Explorer 8 and lower, a few events such as change and submit do not
 natively bubble but jQuery patches these to bubble and create
-consistent cross-browser behavior. The focus and blur events are
-specified by the W3C to not bubble, but jQuery defines cross-browser
-focusin and focusout events that do bubble.
+consistent cross-browser behavior.
 ") (text . "") (text . "If selector is omitted or is null, the event handler is referred to as
 direct or directly-bound. The handler is called every time an event
 occurs on the selected elements, whether it occurs directly on the
@@ -973,10 +971,10 @@ function notify() { alert(\"clicked\"); }
 $(\"button\").on(\"click\", notify);
 ") (text . "") (text . "When the browser triggers an event or other JavaScript calls jQuery`s
 .trigger() method, jQuery passes the handler an event object it can use
-to analyze and change the status of the event. This object is a
+to analyze and change the status of the event. This object includes a
 normalized subset of data provided by the browser; the browser`s
-unmodified native event object is available in event.originalEvent .
-For example, event.type contains the event name (e.g., \"resize\") and
+unmodified native event object is available in event.originalEvent. For
+example, event.type contains the event name (e.g., \"resize\") and
 event.target indicates the deepest (innermost) element where the event
 occurred.
 ") (text . "") (text . "By default, most events bubble up from the original event target to the
@@ -1017,10 +1015,10 @@ is used the selector must either be provided or explicitly passed as
 null so that the data is not mistaken for a selector. Best practice is
 to use an object (map) so that multiple values can be passed as
 properties.
-") (text . "") (text . "The same event handler can be bound to an element multiple times. This
-is especially useful when the event.data feature is being used, or when
-other unique data resides in a closure around the event handler
-function. For example:
+") (text . "") (text . "As of jQuery 1.4, the same event handler can be bound to an element
+multiple times. This is especially useful when the event.data feature
+is being used, or when other unique data resides in a closure around
+the event handler function. For example:
 ") (text . "") (js . "
 function greet(event) { alert(\"Hello \"+event.data.name); }
 $(\"button\").on(\"click\", { name: \"Karl\" }, greet);
@@ -1065,23 +1063,34 @@ addComment) use $(\"#commentForm\").on(\"click\", \".addNew\", addComment).
 ") (text . "") (text . "There are shorthand methods for some events such as .click() that can
 be used to attach or trigger event handlers. For a complete list of
 shorthand methods, see the events category.
-") (text . "") (text . "Although not recommended, the pseudo-event-name \"hover\" can be used as
-a shorthand for \"mouseenter mouseleave\". Do not confuse it with the
-.hover() method, which accepts two functions. There is only one handler
-function attached by the pseudo-event-name \"hover\"; the handler should
-examine event.type to determine whether the event is mouseenter or
-mouseleave.
+") (text . "") (text . "Although strongly discouraged for new code, you may see the
+pseudo-event-name \"hover\" used as a shorthand for the string
+\"mouseenter mouseleave\". It attaches a single event handler for those
+two events, and the handler must examine event.type to determine
+whether the event is mouseenter or mouseleave. Do not confuse the
+\"hover\" pseudo-event-name with the .hover() method, which accepts one
+or two functions.
 ") (text . "") (text . "jQuery`s event system requires that a DOM element allow attaching data
 via a property on the element, so that events can be tracked and
 delivered. The object, embed, and applet elements cannot attach data,
 and therefore cannot have jQuery events bound to them.
-") (text . "") (text . "The error event on the window object uses nonstandard arguments and
-return value conventions, so it is not supported by jQuery. Instead,
-assign a handler function directly to the window.onerror property.
+") (text . "") (text . "The focus and blur events are specified by the W3C to not bubble, but
+jQuery defines cross-browser focusin and focusout events that do
+bubble. When focus and blur are used to attach delegated event
+handlers, jQuery maps the names and delivers them as focusin and
+focusout respectively. For consistency and clarity, use the bubbling
+event type names.
+") (text . "") (text . "jQuery also specifically prevents right and middle clicks from bubbling
+as they don`t occur on the element being clicked. Should working with
+the middle click be required, the mousedown or mouseup events should be
+used with .on() instead.
 ") (text . "") (text . "In all browsers, the load event does not bubble. In Internet Explorer 8
 and lower, the paste and reset events do not bubble. Such events are
 not supported for use with delegation, but they can be used when the
 event handler is directly attached to the element generating the event.
+") (text . "") (text . "The error event on the window object uses nonstandard arguments and
+return value conventions, so it is not supported by jQuery. Instead,
+assign a handler function directly to the window.onerror property.
 ") (text . "")) ("examples" ((text . "") (text . "Display a paragraph`s text in an alert when it is clicked:
 
 ") (text . "") (js . "$(\"p\").on(\"click\", function(){
@@ -1124,9 +1133,13 @@ span { color:blue; }
 <button>Trigger custom event</button>
 <span style=\"display:none;\"></span>") (text . "")) ((text . "") (text . "Attach multiple event handlers simultaneously using a map.
 
+") (text . "") (html . "<div class=\"test\">test div</div>") (text . "") (css . "
+.test { color: #000; padding: .5em; border: 1px solid #444; }
+.active { color: #900;}
+.inside { background-color: aqua; }
 ") (text . "") (js . "$(\"div.test\").on({
   click: function(){
-    $(this).addClass(\"active\");
+    $(this).toggleClass(\"active\");
   },
   mouseenter: function(){
     $(this).addClass(\"inside\");
@@ -1143,7 +1156,7 @@ by the ever-present body element after it bubbles to there.
       $(this).after(\"<p>Another paragraph! \"+(++count)+\"</p>\");
     });
 ") (text . "") (css . "
-  p { background:yellow; font-weight:bold; cursor:pointer; 
+  p { background:yellow; font-weight:bold; cursor:pointer;
       padding:5px; }
   p.over { background: #ccc; }
   span { color:red; }
@@ -1198,7 +1211,8 @@ $.isNumeric(undefined); // false
 
 " "true" nil) ("failFilter" "An optional function that is called when the Deferred is rejected.
 
-" "true" nil) ("progressFilter" "An optional function that is called when the Deferred is rejected.
+" "true" nil) ("progressFilter" "An optional function that is called when progress notifications are
+sent to the Deferred.
 
 " "true" nil))) ("desc" (text . "Utility method to filter and/or chain Deferreds.
 
@@ -1671,17 +1685,28 @@ true.
 create and associate a data object with the element if none currently
 exists. In contrast, jQuery.data(element) always returns a data object
 to the caller, creating one if no data object previously existed.
+") (text . "") (text . "Note that jQuery`s event system uses the jQuery data API to store event
+handlers. Therefore, binding an event to an element using .on(),
+.bind(), .live(), .delegate(), or one of the shorthand event methods
+also associates a data object with that element.
 ") (text . "")) ("examples" ((text . "") (text . "Set data on an element and see the results of hasData.
 
 ") (text . "") (js . "
-$(function(){
-  var $p = jQuery(\"p\"), p = $p[0];
-  $p.append(jQuery.hasData(p)+\" \"); /* false */
-  jQuery.data(p, \"testing\", 123);
-  $p.append(jQuery.hasData(p)+\" \"); /* true*/
-  jQuery.removeData(p, \"testing\");
-  $p.append(jQuery.hasData(p)+\" \"); /* false */
-});
+var $p = jQuery(\"p\"), p = $p[0];
+$p.append(jQuery.hasData(p)+\" \"); /* false */
+
+$.data(p, \"testing\", 123);
+$p.append(jQuery.hasData(p)+\" \"); /* true*/
+
+$.removeData(p, \"testing\");
+$p.append(jQuery.hasData(p)+\" \"); /* false */
+
+$p.on('click', function() {});
+$p.append(jQuery.hasData(p)+\" \"); /* true */
+
+$p.off('click');
+$p.append(jQuery.hasData(p)+\" \"); /* false */
+
 ") (text . "") (html . "<p>Results: </p>") (text . ""))))) jquery-doc-hash)
 
 (push "$.now" jquery-doc-methods)
@@ -1704,8 +1729,8 @@ prevent other code from interfering with the progress or status of its
 internal request. The Promise exposes only the Deferred methods needed
 to attach additional handlers or determine the state ( then, done,
 fail, always, pipe, progress, and state), but not ones that change the
-state ( resolve, reject, progress, resolveWith, rejectWith, and
-progressWith).
+state ( resolve, reject, notify, resolveWith, rejectWith, and
+notifyWith).
 ") (text . "") (text . "If target is provided, deferred.promise() will attach the methods onto
 it and then return this object rather than create a new one. This can
 be useful to attach the Promise behavior to an object that already
@@ -2134,7 +2159,10 @@ documentation for Deferred object.
 (puthash "$.sub" (quote (("name" . "$.sub") ("signatures" "$.sub" nil) ("desc" (text . "Creates a new copy of jQuery whose properties and methods can be
 modified without affecting the original jQuery object.
 
-")) ("longdesc" (text . "There are two specific use cases for which jQuery.sub() was created.
+")) ("longdesc" (text . "This method is deprecated as of jQuery 1.7 and will be moved to a
+plugin in jQuery 1.8.
+
+") (text . "") (text . "There are two specific use cases for which jQuery.sub() was created.
 The first was for providing a painless way of overriding jQuery methods
 without completely destroying the original methods and another was for
 helping to do encapsulation and basic namespacing for jQuery plugins.
@@ -2297,6 +2325,10 @@ an object. The [[Class]] is determined as follows:
 
 ") (text . "") (text . "  * If the object is undefined or null, then \"undefined\" or \"null\" is
     returned accordingly.
+       + jQuery.type(undefined) === \"undefined\"
+       + jQuery.type() === \"undefined\"
+       + jQuery.type(window.notDefined) === \"undefined\"
+       + jQuery.type(null) === \"null\"
   * If the object has an internal [[Class]] equivalent to one of the
     browser`s built-in objects, the associated name is returned. ( More
     details about this technique.)
@@ -2336,15 +2368,16 @@ iframe).
 " "true" nil))) ("desc" (text . "Bind two or more handlers to the matched elements, to be executed on
 alternate clicks.
 
-")) ("longdesc" (text . "") (text . "The .toggle() method binds a handler for the click event, so the rules
+")) ("longdesc" (text . "") (text . "  Note: jQuery also provides an animation method named .toggle() that
+  toggles the visibility of elements. Whether the animation or the
+  event method is fired depends on the set of arguments passed.
+") (text . "") (text . "The .toggle() method binds a handler for the click event, so the rules
 outlined for the triggering of click apply here as well.
 
 ") (text . "") (js . "For example, consider the HTML:
 <div id=\"target\">
   Click here
-</div>") (text . "") (text . "
-
-") (text . "") (text . "Event handlers can then be bound to the <div>:
+</div>") (text . "") (text . "Event handlers can then be bound to the <div>:
 
 
 ") (text . "") (js . "$('#target').toggle(function() {
@@ -2363,9 +2396,6 @@ First handler for .toggle() called.
 of them. For example, if there are three handlers, then the first
 handler will be called on the first click, the fourth click, the
 seventh click, and so on.
-") (text . "") (text . "  Note: jQuery also provides an animation method named .toggle() that
-  toggles the visibility of elements. Whether the animation or the
-  event method is fired depends on the set of arguments passed.
 ") (text . "") (text . "The .toggle() method is provided for convenience. It is relatively
 straightforward to implement the same behavior by hand, and this can be
 necessary if the assumptions built into .toggle() prove limiting. For
@@ -2423,7 +2453,7 @@ called on the element.
 " nil nil) ("eventType" "A string containing a JavaScript event type, such as \"click\" or
 \"keydown\"
 
-" nil nil) ("handler" "A function to execute at the time the event is triggered.
+" nil nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("selector" "A selector which will be used to filter the event results.
 
@@ -2496,7 +2526,7 @@ $(\"form\").undelegate(\".whatever\");") (text . ""))))) jquery-doc-hash)
 " nil nil) ("eventType" "A string containing one or more space-separated JavaScript event types,
 such as \"click\" or \"keydown,\" or custom event names.
 
-" nil nil) ("handler" "A function to execute at the time the event is triggered.
+" nil nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("selector" "A selector to filter the elements that trigger the event.
 
@@ -2505,7 +2535,7 @@ such as \"click\" or \"keydown,\" or custom event names.
 
 " nil nil) ("eventData" "A map of data that will be passed to the event handler.
 
-" nil nil) ("handler" "A function to execute at the time the event is triggered.
+" nil nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("selector" "A selector to filter the elements that trigger the event.
 
@@ -2843,7 +2873,10 @@ only <li> that has a <ul> among its descendants.
 
 " nil nil))) ("desc" (text . "Check to see if a DOM element is within another DOM element.
 
-")) ("longdesc") ("examples" ((text . "") (text . "Check if an element is inside another. Text and comment nodes are not
+")) ("longdesc" (text . "") (text . "  Note: The first argument must be a DOM element, not a jQuery object
+  or plain JavaScript object.
+
+")) ("examples" ((text . "") (text . "Check if an element is inside another. Text and comment nodes are not
 supported.
 
 ") (text . "") (js . "jQuery.contains(document.documentElement, document.body); // true
@@ -3562,8 +3595,8 @@ instead.
 removed from the queue, and then executed. This function should in turn
 (directly or indirectly) cause jQuery.dequeue() to be called, so that
 the sequence can continue.
-")) ("examples" ((text . "") (text . "Use dequeue to end a custom queue function which allows the queue to
-keep going.
+")) ("examples" ((text . "") (text . "Use jQuery.dequeue() to end a custom queue function which allows the
+queue to keep going.
 
 ") (text . "") (js . "$(\"button\").click(function () {
       $(\"div\").animate({left:'+=200px'}, 2000);
@@ -3893,7 +3926,7 @@ the input.
 ") (text . "") (js . "
 var xTriggered = 0;
 $('#target').keydown(function(event) {
-  if (event.keyCode == '13') {
+  if (event.which == 13) {
      event.preventDefault();
    }
    xTriggered++;
@@ -4086,12 +4119,17 @@ $('div').html('Index: ' + foobar);") (text . "") (html . "<ul>
 
 " "true" nil))) ("desc" (text . "Remove a previously-stored piece of data.
 
-")) ("longdesc" (text . "The .removeData() method allows us to remove values that were
+")) ("longdesc" (text . "") (text . "The .removeData() method allows us to remove values that were
 previously set using .data(). When called with the name of a key,
 .removeData() deletes that particular value; when called with no
 arguments, all values are removed. Removing data from jQuery`s internal
 .data() cache does not effect any HTML5 data- attributes in a document;
 use .removeAttr() to remove those.
+") (text . "") (text . "When using .removeData(\"name\"), jQuery will attempt to locate a data-
+attribute on the element if no property by that name is in the internal
+data cache. To avoid a re-query of the data- attribute, set the name to
+a value of either null or undefined (e.g. .data(\"name\", undefined))
+rather than using .removeData().
 ") (text . "") (text . "As of jQuery 1.7, when called with an array of keys or a string of
 space-separated keys, .removeData() deletes the value of each key in
 that array or string.
@@ -4165,7 +4203,7 @@ $(\"span:last\").text($(\"div\").data(\"test\").last);
   div { color:blue; }
   span { color:red; }
   ") (text . "") (html . "<div>
-    The values stored were 
+    The values stored were
     <span></span>
     and
     <span></span>
@@ -4192,7 +4230,7 @@ returned.
 alert( $(\"body\").data(\"foo\")); //undefined
 $(\"body\").data(\"bar\", \"foobar\");
 alert( $(\"body\").data(\"bar\")); //foobar
-") (text . "") (text . "HTML 5 data- Attributes
+") (text . "") (text . " HTML5 data-* Attributes
 
 
 ") (text . "") (text . "As of jQuery 1.4.3 HTML 5 data- attributes will be automatically pulled
@@ -4706,9 +4744,9 @@ $('#foo').queue(function() {
 });") (text . "") (text . "Note that when adding a function with .queue(), we should ensure that
 .dequeue() is eventually called so that the next function in line
 executes.
-") (text . "") (text . "In jQuery 1.4 the function that`s called is passed in another function,
-as the first argument, that when called automatically dequeues the next
-item and keeps the queue moving. You would use it like so:
+") (text . "") (text . "As of jQuery 1.4, the function that`s called is passed another function
+as the first argument. When called, this automatically dequeues the
+next item and keeps the queue moving. We use it as follows:
 ") (text . "") (js . "$(\"#test\").queue(function(next) {
     // Do some stuff...
     next();
@@ -5294,6 +5332,11 @@ event on an element.
     browser, for example with a dotted line surrounding the element.
     The focus is used to determine which element is the first to
     receive keyboard-related events.
+") (text . "") (text . "  Attempting to set focus to a hidden element causes an error in
+  Internet Explorer. Take care to only use .focus() on elements that
+  are visible. To run an element`s focus event handlers without
+  setting focus to the element, use .triggerHandler(\"focus\") instead
+  of .focus().
 ") (text . "") (text . "For example, consider the HTML:
 
 
@@ -5328,9 +5371,6 @@ scripts that rely on event delegation with the focus event will not
 work consistently across browsers. As of version 1.4.2, however, jQuery
 works around this limitation by mapping focus to the focusin event in
 its event delegation methods, .live() and .delegate() .
-") (text . "") (text . "  Triggering the focus on hidden elements causes an error in Internet
-  Explorer. Take care to only call .focus() without parameters on
-  elements that are visible.
 ") (text . "")) ("examples" ((text . "") (text . "Fire focus.
 
 ") (text . "") (css . "span {display:none;}") (text . "") (js . "
@@ -5430,21 +5470,20 @@ iframe.
     $(\"div\").mousemove(function(e){
       var pageCoords = \"( \" + e.pageX + \", \" + e.pageY + \" )\";
       var clientCoords = \"( \" + e.clientX + \", \" + e.clientY + \" )\";
-      $(\"span:first\").text(\"( e.pageX, e.pageY ) - \" + pageCoords);
-      $(\"span:last\").text(\"( e.clientX, e.clientY ) - \" + clientCoords);
+      $(\"span:first\").text(\"( e.pageX, e.pageY ) : \" + pageCoords);
+      $(\"span:last\").text(\"( e.clientX, e.clientY ) : \" + clientCoords);
     });
 
 ") (text . "") (text . "300
 
 ") (text . "") (css . "
-  div { width:220px; height:170px; margin;10px; margin-right:50px;
+  div { width:220px; height:170px; margin: 10px 50px 10px 10px;
         background:yellow; border:2px groove; float:right; }
   p { margin:0; margin-left:10px; color:red; width:220px;
       height:120px; padding-top:70px;
       float:left; font-size:14px; }
   span { display:block; }
-  ") (text . "") (html . "<p>   
-    Try scrolling too.
+  ") (text . "") (html . "<p>
     <span>Move the mouse over the div.</span>
     <span>&nbsp;</span>
   </p>
@@ -6035,9 +6074,10 @@ paragraph on the page:
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"click\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .bind(`click`, handler) in the first two
-variations, and .trigger(`click`) in the third.
-
+")) ("longdesc" (text . "") (text . "In the first two variations, this method is a shortcut for
+.bind(\"click\", handler), as well as for .on(\"click\", handler) as of
+jQuery 1.7. In the third variation, when .click() is called without
+arguments, it is a shortcut for .trigger(\"click\").
 ") (text . "") (text . "The click event is sent to an element when the mouse pointer is over
 the element, and the mouse button is pressed and released. Any HTML
 element can receive this event.
@@ -6052,8 +6092,8 @@ element can receive this event.
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js . "$('#target').click(function() {
-  alert('Handler for .click() called.');
+") (text . "") (js . "$(\"#target\").click(function() {
+  alert(\"Handler for .click() called.\");
 });") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
 
@@ -6063,8 +6103,8 @@ element can receive this event.
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').click();
+") (text . "") (js . "$(\"#other\").click(function() {
+  $(\"#target\").click();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
@@ -6078,24 +6118,19 @@ the message.
 ") (text . "") (text . "This is usually the desired sequence before taking an action. If this
 is not required, the mousedown or mouseup event may be more suitable.
 
-") (text . "")) ("examples" ((text . "") (text . "To hide paragraphs on a page when they are clicked:
+") (text . "")) ("examples" ((text . "") (text . "Hide paragraphs on a page when they are clicked:
 
 ") (text . "") (js . "
-    $(\"p\").click(function () { 
-      $(this).slideUp(); 
-    });
-    $(\"p\").hover(function () {
-      $(this).addClass(\"hilite\");
-    }, function () {
-      $(this).removeClass(\"hilite\");
+    $(\"p\").click(function () {
+      $(this).slideUp();
     });
 ") (text . "") (css . "
   p { color:red; margin:5px; cursor:pointer; }
-  p.hilite { background:yellow; }
+  p:hover { background:yellow; }
   ") (text . "") (html . "<p>First Paragraph</p>
 
   <p>Second Paragraph</p>
-  <p>Yet one more Paragraph</p>") (text . "")) ((text . "") (text . "To trigger the click event on all of the paragraphs on the page:
+  <p>Yet one more Paragraph</p>") (text . "")) ((text . "") (text . "Trigger the click event on all of the paragraphs on the page:
 
 ") (text . "") (js . "$(\"p\").click();") (text . ""))))) jquery-doc-hash)
 
@@ -6539,14 +6574,14 @@ $(\"p\").die(\"click\", foo); // ... foo will no longer be called.") (text . "")
 (puthash "live" (quote (("name" . "live") ("signatures" "live" (("events" "A string containing a JavaScript event type, such as \"click\" or
 \"keydown.\" As of jQuery 1.4 the string can contain multiple,
 space-separated event types or custom event names.
-" nil nil) ("handler" "A function to execute at the time the event is triggered.
+" nil nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("events" "A string containing a JavaScript event type, such as \"click\" or
 \"keydown.\" As of jQuery 1.4 the string can contain multiple,
 space-separated event types or custom event names.
 " nil nil) ("data" "A map of data that will be passed to the event handler.
 
-" nil nil) ("handler" "A function to execute at the time the event is triggered.
+" nil nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("events-map" "A map of one or more JavaScript event types and functions to execute
 for them.
@@ -6588,6 +6623,20 @@ particular, the following issues arise with the use of .live():
   * Since all .live() events are attached at the document element,
     events take the longest and slowest possible path before they are
     handled.
+  * On mobile iOS (iPhone, iPad and iPod Touch) the click event does
+    not bubble to the document body for most elements and cannot be
+    used with .live() without applying one of the following
+    workarounds:
+      1. Use natively clickable elements such as a or button, as both
+         of these do bubble to document.
+      2. Use .on() or .delegate() attached to an element below the
+         level of document.body, since mobile iOS does bubble within
+         the body.
+      3. Apply the CSS style cursor:pointer to the element that needs
+         to bubble clicks (or a parent including
+         document.documentElement). Note however, this will disable
+         copy\\paste on the element and cause it to be highlighted when
+         touched.
   * Calling event.stopPropagation() in the event handler is ineffective
     in stopping event handlers attached lower in the document; the
     event has already propagated to document.
@@ -6601,7 +6650,8 @@ differences may be helpful:
     one bound using .live(), the handler must return false. Calling
     .stopPropagation() will not accomplish this.
   * As of jQuery 1.4 the .live() method supports custom events as well
-    as all JavaScript events that bubble.
+    as all JavaScript events that bubble. It also supports certain
+    events that don`t bubble, including change, submit, focus and blur.
   * In jQuery 1.3.x only the following JavaScript events could be
     bound: click, dblclick, keydown, keypress, keyup, mousedown,
     mousemove, mouseout, mouseover, and mouseup.
@@ -6675,7 +6725,7 @@ $(\"p\").live({
 
 " nil nil) ("extraParameters" "An array of additional parameters to pass along to the event handler.
 
-" nil nil))) ("desc" (text . "Execute all handlers attached to an element for an event.
+" "true" nil))) ("desc" (text . "Execute all handlers attached to an element for an event.
 
 ")) ("longdesc" (text . "") (text . "The .triggerHandler() method behaves similarly to .trigger(), with the
 following exceptions:
@@ -6720,7 +6770,7 @@ $(\"<span>Focused!</span>\").appendTo(\"body\").fadeOut(1000);
 
 " nil nil) ("extraParameters" "Additional parameters to pass along to the event handler.
 
-" nil nil)) (("event" "A jQuery.Event object.
+" "true" nil)) (("event" "A jQuery.Event object.
 
 " nil nil))) ("desc" (text . "Execute all handlers and behaviors attached to the matched elements for
 the given event type.
@@ -6762,6 +6812,14 @@ argument to .trigger() allows information to be determined at the time
 the event is triggered, while the eventData argument to .bind()
 requires the information to be already computed at the time the handler
 is bound.
+") (text . "") (text . "The .trigger() method can be used on jQuery collections that wrap plain
+JavaScript objects similar to a pub/sub mechanism; any event handlers
+bound to the object will be called when the event is triggered.
+") (text . "") (text . "  Note: For both plain objects and DOM objects, if a triggered event
+  name matches the name of a property on the object, jQuery will
+  attempt to invoke the property as a method if no event handler calls
+  event.preventDefault(). If this behavior is not desired, use
+  .triggerHandler() instead.
 ") (text . "")) ("examples" ((text . "") (text . "Clicks to button #2 also trigger a click for button #1.
 
 ") (text . "") (js . "
@@ -6842,8 +6900,8 @@ request:
 
 ") (text . "") (js . "$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
-});") (text . "") (text . "When the user clicks the button and the Ajax request completes, the log
-message is displayed.
+});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+request completes, the log message is displayed.
 
 ") (text . "") (text . "Note: Because .ajaxComplete() is implemented as a method of jQuery
 object instances, we can use the this keyword as we do here to refer to
@@ -6876,7 +6934,7 @@ or \"submit,\" or custom event names.
 
 " nil nil) ("data" "A map of data that will be passed to the event handler.
 
-" "true" nil) ("handler" "A function to execute at the time the event is triggered.
+" "true" nil) ("handler(eventObject)" "A function to execute at the time the event is triggered.
 
 " nil nil)) (("events" "One or more space-separated event types and optional namespaces, such
 as \"click\" or \"keydown.myPlugin\".
@@ -6887,7 +6945,7 @@ is always triggered when it reaches the selected element.
 " "true" nil) ("data" "Data to be passed to the handler in event.data when an event is
 triggered.
 
-" "true" nil) ("handler" "A function to execute when the event is triggered. The value false is
+" "true" nil) ("handler(eventObject)" "A function to execute when the event is triggered. The value false is
 also allowed as a shorthand for a function that simply does return
 false.
 " nil nil)) (("events-map" "A map in which the string keys represent one or more space-separated
@@ -6904,9 +6962,13 @@ at most once per element.
 ")) ("longdesc" (text . "") (text . "The first form of this method is identical to .bind(), except that the
 handler is unbound after its first invocation. The second two forms,
 introduced in jQuery 1.7, are identical to .on() except that the
-handler is removed after its first invocation. For example:
+handler is removed after the first time a selector match occurs at the
+delegated element. For example:
 ") (text . "") (js . "$(\"#foo\").one(\"click\", function() {
   alert(\"This will be displayed only once.\");
+});
+$(\"body\").one(\"click\", \".foo\", function() {
+  alert(\"This displays once for the first .foo clicked in the body.\");
 });
 ") (text . "") (text . "After the code is executed, a click on the element with ID foo will
 display the alert. Subsequent clicks will do nothing. This code is
@@ -7225,8 +7287,8 @@ request:
 
 ") (text . "") (js . "$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
-});") (text . "") (text . "When the user clicks the button and the Ajax request completes
-successfully, the log message is displayed.
+});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+request completes successfully, the log message is displayed.
 
 ") (text . "") (text . "Note: Because .ajaxSuccess() is implemented as a method of jQuery
 object instances, we can use the this keyword as we do here to refer to
@@ -7239,12 +7301,12 @@ object, and the settings object that was used in the creation of the
 request. For example, we can restrict our callback to only handling
 events dealing with a particular URL:
 ") (text . "") (text . "Note: You can get the returned ajax contents by looking at
-xhr.responseXML or xhr.responseHTML for xml and html respectively.
+xhr.responseXML or xhr.responseText for xml and html respectively.
 
 ") (text . "") (js . "$('.log').ajaxSuccess(function(e, xhr, settings) {
   if (settings.url == 'ajax/test.html') {
     $(this).text('Triggered ajaxSuccess handler. The ajax response was:' 
-                     + xhr.responseHTML );
+                     + xhr.responseText );
   }
 });") (text . "")) ("examples" ((text . "") (text . "Show a message when an Ajax request completes successfully.
 
@@ -7280,8 +7342,8 @@ request:
 
 ") (text . "") (js . "$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
-});") (text . "") (text . "When the user clicks the button and the Ajax request completes, the log
-message is displayed.
+});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+request completes, the log message is displayed.
 
 ") (text . "") (text . "Because .ajaxStop() is implemented as a method of jQuery object
 instances, we can use the this keyword as we do here to refer to the
@@ -7290,7 +7352,7 @@ selected elements within the callback function.
 
 ") (text . "") (js . "$(\"#loading\").ajaxStop(function(){
       $(this).hide();
-      });") (text . ""))))) jquery-doc-hash)
+});") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxStart" jquery-doc-methods)
 
@@ -7318,8 +7380,8 @@ request:
 
 ") (text . "") (js . "$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
-});") (text . "") (text . "When the user clicks the button and the Ajax request is sent, the log
-message is displayed.
+});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+request is sent, the log message is displayed.
 
 ") (text . "") (text . "Note: Because .ajaxStart() is implemented as a method of jQuery object
 instances, we can use the this keyword as we do here to refer to the
@@ -7356,8 +7418,8 @@ request:
 
 ") (text . "") (js . "$('.trigger').click(function() {
   $('.result').load('ajax/test.html');
-});") (text . "") (text . "When the user clicks the button and the Ajax request is about to begin,
-the log message is displayed.
+});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+request is about to begin, the log message is displayed.
 
 ") (text . "") (text . "Note: Because .ajaxSend() is implemented as a method of jQuery
 instances, we can use the this keyword as we do here to refer to the
@@ -8007,7 +8069,10 @@ a set of elements.
 written as $() -- searches through the DOM for any elements that match
 the provided selector and creates a new jQuery object that references
 these elements:
-") (text . "") (js . "$('div.foo');") (text . "") (text . " Selector Context
+") (text . "") (js . "$('div.foo');") (text . "") (text . "If no elements match the provided selector, the new jQuery object is
+\"empty\"; that is, it contains no elements and has .length property of
+0.
+") (text . "") (text . " Selector Context
 
 
 ") (text . "") (text . "By default, selectors perform their searches within the DOM starting at
@@ -8631,10 +8696,11 @@ specified where applicable.
 ") (text . "") (text . "In addition to style properties, some non-style properties such as
 scrollTop and scrollLeft, as well as custom properties, can be
 animated.
-") (text . "") (text . "Shorthand CSS properties (e.g. margin, background, border) are not
-supported. For example, if you want to retrieve the rendered margin,
-use: $(elem).css(`marginTop`) and $(elem).css(`marginRight`), and so
-on.
+") (text . "") (text . "Shorthand CSS properties (e.g. font, background, border) are not fully
+supported. For example, if you want to animate the rendered border
+width, at least a border style and border width other than \"auto\" must
+be set in advance. Or, if you want to animate font size, you would use
+fontSize or the CSS equivalent `font-size` rather than simply `font`.
 ") (text . "") (text . "In addition to numeric values, each property can take the strings
 `show`, `hide`, and `toggle`. These shortcuts allow for custom hiding
 and showing animations that take into account the display type of the
@@ -8652,9 +8718,9 @@ value of the property.
 
 
 ") (text . "") (text . "Durations are given in milliseconds; higher values indicate slower
-animations, not faster ones. The strings `fast` and `slow` can be
-supplied to indicate durations of 200 and 600 milliseconds,
-respectively.
+animations, not faster ones. The default duration is 400 milliseconds.
+The strings `fast` and `slow` can be supplied to indicate durations of
+200 and 600 milliseconds, respectively.
 ") (text . "") (text . " Complete Function
 
 
@@ -8912,46 +8978,48 @@ div {
 <div class=\"block\"></div> <div class=\"block\"></div>
 <div class=\"block\"></div> <div class=\"block\"></div>
 <div class=\"block\"></div> <div class=\"block\"></div>
-") (text . "")) ((text . "") (text . "Animates all paragraphs to toggle both height and opacity, completing
+") (text . "")) ((text . "") (text . "Animate all paragraphs to toggle both height and opacity, completing
 the animation within 600 milliseconds.
 
 ") (text . "") (js . "$( \"p\" ).animate({
-  \"height\": \"toggle\", \"opacity\": \"toggle\"
-}, \"slow\" );") (text . "")) ((text . "") (text . "Animates all paragraph to a left style of 50 and opacity of 1 (opaque,
+  height: \"toggle\", opacity: \"toggle\"
+}, \"slow\" );") (text . "")) ((text . "") (text . "Animate all paragraphs to a left style of 50 and opacity of 1 (opaque,
 visible), completing the animation within 500 milliseconds.
 
 ") (text . "") (js . "$( \"p\" ).animate({
-  \"left\": \"50\", \"opacity\": 1
+  left: 50, opacity: 1
 }, 500 );
-") (text . "")) ((text . "") (text . "An example of using an `easing` function to provide a different style
-of animation. This will only work if you have a plugin that provides
-this easing function. Note, this code will do nothing unless the
-paragraph element is hidden.
-") (text . "") (js . "$( \"p\" ).animate({
-  \"opacity\": \"show\"
-}, \"slow\", \"easein\" );") (text . "")) ((text . "") (text . "Animates all paragraphs to toggle both height and opacity, completing
-the animation within 600 milliseconds.
-
-") (text . "") (js . "$( \"p\" ).animate({
-  \"height\": \"toggle\", \"opacity\": \"toggle\"
-}, { duration: \"slow\" });") (text . "")) ((text . "") (text . "Animates all paragraph to a left style of 50 and opacity of 1 (opaque,
-visible), completing the animation within 500 milliseconds. It also
-will do it outside the queue, meaning it will automatically start
+") (text . "")) ((text . "") (text . "Animate the left and opacity style properties of all paragraphs; run
+the animation outside the queue, so that it will automatically start
 without waiting for its turn.
 ") (text . "") (js . "$( \"p\" ).animate({
   left: \"50px\", opacity: 1
 }, { duration: 500, queue: false });") (text . "")) ((text . "") (text . "An example of using an `easing` function to provide a different style
 of animation. This will only work if you have a plugin that provides
-this easing function.
+this easing function. Note, this code will do nothing unless the
+paragraph element is hidden.
 ") (text . "") (js . "$( \"p\" ).animate({
-  \"opacity\": \"show\"
-}, { \"duration\": \"slow\", \"easing\": \"easein\" });") (text . "")) ((text . "") (text . "An example of using a callback function. The first argument is an array
-of CSS properties, the second specifies that the animation should take
-1000 milliseconds to complete, the third states the easing type, and
-the fourth argument is an anonymous callback function.
+  opacity: \"show\"
+}, \"slow\", \"easein\" );") (text . "")) ((text . "") (text . "Animates all paragraphs to toggle both height and opacity, completing
+the animation within 600 milliseconds.
+
 ") (text . "") (js . "$( \"p\" ).animate({
-  height:200, width:400, opacity: .5
-}, 1000, \"linear\", function(){ alert(\"all done\"); });
+  height: \"toggle\", opacity: \"toggle\"
+}, { duration: \"slow\" });") (text . "")) ((text . "") (text . "Use an easing function to provide a different style of animation. This
+will only work if you have a plugin that provides this easing function.
+
+") (text . "") (js . "$( \"p\" ).animate({
+  opacity: \"show\"
+}, { duration: \"slow\", easing: \"easein\" });") (text . "")) ((text . "") (text . "Animate all paragraphs and execute a callback function when the
+animation is complete. The first argument is a map of CSS properties,
+the second specifies that the animation should take 1000 milliseconds
+to complete, the third states the easing type, and the fourth argument
+is an anonymous callback function.
+") (text . "") (js . "$( \"p\" ).animate({
+  height: 200, width: 400, opacity: 0.5
+}, 1000, \"linear\", function() {
+  alert(\"all done\");
+});
 ") (text . ""))))) jquery-doc-hash)
 
 (push "prevAll" jquery-doc-methods)
@@ -9808,7 +9876,7 @@ some disappear.
 " "true" nil) ("success(data, textStatus, jqXHR)" "A callback function that is executed if the request succeeds.
 
 " "true" nil) ("dataType" "The type of data expected from the server. Default: Intelligent Guess
-(xml, json, script, or html).
+(xml, json, script, text, html).
 
 " "true" nil))) ("desc" (text . "Load data from the server using a HTTP POST request.
 
@@ -10385,7 +10453,7 @@ the letter t.
 
 (puthash "$.getScript" (quote (("name" . "$.getScript") ("signatures" "$.getScript" (("url" "A string containing the URL to which the request is sent.
 
-" nil nil) ("success(data, textStatus)" "A callback function that is executed if the request succeeds.
+" nil nil) ("success(script, textStatus, jqXHR)" "A callback function that is executed if the request succeeds.
 
 " "true" nil))) ("desc" (text . "Load a JavaScript file from the server using a GET HTTP request, then
 execute it.
@@ -10394,33 +10462,86 @@ execute it.
 
 
 ") (text . "") (js . "$.ajax({
-  url: ") (text . "") (text . "The callback is passed the returned JavaScript file. This is generally
+  url: ") (text . "") (text . "The script is executed in the global context, so it can refer to other
+variables and use jQuery functions. Included scripts can have some
+impact on the current page.
+") (text . "") (text . " Success Callback
+
+
+") (text . "") (text . "The callback is passed the returned JavaScript file. This is generally
 not useful as the script will already have run at this point.
 
-") (text . "") (text . "The script is executed in the global context, so it can refer to other
-variables and use jQuery functions. Included scripts can have some
-impact on the current page:
 ") (text . "") (js . "$(\".result\").html(\"<p>Lorem ipsum dolor sit amet.</p>\");") (text . "") (text . "Scripts are included and run by referencing the file name:
 
 
-") (text . "") (js . "$.getScript('ajax/test.js', function(data, textStatus){
+") (text . "") (js . "$.getScript(\"ajax/test.js\", function(data, textStatus, jqxhr) {
    console.log(data); //data returned
    console.log(textStatus); //success
+   console.log(jqxhr.status); //200
    console.log('Load was performed.');
-});") (text . "Note: Should you require an additional callback for errors when using
-the getScript() method, the global ajaxError() callback event may be
-used to achieve this as follows:
+});") (text . "") (text . " Handling Errors
+
+
+") (text . "") (text . "As of jQuery 1.5, you may use .fail() to account for errors:
+
+
+") (text . "") (js . "
+$.getScript(\"ajax/test.js\")
+.done(function(script, textStatus) {
+  console.log( textStatus );
+})
+.fail(function(jqxhr, settings, exception) {
+  $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
+});  
+") (text . "") (text . "Prior to jQuery 1.5, the global .ajaxError() callback event had to be
+used in order to handle $.getScript() errors:
+
 ") (text . "") (js . "
 $( \"div.log\" ).ajaxError(function(e, jqxhr, settings, exception) {
   if (settings.dataType=='script') {
     $(this).text( \"Triggered ajaxError handler.\" );
   }
 });
-") (text . "")) ("examples" ((text . "") (text . "Load the official jQuery Color Animation plugin dynamically and bind
+") (text . "") (text . " Caching Responses
+
+
+") (text . "") (text . "Be default, $.getScript() sets the cache setting to false. This appends
+a timestamped query parameter to the request URL to ensure that the
+browser downloads the script each time it is requested. You can
+override this feature by setting the cache property globally using
+$.ajaxSetup() :
+") (text . "") (js . "
+$.ajaxSetup({
+  cache: true
+});
+") (text . "") (text . "Alternatively, you could define a new method that uses the more
+flexible $.ajax() method.
+
+") (text . "")) ("examples" ((text . "") (text . "Define a $.cachedScript() method that allows fetching a cached script:
+
+") (text . "") (js . "jQuery.cachedScript = function(url, options) {
+
+  // allow user to set any option except for dataType, cache, and url
+  options = $.extend(options || {}, {
+    dataType: \"script\",
+    cache: true,
+    url: url
+  });
+
+  // Use $.ajax() since it is more flexible than $.getScript
+  // Return the jqXHR object so we can chain callbacks
+  return jQuery.ajax(options);
+};
+
+// Usage
+$.cachedScript(\"ajax/test.js\").done(function(script, textStatus) {
+  console.log( textStatus );
+});
+") (text . "")) ((text . "") (text . "Load the official jQuery Color Animation plugin dynamically and bind
 some color animations to occur once the new functionality is loaded.
 
 ") (text . "") (js . "
-$.getScript(\"http://dev.jquery.com/view/trunk/plugins/color/jquery.color.js\", function() {
+$.getScript(\"/scripts/jquery.color.js\", function() {
   $(\"#go\").click(function(){
     $(\".block\").animate( { backgroundColor: \"pink\" }, 1000)
       .delay(500)
@@ -10606,8 +10727,8 @@ instead.
 " "true" nil))) ("desc" (text . "Gets an array of all the elements and selectors matched against the
 current element up through the DOM tree.
 
-")) ("longdesc" (text . "This method is primarily meant to be used internally or by plugin
-authors.
+")) ("longdesc" (text . "This signature (only!) is deprecated as of jQuery 1.7. This method is
+primarily meant to be used internally or by plugin authors.
 
 ")) ("examples" ((text . "") (text . "Show how event delegation can be done with closest.
 
@@ -10844,26 +10965,33 @@ adds it to the page.
 " "true" nil))) ("desc" (text . "Load data from the server and place the returned HTML into the matched
 element.
 
-")) ("longdesc" (text . "") (text . "This method is the simplest way to fetch data from the server. It is
+")) ("longdesc" (text . "") (text . "  Note: The event handling suite also has a method named .load() .
+  jQuery determines which method to fire based on the set of arguments
+  passed to it.
+") (text . "") (text . "This method is the simplest way to fetch data from the server. It is
 roughly equivalent to $.get(url, data, success) except that it is a
 method rather than global function and it has an implicit callback
 function. When a successful response is detected (i.e. when textStatus
 is \"success\" or \"notmodified\"), .load() sets the HTML contents of the
 matched element to the returned data. This means that most uses of the
 method can be quite simple:
-") (text . "") (js . "$('#result').load('ajax/test.html');") (text . "") (text . "The provided callback, if any, is executed after this post-processing
-has been performed:
+") (text . "") (js . "$('#result').load('ajax/test.html');") (text . "") (text . " Callback Function
 
+
+") (text . "") (text . "If a \"complete\" callback is provided, it is executed after
+post-processing and HTML insertion has been performed. The callback is
+fired once for each element in the jQuery collection, and this is set
+to each DOM element in turn.
 ") (text . "") (js . "$('#result').load('ajax/test.html', function() {
   alert('Load was performed.');
 });") (text . "") (text . "In the two examples above, if the current document does not contain an
 element with an ID of \"result,\" the .load() method is not executed.
 
+") (text . "") (text . " Request Method
+
+
 ") (text . "") (text . "The POST method is used if data is provided as an object; otherwise,
 GET is assumed.
-
-") (text . "") (text . "  Note: The event handling suite also has a method named .load() .
-  Which one is fired depends on the set of arguments passed.
 
 ") (text . "") (text . " Loading Page Fragments
 
@@ -10888,20 +11016,22 @@ browsers often filter elements from the document such as <html>,
 <title>, or <head> elements. As a result, the elements retrieved by
 .load() may not be exactly the same as if the document were retrieved
 directly by the browser.
-") (text . "") (text . "  Note: When calling .load() using a URL without a suffixed selector
-  expression, the content is passed to .html() prior to scripts being
-  removed. This executes the script blocks before they are discarded.
-  If .load() is however called with a selector expression appended to
-  the URL, the scripts are stripped out prior to the DOM being
-  updated, which is why they are never executed. An example of both
-  cases can be seen below:
+") (text . "") (text . " Script Execution
+
+
+") (text . "") (text . " When calling .load() using a URL without a suffixed selector
+expression, the content is passed to .html() prior to scripts being
+removed. This executes the script blocks before they are discarded. If
+.load() is called with a selector expression appended to the URL,
+however, the scripts are stripped out prior to the DOM being updated,
+and thus are not executed. An example of both cases can be seen below:
 ") (text . "") (text . "Here, any JavaScript loaded into #a as a part of the document will
 successfully execute.
 
 ") (text . "") (js . "
 $('#a').load('article.html');
-") (text . "") (text . "However in this case, script blocks in the document being loaded into
-#b are stripped out prior to being executed:
+") (text . "") (text . "However, in the following case, script blocks in the document being
+loaded into #b are stripped out and not executed:
 
 ") (text . "") (js . "
 $('#b').load('article.html #target');
@@ -10980,7 +11110,7 @@ are optional. A default can be set for any option with $.ajaxSetup().
 ") ("converters" "Map" "{\"* text\": window.String, \"text html\": true, \"text json\": jQuery.parseJSON, \"text xml\": jQuery.parseXML}" "A set of key/value pairs that configure the Ajax request. All settings
 are optional. A default can be set for any option with $.ajaxSetup().
 
-") ("crossDomain" "" "false for same-domain requests, true for cross-domain requests" "A set of key/value pairs that configure the Ajax request. All settings
+") ("crossDomain" "Boolean" "false for same-domain requests, true for cross-domain requests" "A set of key/value pairs that configure the Ajax request. All settings
 are optional. A default can be set for any option with $.ajaxSetup().
 
 ") ("data" "Object, String" "" "A set of key/value pairs that configure the Ajax request. All settings
@@ -11085,14 +11215,13 @@ method may be used in the beforeSend() callback function, for example,
 to modify the response content-type header:
 ") (text . "") (js . "
 $.ajax({
-  url: 'http://fiddle.jshell.net/favicon.png',
-  beforeSend: function( xhr ) {
-    xhr.overrideMimeType( 'text/plain; charset=x-user-defined' );
-  },
-  success: function( data ) {
-    if (console && console.log){
-      console.log( 'Sample of data:', data.slice(0,100) );
-    }
+  url: \"http://fiddle.jshell.net/favicon.png\",
+  beforeSend: function ( xhr ) {
+    xhr.overrideMimeType(\"text/plain; charset=x-user-defined\");
+  }
+}).done(function ( data ) {
+  if( console && console.log ) {
+    console.log(\"Sample of data:\", data.slice(0, 100));
   }
 });
 ") (text . "") (text . "The jqXHR objects returned by $.ajax() as of jQuery 1.5 implement the
@@ -11322,17 +11451,16 @@ features, see the Extending Ajax page.
 ") (text . "") (js . "$.ajax({
   type: \"POST\",
   url: \"some.php\",
-  data: \"name=John&location=Boston\",
+  data: { name: \"John\", location: \"Boston\" }
 }).done(function( msg ) {
   alert( \"Data Saved: \" + msg );
 });") (text . "")) ((text . "") (text . "Retrieve the latest version of an HTML page.
 
 ") (text . "") (js . "$.ajax({
   url: \"test.html\",
-  cache: false,
-  success: function(html){
-    $(\"#results\").append(html);
-  }
+  cache: false
+}).done(function( html ) {
+  $(\"#results\").append(html);
 });") (text . "")) ((text . "") (text . "Send an xml document as data to the server. By setting the processData
 option to false, the automatic conversion of data to strings is
 prevented.
@@ -11376,16 +11504,18 @@ request.fail(function(jqXHR, textStatus) {
 optionally filtered by a selector.
 
 ")) ("longdesc" (text . "Given a jQuery object that represents a set of DOM elements, the
-.children() method allows us to search through the immediate children
-of these elements in the DOM tree and construct a new jQuery object
-from the matching elements. The .find() and .children() methods are
-similar, except that the latter only travels a single level down the
-DOM tree. Note also that like most jQuery methods, .children() does not
-return text nodes; to get all children including text and comment
-nodes, use .contents().
-") (text . "") (text . "The method optionally accepts a selector expression of the same type
-that we can pass to the $() function. If the selector is supplied, the
-elements will be filtered by testing whether they match it.
+.children() method allows us to search through the children of these
+elements in the DOM tree and construct a new jQuery object from the
+matching elements. The .children() method differs from .find() in that
+.children() only travels a single level down the DOM tree while .find()
+can traverse down multiple levels to select descendant elements
+(grandchildren, etc.) as well. Note also that like most jQuery methods,
+.children() does not return text nodes; to get all children including
+text and comment nodes, use .contents() .
+") (text . "") (text . "The .children() method optionally accepts a selector expression of the
+same type that we can pass to the $() function. If the selector is
+supplied, the elements will be filtered by testing whether they match
+it.
 ") (text . "") (text . "Consider a page with a basic nested list on it:
 
 
@@ -11602,6 +11732,9 @@ collection.css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p><
 " nil nil)) (("function(index)" "A function used as a test for each element in the set. this is the
 current DOM element.
 
+" nil nil)) (("jQuery object" "An existing jQuery object to match the current set of elements against.
+
+
 " nil nil))) ("desc" (text . "Remove elements from the set of matched elements.
 
 ")) ("longdesc" (text . "Given a jQuery object that represents a set of DOM elements, the .not()
@@ -11752,7 +11885,10 @@ $(\"p:last\").text( \"outerHeight:\" + p.outerHeight() + \" , outerHeight(true):
 
 " nil nil))) ("desc" (text . "Display or hide the matched elements.
 
-")) ("longdesc" (text . "With no parameters, the .toggle() method simply toggles the visibility
+")) ("longdesc" (text . "") (text . "  Note: The event handling suite also has a method named .toggle().
+  Which one is fired depends on the set of arguments passed.
+
+") (text . "") (text . "With no parameters, the .toggle() method simply toggles the visibility
 of elements:
 
 ") (text . "") (js . "$('.target').toggle();
@@ -11771,9 +11907,6 @@ element no longer affects the layout of the page.
 animations, not faster ones. The strings `fast` and `slow` can be
 supplied to indicate durations of 200 and 600 milliseconds,
 respectively.
-") (text . "") (text . "  Note: The event handling suite also has a method named .toggle().
-  Which one is fired depends on the set of arguments passed.
-
 ") (text . "") (text . "As of jQuery 1.4.3, an optional string naming an easing function may be
 used. Easing functions specify the speed at which the animation
 progresses at different points within the animation. The only easing
@@ -12034,6 +12167,9 @@ affects the layout of the page.
 animations, not faster ones. The strings `fast` and `slow` can be
 supplied to indicate durations of 200 and 600 milliseconds,
 respectively.
+") (text . "") (text . "Note that .hide() is fired immediately and will override the animation
+queue if no duration or a duration of 0 is specified.
+
 ") (text . "") (text . "As of jQuery 1.4.3, an optional string naming an easing function may be
 used. Easing functions specify the speed at which the animation
 progresses at different points within the animation. The only easing
@@ -12064,7 +12200,6 @@ $('#clickme').click(function() {
 ") (text . "")) ("examples" ((text . "") (text . "Hides all paragraphs then the link on click.
 
 ") (text . "") (js . "
-
     $(\"p\").hide();
     $(\"a\").click(function ( event ) {
       event.preventDefault();
@@ -12130,7 +12265,7 @@ element when its hidden. Try clicking on more than one box at a time.
 (puthash "width" (quote (("name" . "width") ("signatures" "width" nil) ("desc" (text . "Get the current computed width for the first element in the set of
 matched elements.
 
-")) ("longdesc" (text . "The difference between .css(width) and .width() is that the latter
+")) ("longdesc" (text . "") (text . "The difference between .css(width) and .width() is that the latter
 returns a unit-less pixel value (for example, 400) while the former
 returns a value with units intact (for example, 400px). The .width()
 method is recommended when an element`s width needs to be used in a
@@ -12145,23 +12280,23 @@ mathematical calculation.
 $(document).width(); // returns width of HTML document") (text . "") (text . "Note that .width() will always return the content width, regardless of
 the value of the CSS box-sizing property.
 
-")) ("examples" ((text . "") (text . "Show various widths. Note the values are from the iframe so might be
+") (text . "")) ("examples" ((text . "") (text . "Show various widths. Note the values are from the iframe so might be
 smaller than you expected. The yellow highlight shows the iframe body.
 
 ") (text . "") (js . "
-    function showWidth(ele, w) {
-      $(\"div\").text(\"The width for the \" + ele + 
-                    \" is \" + w + \"px.\");
-    }
-    $(\"#getp\").click(function () { 
-      showWidth(\"paragraph\", $(\"p\").width()); 
-    });
-    $(\"#getd\").click(function () { 
-      showWidth(\"document\", $(document).width()); 
-    });
-    $(\"#getw\").click(function () { 
-      showWidth(\"window\", $(window).width()); 
-    });
+function showWidth(ele, w) {
+  $(\"div\").text(\"The width for the \" + ele + 
+                \" is \" + w + \"px.\");
+}
+$(\"#getp\").click(function () { 
+  showWidth(\"paragraph\", $(\"p\").width()); 
+});
+$(\"#getd\").click(function () { 
+  showWidth(\"document\", $(document).width()); 
+});
+$(\"#getw\").click(function () { 
+  showWidth(\"window\", $(window).width()); 
+});
 
 ") (text . "") (css . "
   body { background:yellow; }
@@ -12187,37 +12322,42 @@ the element in the set and the old width as arguments. Within the
 function, this refers to the current element in the set.
 " nil nil))) ("desc" (text . "Set the CSS width of each element in the set of matched elements.
 
-")) ("longdesc" (text . "When calling .width(`value`), the value can be either a string (number
+")) ("longdesc" (text . "") (text . "When calling .width(\"value\"), the value can be either a string (number
 and unit) or a number. If only a number is provided for the value,
 jQuery assumes a pixel unit. If a string is provided, however, any
 valid CSS measurement may be used for the width (such as 100px, 50%, or
 auto). Note that in modern browsers, the CSS width property does not
 include padding, border, or margin, unless the box-sizing CSS property
 is used.
-") (text . "") (text . "If no explicit unit was specified (like `em` or `%`) then \"px\" is
-concatenated to the value.
+") (text . "") (text . "If no explicit unit is specified (like \"em\" or \"%\") then \"px\" is
+assumed.
 
-") (text . "") (text . "Note that .width(`value`) sets the width of the box in accordance with
+") (text . "") (text . "Note that .width(\"value\") sets the width of the box in accordance with
 the CSS box-sizing property. Changing this property to border-box will
 cause this function to change the outerWidth of the box instead of the
 content width.
-")) ("examples" ((text . "") (text . "To set the width of each div on click to 30px plus a color change.
+") (text . "")) ("examples" ((text . "") (text . "Change the width of each div the first time it is clicked (and change
+its color).
 
 ") (text . "") (js . "
-
-    $(\"div\").one('click', function () {
-      $(this).width(30)
-             .css({cursor:\"auto\", \"background-color\":\"blue\"});
-    });
+(function() {
+  var modWidth = 50;
+  $(\"div\").one('click', function () {
+    $(this).width(modWidth).addClass(\"mod\");
+  modWidth -= 8;
+  });
+})();
 ") (text . "") (css . "
-  div { width:70px; height:50px; float:left; margin:5px;
-        background:red; cursor:pointer; }
-  ") (text . "") (html . "<div></div>
+div { width: 70px; height: 50px; float:left; margin: 5px;
+        background: red; cursor: pointer; }
+.mod { background: blue; cursor: default; }
+  ") (text . "") (html . "
   <div>d</div>
-
   <div>d</div>
   <div>d</div>
-  <div>d</div>") (text . ""))))) jquery-doc-hash)
+  <div>d</div>
+  <div>d</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "height" jquery-doc-methods)
 
@@ -12239,7 +12379,12 @@ mathematical calculation.
 $(document).height(); // returns height of HTML document") (text . "") (text . "Note that .height() will always return the content height, regardless
 of the value of the CSS box-sizing property.
 
-")) ("examples" ((text . "") (text . "Show various heights. Note the values are from the iframe so might be
+") (text . "") (text . "  Note: Although style and script tags will report a value for
+  .width() or height() when absolutely positioned and given
+  display:block, it is strongly discouraged to call those methods on
+  these tags. In addition to being a bad practice, the results may
+  also prove unreliable.
+") (text . "")) ("examples" ((text . "") (text . "Show various heights. Note the values are from the iframe so might be
 smaller than you expected. The yellow highlight shows the iframe body.
 
 ") (text . "") (js . "
@@ -12378,22 +12523,21 @@ within 600 milliseconds.
       p { background:yellow; }
       ") (text . "") (html . "<button>Show it</button>
 
-      <p style=\"display: none\">Hello  2</p>") (text . "")) ((text . "") (text . "Animates all hidden divs to show fastly in order, completing each
-animation within 200 milliseconds. Once each animation is done, it
-starts the next one.
+      <p style=\"display: none\">Hello  2</p>") (text . "")) ((text . "") (text . "Show the first div, followed by each next adjacent sibling div in
+order, with a 200ms animation. Each animation starts when the previous
+sibling div`s animation ends.
 ") (text . "") (js . "
 $(\"#showr\").click(function () {
-  $(\"div:eq(0)\").show(\"fast\", function () {
-    /* use callee so don't have to name the function */
-    $(this).next(\"div\").show(\"fast\", arguments.callee);
+  $(\"div\").first().show(\"fast\", function showNext() {
+    $(this).next(\"div\").show(\"fast\", showNext);
   });
 });
-$(\"#hidr\").click(function () {
-  $(\"div\").hide(2000);
-});
 
+$(\"#hidr\").click(function () {
+  $(\"div\").hide(1000);
+});
 ") (text . "") (css . "
-  div { background:#def3ca; margin:3px; width:80px; 
+  div { background:#def3ca; margin:3px; width:80px;
   display:none; float:left; text-align:center; }
   ") (text . "") (html . "
   <button id=\"showr\">Show</button>
@@ -12402,8 +12546,8 @@ $(\"#hidr\").click(function () {
 
   <div>how</div>
   <div>are</div>
-  <div>you?</div>") (text . "")) ((text . "") (text . "Shows all span and input elements with an animation. Once the animation
-is done, it changes the text.
+  <div>you?</div>") (text . "")) ((text . "") (text . "Show all span and input elements with an animation. Change the text
+once the animation is done.
 
 ") (text . "") (js . "
 function doIt() {
@@ -12420,21 +12564,22 @@ $(\"form\").submit(function () {
   }
   $(\"span,div\").hide(\"fast\");
   /* to stop the submit */
-  return false; 
+  return false;
 });
 ") (text . "") (css . "
   span { display:none; }
   div { display:none; }
   p { font-weight:bold; background-color:#fcd; }
-  ") (text . "") (html . "<button>Do it!</button>
-  <span>Are you sure? (type 'yes' if you are) </span>
-  <div>
-    <form>
-      <input type=\"text\"  value=\"as;ldkfjalsdf\"/>
-    </form>
-  </div>
-  <p style=\"display:none;\">I'm hidden...</p>
-  ") (text . ""))))) jquery-doc-hash)
+  ") (text . "") (html . "
+<button>Do it!</button>
+<span>Are you sure? (type 'yes' if you are) </span>
+<div>
+  <form>
+    <input type=\"text\"  value=\"as;ldkfjalsdf\"/>
+  </form>
+</div>
+<p style=\"display:none;\">I'm hidden...</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "scrollLeft" jquery-doc-methods)
 
@@ -12442,13 +12587,13 @@ $(\"form\").submit(function () {
 element in the set of matched elements.
 
 ")) ("longdesc" (text . "The horizontal scroll position is the same as the number of pixels that
-are hidden from view above the scrollable area. If the scroll bar is at
-the very left, or if the element is not scrollable, this number will be
-0.
-") (text . "  Note: .scrollLeft(), when called directly or animated as a property
-  using .animate() will not work if the element(s) it is being applied
-  to are hidden.
-")) ("examples" ((text . "") (text . "Get the scrollLeft of a paragraph.
+are hidden from view to the left of the scrollable area. If the scroll
+bar is at the very left, or if the element is not scrollable, this
+number will be 0.
+") (text . "") (text . "  Note: .scrollLeft(), when called directly or animated as a property
+  using .animate(), will not work if the element it is being applied
+  to is hidden.
+") (text . "")) ("examples" ((text . "") (text . "Get the scrollLeft of a paragraph.
 
 ") (text . "") (js . "var p = $(\"p:first\");
 			$(\"p:last\").text( \"scrollLeft:\" + p.scrollLeft() );
@@ -12942,16 +13087,18 @@ completely overwritten by a property with the same key in the second
 object. The values are not merged. This can be seen in the example
 below by examining the value of banana. However, by passing true for
 the first function argument, objects will be recursively merged.
+(Passing false for the first argument is not supported.)
 ") (text . "") (text . "Undefined properties are not copied. However, properties inherited from
-the object`s prototype will be copied over. For performance reasons,
-properties that have values of built-in JavaScript types such as Date
-or RegExp are not re-constructed, and will appear as plain Objects in
-the resulting object or array.
-") (text . "") (text . "  Note: When performing a deep extend, Object and Array are extended,
-  however primitive types such string, boolean and number are not. For
-  specific needs that fall outside of this behaviour, it is
-  recommended to write a custom extend method as this will be
-  significantly faster from a performance perspective.
+the object`s prototype will be copied over. Properties that are an
+object constructed via new MyCustomObject(args), or built-in JavaScript
+types such as Date or RegExp, are not re-constructed and will appear as
+plain Objects in the resulting object or array.
+") (text . "") (text . "On a deep extend, Object and Array are extended, but object wrappers on
+primitive types such as String, Boolean, and Number are not.
+
+") (text . "") (text . "For needs that fall outside of this behavior, write a custom extend
+method instead.
+
 ") (text . "")) ("examples" ((text . "") (text . "Merge two objects, modifying the first.
 
 ") (text . "") (js . "
@@ -12968,7 +13115,7 @@ var object2 = {
 /* merge object2 into object1 */
 $.extend(object1, object2);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + \": \";
@@ -12997,7 +13144,7 @@ var object2 = {
 /* merge object2 into object1, recursively */
 $.extend(true, object1, object2);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + \": \";
@@ -13020,7 +13167,7 @@ var options = { validate: true, name: \"bar\" };
 /* merge defaults and options, without modifying defaults */
 var settings = $.extend({}, defaults, options);
 
-var printObj = function(obj) {
+var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
   var arr = [];
   $.each(obj, function(key, val) {
     var next = key + \": \";
@@ -13031,8 +13178,9 @@ var printObj = function(obj) {
 };
 
 
-$(\"#log\").append( \"<div><b>settings -- </b>\" + printObj(settings) + \"</div>\" );
+$(\"#log\").append( \"<div><b>defaults -- </b>\" + printObj(defaults) + \"</div>\" );
 $(\"#log\").append( \"<div><b>options -- </b>\" + printObj(options) + \"</div>\" );
+$(\"#log\").append( \"<div><b>settings -- </b>\" + printObj(settings) + \"</div>\" );
 
 ") (text . "") (html . "
 <div id=\"log\"></div>
@@ -13179,7 +13327,10 @@ containing DOM element, .position() is the more useful.
 ") (text . "") (text . "Returns an object containing the properties top and left.
 
 
-")) ("examples" ((text . "") (text . "Access the position of the second paragraph:
+") (text . "") (text . "  Note: jQuery does not support getting the position coordinates of
+  hidden elements or accounting for borders, margins, or padding set
+  on the body element.
+") (text . "")) ("examples" ((text . "") (text . "Access the position of the second paragraph:
 
 ") (text . "") (js . "
 var p = $(\"p:first\");
@@ -13213,6 +13364,10 @@ is the more useful.
 ") (text . "") (text . "  Note: jQuery does not support getting the offset coordinates of
   hidden elements or accounting for borders, margins, or padding set
   on the body element.
+
+  While it is possible to get the coordinates of elements with
+  visibility:hidden set, display:none is excluded from the rendering
+  tree and thus has a position that is undefined.
 ") (text . "")) ("examples" ((text . "") (text . "Access the offset of the second paragraph:
 
 ") (text . "") (js . "var p = $(\"p:last\");
@@ -13546,7 +13701,7 @@ write the following:
     Goodbye
     <div class=\"hello\">Hello</div>
   </div>
-</div>") (text . "") (text . "  Note that when using the .clone() method, you can modify the cloned
+</div>") (text . "") (text . "  Note: When using the .clone() method, you can modify the cloned
   elements or their contents before (re-)inserting them into the
   document.
 ") (text . "") (text . "Normally, any event handlers bound to the original element are not
@@ -13564,6 +13719,10 @@ element. To deep copy all data, copy each one manually:
 ") (text . "") (text . "As of jQuery 1.5, withDataAndEvents can be optionally enhanced with
 deepWithDataAndEvents to copy the events and data for all children of
 the cloned element.
+") (text . "") (text . "  Note: Using .clone() has the side-effect of producing elements with
+  duplicate id attributes, which are supposed to be unique. Where
+  possible, it is recommended to avoid cloning elements with this
+  attribute or using class attributes as identifiers instead.
 ") (text . "")) ("examples" ((text . "") (text . "Clones all b elements (and selects the clones) and prepends them to all
 paragraphs.
 
@@ -13698,6 +13857,9 @@ they would be removed, too.
 ") (text . "") (text . "To avoid memory leaks, jQuery removes other constructs such as data and
 event handlers from the child elements before removing the elements
 themselves.
+") (text . "") (text . "If you want to remove elements without destroying their data or event
+handlers (so they can be re-added later), use .detach() instead.
+
 ") (text . "")) ("examples" ((text . "") (text . "Removes all child nodes (including text nodes) from all paragraphs
 
 ") (text . "") (js . "
@@ -14427,7 +14589,7 @@ $('p').first().after($newdiv1, [newdiv2, existingdiv1]);
 result can be achieved by passing in the three <div>s as three separate
 arguments, like so: $(`p`).first().after($newdiv1, newdiv2,
 existingdiv1). The type and number of arguments will largely depend on
-the elements are collected in the code.
+the elements that are collected in the code.
 ") (text . "")) ("examples" ((text . "") (text . "Inserts some HTML after all paragraphs.
 
 ") (text . "") (js . "$(\"p\").after(\"<b>Hello</b>\");") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p>I would like to say: </p>") (text . "")) ((text . "") (text . "Inserts a DOM element after all paragraphs.
@@ -14767,7 +14929,8 @@ elements.
 ")) ("longdesc" (text . "") (text . "The .val() method is primarily used to get the values of form elements
 such as input, select and textarea. In the case of <select
 multiple=\"multiple\"> elements, the .val() method returns an array
-containing each selected option.
+containing each selected option; if no option is selected, it returns
+null.
 ") (text . "") (text . "For selects and checkboxes, you can also use the :selected and :checked
 selectors to get at values, for example:
 
@@ -15099,6 +15262,13 @@ For example, Internet Explorer prior to version 8 will convert all href
 properties on links to absolute URLs, and Internet Explorer prior to
 version 9 will not correctly handle HTML5 elements without the addition
 of a separate compatibility layer.
+") (text . "") (text . "Note: In Internet Explorer up to and including version 9, setting the
+text content of an HTML element may corrupt the text nodes of its
+children that are being removed from the document as a result of the
+operation. If you are keeping references to these DOM elements and need
+them to be unchanged, use .empty().html(string) instead of
+.html(string) so that the elements are removed from the document before
+the new string is assigned to the element.
 ") (text . "")) ("examples" ((text . "") (text . "Add some html to each div.
 
 ") (text . "") (js . "$(\"div\").html(\"<span class='red'>Hello <b>Again</b></span>\");") (text . "") (css . "
@@ -15873,7 +16043,8 @@ $(\"div#result3\").append($(\"p\").hasClass(\"selected\").toString());
 
 (push "removeAttr" jquery-doc-methods)
 
-(puthash "removeAttr" (quote (("name" . "removeAttr") ("signatures" "removeAttr" (("attributeName" "An attribute to remove.
+(puthash "removeAttr" (quote (("name" . "removeAttr") ("signatures" "removeAttr" (("attributeName" "An attribute to remove; as of version 1.7, it can be a space-separated
+list of attributes.
 
 " nil nil))) ("desc" (text . "Remove an attribute from each element in the set of matched elements.
 
@@ -15887,11 +16058,6 @@ avoid potential problems, use .prop() instead:
 ") (text . "") (js . "
 $element.prop(\"onclick\", null);
 console.log(\"onclick property: \", $element[0].onclick);
-") (text . "") (text . "The behavior of .removeAttr() may be updated to better handle this in
-the future. For the time being, however, setting .prop(\"onclick\", null)
-should be considered the standard cross-browser solution.
-") (text . "") (text . "
-
 ") (text . "")) ("examples" ((text . "") (text . "Clicking the button enables the input next to it.
 
 ") (text . "") (js . "
@@ -16089,8 +16255,8 @@ while yourClass is added.
 ") (text . "") (text . "As of jQuery 1.4, the .addClass() method`s argument can receive a
 function.
 
-") (text . "") (js . "$(\"ul li:last\").addClass(function() {
-  return \"item-\" + $(this).index();
+") (text . "") (js . "$(\"ul li:last\").addClass(function(index) {
+  return \"item-\" + index;
 });") (text . "") (text . "Given an unordered list with five <li> elements, this example adds the
 class \"item-4\" to the last <li>.
 
