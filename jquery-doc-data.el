@@ -1063,13 +1063,12 @@ addComment) use $(\"#commentForm\").on(\"click\", \".addNew\", addComment).
 ") (text . "") (text . "There are shorthand methods for some events such as .click() that can
 be used to attach or trigger event handlers. For a complete list of
 shorthand methods, see the events category.
-") (text . "") (text . "Although strongly discouraged for new code, you may see the
-pseudo-event-name \"hover\" used as a shorthand for the string
-\"mouseenter mouseleave\". It attaches a single event handler for those
-two events, and the handler must examine event.type to determine
-whether the event is mouseenter or mouseleave. Do not confuse the
-\"hover\" pseudo-event-name with the .hover() method, which accepts one
-or two functions.
+") (text . "") (text . "Deprecated as of jQuery 1.8: The name \"hover\" used as a shorthand for
+the string \"mouseenter mouseleave\". It attaches a single event handler
+for those two events, and the handler must examine event.type to
+determine whether the event is mouseenter or mouseleave. Do not confuse
+the \"hover\" pseudo-event-name with the .hover() method, which accepts
+one or two functions.
 ") (text . "") (text . "jQuery`s event system requires that a DOM element allow attaching data
 via a property on the element, so that events can be tracked and
 delivered. The object, embed, and applet elements cannot attach data,
@@ -1084,10 +1083,11 @@ event type names.
 as they don`t occur on the element being clicked. Should working with
 the middle click be required, the mousedown or mouseup events should be
 used with .on() instead.
-") (text . "") (text . "In all browsers, the load event does not bubble. In Internet Explorer 8
-and lower, the paste and reset events do not bubble. Such events are
-not supported for use with delegation, but they can be used when the
-event handler is directly attached to the element generating the event.
+") (text . "") (text . "In all browsers, the load, scroll, and error events (e.g., on an <img>
+element) do not bubble. In Internet Explorer 8 and lower, the paste and
+reset events do not bubble. Such events are not supported for use with
+delegation, but they can be used when the event handler is directly
+attached to the element generating the event.
 ") (text . "") (text . "The error event on the window object uses nonstandard arguments and
 return value conventions, so it is not supported by jQuery. Instead,
 assign a handler function directly to the window.onerror property.
@@ -6456,8 +6456,8 @@ handler for the load event instead.
 ") (text . "") (text . "  * $(document).ready(handler)
   * $().ready(handler) (this is not recommended)
   * $(handler)
-") (text . "") (text . "There is also $(document).bind(\"ready\", handler). This behaves
-similarly to the ready method but with one exception: If the ready
+") (text . "") (text . "There is also $(document).bind(\"ready\", handler), deprecated as of
+jQuery 1.8. This behaves similarly to the ready method but if the ready
 event has already fired and you try to .bind(\"ready\") the bound handler
 will not be executed. Ready handlers bound this way are executed after
 any bound by the other three methods above.
@@ -10838,7 +10838,7 @@ jqxhr.complete(function(){ alert(\"second complete\"); });") (text . "")) ("exam
 ") (text . "") (js . "
 $.getJSON(\"http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?\",
   {
-    tags: \"cat\",
+    tags: \"mount rainier\",
     tagmode: \"any\",
     format: \"json\"
   },
@@ -12866,7 +12866,7 @@ object.
 
 
 ") (text . "") (text . "  * the translated value, which will be mapped to the resulting array
-  * null, to remove the item
+  * null or undefined, to remove the item
   * an array of values, which will be flattened into the full array
 ") (text . "")) ("examples" ((text . "") (text . "A couple examples of using .map()
 
@@ -13434,13 +13434,9 @@ in standards-based browsers versus the currentStyle and runtimeStyle
 properties in Internet Explorer) and the different terms browsers use
 for certain properties. For example, Internet Explorer`s DOM
 implementation refers to the float property as styleFloat, while W3C
-standards-compliant browsers refer to it as cssFloat. The .css() method
-accounts for such differences, producing the same result no matter
-which term we use. For example, an element that is floated left will
-return the string left for each of the following three lines:
-") (text . "") (text . " 1. $(`div.left`).css(`float`);
- 2. $(`div.left`).css(`cssFloat`);
- 3. $(`div.left`).css(`styleFloat`);
+standards-compliant browsers refer to it as cssFloat. For consistency,
+you can simply use \"float\" and jQuery will translate it to the correct
+value for each browser.
 ") (text . "") (text . "Also, jQuery can equally interpret the CSS and DOM formatting of
 multiple-word properties. For example, jQuery understands and returns
 the correct value for both .css(`background-color`) and
