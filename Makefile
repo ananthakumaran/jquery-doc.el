@@ -13,5 +13,5 @@ update-doc-data: compile
 	--eval='(jquery-doc-generate-data "jquery.api.xml")'
 
 update-api:
-	curl http://api.jquery.com/api/ > jquery.api.xml
+	curl http://api.jquery.com/resources/api.xml > jquery.api.xml
 	dos2unix jquery.api.xml
