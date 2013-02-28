@@ -350,4 +350,8 @@ Optional argument JQUERY-METHOD method-name."
 
 (provide 'jquery-doc)
 
+;; Local Variables:
+;; byte-compile-warnings: (not cl-functions)
+;; End:
+
 ;;; jquery-doc.el ends here
