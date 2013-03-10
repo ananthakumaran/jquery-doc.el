@@ -15,3 +15,9 @@ update-doc-data: compile
 update-api:
 	curl http://api.jquery.com/resources/api.xml > jquery.api.xml
 	dos2unix jquery.api.xml
+
+test: clean compile
+	$(BATCH) -l ert -l jquery-doc-test.el -f ert-run-tests-batch-and-exit
+
+clean:
+	rm -f *.elc
