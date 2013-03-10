@@ -62,12 +62,25 @@
     (delete-file temp-file)
     dump))
 
+(defun jquery-doc-code-type (code)
+  (if (string-match-p "^ *<[^>]*>.*<[^>]*> *$" code)
+      'html
+    'js))
+
 (defun jquery-doc-format-node (node)
   (if (stringp node)
       (cons 'text "") ;; XXX remove this
     (let ((tag (xml-node-name node)))
-      (cond ((memq tag '(code pre))
+      (cond ((eq tag 'code)
 	     (cons 'js (jquery-doc-xml-node-first-children node)))
+            ((eq tag 'pre)
+             (let ((code (jquery-doc-xml-node-first-children
+                          (find-if
+                           (lambda (node)
+                             (and (listp node) (equal (xml-node-name node) 'code)))
+                           (xml-node-children node)))))
+               (cons (jquery-doc-code-type code)
+                     code)))
 	    ((eq tag 'html)
 	     (cons 'html (jquery-doc-xml-node-first-children node)))
 	    ((eq tag 'css)

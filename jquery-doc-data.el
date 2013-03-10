@@ -35,30 +35,37 @@ expression, references to DOM elements, or an HTML snippet.
 method, or assigned to a variable for later use. For example:
 
 ") (text . "") (js . "
-      ") (text . "") (text . "The following will not save the added elements, because the .add()
+$(\"p\").add(\"div\").addClass(\"widget\");
+var pdiv = $(\"p\").add(\"div\");
+") (text . "") (text . "The following will not save the added elements, because the .add()
 method creates a new set and leaves the original set in pdiv unchanged:
 
 ") (text . "") (js . "
-      ") (text . "") (text . "Consider a page with a simple list and a paragraph following it:
+var pdiv = $(\"p\");
+pdiv.add(\"div\");  // WRONG, pdiv will not change
+") (text . "") (text . "Consider a page with a simple list and a paragraph following it:
 
 
-") (text . "") (js . "
-      ") (text . "") (text . "We can select the list items and then the paragraph by using either a
+") (text . "") (html . "<ul>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li>list item 3</li>
+</ul>
+<p>a paragraph</p>") (text . "") (text . "We can select the list items and then the paragraph by using either a
 selector or a reference to the DOM element itself as the .add()
 method`s argument:
-") (text . "") (js . "
-      ") (text . "") (text . "Or:
+") (text . "") (js . "$('li').add('p').css('background-color', 'red');") (text . "") (text . "Or:
 
 
-") (text . "") (js . "
-      ") (text . "") (text . "The result of this call is a red background behind all four elements.
+") (text . "") (js . "$('li').add(document.getElementsByTagName('p')[0])
+  .css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind all four elements.
 Using an HTML snippet as the .add() method`s argument (as in the third
 version), we can create additional elements on the fly and add those
 elements to the matched set of elements. Let`s say, for example, that
 we want to alter the background of the list items along with a newly
 created paragraph:
-") (text . "") (js . "
-      ") (text . "") (text . "Although the new paragraph has been created and its background color
+") (text . "") (js . "$('li').add('<p id=\"new\">new paragraph</p>')
+  .css('background-color', 'red');") (text . "") (text . "Although the new paragraph has been created and its background color
 changed, it still does not appear on the page. To place it on the page,
 we could add one of the insertion methods to the chain.
 ") (text . "") (text . "As of jQuery 1.4 the results from .add() will always be returned in
@@ -119,16 +126,16 @@ assigned to the elements.
 ") (text . "") (text . "More than one class may be added at a time, separated by a space, to
 the set of matched elements, like so:
 
-") (text . "") (js code nil "$(\"p\").addClass(\"myClass yourClass\");") (text . "") (text . "This method is often used with .removeClass() to switch elements`
+") (text . "") (js . "$(\"p\").addClass(\"myClass yourClass\");") (text . "") (text . "This method is often used with .removeClass() to switch elements`
 classes from one to another, like so:
 
-") (text . "") (js code nil "$(\"p\").removeClass(\"myClass noClass\").addClass(\"yourClass\");") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
+") (text . "") (js . "$(\"p\").removeClass(\"myClass noClass\").addClass(\"yourClass\");") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
 while yourClass is added.
 
 ") (text . "") (text . "As of jQuery 1.4, the .addClass() method`s argument can receive a
 function.
 
-") (text . "") (js code nil "$(\"ul li:last\").addClass(function(index) {
+") (text . "") (js . "$(\"ul li:last\").addClass(function(index) {
   return \"item-\" + index;
 });") (text . "") (text . "Given an unordered list with five <li> elements, this example adds the
 class \"item-4\" to the last <li>.
@@ -206,17 +213,17 @@ fly, and it is inserted after the target container.
 ") (text . "") (text . "Using the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "Content can be created and then inserted after several elements at
 once:
 
-") (text . "") (js code nil "$('.inner').after('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "$('.inner').after('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <p>Test</p>
@@ -225,10 +232,10 @@ once:
 </div>") (text . "") (text . "An element in the DOM can also be selected and inserted after another
 element:
 
-") (text . "") (js code nil "$('.container').after($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "$('.container').after($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved rather than cloned:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
@@ -241,16 +248,16 @@ inserted element will be created for each target after the first.
 ") (text . "") (text . "As of jQuery 1.4, .before() and .after() will also work on disconnected
 DOM nodes. For example, given the following code:
 
-") (text . "") (js code nil "$('<div/>').after('<p></p>');") (text . "") (text . "The result is a jQuery set containing a div and a paragraph, in that
+") (text . "") (js . "$('<div/>').after('<p></p>');") (text . "") (text . "The result is a jQuery set containing a div and a paragraph, in that
 order. That set can be further manipulated, even before it is inserted
 in the document.
-") (text . "") (js code nil "$('<div/>').after('<p></p>').addClass('foo')
+") (text . "") (js . "$('<div/>').after('<p></p>').addClass('foo')
   .filter('p').attr('id', 'bar').html('hello')
 .end()
 .appendTo('body');") (text . "") (text . "This results in the following elements inserted just before the closing
 </body> tag:
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <div class=\"foo\"></div>
 <p class=\"foo\" id=\"bar\">hello</p>
 ") (text . "") (text . " Passing a Function
@@ -259,7 +266,7 @@ in the document.
 ") (text . "") (text . "As of jQuery 1.4, .after() supports passing a function that returns the
 elements to insert.
 
-") (text . "") (js code nil "$('p').after(function() {
+") (text . "") (js . "$('p').after(function() {
   return '<div>' + this.className + '</div>';
 });") (text . "") (text . "This example inserts a <div> after each paragraph, with each new <div>
 containing the class name(s) of its preceding paragraph.
@@ -274,7 +281,7 @@ strings, and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> after the first paragraph:
 
-") (text . "") (js code nil "var $newdiv1 = $('<div id=\"object1\"/>'),
+") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
     newdiv2 = document.createElement('div'),
     existingdiv1 = document.getElementById('foo');
 
@@ -306,19 +313,19 @@ event. Any and all handlers that have been registered with the
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (js code nil "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>
 ") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js code nil "$(document).ajaxComplete(function() {
+") (text . "") (js . "$(document).ajaxComplete(function() {
   $( \".log\" ).text( \"Triggered ajaxComplete handler.\" );
 });
 ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \".trigger\" ).click(function() {
+") (text . "") (js . "$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
 });") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes, the log message is displayed.
@@ -334,7 +341,7 @@ executed, it is passed the event object, the XMLHttpRequest object, and
 the settings object that was used in the creation of the request. For
 example, you can restrict the callback to only handling events dealing
 with a particular URL:
-") (text . "") (js code nil "$(document).ajaxComplete(function(event, xhr, settings) {
+") (text . "") (js . "$(document).ajaxComplete(function(event, xhr, settings) {
   if ( settings.url === \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxComplete handler. The result is \" +
                      xhr.responseHTML );
@@ -361,17 +368,17 @@ the .ajaxError() method are executed at this time.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request.
 
 
-") (text . "") (js code nil "<button class=\"trigger\">Trigger</button>
+") (text . "") (html . "<button class=\"trigger\">Trigger</button>
 <div class=\"result\"></div>
 <div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js code nil "$(document).ajaxError(function() {
+") (text . "") (js . "$(document).ajaxError(function() {
   $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
 });") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \"button.trigger\" ).click(function() {
+") (text . "") (js . "$( \"button.trigger\" ).click(function() {
   $( \"div.result\" ).load( \"ajax/missing.html\" );
 });") (text . "") (text . "When the user clicks the button and the Ajax request fails, because the
 requested file is missing, the log message is displayed.
@@ -389,7 +396,7 @@ the request. If the request failed because JavaScript raised an
 exception, the exception object is passed to the handler as a fourth
 parameter. For example, to restrict the error callback to only handling
 events dealing with a particular URL:
-") (text . "") (js code nil "$( document ).ajaxError(function(event, jqxhr, settings, exception) {
+") (text . "") (js . "$( document ).ajaxError(function(event, jqxhr, settings, exception) {
   if ( settings.url == \"ajax/missing.html\" ) {
     $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
   }
@@ -412,17 +419,17 @@ ajaxSend event. Any and all handlers that have been registered with the
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (js code nil "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js code nil "$(document).ajaxSend(function() {
+") (text . "") (js . "$(document).ajaxSend(function() {
   $( \".log\" ).text( \"Triggered ajaxSend handler.\" );
 });") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \".trigger\" ).click(function() {
+") (text . "") (js . "$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
 });") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request is about to begin, the log message is displayed.
@@ -438,7 +445,7 @@ executed, it is passed the event object, the jqXHR object (in version
 1.4, XMLHttpRequestobject), and the settings object that was used in
 the creation of the Ajax request. For example, you can restrict the
 callback to only handling events dealing with a particular URL:
-") (text . "") (js code nil "$(document).ajaxSend(function(event, jqxhr, settings) {
+") (text . "") (js . "$(document).ajaxSend(function(event, jqxhr, settings) {
   if ( settings.url == \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxSend handler.\" );
   }
@@ -462,17 +469,17 @@ been registered with the .ajaxStart() method are executed at this time.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (js code nil "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>") (text . "") (text . "Attach the event handler to any element:
 
 
-") (text . "") (js code nil "$(document).ajaxStart(function() {
+") (text . "") (js . "$(document).ajaxStart(function() {
   $( \".log\" ).text( \"Triggered ajaxStart handler.\" );
 });") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \".trigger\" ).click(function() {
+") (text . "") (js . "$( \".trigger\" ).click(function() {
   $( \".result\" ).load(\"ajax/test.html\");
 });") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request is sent, the log message is displayed.
@@ -504,17 +511,17 @@ returning false within the beforeSend callback function.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (js code nil "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js code nil "$( \".log\" ).ajaxStop(function() {
+") (text . "") (js . "$( \".log\" ).ajaxStop(function() {
   $(this).text( \"Triggered ajaxStop handler.\" );
 });") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \".trigger\" ).click(function() {
+") (text . "") (js . "$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
 });") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes, the log message is displayed.
@@ -542,17 +549,17 @@ the .ajaxSuccess() method are executed at this time.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (js code nil "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>") (text . "") (text . "Attach the event handler to any element:
 
 
-") (text . "") (js code nil "$(document).ajaxSuccess(function() {
+") (text . "") (js . "$(document).ajaxSuccess(function() {
   $( \".log\" ).text( \"Triggered ajaxSuccess handler.\" );
 });") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js code nil "$( \".trigger\" ).on(\"click\", function() {
+") (text . "") (js . "$( \".trigger\" ).on(\"click\", function() {
   $( \".result\" ).load( \"ajax/test.html\" );
 });") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes successfully, the log message is displayed.
@@ -568,7 +575,7 @@ handler is executed, it is passed the event object, the XMLHttpRequest
 object, and the settings object that was used in the creation of the
 request. For example, you can restrict the callback to only handling
 events dealing with a particular URL:
-") (text . "") (js code nil "$(document).ajaxSuccess(function(event, xhr, settings) {
+") (text . "") (js . "$(document).ajaxSuccess(function(event, xhr, settings) {
   if ( settings.url == \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxSuccess handler. The ajax response was: \" +
                       xhr.responseText );
@@ -597,7 +604,7 @@ is desired as well, .andSelf() can help.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -608,7 +615,7 @@ is desired as well, .andSelf() can help.
 ") (text . "") (text . "The result of the following code is a red background behind items 3, 4
 and 5:
 
-") (text . "") (js code nil "$('li.third-item').nextAll().andSelf()
+") (text . "") (js . "$('li.third-item').nextAll().andSelf()
   .css('background-color', 'red');
 ") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
 the set containing just this item. The call to .nextAll() then pushes
@@ -729,14 +736,14 @@ for the animation as a whole.
 ") (text . "") (text . "To animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\"
   style=\"position: relative; left: 10px;\" />") (text . "") (text . "To animate the opacity, left offset, and height of the image
 simultaneously:
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').animate({
     opacity: 0.25,
     left: '+=50',
@@ -786,7 +793,7 @@ set to the DOM element being animated.
 ") (text . "") (text . "Note that the step function is called for each animated property on
 each animated element. For example, given two list items, the step
 function fires four times at each step of the animation:
-") (text . "") (js code nil "$('li').animate({
+") (text . "") (js . "$('li').animate({
   opacity: .5,
   height: '50%'
 },
@@ -819,7 +826,7 @@ function is used.
 ") (text . "") (text . "For example, to simultaneously animate the width and height with the
 swing easing function and the opacity with the linear easing function:
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').animate({
     width: ['toggle', 'swing'],
     height: ['toggle', 'swing'],
@@ -832,7 +839,7 @@ specialEasing property, which is itself an object of CSS properties and
 their corresponding easing functions. For example, to simultaneously
 animate the width using the linear easing function and the height using
 the easeOutBounce easing function:
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').animate({
     width: 'toggle',
     height: 'toggle'
@@ -1044,7 +1051,7 @@ inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
@@ -1052,11 +1059,11 @@ inserted into the target container.
 ") (text . "") (text . "You can create content and insert it into several elements at once:
 
 
-") (text . "") (js code nil "$('.inner').append('<p>Test</p>');
+") (text . "") (js . "$('.inner').append('<p>Test</p>');
 ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     Hello
@@ -1070,11 +1077,11 @@ inserted into the target container.
 ") (text . "") (text . "You can also select an element on the page and insert it into another:
 
 
-") (text . "") (js code nil "$('.container').append($('h2'));
+") (text . "") (js . "$('.container').append($('h2'));
 ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved into the target (not cloned):
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
   <h2>Greetings</h2>
@@ -1092,7 +1099,7 @@ strings, and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> as the last three child nodes of the body:
 
-") (text . "") (js code nil "var $newdiv1 = $('<div id=\"object1\"/>'),
+") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
     newdiv2 = document.createElement('div'),
     existingdiv1 = document.getElementById('foo');
 
@@ -1142,7 +1149,7 @@ inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
@@ -1150,11 +1157,11 @@ inserted into the target container.
 ") (text . "") (text . "We can create content and insert it into several elements at once:
 
 
-") (text . "") (js code nil "$('<p>Test</p>').appendTo('.inner');
+") (text . "") (js . "$('<p>Test</p>').appendTo('.inner');
 ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     Hello
@@ -1168,11 +1175,11 @@ inserted into the target container.
 ") (text . "") (text . "We can also select an element on the page and insert it into another:
 
 
-") (text . "") (js code nil "$('h2').appendTo($('.container'));
+") (text . "") (js . "$('h2').appendTo($('.container'));
 ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved into the target (not cloned):
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
   <h2>Greetings</h2>
@@ -1249,16 +1256,16 @@ attribute value as arguments.
 ")) ("longdesc" (text . "") (text . "The .attr() method is a convenient way to set the value of
 attributes--especially when setting multiple attributes or using values
 returned by a function. Consider the following image:
-") (text . "") (js code nil "<img id=\"greatphoto\" src=\"brush-seller.jpg\" alt=\"brush seller\" />") (text . "") (text . " Setting a simple attribute
+") (text . "") (js . "<img id=\"greatphoto\" src=\"brush-seller.jpg\" alt=\"brush seller\" />") (text . "") (text . " Setting a simple attribute
 
 
 ") (text . "") (text . "To change the alt attribute, simply pass the name of the attribute and
 its new value to the .attr() method:
 
-") (text . "") (js code nil "$('#greatphoto').attr('alt', 'Beijing Brush Seller');") (text . "") (text . "Add an attribute the same way:
+") (text . "") (js . "$('#greatphoto').attr('alt', 'Beijing Brush Seller');") (text . "") (text . "Add an attribute the same way:
 
 
-") (text . "") (js code nil "$('#greatphoto')
+") (text . "") (js . "$('#greatphoto')
 .attr('title', 'Photo by Kelly Clark');") (text . "") (text . " Setting several attributes at once
 
 
@@ -1266,7 +1273,7 @@ its new value to the .attr() method:
 time, pass both sets of names and values into the method at once using
 a plain JavaScript object. Each key-value pair in the object adds or
 modifies an attribute:
-") (text . "") (js code nil "$('#greatphoto').attr({
+") (text . "") (js . "$('#greatphoto').attr({
   alt: 'Beijing Brush Seller',
   title: 'photo by Kelly Clark'
 });") (text . "") (text . "When setting multiple attributes, the quotes around attribute names are
@@ -1284,7 +1291,7 @@ because the type attribute cannot be changed in Internet Explorer.
 ") (text . "") (text . "By using a function to set attributes, you can compute the value based
 on other properties of the element. For example, to concatenate a new
 value with an existing value:
-") (text . "") (js code nil "$('#greatphoto').attr('title', function(i, val) {
+") (text . "") (js . "$('#greatphoto').attr('title', function(i, val) {
   return val + ' - photo by Kelly Clark'
 });") (text . "") (text . "This use of a function to compute attribute values can be particularly
 useful when modifying the attributes of multiple elements at once.
@@ -1363,17 +1370,17 @@ is inserted before the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "You can create content and insert it before several elements at once:
 
 
-") (text . "") (js code nil "$('.inner').before('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "$('.inner').before('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <p>Test</p>
   <div class=\"inner\">Hello</div>
@@ -1382,10 +1389,10 @@ is inserted before the target container.
 </div>") (text . "") (text . "You can also select an element on the page and insert it before
 another:
 
-") (text . "") (js code nil "$('.container').before($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "$('.container').before($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved before the target (not cloned):
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
@@ -1395,7 +1402,7 @@ inserted element will be created for each target after the first.
 ") (text . "") (text . "In jQuery 1.4, .before() and .after() will also work on disconnected
 DOM nodes:
 
-") (text . "") (js code nil "$(\"<div/>\").before(\"<p></p>\");") (text . "") (text . "The result is a jQuery set that contains a paragraph and a div (in that
+") (text . "") (js . "$(\"<div/>\").before(\"<p></p>\");") (text . "") (text . "The result is a jQuery set that contains a paragraph and a div (in that
 order).
 
 ") (text . "") (text . " Additional Arguments
@@ -1408,7 +1415,7 @@ and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> before the first paragraph:
 
-") (text . "") (js code nil "var $newdiv1 = $('<div id=\"object1\"/>'),
+") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
     newdiv2 = document.createElement('div'),
     existingdiv1 = document.getElementById('foo');
 
@@ -1478,7 +1485,7 @@ propagation path.
 ") (text . "") (text . "A basic usage of .bind() is:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('#foo').bind('click', function() {
   alert('User clicked on \"foo.\"');
 });
@@ -1491,7 +1498,7 @@ alert will be shown.
 ") (text . "") (text . "Multiple event types can be bound at once by including each one
 separated by a space:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('#foo').bind('mouseenter mouseleave', function() {
   $(this).toggleClass('entered');
 });
@@ -1501,7 +1508,7 @@ enters the <div> and remove the class when the mouse leaves.
 ") (text . "") (text . "As of jQuery 1.4 we can bind multiple event handlers simultaneously by
 passing an object of event type/handler pairs:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('#foo').bind({
   click: function() {
     // do something on click
@@ -1517,7 +1524,7 @@ $('#foo').bind({
 the handler, the keyword this refers to the DOM element to which the
 handler is bound. To make use of the element in jQuery, it can be
 passed to the normal $() function. For example:
-") (text . "") (js code nil "$('#foo').bind('click', function() {
+") (text . "") (js . "$('#foo').bind('click', function() {
   alert($(this).text());
 });
 ") (text . "") (text . "After this code is executed, when the user clicks inside the element
@@ -1549,7 +1556,7 @@ full Event Object.
 ") (text . "") (text . "Using the event object in a handler looks like this:
 
 
-") (text . "") (js code nil "$(document).ready(function() {
+") (text . "") (js . "$(document).ready(function() {
   $('#foo').bind('click', function(event) {
     alert('The mouse cursor is at ('
       + event.pageX + ', ' + event.pageY + ')');
@@ -1566,7 +1573,7 @@ this argument allows us to pass additional information to the handler.
 One handy use of this parameter is to work around issues caused by
 closures. For example, suppose we have two event handlers that both
 refer to the same external variable:
-") (text . "") (js code nil "var message = 'Spoon!';
+") (text . "") (js . "var message = 'Spoon!';
 $('#foo').bind('click', function() {
   alert(message);
 });
@@ -1578,7 +1585,7 @@ $('#bar').bind('click', function() {
 environment, both will display the message Not in the face! when
 triggered. The variable`s value has changed. To sidestep this, we can
 pass the message in using eventData:
-") (text . "") (js code nil "var message = 'Spoon!';
+") (text . "") (js . "var message = 'Spoon!';
 $('#foo').bind('click', {msg: message}, function(event) {
   alert(event.data.msg);
 });
@@ -1707,7 +1714,7 @@ such as the Tab key, or by mouse clicks elsewhere on the page.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <input id=\"target\" type=\"text\" value=\"Field 1\" />
   <input type=\"text\" value=\"Field 2\" />
 </form>
@@ -1726,7 +1733,7 @@ away from it displays the alert:
 ") (text . "") (text . "To trigger the event programmatically, apply .blur() without an
 argument:
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').blur();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -1756,7 +1763,7 @@ this).
 ") (text . "") (text . "Use callbacks.add() to add new callbacks to a callback list:
 
 
-") (text . "") (js code nil "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "// a sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo: \" + value );
 };
@@ -1799,7 +1806,7 @@ this).
 ") (text . "") (text . "Use callbacks.disable() to disable further calls to a callback list:
 
 
-") (text . "") (js code nil "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "// a sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( value );
 };
@@ -1834,7 +1841,7 @@ this).
 ") (text . "") (text . "Use callbacks.empty() to empty a list of callbacks:
 
 
-") (text . "") (js code nil "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "// a sample logging function to be added to a callbacks list
 var foo = function( value1, value2 ) {
   console.log( \"foo: \" + value1 + \",\" + value2 );
 }
@@ -1875,7 +1882,7 @@ this).
 ") (text . "") (text . "Use callbacks.fire() to invoke the callbacks in a list with any
 arguments that have been passed:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 // a sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo:\" + value );
@@ -1924,7 +1931,7 @@ this).
 ") (text . "") (text . "Use callbacks.fireWith() to fire a list of callbacks with a specific
 context and an array of arguments:
 
-") (text . "") (js code nil "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "// a sample logging function to be added to a callbacks list
 var log = function( value1, value2 ) {
   console.log( \"Received: \" + value1 + \",\" + value2 );
 };
@@ -1952,7 +1959,7 @@ callbacks.fireWith( window, [\"foo\",\"bar\"]);
 ") (text . "") (text . "Use callbacks.fired() to determine if the callbacks in a list have been
 called at least once:
 
-") (text . "") (js code nil "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "// a sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo:\" + value );
 };
@@ -2172,7 +2179,7 @@ loses focus.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (html . "<form>
   <input class=\"target\" type=\"text\" value=\"Field 1\" />
   <select class=\"target\">
     <option value=\"option1\" selected=\"selected\">Option 1</option>
@@ -2184,14 +2191,14 @@ loses focus.
 </div>") (text . "") (text . "The event handler can be bound to the text input and the select box:
 
 
-") (text . "") (js code nil "$('.target').change(function() {
+") (text . "") (js . "$('.target').change(function() {
   alert('Handler for .change() called.');
 });") (text . "") (text . "Now when the second option is selected from the dropdown, the alert is
 displayed. It is also displayed if you change the text in the field and
 then click away. If the field loses focus without the contents having
 changed, though, the event is not triggered. To trigger the event
 manually, apply .change() without arguments:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('.target').change();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message. The message will display twice, because the handler has
@@ -2252,7 +2259,7 @@ it.
 ") (text . "") (text . "Consider a page with a basic nested list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\">II
@@ -2273,7 +2280,7 @@ it.
 ") (text . "") (text . "If we begin at the level-2 list, we can find its children:
 
 
-") (text . "") (js code nil "$('ul.level-2').children().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items A, B, and C.
+") (text . "") (js . "$('ul.level-2').children().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items A, B, and C.
 Since we do not supply a selector expression, all of the children are
 part of the returned jQuery object. If we had supplied one, only the
 matching items among these three would be included.
@@ -2421,7 +2428,7 @@ variations, and .trigger(`click`) in the third. The click event is sent
 to an element when the mouse pointer is over the element, and the mouse
 button is pressed and released. Any HTML element can receive this
 event. For example, consider the HTML:
-") (text . "") (js code nil "<div id=\"target\">
+") (text . "") (js . "<div id=\"target\">
   Click here
 </div>
 <div id=\"other\">
@@ -2431,7 +2438,7 @@ event. For example, consider the HTML:
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js code nil "$(\"#target\").click(function() {
+") (text . "") (js . "$(\"#target\").click(function() {
   alert(\"Handler for .click() called.\");
 });") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
@@ -2442,7 +2449,7 @@ event. For example, consider the HTML:
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js code nil "$(\"#other\").click(function() {
+") (text . "") (js . "$(\"#other\").click(function() {
   $(\"#target\").click();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -2492,16 +2499,16 @@ elements, meaning that it copies the matched elements as well as all of
 their descendant elements and text nodes. When used in conjunction with
 one of the insertion methods, .clone() is a convenient way to duplicate
 elements on a page. Consider the following HTML:
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "") (text . "As shown in the discussion for .append() , normally when an element is
 inserted somewhere in the DOM, it is moved from its old location. So,
 given the code:
-") (text . "") (js code nil "$('.hello').appendTo('.goodbye');") (text . "") (text . "The resulting DOM structure would be:
+") (text . "") (js . "$('.hello').appendTo('.goodbye');") (text . "") (text . "The resulting DOM structure would be:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"goodbye\">
     Goodbye
     <div class=\"hello\">Hello</div>
@@ -2509,10 +2516,10 @@ given the code:
 </div>") (text . "") (text . "To prevent this and instead create a copy of the element, you could
 write the following:
 
-") (text . "") (js code nil "$('.hello').clone().appendTo('.goodbye');") (text . "") (text . "This would produce:
+") (text . "") (js . "$('.hello').clone().appendTo('.goodbye');") (text . "") (text . "This would produce:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">
     Goodbye
@@ -2530,7 +2537,7 @@ to the new copy.
 ") (text . "") (text . "However, objects and arrays within element data are not copied and will
 continue to be shared between the cloned element and the original
 element. To deep copy all data, copy each one manually:
-") (text . "") (js code nil "var $elem = $('#elem').data( \"arr\": [ 1 ] ), // Original element with attached data
+") (text . "") (js . "var $elem = $('#elem').data( \"arr\": [ 1 ] ), // Original element with attached data
     $clone = $elem.clone( true )
     .data( \"arr\", $.extend( [], $elem.data(\"arr\") ) ); // Deep copy to prevent data sharing
 ") (text . "") (text . "As of jQuery 1.5, withDataAndEvents can be optionally enhanced with
@@ -2615,7 +2622,7 @@ collection based on a selector if one is supplied
 The returned jQuery object contains zero or one element for each
 element in the original set The returned jQuery object contains zero or
 more elements for each element in the original set
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul id=\"one\" class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li id=\"ii\" class=\"item-ii\">II
@@ -2636,7 +2643,7 @@ more elements for each element in the original set
 ") (text . "") (text . "Suppose we perform a search for <ul> elements starting at item A:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('li.item-a').closest('ul')
   .css('background-color', 'red');
 ") (text . "") (text . "This will change the color of the level-2 <ul>, since it is the first
@@ -2645,7 +2652,7 @@ encountered when traveling up the DOM tree.
 ") (text . "") (text . "Suppose we search for an <li> element instead:
 
 
-") (text . "") (js code nil "$('li.item-a').closest('li')
+") (text . "") (js . "$('li.item-a').closest('li')
   .css('background-color', 'red');
 ") (text . "") (text . "This will change the color of list item A. The .closest() method begins
 its search with the element itself before progressing up the DOM tree,
@@ -2653,7 +2660,7 @@ and stops when item A matches the selector.
 ") (text . "") (text . "We can pass in a DOM element as the context within which to search for
 the closest element.
 
-") (text . "") (js code nil "var listItemII = document.getElementById('ii');
+") (text . "") (js . "var listItemII = document.getElementById('ii');
 $('li.item-a').closest('ul', listItemII)
   .css('background-color', 'red');
 $('li.item-a').closest('#one', listItemII)
@@ -2723,7 +2730,7 @@ an iframe, if the iframe is on the same domain as the main page.
 ") (text . "") (text . "Consider a simple <div> with a number of text nodes, each of which is
 separated by two line break elements ( <br />):
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed 
   do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
   <br /><br />
@@ -2736,7 +2743,7 @@ separated by two line break elements ( <br />):
 ") (text . "") (text . "We can employ the .contents() method to help convert this blob of text
 into three well-formed paragraphs:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('.container').contents().filter(function() {
   return this.nodeType == 3;
 })
@@ -2882,7 +2889,7 @@ padding-left of 25px.
 ") (text . "") (text . "As of jQuery 1.4, .css() allows us to pass a function as the property
 value:
 
-") (text . "") (js code nil "$('div.example').css('width', function(index) {
+") (text . "") (js . "$('div.example').css('width', function(index) {
   return index * 50;
 });") (text . "") (text . "This example sets the widths of the matched elements to incrementally
 larger values.
@@ -2988,7 +2995,7 @@ memory leaks.
 ") (text . "") (text . " We can set several distinct values for a single element and retrieve
 them later:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('body').data('foo', 52);
 $('body').data('bar', { myType: 'test', count: 40 });
 
@@ -3034,13 +3041,13 @@ attribute.
 in a way that is safe from circular references and therefore from
 memory leaks. We can retrieve several distinct values for a single
 element one at a time, or as a set:
-") (text . "") (js code nil "
+") (text . "") (js . "
 alert($('body').data('foo'));
 alert($('body').data());
 ") (text . "") (text . "The above lines alert the data values that were set on the body
 element. If no data at all was set on that element, undefined is
 returned.
-") (text . "") (js code nil "
+") (text . "") (js . "
 alert( $(\"body\").data(\"foo\")); //undefined
 $(\"body\").data(\"bar\", \"foobar\");
 alert( $(\"body\").data(\"bar\")); //foobar
@@ -3054,10 +3061,10 @@ specification.
 ") (text . "") (text . "For example, given the following HTML:
 
 
-") (text . "") (js code nil "<div data-role=\"page\" data-last-value=\"43\" data-hidden=\"true\" data-options='{\"name\":\"John\"}'></div>") (text . "") (text . "All of the following jQuery code will work.
+") (text . "") (html . "<div data-role=\"page\" data-last-value=\"43\" data-hidden=\"true\" data-options='{\"name\":\"John\"}'></div>") (text . "") (text . "All of the following jQuery code will work.
 
 
-") (text . "") (js code nil "$(\"div\").data(\"role\") === \"page\";
+") (text . "") (js . "$(\"div\").data(\"role\") === \"page\";
 $(\"div\").data(\"lastValue\") === 43;
 $(\"div\").data(\"hidden\") === true;
 $(\"div\").data(\"options\").name === \"John\";") (text . "") (text . "Every attempt is made to convert the string to a JavaScript value (this
@@ -3075,7 +3082,7 @@ JavaScript object. This object can be safely cached in a variable as
 long as a new object is not set with .data(obj). Using the object
 directly to get or set values is faster than making individual calls to
 .data() to get or set each value:
-") (text . "") (js code nil "
+") (text . "") (js . "
 var mydata = $(\"#mydiv\").data();
 if ( mydata.count < 9 ) {
     mydata.count = 43;
@@ -3136,7 +3143,7 @@ that event on an element.
 variations, and .trigger(`dblclick`) in the third. The dblclick event
 is sent to an element when the element is double-clicked. Any HTML
 element can receive this event. For example, consider the HTML:
-") (text . "") (js code nil "<div id=\"target\">
+") (text . "") (js . "<div id=\"target\">
   Double-click here
 </div>
 <div id=\"other\">
@@ -3146,7 +3153,7 @@ element can receive this event. For example, consider the HTML:
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js code nil "$('#target').dblclick(function() {
+") (text . "") (js . "$('#target').dblclick(function() {
   alert('Handler for .dblclick() called.');
 });") (text . "") (text . "Now double-clicking on this element displays the alert:
 
@@ -3157,7 +3164,7 @@ element can receive this event. For example, consider the HTML:
 ") (text . "") (text . "To trigger the event manually, apply .dblclick() without an argument:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').dblclick();
 });") (text . "") (text . "After this code executes, (single) clicks on Trigger the handler will
 also alert the message.
@@ -3801,7 +3808,7 @@ respectively.
 ") (text . "") (text . "Using the standard effects queue, we can, for example, set an
 800-millisecond delay between the .slideUp() and .fadeIn() of <div
 id=\"foo\">:
-") (text . "") (js code nil "$('#foo').slideUp(300).delay(800).fadeIn(400);") (text . "") (text . "When this statement is executed, the element slides up for 300
+") (text . "") (js . "$('#foo').slideUp(300).delay(800).fadeIn(400);") (text . "") (text . "When this statement is executed, the element slides up for 300
 milliseconds and then pauses for 800 milliseconds before fading in for
 400 milliseconds.
 ") (text . "") (text . "  The .delay() method is best for delaying between queued jQuery
@@ -3856,7 +3863,7 @@ For earlier versions, however, it remains the most effective means to
 use event delegation. More information on event binding and delegation
 is in the .on() method. In general, these are the equivalent templates
 for the two methods:
-") (text . "") (js code nil "
+") (text . "") (js . "
 // jQuery 1.4.3+
 $(elements).delegate( selector, events, data, handler );
 // jQuery 1.7+
@@ -3864,12 +3871,12 @@ $(elements).on( events, selector, data, handler );
  ") (text . "") (text . "For example, the following .delegate() code:
 
 
-") (text . "") (js code nil "$(\"table\").delegate(\"td\", \"click\", function() {
+") (text . "") (js . "$(\"table\").delegate(\"td\", \"click\", function() {
   $(this).toggleClass(\"chosen\");
 });") (text . "") (text . "is equivalent to the following code written using .on():
 
 
-") (text . "") (js code nil "$(\"table\").on(\"click\", \"td\", function() {
+") (text . "") (js . "$(\"table\").on(\"click\", \"td\", function() {
   $(this).toggleClass(\"chosen\");
 });") (text . "") (text . "To remove events attached with delegate(), see the .undelegate()
 method.
@@ -4042,14 +4049,14 @@ keyword this refers to the element.
 ") (text . "") (text . "Suppose you have a simple unordered list on the page:
 
 
-") (text . "") (js code nil "<ul>
+") (text . "") (html . "<ul>
     <li>foo</li>
     <li>bar</li>
 </ul>
     ") (text . "") (text . "You can select the list items and iterate across them:
 
 
-") (text . "") (js code nil "$( \"li\" ).each(function( index ) {
+") (text . "") (js . "$( \"li\" ).each(function( index ) {
   console.log( index + \": \" + $(this).text() );
 });
   ") (text . "") (text . "A message is thus logged for each item in the list:
@@ -4065,7 +4072,7 @@ false.
 the set of elements in the jQuery collection -- a process known as
 implicit iteration. When this occurs, it is often unnecessary to
 explicitly iterate with the .each() method:
-") (text . "") (js code nil "// The .each() method is unnecessary here:
+") (text . "") (js . "// The .each() method is unnecessary here:
 $( \"li\" ).each(function() {
   $(this).addClass( \"foo\" );
 });
@@ -4149,16 +4156,16 @@ also any text within the set of matched elements. This is because,
 according to the DOM specification, any string of text within an
 element is considered a child node of that element. Consider the
 following HTML:
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "") (text . "We can target any element for removal:
 
 
-") (text . "") (js code nil "$('.hello').empty();") (text . "") (text . "This will result in a DOM structure with the Hello text deleted:
+") (text . "") (js . "$('.hello').empty();") (text . "") (text . "This will result in a DOM structure with the Hello text deleted:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"hello\"></div>
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
@@ -4199,7 +4206,7 @@ of the stack.
 ") (text . "") (text . "Suppose we have a couple short lists on a page:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"first\">
    <li class=\"foo\">list item 1</li>
    <li>list item 2</li>
@@ -4214,7 +4221,7 @@ of the stack.
 properties. When not using chaining, we can usually just call up a
 previous object by variable name, so we don`t need to manipulate the
 stack. With end(), though, we can string all the method calls together:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('ul.first').find('.foo').css('background-color', 'red')
   .end().find('.bar').css('background-color', 'green');
 ") (text . "") (text . "This chain searches for items with the class foo within the first list
@@ -4227,7 +4234,7 @@ background, and none of the items from the second list do.
 ") (text . "") (text . "A long jQuery chain can be visualized as a structured code block, with
 filtering methods providing the openings of nested blocks and end()
 methods closing them:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('ul.first').find('.foo')
   .css('background-color', 'red')
 .end().find('.bar')
@@ -4304,7 +4311,7 @@ The supplied index identifies the position of this element in the set.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
   <ul>
     <li>list item 1</li>
     <li>list item 2</li>
@@ -4315,7 +4322,7 @@ The supplied index identifies the position of this element in the set.
 ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
   $('li').eq(2).css('background-color', 'red');
 ") (text . "") (text . "The result of this call is a red background for item 3. Note that the
 supplied index is zero-based, and refers to the position of the element
@@ -4323,7 +4330,7 @@ within the jQuery object, not within the DOM tree.
 ") (text . "") (text . "Providing a negative number indicates a position starting from the end
 of the set, rather than the beginning. For example:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
   $('li').eq(-2).css('background-color', 'red');
 ") (text . "") (text . "This time list item 4 is turned red, since it is two from the end of
 the set.
@@ -4331,7 +4338,7 @@ the set.
 ") (text . "") (text . "If an element cannot be found at the specified zero-based index, the
 method constructs a new jQuery object with an empty set and a length
 property of 0.
-") (text . "") (js code nil "
+") (text . "") (js . "
   $('li').eq(5).css('background-color', 'red');
 ") (text . "") (text . "Here, none of the list items is turned red, since .eq(5) indicates the
 sixth of five list items.
@@ -4371,10 +4378,10 @@ element was not loaded correctly.
 ") (text . "") (text . "For example, consider a page with a simple image element:
 
 
-") (text . "") (js code nil "<img alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
+") (text . "") (js . "<img alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
 
 
-") (text . "") (js code nil "$('#book')
+") (text . "") (js . "$('#book')
   .error(function() {
     alert('Handler for .error() called.')
   })
@@ -4583,7 +4590,7 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
       Click here
     </div>
     <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
@@ -4689,13 +4696,13 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially shown, we can hide it slowly:
 
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').fadeOut('slow', function() {
     // Animation complete.
   });
@@ -4835,7 +4842,7 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
     Click here
   </div>
   <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
@@ -5006,7 +5013,7 @@ result.
 ") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -5018,7 +5025,7 @@ result.
 ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
   $('li').filter(':even').css('background-color', 'red');
 ") (text . "") (text . "The result of this call is a red background for items 1, 3, and 5, as
 they match the selector (recall that :even and :odd use 0-based
@@ -5031,7 +5038,7 @@ function rather than a selector. For each element, if the function
 returns true (or a \"truthy\" value), the element will be included in the
 filtered set; otherwise, it will be excluded. Suppose we have a
 somewhat more involved HTML snippet:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li><strong>list</strong> item 1 -
     one strong tag</li>
@@ -5045,7 +5052,7 @@ somewhat more involved HTML snippet:
 ") (text . "") (text . "We can select the list items, then filter them based on their contents:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('li').filter(function(index) {
   return $('strong', this).length == 1;
 }).css('background-color', 'red');
@@ -5056,7 +5063,7 @@ index of that DOM element within the set matched by the jQuery object.
 ") (text . "") (text . "We can also take advantage of the index passed through the function,
 which indicates the 0-based position of the element within the
 unfiltered set of matched elements:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('li').filter(function(index) {
   return index % 3 == 2;
 }).css('background-color', 'red');
@@ -5132,7 +5139,7 @@ will be filtered by testing whether they match this selector.
 ") (text . "") (text . "Consider a page with a basic nested list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\">II
@@ -5153,7 +5160,7 @@ will be filtered by testing whether they match this selector.
 ") (text . "") (text . "If we begin at item II, we can find list items within it:
 
 
-") (text . "") (js code nil "$('li.item-ii').find('li').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background on items A, B, 1, 2, 3, and
+") (text . "") (js . "$('li.item-ii').find('li').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background on items A, B, 1, 2, 3, and
 C. Even though item II matches the selector expression, it is not
 included in the results; only descendants are considered candidates for
 the match.
@@ -5167,16 +5174,16 @@ $(`li.item-ii`).find(`li`) is equivalent to $(`li`, `li.item-ii`).
 ") (text . "") (text . "As of jQuery 1.6, we can also filter the selection with a given jQuery
 collection or element. With the same nested list as above, if we start
 with:
-") (text . "") (js code nil "var $allListElements = $('li');") (text . "") (text . "And then pass this jQuery object to find:
+") (text . "") (js . "var $allListElements = $('li');") (text . "") (text . "And then pass this jQuery object to find:
 
 
-") (text . "") (js code nil "$('li.item-ii').find( $allListElements );") (text . "") (text . "This will return a jQuery collection which contains only the list
+") (text . "") (js . "$('li.item-ii').find( $allListElements );") (text . "") (text . "This will return a jQuery collection which contains only the list
 elements that are descendants of item II.
 
 ") (text . "") (text . "Similarly, an element may also be passed to find:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var item1 = $('li.item-1')[0];
 $('li.item-ii').find( item1 ).css('background-color', 'red');
 ") (text . "") (text . "The result of this call would be a red background on item 1.
@@ -5236,7 +5243,7 @@ in that set.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -5247,7 +5254,7 @@ in that set.
 ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "$('li').first().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the first item.
+") (text . "") (js . "$('li').first().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the first item.
 
 
 ")) ("examples" ((text . "") (text . "Highlight the first span in a paragraph.
@@ -5286,7 +5293,7 @@ event on an element.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <input id=\"target\" type=\"text\" value=\"Field 1\" />
   <input type=\"text\" value=\"Field 2\" />
 </form>
@@ -5296,7 +5303,7 @@ event on an element.
 ") (text . "") (text . "The event handler can be bound to the first input field:
 
 
-") (text . "") (js code nil "$('#target').focus(function() {
+") (text . "") (js . "$('#target').focus(function() {
   alert('Handler for .focus() called.');
 });") (text . "") (text . "Now clicking on the first field, or tabbing to it from another field,
 displays the alert:
@@ -5307,7 +5314,7 @@ displays the alert:
 ") (text . "") (text . "We can trigger the event when another element is clicked:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').focus();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -5424,7 +5431,7 @@ $(\"p\").focusout(function() {
 ")) ("longdesc" (text . "") (text . "The .get() method grants us access to the DOM nodes underlying each
 jQuery object. Suppose we had a simple unordered list on the page:
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
@@ -5432,7 +5439,7 @@ jQuery object. Suppose we had a simple unordered list on the page:
     ") (text . "") (text . "Without a parameter, .get() returns all of the elements:
 
 
-") (text . "") (js code nil "alert($('li').get());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
+") (text . "") (js . "alert($('li').get());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
 standard array:
 
 ") (text . "") (text . "[<li id=\"foo\">, <li id=\"bar\">]
@@ -5441,7 +5448,7 @@ standard array:
 ") (text . "") (text . "With an index specified, .get() will retrieve a single element:
 
 
-") (text . "") (js code nil "($('li').get(0));") (text . "") (text . "Since the index is zero-based, the first list item is returned:
+") (text . "") (js . "($('li').get(0));") (text . "") (text . "Since the index is zero-based, the first list item is returned:
 
 
 ") (text . "") (text . "<li id=\"foo\">
@@ -5450,10 +5457,10 @@ standard array:
 ") (text . "") (text . "Each jQuery object also masquerades as an array, so we can use the
 array dereferencing operator to get at the list item instead:
 
-") (text . "") (js code nil "alert($('li')[0]);") (text . "") (text . "However, this syntax lacks some of the additional capabilities of
+") (text . "") (js . "alert($('li')[0]);") (text . "") (text . "However, this syntax lacks some of the additional capabilities of
 .get(), such as specifying a negative index:
 
-") (text . "") (js code nil "alert($('li').get(-1));") (text . "") (text . "A negative index is counted from the end of the matched set, so this
+") (text . "") (js . "alert($('li').get(-1));") (text . "") (text . "A negative index is counted from the end of the matched set, so this
 example will return the last item in the list:
 
 ") (text . "") (text . "<li id=\"bar\">
@@ -5510,7 +5517,7 @@ any of its descendant elements matches the selector.
 ") (text . "") (text . "Consider a page with a nested list as follows:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
  <ul>
   <li>list item 1</li>
   <li>list item 2
@@ -5525,7 +5532,7 @@ any of its descendant elements matches the selector.
 ") (text . "") (text . "We can apply this method to the set of list items as follows:
 
 
-") (text . "") (js code nil "$('li').has('ul').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for item 2, as it is the
+") (text . "") (js . "$('li').has('ul').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for item 2, as it is the
 only <li> that has a <ul> among its descendants.
 
 ") (text . "")) ("examples" ((text . "") (text . "Check if an element is inside another.
@@ -5549,16 +5556,16 @@ class.
 ")) ("longdesc" (text . "") (text . "Elements may have more than one class assigned to them. In HTML, this
 is represented by separating the class names with a space:
 
-") (text . "") (js code nil "<div id=\"mydiv\" class=\"foo bar\"></div>") (text . "") (text . "The .hasClass() method will return true if the class is assigned to an
+") (text . "") (html . "<div id=\"mydiv\" class=\"foo bar\"></div>") (text . "") (text . "The .hasClass() method will return true if the class is assigned to an
 element, even if other classes also are. For example, given the HTML
 above, the following will return true:
-") (text . "") (js code nil "$('#mydiv').hasClass('foo')") (text . "") (text . "As would:
+") (text . "") (js . "$('#mydiv').hasClass('foo')") (text . "") (text . "As would:
 
 
-") (text . "") (js code nil "$('#mydiv').hasClass('bar')") (text . "") (text . "While this would return false:
+") (text . "") (js . "$('#mydiv').hasClass('bar')") (text . "") (text . "While this would return false:
 
 
-") (text . "") (js code nil "$('#mydiv').hasClass('quux')") (text . "")) ("examples" ((text . "") (text . "Looks for the paragraph that contains `selected` as a class.
+") (text . "") (js . "$('#mydiv').hasClass('quux')") (text . "")) ("examples" ((text . "") (text . "Looks for the paragraph that contains `selected` as a class.
 
 ") (text . "") (js . "
 $(\"div#result1\").append($(\"p:first\").hasClass(\"selected\").toString());
@@ -5591,7 +5598,7 @@ mathematical calculation.
 ") (text . "") (text . "This method is also able to find the height of the window and document.
 
 
-") (text . "") (js code nil "$(window).height();   // returns height of browser viewport
+") (text . "") (js . "$(window).height();   // returns height of browser viewport
 $(document).height(); // returns height of HTML document") (text . "") (text . "Note that .height() will always return the content height, regardless
 of the value of the CSS box-sizing property.
 
@@ -5686,7 +5693,7 @@ of the value of the CSS box-sizing property.
 ")) ("longdesc" (text . "") (text . "With no parameters, the .hide() method is the simplest way to hide an
 element:
 
-") (text . "") (js code nil "$('.target').hide();
+") (text . "") (js . "$('.target').hide();
     ") (text . "") (text . "The matched elements will be hidden immediately, with no animation.
 This is roughly equivalent to calling .css(`display`, `none`), except
 that the value of the display property is saved in jQuery`s data cache
@@ -5721,7 +5728,7 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
@@ -5809,7 +5816,7 @@ the time the mouse is within the element.
 ") (text . "") (text . "Calling $(selector).hover(handlerIn, handlerOut) is shorthand for:
 
 
-") (text . "") (js code nil "$(selector).mouseenter(handlerIn).mouseleave(handlerOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
+") (text . "") (js . "$(selector).mouseenter(handlerIn).mouseleave(handlerOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
 details.
 
 ") (text . "")) ("examples" ((text . "") (text . "To add a special style to list items that are being hovered over, try:
@@ -5866,7 +5873,7 @@ differently within the handler depending on the event.type.
 ") (text . "") (text . "Calling $(selector).hover(handlerInOut) is shorthand for:
 
 
-") (text . "") (js code nil "$(selector).on(\"mouseenter mouseleave\", handlerInOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
+") (text . "") (js . "$(selector).on(\"mouseenter mouseleave\", handlerInOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
 details.
 
 ") (text . "")) ("examples" ((text . "") (text . "Slide the next sibling LI up or down on hover, and toggle a class.
@@ -5909,15 +5916,15 @@ elements.
 element. If the selector expression matches more than one element, only
 the first match will have its HTML content returned. Consider this
 code:
-") (text . "") (js code nil "$('div.demo-container').html();") (text . "") (text . "In order for the following <div>`s content to be retrieved, it would
+") (text . "") (js . "$('div.demo-container').html();") (text . "") (text . "In order for the following <div>`s content to be retrieved, it would
 have to be the first one with class=\"demo-container\" in the document:
 
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (html . "<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
   </div>") (text . "") (text . "The result would look like this:
 
 
-") (text . "") (js code nil "<div class=\"demo-box\">Demonstration Box</div>") (text . "") (text . "This method uses the browser`s innerHTML property. Some browsers may
+") (text . "") (html . "<div class=\"demo-box\">Demonstration Box</div>") (text . "") (text . "This method uses the browser`s innerHTML property. Some browsers may
 not return HTML that exactly replicates the HTML source in an original
 document. For example, Internet Explorer sometimes leaves off the
 quotes around attribute values if they contain only alphanumeric
@@ -5966,21 +5973,21 @@ new content.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (html . "<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
 </div>") (text . "") (text . "The content of <div class=\"demo-container\"> can be set like this:
 
 
-") (text . "") (js code nil "$('div.demo-container')
+") (text . "") (js . "$('div.demo-container')
   .html('<p>All new content. <em>You bet!</em></p>');") (text . "") (text . "That line of code will replace everything inside <div
 class=\"demo-container\">:
 
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (html . "<div class=\"demo-container\">
   <p>All new content. <em>You bet!</em></p>
 </div>") (text . "") (text . "As of jQuery 1.4, the .html() method allows the HTML content to be set
 by passing in a function.
 
-") (text . "") (js code nil "$('div.demo-container').html(function() {
+") (text . "") (js . "$('div.demo-container').html(function() {
   var emph = '<em>' + $('p').length + ' paragraphs!</em>';
   return '<p>All new content for ' + emph + '</p>';
 });") (text . "") (text . "Given a document with six paragraphs, this example will set the HTML of
@@ -6047,7 +6054,7 @@ is not found, .index() will return -1.
 ") (text . "") (text . "The complementary operation to .get(), which accepts an index and
 returns a DOM node, .index() can take a DOM node and returns an index.
 Suppose we have a simple unordered list on the page:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
@@ -6056,7 +6063,7 @@ Suppose we have a simple unordered list on the page:
 ") (text . "") (text . "If we retrieve one of the three list items (for example, through a DOM
 function or as the context to an event handler), .index() can search
 for this list item within the set of matched elements:
-") (text . "") (js code nil "
+") (text . "") (js . "
 var listItem = document.getElementById('bar');
 alert('Index: ' + $('li').index(listItem));
 We get back the zero-based position of the list item:
@@ -6066,7 +6073,7 @@ We get back the zero-based position of the list item:
 ") (text . "") (text . "Similarly, if we retrieve a jQuery object consisting of one of the
 three list items, .index() will search for that list item:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var listItem = $('#bar');
 alert('Index: ' + $('li').index(listItem));
 ") (text . "") (text . "We get back the zero-based position of the list item:
@@ -6078,7 +6085,7 @@ alert('Index: ' + $('li').index(listItem));
 ") (text . "") (text . "Note that if the jQuery collection used as the .index() method`s
 argument contains more than one element, the first element within the
 matched set of elements will be used.
-") (text . "") (js code nil "
+") (text . "") (js . "
 var listItems = $('li:gt(0)');
 alert('Index: ' + $('li').index(listItems));
 ") (text . "") (text . "We get back the zero-based position of the first list item within the
@@ -6090,7 +6097,7 @@ matched set:
 ") (text . "") (text . "If we use a string as the .index() method`s argument, it is interpreted
 as a jQuery selector string. The first element among the object`s
 matched elements which also matches this selector is located.
-") (text . "") (js code nil "
+") (text . "") (js . "
 var listItem = $('#bar');
 alert('Index: ' + listItem.index('li'));
 ") (text . "") (text . "We get back the zero-based position of the list item:
@@ -6102,7 +6109,7 @@ alert('Index: ' + listItem.index('li'));
 ") (text . "") (text . "If we omit the argument, .index() will return the position of the first
 element within the set of matched elements in relation to its siblings:
 
-") (text . "") (js code nil "alert('Index: ' + $('#bar').index());") (text . "") (text . "Again, we get back the zero-based position of the list item:
+") (text . "") (js . "alert('Index: ' + $('#bar').index());") (text . "") (text . "Again, we get back the zero-based position of the list item:
 
 
 ") (text . "") (text . "Index: 1
@@ -6221,17 +6228,17 @@ is inserted after the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "We can create content and insert it after several elements at once:
 
 
-") (text . "") (js code nil "$('<p>Test</p>').insertAfter('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "$('<p>Test</p>').insertAfter('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <p>Test</p>
@@ -6240,10 +6247,10 @@ is inserted after the target container.
 </div>") (text . "") (text . "We can also select an element on the page and insert it after another:
 
 
-") (text . "") (js code nil "$('h2').insertAfter($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "$('h2').insertAfter($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved after the target (not cloned):
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
@@ -6274,17 +6281,17 @@ is inserted before the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "We can create content and insert it before several elements at once:
 
 
-") (text . "") (js code nil "$('<p>Test</p>').insertBefore('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "$('<p>Test</p>').insertBefore('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <p>Test</p>
   <div class=\"inner\">Hello</div>
@@ -6293,10 +6300,10 @@ is inserted before the target container.
 </div>") (text . "") (text . "We can also select an element on the page and insert it before another:
 
 
-") (text . "") (js code nil "$('h2').insertBefore($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "$('h2').insertBefore($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved before the target (not cloned):
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
@@ -6332,7 +6339,7 @@ event handlers.
 ") (text . "") (text . "Suppose you have a list, with two of its items containing a child
 element:
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list <strong>item 1</strong></li>
   <li><span>list item 2</span></li>
@@ -6341,7 +6348,7 @@ element:
 ") (text . "") (text . "You can attach a click handler to the <ul> element, and then limit the
 code to be triggered only when a list item itself, not one of its
 children, is clicked:
-") (text . "") (js code nil "$(\"ul\").click(function(event) {
+") (text . "") (js . "$(\"ul\").click(function(event) {
   var $target = $(event.target);
   if ( $target.is(\"li\") ) {
     $target.css(\"background-color\", \"red\");
@@ -6375,7 +6382,7 @@ the W3C selectors whenever feasible.
 elements based on a function rather than a selector. For each element,
 if the function returns true, .is() returns true as well. For example,
 given a somewhat more involved HTML snippet:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li><strong>list</strong> item 1 - one strong tag</li>
   <li><strong>list</strong> item <strong>2</strong> -
@@ -6387,7 +6394,7 @@ given a somewhat more involved HTML snippet:
 ") (text . "") (text . "You can attach a click handler to every <li> that evaluates the number
 of <strong> elements within the clicked <li> at that time like so:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(\"li\").click(function() {
   var $li = $(this),
     isWithTwo = $li.is(function() {
@@ -6504,7 +6511,7 @@ callbacks.remove() , callbacks.fire() and callbacks.disable() .
 ") (text . "") (text . "The following are two sample methods named fn1 and fn2:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 function fn1( value ) {
     console.log( value );
 }
@@ -6516,7 +6523,7 @@ function fn2( value ) {
 ") (text . "") (text . "These can be added as callbacks to a $.Callbacks list and invoked as
 follows:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var callbacks = $.Callbacks();
 callbacks.add( fn1 );
 
@@ -6537,7 +6544,7 @@ pass arguments to be processed by the callbacks in the same list.
 ") (text . "") (text . "Another method supported by $.Callbacks is .remove(), which has the
 ability to remove a particular callback from the callback list. Here\"s
 a practical example of .remove() being used:
-") (text . "") (js code nil "
+") (text . "") (js . "
 var callbacks = $.Callbacks();
 callbacks.add( fn1 );
 
@@ -6579,7 +6586,7 @@ be \"fired\" multiple times.
 ") (text . "") (text . "$.Callbacks( \"once\" ):
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var callbacks = $.Callbacks( \"once\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
@@ -6595,7 +6602,7 @@ foo
 ") (text . "") (text . "$.Callbacks( \"memory\" ):
 
 
-") (text . "") (js code nil "var callbacks = $.Callbacks( \"memory\" );
+") (text . "") (js . "var callbacks = $.Callbacks( \"memory\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
 callbacks.add( fn2 );
@@ -6614,7 +6621,7 @@ foobar
 ") (text . "") (text . "$.Callbacks( \"unique\" ):
 
 
-") (text . "") (js code nil "var callbacks = $.Callbacks( \"unique\" );
+") (text . "") (js . "var callbacks = $.Callbacks( \"unique\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
 callbacks.add( fn1 ); // repeat addition
@@ -6633,7 +6640,7 @@ foobar
 ") (text . "") (text . "$.Callbacks( \"stopOnFalse\" ):
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 function fn1( value ){
     console.log( value );
     return false;
@@ -6667,7 +6674,7 @@ $.Callbacks(\"unique memory\")).
 ") (text . "") (text . "$.Callbacks( `unique memory` ):
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 function fn1( value ) {
     console.log( value );
     return false;
@@ -6705,7 +6712,7 @@ $.Callbacks(`memory once`).
 ") (text . "") (text . "The methods of $.Callbacks can also be detached, should there be a need
 to define short-hand versions for convenience:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var callbacks = $.Callbacks(),
     add = callbacks.add,
     remove = callbacks.remove,
@@ -6728,7 +6735,7 @@ subject). Publishers notify subscribers when events occur.
 it`s possible to implement a Pub/Sub system using only callback lists.
 Using $.Callbacks as a topics queue, a system for publishing and
 subscribing to topics can be implemented as follows:
-") (text . "") (js code nil "var topics = {};
+") (text . "") (js . "var topics = {};
 
 jQuery.Topic = function( id ) {
     var callbacks,
@@ -6751,7 +6758,7 @@ jQuery.Topic = function( id ) {
 ") (text . "") (text . "This can then be used by parts of your application to publish and
 subscribe to events of interest quite easily:
 
-") (text . "") (js code nil "// Subscribers
+") (text . "") (js . "// Subscribers
 $.Topic( \"mailArrived\" ).subscribe( fn1 );
 $.Topic( \"mailArrived\" ).subscribe( fn2 );
 $.Topic( \"mailSent\" ).subscribe( fn1 );
@@ -6776,7 +6783,7 @@ $.Deferreds, it`s possible to ensure publishers only publish
 notifications for subscribers once particular tasks have been completed
 (resolved). See the below code sample for some further comments on how
 this could be used in practice:
-") (text . "") (js code nil "// subscribe to the mailArrived notification
+") (text . "") (js . "// subscribe to the mailArrived notification
 $.Topic( \"mailArrived\" ).subscribe( fn1 );
 
 // create a new instance of Deferreds
@@ -6818,7 +6825,7 @@ $.ajax() can be used more flexibly.
 ") (text . "") (text . "At its simplest, the $.ajax() function can be called with no arguments:
 
 
-") (text . "") (js code nil "$.ajax();") (text . "") (text . "Note: Default settings can be set globally by using the $.ajaxSetup()
+") (text . "") (js . "$.ajax();") (text . "") (text . "Note: Default settings can be set globally by using the $.ajaxSetup()
 function.
 
 ") (text . "") (text . "This example, using no options, loads the contents of the current page,
@@ -6839,7 +6846,7 @@ overrideMimeType() method (it was available in jQuery 1.4.x, as well,
 but was temporarily removed in jQuery 1.5). The .overrideMimeType()
 method may be used in the beforeSend() callback function, for example,
 to modify the response content-type header:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajax({
   url: \"http://fiddle.jshell.net/favicon.png\",
   beforeSend: function ( xhr ) {
@@ -6885,7 +6892,7 @@ object include:
   jqXHR.complete() callbacks are deprecated as of jQuery 1.8. To
   prepare your code for their eventual removal, use jqXHR.done(),
   jqXHR.fail(), and jqXHR.always() instead.
-") (text . "") (js code nil "// Assign handlers immediately after making the request,
+") (text . "") (js . "// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
 var jqxhr = $.ajax( \"example.php\" )
     .done(function() { alert(\"success\"); })
@@ -7051,7 +7058,7 @@ in Firefox with jQuery is not supported.
 ") (text . "") (text . "A workaround to this is possible by overriding jQuery.ajaxSettings.xhr
 as follows:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 var _super = jQuery.ajaxSettings.xhr;
 jQuery.ajaxSettings.xhr = function () {
   var xhr = _super(),
@@ -7088,7 +7095,7 @@ deal of flexibility.
 however, you want to map a custom data type to a known type (e.g json),
 you must add a correspondance between the response Content-Type and the
 actual data type using the contents option:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxSetup({
   contents: {
     mycustomtype: /mycustomtype/
@@ -7106,7 +7113,7 @@ regular expression).
 ") (text . "") (text . "To convert from a supported type (e.g text, json) to a custom data type
 and back again, use another pass-through converter:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxSetup({
   contents: {
     mycustomtype: /mycustomtype/
@@ -7184,7 +7191,7 @@ request is sent and before they are processed by $.ajax().
 ")) ("longdesc" (text . "") (text . "A typical prefilter registration using $.ajaxPrefilter() looks like
 this:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
   // Modify options, control originalOptions, store jqXHR, etc
 });
@@ -7199,7 +7206,7 @@ $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
 Given the following code, for example, a call to $.ajax() would
 automatically abort a request to the same URL if the custom
 abortOnRetry option is set to true:
-") (text . "") (js code nil "
+") (text . "") (js . "
 var currentRequests = {};
 
 $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
@@ -7213,7 +7220,7 @@ $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
 ") (text . "") (text . "Prefilters can also be used to modify existing options. For example,
 the following proxies cross-domain requests through
 http://mydomain.net/proxy/:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxPrefilter( function( options ) {
   if ( options.crossDomain ) {
     options.url = \"http://mydomain.net/proxy/\" + encodeURIComponent( options.url );
@@ -7224,7 +7231,7 @@ $.ajaxPrefilter( function( options ) {
 only be applied to requests with the indicated dataTypes. For example,
 the following only applies the given prefilter to JSON and script
 requests:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxPrefilter( \"json script\", function( options, originalOptions, jqXHR ) {
   // Modify options, control originalOptions, store jqXHR, etc
 });
@@ -7232,7 +7239,7 @@ $.ajaxPrefilter( \"json script\", function( options, originalOptions, jqXHR ) {
 dataType by returning that dataType. For example, the following sets a
 request as \"script\" if the URL has some specific properties defined in
 a custom isActuallyScript() function:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxPrefilter(function( options ) {
   if ( isActuallyScript( options.url ) ) {
     return \"script\";
@@ -7259,12 +7266,12 @@ $.ajaxSetup().
 ") (text . "") (text . "For example, the following sets a default for the url parameter before
 pinging the server repeatedly:
 
-") (text . "") (js code nil "$.ajaxSetup({
+") (text . "") (js . "$.ajaxSetup({
   url: 'ping.php'
 });") (text . "") (text . "Now each time an Ajax request is made, the \"ping.php\" URL will be used
 automatically:
 
-") (text . "") (js code nil "$.ajax({
+") (text . "") (js . "$.ajax({
   // url not set here; uses ping.php
   data: {'name': 'Dan'}
 });") (text . "") (text . "  Note: Global callback functions should be set with their respective
@@ -7301,7 +7308,7 @@ a function that returns a transport instead.
 ") (text . "") (text . "Transports factories are registered using $.ajaxTransport(). A typical
 registration looks like this:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxTransport( function( options, originalOptions, jqXHR ) {
   if( /* transportCanHandleRequest */ ) {
     return {
@@ -7328,7 +7335,7 @@ $.ajaxTransport( function( options, originalOptions, jqXHR ) {
 ") (text . "") (text . "completeCallback has the following signature:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 function( status, statusText, responses, headers ) {}
 ") (text . "") (text . "where:
 
@@ -7347,14 +7354,14 @@ function( status, statusText, responses, headers ) {}
 ") (text . "") (text . "Just like prefilters, a transport`s factory function can be attached to
 a specific dataType:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxTransport( \"script\", function( options, originalOptions, jqXHR ) {
     /* Will only be called for script requests */
 });
 ") (text . "") (text . "The following example shows how a minimal image transport could be
 implemented:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxTransport( \"image\", function( s ) {
 
   if ( s.type === \"GET\" && s.async ) {
@@ -7406,7 +7413,7 @@ data type conversion strategies used by $.ajax().
 ") (text . "") (text . " The unminified jQuery source itself includes a list of default
 converters, which effectively illustrates how they can be used:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 // List of data converters
 // 1) key format is \"source_type destination_type\"
 //    (a single space in-between)
@@ -7431,7 +7438,7 @@ overwriting those you specify and leaving the others intact.
 ") (text . "") (text . "For example, the jQuery source uses $.ajaxSetup() to add a converter
 for \"text script\":
 
-") (text . "") (js code nil "jQuery.ajaxSetup({
+") (text . "") (js . "jQuery.ajaxSetup({
   accepts: {
     script: \"text/javascript, application/javascript\"
   },
@@ -7486,7 +7493,7 @@ free from memory leaks. jQuery ensures that the data is removed when
 DOM elements are removed via jQuery methods, and when the user leaves
 the page. We can set several distinct values for a single element and
 retrieve them later:
-") (text . "") (js code nil "
+") (text . "") (js . "
 jQuery.data(document.body, 'foo', 52);
 jQuery.data(document.body, 'bar', 'test');
 ") (text . "") (text . "Note: this method currently does not provide cross-platform support for
@@ -7528,7 +7535,7 @@ method has already retrieved them.
 elements in a way that is safe from circular references and therefore
 from memory leaks. We can retrieve several distinct values for a single
 element one at a time, or as a set:
-") (text . "") (js code nil "alert(jQuery.data( document.body, 'foo' ));
+") (text . "") (js . "alert(jQuery.data( document.body, 'foo' ));
 alert(jQuery.data( document.body ));") (text . "") (text . "The above lines alert the data values that were set on the body
 element. If nothing was set on that element, an empty string is
 returned.
@@ -7633,7 +7640,7 @@ also be accessed through the this keyword, but Javascript will always
 wrap the this value as an Object even if it is a simple string or
 number value.) The method returns its first argument, the object that
 was iterated.
-") (text . "") (js code nil "$.each([52, 97], function(index, value) {
+") (text . "") (js . "$.each([52, 97], function(index, value) {
   alert(index + ': ' + value);
 });
 ") (text . "") (text . "This produces two messages:
@@ -7645,7 +7652,7 @@ was iterated.
 ") (text . "") (text . "If an object is used as the collection, the callback is passed a
 key-value pair each time:
 
-") (text . "") (js code nil "var obj = {
+") (text . "") (js . "var obj = {
   \"flammable\": \"inflammable\",
   \"duh\": \"no duh\"
 };
@@ -7741,7 +7748,7 @@ new methods to JQuery.
 and will also be returned from $.extend(). If, however, you want to
 preserve both of the original objects, you can do so by passing an
 empty object as the target:
-") (text . "") (js code nil "var object = $.extend({}, object1, object2);") (text . "") (text . "The merge performed by $.extend() is not recursive by default; if a
+") (text . "") (js . "var object = $.extend({}, object1, object2);") (text . "") (text . "The merge performed by $.extend() is not recursive by default; if a
 property of the first object is itself an object or array, it will be
 completely overwritten by a property with the same key in the second
 object. The values are not merged. This can be seen in the example
@@ -7864,7 +7871,7 @@ $(\"#log\").append( \"<div><b>settings -- </b>\" + printObj(settings) + \"</div>
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js code nil "$.ajax({
+") (text . "") (js . "$.ajax({
   url: url,
   data: data,
   success: success,
@@ -7882,7 +7889,7 @@ success callback are undefined.
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js code nil "$.get('ajax/test.html', function(data) {
+") (text . "") (js . "$.get('ajax/test.html', function(data) {
   $('.result').html(data);
   alert('Load was performed.');
 });
@@ -7906,7 +7913,7 @@ $.get(), to chain multiple .done(), .fail(), and .always() callbacks on
 a single request, and even to assign these callbacks after the request
 may have completed. If the request is already complete, the callback is
 fired immediately.
-") (text . "") (js code nil "// Assign handlers immediately after making the request,
+") (text . "") (js . "// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
 var jqxhr = $.get(\"example.php\", function() {
   alert(\"success\");
@@ -7967,7 +7974,7 @@ add it to the page.
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js code nil "$.ajax({
+") (text . "") (js . "$.ajax({
   dataType: \"json\",
   url: url,
   data: data,
@@ -7979,7 +7986,7 @@ converted to a string and url-encoded before it is appended to the URL.
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js code nil "$.getJSON('ajax/test.json', function(data) {
+") (text . "") (js . "$.getJSON('ajax/test.json', function(data) {
   var items = [];
 
   $.each(data, function(key, val) {
@@ -7994,7 +8001,7 @@ converted to a string and url-encoded before it is appended to the URL.
 ") (text . "") (text . "This example, of course, relies on the structure of the JSON file:
 
 
-") (text . "") (js code nil "{
+") (text . "") (js . "{
   \"one\": \"Singular sensation\",
   \"two\": \"Beady little eyes\",
   \"three\": \"Little birds pitch by my doorstep\"
@@ -8042,7 +8049,7 @@ including $.getJSON(), to chain multiple .success(), .complete(), and
 .error() callbacks on a single request, and even to assign these
 callbacks after the request may have completed. If the request is
 already complete, the callback is fired immediately.
-") (text . "") (js code nil "// Assign handlers immediately after making the request,
+") (text . "") (js . "// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
 var jqxhr = $.getJSON(\"example.json\", function() {
   alert(\"success\");
@@ -8094,7 +8101,7 @@ execute it.
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js code nil "$.ajax({
+") (text . "") (js . "$.ajax({
   url: url,
   dataType: \"script\",
   success: success
@@ -8108,10 +8115,10 @@ impact on the current page.
 ") (text . "") (text . "The callback is fired once the script has been loaded but not
 necessarily executed.
 
-") (text . "") (js code nil "$(\".result\").html(\"<p>Lorem ipsum dolor sit amet.</p>\");") (text . "") (text . "Scripts are included and run by referencing the file name:
+") (text . "") (js . "$(\".result\").html(\"<p>Lorem ipsum dolor sit amet.</p>\");") (text . "") (text . "Scripts are included and run by referencing the file name:
 
 
-") (text . "") (js code nil "$.getScript(\"ajax/test.js\", function(data, textStatus, jqxhr) {
+") (text . "") (js . "$.getScript(\"ajax/test.js\", function(data, textStatus, jqxhr) {
    console.log(data); //data returned
    console.log(textStatus); //success
    console.log(jqxhr.status); //200
@@ -8122,7 +8129,7 @@ necessarily executed.
 ") (text . "") (text . "As of jQuery 1.5, you may use .fail() to account for errors:
 
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.getScript(\"ajax/test.js\")
 .done(function(script, textStatus) {
   console.log( textStatus );
@@ -8133,7 +8140,7 @@ $.getScript(\"ajax/test.js\")
 ") (text . "") (text . "Prior to jQuery 1.5, the global .ajaxError() callback event had to be
 used in order to handle $.getScript() errors:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $( \"div.log\" ).ajaxError(function(e, jqxhr, settings, exception) {
   if (settings.dataType=='script') {
     $(this).text( \"Triggered ajaxError handler.\" );
@@ -8147,7 +8154,7 @@ a timestamped query parameter to the request URL to ensure that the
 browser downloads the script each time it is requested. You can
 override this feature by setting the cache property globally using
 $.ajaxSetup() :
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.ajaxSetup({
   cache: true
 });
@@ -8503,7 +8510,7 @@ inconsistently across browsers in certain instances.
 ") (text . "") (text . "An example of this is a test against document.location using
 $.isPlainObject() as follows:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
   console.log($.isPlainObject(document.location));
 ") (text . "") (text . "which throws an invalid pointer exception in IE8. With this in mind,
 it`s important to be aware of any of the gotchas involved in using
@@ -8606,7 +8613,17 @@ traverses objects.
 passed to $.map(). The jQuery library provides $.makeArray() for such
 conversions.
 ") (text . "") (js . "
-      ") (text . "") (text . "The translation function that is provided to this method is called for
+// The following object masquerades as an array.
+var fakeArray = {\"length\": 1, 0: \"Addy\", 1: \"Subtracty\"};
+
+// Therefore, convert it to a real array
+var realArray = $.makeArray( fakeArray )
+
+// Now it can be used reliably with $.map()
+$.map( realArray, function(val, i) {
+  // do something
+});
+") (text . "") (text . "The translation function that is provided to this method is called for
 each top-level element in the array or object and is passed two
 arguments: The element`s value and its index or key within the array or
 object.
@@ -8715,7 +8732,7 @@ second.
 ") (text . "") (text . "If you need the original first array, make a copy of it before calling
 $.merge(). Fortunately, $.merge() itself can be used for this
 duplication:
-") (text . "") (js code nil "var newArray = $.merge([], oldArray);") (text . "") (text . "This shortcut creates a new, empty array and merges the contents of
+") (text . "") (js . "var newArray = $.merge([], oldArray);") (text . "") (text . "This shortcut creates a new, empty array and merges the contents of
 oldArray into it, effectively cloning the array.
 
 ") (text . "") (text . "Prior to jQuery 1.4, the arguments should be true Javascript Array
@@ -8755,7 +8772,7 @@ saved during jQuery initialization; noConflict() simply restores them.
 recommended), calling $.noConflict(true) from the second version will
 return the globally scoped jQuery variables to those of the first
 version.
-") (text . "") (js code nil "
+") (text . "") (html . "
 <script type=\"text/javascript\" src=\"other_lib.js\"></script>
 <script type=\"text/javascript\" src=\"jquery.js\"></script>
 <script type=\"text/javascript\">
@@ -8765,7 +8782,7 @@ version.
 ") (text . "") (text . "This technique is especially effective in conjunction with the .ready()
 method`s ability to alias the jQuery object, as within callback passed
 to .ready() you can use $ if you wish without fear of conflicts later:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <script type=\"text/javascript\" src=\"other_lib.js\"></script>
 <script type=\"text/javascript\" src=\"jquery.js\"></script>
 <script type=\"text/javascript\">
@@ -8881,7 +8898,7 @@ globally by setting jQuery.ajaxSettings.traditional = true;.
 ") (text . "") (text . "If the object passed is in an Array, it must be an array of objects in
 the format returned by .serializeArray()
 
-") (text . "") (js code nil "[{name:\"first\",value:\"Rick\"},
+") (text . "") (js . "[{name:\"first\",value:\"Rick\"},
 {name:\"last\",value:\"Astley\"},
 {name:\"job\",value:\"Rock Star\"}]") (text . "") (text . "  Note: Because some frameworks have limited ability to parse
   serialized arrays, developers should exercise caution when passing
@@ -8898,7 +8915,7 @@ the format returned by .serializeArray()
 ") (text . "") (text . "We can display a query string representation of an object and a
 URI-decoded version of the same as follows:
 
-") (text . "") (js code nil "var myObject = {
+") (text . "") (js . "var myObject = {
   a: {
     one: 1,
     two: 2,
@@ -8920,7 +8937,7 @@ a[one]=1&a[two]=2&a[three]=3&b[]=1&b[]=2&b[]=3
 ") (text . "") (text . "To emulate the behavior of $.param() prior to jQuery 1.4, we can set
 the traditional argument to true:
 
-") (text . "") (js code nil "var myObject = {
+") (text . "") (js . "var myObject = {
   a: {
     one: 1,
     two: 2,
@@ -9031,7 +9048,7 @@ $( \"#anotherElement\" ).append( $title.text() );
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js code nil "$.ajax({
+") (text . "") (js . "$.ajax({
   type: \"POST\",
   url: url,
   data: data,
@@ -9047,7 +9064,7 @@ object).
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js code nil "$.post('ajax/test.html', function(data) {
+") (text . "") (js . "$.post('ajax/test.html', function(data) {
   $('.result').html(data);
 });
 ") (text . "") (text . "This example fetches the requested HTML snippet and inserts it on the
@@ -9073,7 +9090,7 @@ $.get(), to chain multiple .done(), .fail(), and .always() callbacks on
 a single request, and even to assign these callbacks after the request
 may have completed. If the request is already complete, the callback is
 fired immediately.
-") (text . "") (js code nil "// Assign handlers immediately after making the request,
+") (text . "") (js . "// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
 var jqxhr = $.post(\"example.php\", function() {
   alert(\"success\");
@@ -9674,7 +9691,7 @@ as deferred.then . When the Deferred is resolved or rejected, usually
 by the code that created the Deferred originally, the appropriate
 callbacks will be called. For example, the jqXHR object returned by
 jQuery.ajax() is a Promise and can be used this way:
-") (text . "") (js code nil "$.when( $.ajax(\"test.aspx\") ).then(function(data, textStatus, jqXHR){
+") (text . "") (js . "$.when( $.ajax(\"test.aspx\") ).then(function(data, textStatus, jqXHR){
      alert( jqXHR.status ); // alerts 200
 });") (text . "") (text . "If a single argument is passed to jQuery.when and it is not a Deferred
 or a Promise, it will be treated as a resolved Deferred and any
@@ -9682,7 +9699,7 @@ doneCallbacks attached will be executed immediately. The doneCallbacks
 are passed the original argument. In this case any failCallbacks you
 might set are never called since the Deferred is never rejected. For
 example:
-") (text . "") (js code nil "$.when( { testing: 123 } ).done(
+") (text . "") (js . "$.when( { testing: 123 } ).done(
     function(x) { alert(x.testing); } /* alerts \"123\" */
     );") (text . "") (text . "In the case where multiple Deferred objects are passed to jQuery.when,
 the method returns the Promise from a new \"master\" Deferred object that
@@ -9740,7 +9757,7 @@ a set of elements.
 written as $() -- searches through the DOM for any elements that match
 the provided selector and creates a new jQuery object that references
 these elements:
-") (text . "") (js code nil "$( \"div.foo\" );") (text . "") (text . "If no elements match the provided selector, the new jQuery object is
+") (text . "") (js . "$( \"div.foo\" );") (text . "") (text . "If no elements match the provided selector, the new jQuery object is
 \"empty\"; that is, it contains no elements and has .length property of
 0.
 ") (text . "") (text . " Selector Context
@@ -9751,7 +9768,7 @@ the document root. However, an alternate context can be given for the
 search by using the optional second parameter to the $() function. For
 example, to do a search within an event handler, the search can be
 restricted like so:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $( \"div.foo\" ).click(function() {
   $(  \"span\", this ).addClass( \"bar\" );
 });
@@ -9773,7 +9790,7 @@ discouraged.
 ") (text . "") (text . "A common use of this facility is to call jQuery methods on an element
 that has been passed to a callback function through the keyword this:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $( \"div.foo\" ).click(function() {
   $(this).slideUp();
 });
@@ -9784,7 +9801,7 @@ function before applying jQuery methods to it.
 ") (text . "") (text . "XML data returned from an Ajax call can be passed to the $() function
 so individual elements of the XML structure can be retrieved using
 .find() and other DOM traversal methods.
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.post( \"url.xml\", function(data) {
   var $child = $(data).find(\"child\");
 })
@@ -9809,7 +9826,7 @@ wrapped in jQuery are: .data(), .prop(), .on(), .off(), .trigger() and
 .triggerHandler(). The use of .data() (or any method requiring .data())
 on a plain object will result in a new property on the object called
 jQuery{randomNumber} (eg. jQuery123456789).
-") (text . "") (js code nil "
+") (text . "") (js . "
 // define a plain object
 var foo = {foo: \"bar\", hello: \"world\"};
 
@@ -9838,7 +9855,7 @@ $foo.trigger( \"eventName\" ); // logs \"eventName was called\"
 attached jQuery handlers are executed. It does not check whether the
 property is a function or not. To avoid this behavior, .triggerHandler(
 \"eventName\" ) should be used instead.
-") (text . "") (js code nil "
+") (text . "") (js . "
 $foo.triggerHandler( \"eventName\" ); // also logs \"eventName was called\"
 ") (text . "")) ("examples" ((text . "") (text . "Find all p elements that are children of a div element and apply a
 border to them.
@@ -9881,7 +9898,7 @@ jQuery attempts to create new DOM elements as described by the HTML.
 Then a jQuery object is created and returned that refers to these
 elements. You can perform any of the usual jQuery methods on this
 object:
-") (text . "") (js code nil "$( \"<p id='test'>My <em>new</em> text</p>\" ).appendTo( \"body\" );") (text . "") (text . "For explicit parsing of a string to HTML, use the $.parseHTML() method.
+") (text . "") (js . "$( \"<p id='test'>My <em>new</em> text</p>\" ).appendTo( \"body\" );") (text . "") (text . "For explicit parsing of a string to HTML, use the $.parseHTML() method.
 
 
 ") (text . "") (text . "If the HTML is more complex than a single tag without attributes, as it
@@ -9907,15 +9924,15 @@ compatibility layer.
 ") (text . "") (text . "To ensure cross-platform compatibility, the snippet must be
 well-formed. Tags that can contain other elements should be paired with
 a closing tag:
-") (text . "") (js code nil "$( \"<a href='http://jquery.com'></a>\" );") (text . "") (text . "Tags that cannot contain elements may be quick-closed or not:
+") (text . "") (js . "$( \"<a href='http://jquery.com'></a>\" );") (text . "") (text . "Tags that cannot contain elements may be quick-closed or not:
 
 
-") (text . "") (js code nil "$( \"<img />\" );
+") (text . "") (js . "$( \"<img />\" );
 $( \"<input>\" );
 ") (text . "") (text . "When passing HTML to jQuery(), please also note that text nodes are not
 treated as DOM elements. With the exception of a few methods (such as
 .content()), they are generally otherwise ignored or removed. E.g:
-") (text . "") (js code nil "
+") (text . "") (js . "
 var el = $( \"1<br/>2<br/>3\" ); // returns [<br>, \"2\", <br>]
 el  = $( \"1<br/>2<br/>3 >\" ); // returns [<br>, \"2\", <br>, \"3 &gt;\"]
 ") (text . "") (text . "This behavior is expected.
@@ -9932,31 +9949,16 @@ height, or offset.
 ") (text . "") (text . "As of jQuery 1.8, any jQuery instance method (a method of jQuery.fn)
 can be used as a property of the object passed to the second parameter:
 
-") (text . "") (js code nil "
-$( \"" (div nil) "\", {
-  \"class\": \"my-div\",
-  on: {
-    touchstart: function( event ) {
-      // do something
-    }
-  }
-}).appendTo( \"body\" );
-      ") (text . "") (text . "The name \"class\" must be quoted in the object since it is a JavaScript
+") (text . "") (js . "
+$( \"") (text . "") (text . "The name \"class\" must be quoted in the object since it is a JavaScript
 reserved word, and \"className\" cannot be used since it refers to the
 DOM property, not the attribute.
 ") (text . "") (text . "While the second argument is convenient, its flexibility can lead to
 unintended consequences (e.g. $(\"<input>\", {size: \"4\"}) calling the
 .size() method instead of setting the size attribute). The previous
 code block could thus be written instead as:
-") (text . "") (js code nil "
-$( \"" (div nil) "\" )
-.addClass( \"my-div\" )
-.on({
-  touchstart: function( event ) {
-    // do something
-  }
-}).appendTo( \"body\" );
-") (text . "")) ("examples" ((text . "") (text . "Create a div element (and all of its contents) dynamically and append
+") (text . "") (js . "
+$( \"") (text . "")) ("examples" ((text . "") (text . "Create a div element (and all of its contents) dynamically and append
 it to the body element. Internally, an element is created and its
 innerHTML property set to the given markup.
 ") (text . "") (js . "$( \"<div><p>Hello</p></div>\" ).appendTo( \"body\" )") (text . "")) ((text . "") (text . "Create some DOM elements.
@@ -10013,7 +10015,7 @@ reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <input id=\"target\" type=\"text\" value=\"Hello there\" />
 </form>
 <div id=\"other\">
@@ -10021,7 +10023,7 @@ reasonable candidates for this event type.
 </div>") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js code nil "$('#target').keydown(function() {
+") (text . "") (js . "$('#target').keydown(function() {
   alert('Handler for .keydown() called.');
 });") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
 displays the alert:
@@ -10032,7 +10034,7 @@ displays the alert:
 ") (text . "") (text . "To trigger the event manually, apply .keydown() without an argument:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').keydown();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -10121,7 +10123,7 @@ reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <fieldset>
     <input id=\"target\" type=\"text\" value=\"Hello there\" />
   </fieldset>
@@ -10131,7 +10133,7 @@ reasonable candidates for this event type.
 </div>") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js code nil "$(\"#target\").keypress(function() {
+") (text . "") (js . "$(\"#target\").keypress(function() {
   alert(\"Handler for .keypress() called.\");
 });") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
 displays the alert:
@@ -10142,7 +10144,7 @@ displays the alert:
 ") (text . "") (text . "The message repeats if the key is held down. To trigger the event
 manually, apply .keypress() without an argument::
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $(\"#target\").keypress();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -10229,7 +10231,7 @@ reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <input id=\"target\" type=\"text\" value=\"Hello there\" />
 </form>
 <div id=\"other\">
@@ -10237,7 +10239,7 @@ reasonable candidates for this event type.
 </div>") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js code nil "$('#target').keyup(function() {
+") (text . "") (js . "$('#target').keyup(function() {
   alert('Handler for .keyup() called.');
 });
 ") (text . "") (text . "Now when the insertion point is inside the field and a key is pressed
@@ -10249,7 +10251,7 @@ and released, the alert is displayed:
 ") (text . "") (text . "To trigger the event manually, apply .keyup() without arguments:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').keyup();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -10319,7 +10321,7 @@ that set.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -10330,7 +10332,7 @@ that set.
 ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "$('li').last().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the final item.
+") (text . "") (js . "$('li').last().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the final item.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Highlight the last span in a paragraph.
@@ -10368,7 +10370,7 @@ information.
 ") (text . "") (text . "Rewriting the .live() method in terms of its successors is
 straightforward; these are templates for equivalent calls for all three
 event attachment methods:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(selector).live(events, data, handler);                // jQuery 1.3+
 $(document).delegate(selector, events, data, handler);  // jQuery 1.4.3+
 $(document).on(events, selector, data, handler);        // jQuery 1.7+
@@ -10378,7 +10380,7 @@ handlers. The data argument is optional and can be omitted. For
 example, the following three method calls are functionally equivalent
 (but see below for more effective and performant ways to attach
 delegated event handlers):
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(\"a.offsite\").live(\"click\", function(){ alert(\"Goodbye!\"); });                // jQuery 1.3+
 $(document).delegate(\"a.offsite\", \"click\", function(){ alert(\"Goodbye!\"); });  // jQuery 1.4.3+
 $(document).on(\"click\", \"a.offsite\", function(){ alert(\"Goodbye!\"); });        // jQuery 1.7+
@@ -10482,10 +10484,10 @@ object.
 ") (text . "") (text . "For example, consider a page with a simple image:
 
 
-") (text . "") (js code nil "<img src=\"book.png\" alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
+") (text . "") (js . "<img src=\"book.png\" alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
 
 
-") (text . "") (js code nil "$('#book').load(function() {
+") (text . "") (js . "$('#book').load(function() {
   // Handler for .load() called.
 });") (text . "") (text . "As soon as the image has been loaded, the handler is called.
 
@@ -10546,7 +10548,7 @@ function. When a successful response is detected (i.e. when textStatus
 is \"success\" or \"notmodified\"), .load() sets the HTML contents of the
 matched element to the returned data. This means that most uses of the
 method can be quite simple:
-") (text . "") (js code nil "$('#result').load('ajax/test.html');") (text . "") (text . "If no element is matched by the selector -- in this case, if the
+") (text . "") (js . "$('#result').load('ajax/test.html');") (text . "") (text . "If no element is matched by the selector -- in this case, if the
 document does not contain an element with id=\"result\" -- the Ajax
 request will not be sent.
 ") (text . "") (text . " Callback Function
@@ -10556,7 +10558,7 @@ request will not be sent.
 post-processing and HTML insertion has been performed. The callback is
 fired once for each element in the jQuery collection, and this is set
 to each DOM element in turn.
-") (text . "") (js code nil "$('#result').load('ajax/test.html', function() {
+") (text . "") (js . "$('#result').load('ajax/test.html', function() {
   alert('Load was performed.');
 });") (text . "") (text . "In the two examples above, if the current document does not contain an
 element with an ID of \"result,\" the .load() method is not executed.
@@ -10579,7 +10581,7 @@ be loaded.
 ") (text . "") (text . "We could modify the example above to use only part of the document that
 is fetched:
 
-") (text . "") (js code nil "$('#result').load('ajax/test.html #container');") (text . "") (text . "When this method executes, it retrieves the content of ajax/test.html,
+") (text . "") (js . "$('#result').load('ajax/test.html #container');") (text . "") (text . "When this method executes, it retrieves the content of ajax/test.html,
 but then jQuery parses the returned document to find the element with
 an ID of container. This element, along with its contents, is inserted
 into the element with an ID of result, and the rest of the retrieved
@@ -10602,12 +10604,12 @@ and thus are not executed. An example of both cases can be seen below:
 ") (text . "") (text . "Here, any JavaScript loaded into #a as a part of the document will
 successfully execute.
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('#a').load('article.html');
 ") (text . "") (text . "However, in the following case, script blocks in the document being
 loaded into #b are stripped out and not executed:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('#b').load('article.html #target');
 ") (text . "")) ("examples" ((text . "") (text . "Load the main page`s footer navigation into an ordered list.
 
@@ -10664,7 +10666,7 @@ very common to call .get() on the result to work with a basic array.
 ") (text . "") (text . "The .map() method is particularly useful for getting or setting the
 value of a collection of elements. Consider a form with a set of
 checkboxes in it:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <form method=\"post\" action=\"\">
   <fieldset>
     <div>
@@ -10688,7 +10690,7 @@ checkboxes in it:
 ") (text . "") (text . "To get a comma-separated list of checkbox IDs:
 
 
-") (text . "") (js code nil "$(':checkbox').map(function() {
+") (text . "") (js . "$(':checkbox').map(function() {
       return this.id;
     }).get().join();") (text . "") (text . "The result of this call is the string, \"two,four,six,eight\".
 
@@ -10800,7 +10802,7 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"target\">
+") (text . "") (js . "<div id=\"target\">
   Click here
 </div>
 <div id=\"other\">
@@ -10810,7 +10812,7 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js code nil "$('#target').mousedown(function() {
+") (text . "") (js . "$('#target').mousedown(function() {
   alert('Handler for .mousedown() called.');
 });") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
@@ -10821,7 +10823,7 @@ receive this event.
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').mousedown();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -10877,7 +10879,7 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"outer\">
+") (text . "") (html . "<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -10891,12 +10893,12 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js code nil "$('#outer').mouseenter(function() {
+") (text . "") (js . "$('#outer').mouseenter(function() {
   $('#log').append('<div>Handler for .mouseenter() called.</div>');
 });") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
 appended to <div id=\"log\">. You can also trigger the event when another
 element is clicked:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
       $('#outer').mouseenter();
     });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
@@ -10977,7 +10979,7 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"outer\">
+") (text . "") (html . "<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -10991,12 +10993,12 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js code nil "$('#outer').mouseleave(function() {
+") (text . "") (js . "$('#outer').mouseleave(function() {
   $('#log').append('<div>Handler for .mouseleave() called.</div>');
 });") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
 appended to <div id=\"log\">. You can also trigger the event when another
 element is clicked:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#outer').mouseleave();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
@@ -11076,7 +11078,7 @@ inside the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"target\">
+") (text . "") (html . "<div id=\"target\">
   Move here
 </div>
 <div id=\"other\">
@@ -11085,7 +11087,7 @@ inside the element. Any HTML element can receive this event.
 <div id=\"log\"></div>") (text . "") (text . "The event handler can be bound to the target:
 
 
-") (text . "") (js code nil "$(\"#target\").mousemove(function(event) {
+") (text . "") (js . "$(\"#target\").mousemove(function(event) {
   var msg = \"Handler for .mousemove() called at \";
   msg += event.pageX + \", \" + event.pageY;
   $(\"#log\").append(\"<div>\" + msg + \"</div>\");
@@ -11099,7 +11101,7 @@ Handler for .mousemove() called at (396, 42)
 ") (text . "") (text . "To trigger the event manually, apply .mousemove() without an argument:
 
 
-") (text . "") (js code nil "$(\"#other\").click(function() {
+") (text . "") (js . "$(\"#other\").click(function() {
   $(\"#target\").mousemove();
 });") (text . "") (text . "After this code executes, clicks on the Trigger button will also append
 the message:
@@ -11177,7 +11179,7 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"outer\">
+") (text . "") (html . "<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -11191,12 +11193,12 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js code nil "$('#outer').mouseout(function() {
+") (text . "") (js . "$('#outer').mouseout(function() {
   $('#log').append('Handler for .mouseout() called.');
 });") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
 appended to <div id=\"log\">. To trigger the event manually, apply
 .mouseout() without an argument::
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#outer').mouseout();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
@@ -11273,7 +11275,7 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"outer\">
+") (text . "") (html . "<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -11287,12 +11289,12 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js code nil "$('#outer').mouseover(function() {
+") (text . "") (js . "$('#outer').mouseover(function() {
   $('#log').append('<div>Handler for .mouseover() called.</div>');
 });") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
 appended to <div id=\"log\">. We can also trigger the event when another
 element is clicked:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
       $('#outer').mouseover();
       });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
@@ -11363,7 +11365,7 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"target\">
+") (text . "") (js . "<div id=\"target\">
   Click here
 </div>
 <div id=\"other\">
@@ -11374,7 +11376,7 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js code nil "$('#target').mouseup(function() {
+") (text . "") (js . "$('#target').mouseup(function() {
   alert('Handler for .mouseup() called.');
 });
 ") (text . "") (text . "Now if we click on this element, the alert is displayed:
@@ -11386,7 +11388,7 @@ receive this event.
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').mouseup();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
@@ -11426,7 +11428,7 @@ jQuery object; otherwise, it is excluded.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -11437,7 +11439,7 @@ jQuery object; otherwise, it is excluded.
 ") (text . "") (text . "If we begin at the third item, we can find the element which comes just
 after it:
 
-") (text . "") (js code nil "$('li.third-item').next().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 4. Since we do
+") (text . "") (js . "$('li.third-item').next().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 4. Since we do
 not supply a selector expression, this following element is
 unequivocally included as part of the object. If we had supplied one,
 the element would be tested for a match before it was included.
@@ -11476,7 +11478,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -11487,7 +11489,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "If we begin at the third item, we can find the elements which come
 after it:
 
-") (text . "") (js code nil "$('li.third-item').nextAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 4 and 5. Since
+") (text . "") (js . "$('li.third-item').nextAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 4 and 5. Since
 we do not supply a selector expression, these following elements are
 unequivocally included as part of the object. If we had supplied one,
 the elements would be tested for a match before they were included.
@@ -11605,7 +11607,7 @@ elements that don`t match the selector will be included in the result.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -11616,7 +11618,7 @@ elements that don`t match the selector will be included in the result.
 ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "$('li').not(':even').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 2 and 4, as they
+") (text . "") (js . "$('li').not(':even').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 2 and 4, as they
 do not match the selector (recall that :even and :odd use 0-based
 indexing).
 ") (text . "") (text . " Removing Specific Elements
@@ -11626,7 +11628,7 @@ indexing).
 from the matched set, assuming we have found those elements previously
 by some other means. For example, suppose our list had an id applied to
 one of its items:
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -11637,7 +11639,7 @@ one of its items:
 ") (text . "") (text . "We can fetch the third list item using the native JavaScript
 getElementById() function, then remove it from a jQuery object:
 
-") (text . "") (js code nil "
+") (text . "") (js . "
 $('li').not(document.getElementById('notli'))
   .css('background-color', 'red');
 ") (text . "") (text . "This statement changes the color of items 1, 2, 4, and 5. We could have
@@ -11867,7 +11869,7 @@ performing animations and placing objects on the page.
 ") (text . "") (text . "Consider a page with a basic nested list on it, with a positioned
 element:
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\" style=\"position: relative;\">II
@@ -11888,7 +11890,7 @@ element:
     ") (text . "") (text . "If we begin at item A, we can find its positioned ancestor:
 
 
-") (text . "") (js code nil "$('li.item-a').offsetParent().css('background-color', 'red');") (text . "") (text . "This will change the color of list item II, which is positioned.
+") (text . "") (js . "$('li.item-a').offsetParent().css('background-color', 'red');") (text . "") (text . "This will change the color of list item II, which is positioned.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Find the offsetParent of item \"A.\"
@@ -12014,14 +12016,14 @@ not yet created, another advantage of delegated events is their
 potential for much lower overhead when many elements must be monitored.
 On a data table with 1,000 rows in its tbody, this example attaches a
 handler to 1,000 elements:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(\"#dataTable tbody tr\").on(\"click\", function(event){
   alert($(this).text());
 });
 ") (text . "") (text . "A delegated-events approach attaches an event handler to only one
 element, the tbody, and the event only needs to bubble up one level
 (from the clicked tr to tbody):
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(\"#dataTable tbody\").on(\"click\", \"tr\", function(event){
   alert($(this).text());
 });
@@ -12036,7 +12038,7 @@ is required unless you pass an object for the events argument. You can
 provide an anonymous handler function at the point of the .on() call,
 as the examples have done above, or declare a named function and pass
 its name:
-") (text . "") (js code nil "
+") (text . "") (js . "
 function notify() { alert(\"clicked\"); }
 $(\"button\").on(\"click\", notify);
 ") (text . "") (text . "When the browser triggers an event or other JavaScript calls jQuery`s
@@ -12089,7 +12091,7 @@ properties.
 multiple times. This is especially useful when the event.data feature
 is being used, or when other unique data resides in a closure around
 the event handler function. For example:
-") (text . "") (js code nil "
+") (text . "") (js . "
 function greet(event) { alert(\"Hello \"+event.data.name); }
 $(\"button\").on(\"click\", { name: \"Karl\" }, greet);
 $(\"button\").on(\"click\", { name: \"Addy\" }, greet);
@@ -12273,7 +12275,7 @@ introduced in jQuery 1.7, are identical to .on() except that the
 handler is removed after the first time the event occurs at the
 delegated element, whether the selector matched anything or not. For
 example:
-") (text . "") (js code nil "$(\"#foo\").one(\"click\", function() {
+") (text . "") (js . "$(\"#foo\").one(\"click\", function() {
   alert(\"This will be displayed only once.\");
 });
 $(\"body\").one(\"click\", \"#foo\", function() {
@@ -12282,7 +12284,7 @@ $(\"body\").one(\"click\", \"#foo\", function() {
 ") (text . "") (text . "After the code is executed, a click on the element with ID foo will
 display the alert. Subsequent clicks will do nothing. This code is
 equivalent to:
-") (text . "") (js code nil "$(\"#foo\").on(\"click\", function( event ) {
+") (text . "") (js . "$(\"#foo\").on(\"click\", function( event ) {
   alert(\"This will be displayed only once.\");
   $(this).off( event );
 });
@@ -12395,7 +12397,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "Consider a page with a basic nested list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\">II
@@ -12416,7 +12418,7 @@ elements will be filtered by testing whether they match it.
     ") (text . "") (text . "If we begin at item A, we can find its parents:
 
 
-") (text . "") (js code nil "$('li.item-a').parent().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list. Since
+") (text . "") (js . "$('li.item-a').parent().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list. Since
 we do not supply a selector expression, the parent element is
 unequivocally included as part of the object. If we had supplied one,
 the element would be tested for a match before it was included.
@@ -12476,7 +12478,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "Consider a page with a basic nested list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\">II
@@ -12497,7 +12499,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "If we begin at item A, we can find its ancestors:
 
 
-") (text . "") (js code nil "$('li.item-a').parents().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list, item
+") (text . "") (js . "$('li.item-a').parents().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list, item
 II, and the level-1 list (and on up the DOM tree all the way to the
 <html> element). Since we do not supply a selector expression, all of
 the ancestors are part of the returned jQuery object. If we had
@@ -12682,17 +12684,17 @@ fly, and it is inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "You can create content and insert it into several elements at once:
 
 
-") (text . "") (js code nil "$('.inner').prepend('<p>Test</p>');") (text . "") (text . "Each <div class=\"inner\"> element gets this new content:
+") (text . "") (js . "$('.inner').prepend('<p>Test</p>');") (text . "") (text . "Each <div class=\"inner\"> element gets this new content:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     <p>Test</p>
@@ -12705,10 +12707,10 @@ fly, and it is inserted into the target container.
 </div>") (text . "") (text . "You can also select an element on the page and insert it into another:
 
 
-") (text . "") (js code nil "$('.container').prepend($('h2'));") (text . "") (text . "If a single element selected this way is inserted into a single
+") (text . "") (js . "$('.container').prepend($('h2'));") (text . "") (text . "If a single element selected this way is inserted into a single
 location elsewhere in the DOM, it will be moved into the target ( not
 cloned):
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
     <h2>Greetings</h2>
     <div class=\"inner\">Hello</div>
     <div class=\"inner\">Goodbye</div>
@@ -12725,7 +12727,7 @@ and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> as the first three child nodes of the body:
 
-") (text . "") (js code nil "var $newdiv1 = $('<div id=\"object1\"/>'),
+") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
     newdiv2 = document.createElement('div'),
     existingdiv1 = document.getElementById('foo');
 
@@ -12765,17 +12767,17 @@ is inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "We can create content and insert it into several elements at once:
 
 
-") (text . "") (js code nil "$('<p>Test</p>').prependTo('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "$('<p>Test</p>').prependTo('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (js code nil "<h2>Greetings</h2>
+") (text . "") (html . "<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     <p>Test</p>
@@ -12788,10 +12790,10 @@ is inserted into the target container.
 </div>") (text . "") (text . "We can also select an element on the page and insert it into another:
 
 
-") (text . "") (js code nil "$('h2').prependTo($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "$('h2').prependTo($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved into the target (not cloned):
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
@@ -12825,7 +12827,7 @@ selector.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -12836,7 +12838,7 @@ selector.
     ") (text . "") (text . "To select the element that comes immediately before item three:
 
 
-") (text . "") (js code nil "$('li.third-item').prev().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 2. Since no
+") (text . "") (js . "$('li.third-item').prev().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 2. Since no
 selector expression is supplied, this preceding element is
 unequivocally included as part of the object. If one had been supplied,
 the element would be tested for a match before it was included.
@@ -12899,7 +12901,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -12910,7 +12912,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "If we begin at the third item, we can find the elements which come
 before it:
 
-") (text . "") (js code nil "$('li.third-item').prevAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1 and 2. Since
+") (text . "") (js . "$('li.third-item').prevAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1 and 2. Since
 we do not supply a selector expression, these preceding elements are
 unequivocally included as part of the object. If we had supplied one,
 the elements would be tested for a match before they were included.
@@ -13191,7 +13193,7 @@ property of input elements, the disabled property of inputs and
 buttons, or the checked property of a checkbox. The .prop() method
 should be used to set disabled and checked instead of the .attr()
 method. The .val() method should be used for getting and setting value.
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(\"input\").prop(\"disabled\", false);
 $(\"input\").prop(\"checked\", true);
 $(\"input\").val(\"someValue\");
@@ -13204,7 +13206,7 @@ added again. See .removeProp() for more information.
 ") (text . "") (text . "By using a function to set properties, you can compute the value based
 on other properties of the element. For example, to toggle all
 checkboxes based off their individual values:
-") (text . "") (js code nil "$(\"input[type='checkbox']\").prop(\"checked\", function( i, val ) {
+") (text . "") (js . "$(\"input[type='checkbox']\").prop(\"checked\", function( i, val ) {
   return !val;
 });") (text . "") (text . "Note: If nothing is returned in the setter function (ie.
 function(index, prop){}), or if undefined is returned, the current
@@ -13309,7 +13311,7 @@ Queues allow a sequence of actions to be called on an element
 asynchronously, without halting program execution. The typical example
 of this is calling multiple animation methods on an element. For
 example:
-") (text . "") (js code nil "$('#foo').slideUp().fadeIn();") (text . "") (text . "When this statement is executed, the element begins its sliding
+") (text . "") (js . "$('#foo').slideUp().fadeIn();") (text . "") (text . "When this statement is executed, the element begins its sliding
 animation immediately, but the fading transition is placed on the fx
 queue to be called only once the sliding transition is complete.
 ") (text . "") (text . "The .queue() method allows us to directly manipulate this queue of
@@ -13319,14 +13321,14 @@ function is executed once for each element in the jQuery set.
 ") (text . "") (text . "This feature is similar to providing a callback function with an
 animation method, but does not require the callback to be given at the
 time the animation is performed.
-") (text . "") (js code nil "$('#foo').slideUp();
+") (text . "") (js . "$('#foo').slideUp();
 $('#foo').queue(function() {
   alert('Animation complete.');
   $(this).dequeue();
 });") (text . "") (text . "This is equivalent to:
 
 
-") (text . "") (js code nil "$('#foo').slideUp(function() {
+") (text . "") (js . "$('#foo').slideUp(function() {
   alert('Animation complete.');
 });") (text . "") (text . "Note that when adding a function with .queue(), we should ensure that
 .dequeue() is eventually called so that the next function in line
@@ -13334,7 +13336,7 @@ executes.
 ") (text . "") (text . "As of jQuery 1.4, the function that`s called is passed another function
 as the first argument. When called, this automatically dequeues the
 next item and keeps the queue moving. We use it as follows:
-") (text . "") (js code nil "$(\"#test\").queue(function(next) {
+") (text . "") (js . "$(\"#test\").queue(function(next) {
     // Do some stuff...
     next();
 });") (text . "")) ("examples" ((text . "") (text . "Queue a custom function.
@@ -13425,12 +13427,12 @@ current document, so the selector can be omitted.
 ") (text . "") (text . "The .ready() method is typically used with an anonymous function:
 
 
-") (text . "") (js code nil "$(document).ready(function() {
+") (text . "") (js . "$(document).ready(function() {
   // Handler for .ready() called.
 });") (text . "") (text . "Which is equivalent to calling:
 
 
-") (text . "") (js code nil "$(function() {
+") (text . "") (js . "$(function() {
      // Handler for .ready() called.
     });") (text . "") (text . "If .ready() is called after the DOM has been initialized, the new
 handler passed in will be executed immediately.
@@ -13445,7 +13447,7 @@ jQuery each time we would normally write $. However, the handler passed
 to the .ready() method can take an argument, which is passed the global
 jQuery object. This means we can rename the object within the context
 of our .ready() handler without affecting other code:
-") (text . "") (js code nil "jQuery(document).ready(function($) {
+") (text . "") (js . "jQuery(document).ready(function($) {
   // Code using $ as usual goes here.
 });") (text . "")) ("examples" ((text . "") (text . "Display a message when the DOM is loaded.
 
@@ -13469,16 +13471,16 @@ instead.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "") (text . "We can target any element for removal:
 
 
-") (text . "") (js code nil "$('.hello').remove();") (text . "") (text . "This will result in a DOM structure with the <div> element deleted:
+") (text . "") (js . "$('.hello').remove();") (text . "") (text . "This will result in a DOM structure with the <div> element deleted:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
 they would be removed, too. Other jQuery constructs such as data or
@@ -13486,10 +13488,10 @@ event handlers are erased as well.
 ") (text . "") (text . "We can also include a selector as an optional parameter. For example,
 we could rewrite the previous DOM removal code as follows:
 
-") (text . "") (js code nil "$('div').remove('.hello');") (text . "") (text . "This would result in the same DOM structure:
+") (text . "") (js . "$('div').remove('.hello');") (text . "") (text . "This would result in the same DOM structure:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"goodbye\">Goodbye</div>
 </div>") (text . "")) ("examples" ((text . "") (text . "Removes all paragraphs from the DOM
 
@@ -13527,7 +13529,7 @@ across browsers.
 ") (text . "") (text . "Note: Removing an inline onclick event handler using .removeAttr()
 doesn`t achieve the desired effect in Internet Explorer 6, 7, or 8. To
 avoid potential problems, use .prop() instead:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $element.prop(\"onclick\", null);
 console.log(\"onclick property: \", $element[0].onclick);
     ") (text . "")) ("examples" ((text . "") (text . "Clicking the button enables the input next to it.
@@ -13569,10 +13571,10 @@ specified in the parameter, all classes will be removed.
 ") (text . "") (text . "More than one class may be removed at a time, separated by a space,
 from the set of matched elements, like so:
 
-") (text . "") (js code nil "$('p').removeClass('myClass yourClass')") (text . "") (text . "This method is often used with .addClass() to switch elements` classes
+") (text . "") (js . "$('p').removeClass('myClass yourClass')") (text . "") (text . "This method is often used with .addClass() to switch elements` classes
 from one to another, like so:
 
-") (text . "") (js code nil "$('p').removeClass('myClass noClass').addClass('yourClass');") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
+") (text . "") (js . "$('p').removeClass('myClass noClass').addClass('yourClass');") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
 while yourClass is added.
 
 ") (text . "") (text . "To replace all existing classes with another class, we can use
@@ -13581,7 +13583,7 @@ while yourClass is added.
 ") (text . "") (text . "As of jQuery 1.4, the .removeClass() method allows us to indicate the
 class to be removed by passing in a function.
 
-") (text . "") (js code nil "$('li:last').removeClass(function() {
+") (text . "") (js . "$('li:last').removeClass(function() {
   return $(this).prev().attr('class');
 });") (text . "") (text . "This example removes the class name of the penultimate <li> from the
 last <li>.
@@ -13714,27 +13716,27 @@ $para.append(\"Now the secret luggage code is: \", String($para.prop(\"luggageCo
 ")) ("longdesc" (text . "") (text . "The .replaceAll() method is corollary to .replaceWith() , but with the
 source and target reversed. Consider this DOM structure:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <div class=\"inner second\">And</div>
   <div class=\"inner third\">Goodbye</div>
 </div>") (text . "") (text . "We can create an element, then replace other elements with it:
 
 
-") (text . "") (js code nil "$('<h2>New heading</h2>').replaceAll('.inner');") (text . "") (text . "This causes all of them to be replaced:
+") (text . "") (js . "$('<h2>New heading</h2>').replaceAll('.inner');") (text . "") (text . "This causes all of them to be replaced:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>New heading</h2>
   <h2>New heading</h2>
   <h2>New heading</h2>
 </div>") (text . "") (text . "Or, we could select an element to use as the replacement:
 
 
-") (text . "") (js code nil "$('.first').replaceAll('.third');") (text . "") (text . "This results in the DOM structure:
+") (text . "") (js . "$('.first').replaceAll('.third');") (text . "") (text . "This results in the DOM structure:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner second\">And</div>
   <div class=\"inner first\">Hello</div>
 </div>") (text . "") (text . "From this example, we can see that the selected element replaces the
@@ -13760,37 +13762,37 @@ new content and return the set of elements that was removed.
 ")) ("longdesc" (text . "") (text . "The .replaceWith() method removes content from the DOM and inserts new
 content in its place with a single call. Consider this DOM structure:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <div class=\"inner second\">And</div>
   <div class=\"inner third\">Goodbye</div>
 </div>") (text . "") (text . "The second inner <div> could be replaced with the specified HTML:
 
 
-") (text . "") (js code nil "$('div.second').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This results in the structure:
+") (text . "") (js . "$('div.second').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This results in the structure:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <h2>New heading</h2>
   <div class=\"inner third\">Goodbye</div>
 </div>") (text . "") (text . "All inner <div> elements could be targeted at once:
 
 
-") (text . "") (js code nil "$('div.inner').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This causes all of them to be replaced:
+") (text . "") (js . "$('div.inner').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This causes all of them to be replaced:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <h2>New heading</h2>
   <h2>New heading</h2>
   <h2>New heading</h2>
 </div>") (text . "") (text . "An element could also be selected as the replacement:
 
 
-") (text . "") (js code nil "$('div.third').replaceWith($('.first'));") (text . "") (text . "This results in the DOM structure:
+") (text . "") (js . "$('div.third').replaceWith($('.first'));") (text . "") (text . "This results in the DOM structure:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner second\">And</div>
   <div class=\"inner first\">Hello</div>
 </div>") (text . "") (text . "This example demonstrates that the selected element replaces the target
@@ -13804,10 +13806,10 @@ element that has replaced it.
 ") (text . "") (text . "As of jQuery 1.4, .replaceWith() can also work on disconnected DOM
 nodes. For example, with the following code, .replaceWith() returns a
 jQuery set containing only a paragraph.:
-") (text . "") (js code nil "$(\"<div/>\").replaceWith(\"<p></p>\");") (text . "") (text . "The .replaceWith() method can also take a function as its argument:
+") (text . "") (js . "$(\"<div/>\").replaceWith(\"<p></p>\");") (text . "") (text . "The .replaceWith() method can also take a function as its argument:
 
 
-") (text . "") (js code nil "$('div.container').replaceWith(function() {
+") (text . "") (js . "$('div.container').replaceWith(function() {
   return $(this).contents();
 });") (text . "") (text . "This results in <div class=\"container\"> being replaced by its three
 child <div>s. The return value of the function may be an HTML string,
@@ -13892,7 +13894,7 @@ second variations, and .trigger(`resize`) in the third.
 ") (text . "") (text . "The resize event is sent to the window element when the size of the
 browser window changes:
 
-") (text . "") (js code nil "$(window).resize(function() {
+") (text . "") (js . "$(window).resize(function() {
   $('#log').append('<div>Handler for .resize() called.</div>');
 });
     ") (text . "") (text . "Now whenever the browser window`s size is changed, the message is
@@ -13933,7 +13935,7 @@ than the height or width of its contents).
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<div id=\"target\" style=\"overflow: scroll; width: 200px; height: 100px;\">
+") (text . "") (html . "<div id=\"target\" style=\"overflow: scroll; width: 200px; height: 100px;\">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit,
   sed do eiusmod tempor incididunt ut labore et dolore magna
   aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -13954,7 +13956,7 @@ to be scrollable:
 ") (text . "") (text . "The scroll event handler can be bound to this element:
 
 
-") (text . "") (js code nil "$('#target').scroll(function() {
+") (text . "") (js . "$('#target').scroll(function() {
   $('#log').append('<div>Handler for .scroll() called.</div>');
 });") (text . "") (text . "Now when the user scrolls the text up or down, one or more messages are
 appended to <div id=\"log\"></div>:
@@ -13965,7 +13967,7 @@ appended to <div id=\"log\"></div>:
 ") (text . "") (text . "To trigger the event manually, apply .scroll() without an argument:
 
 
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').scroll();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
@@ -14101,7 +14103,7 @@ fields and <textarea> boxes.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form>
+") (text . "") (js . "<form>
   <input id=\"target\" type=\"text\" value=\"Hello there\" />
 </form>
 <div id=\"other\">
@@ -14109,13 +14111,13 @@ fields and <textarea> boxes.
 </div>") (text . "") (text . "The event handler can be bound to the text input:
 
 
-") (text . "") (js code nil "$('#target').select(function() {
+") (text . "") (js . "$('#target').select(function() {
   alert('Handler for .select() called.');
 });") (text . "") (text . "Now when any portion of the text is selected, the alert is displayed.
 Merely setting the location of the insertion point will not trigger the
 event. To trigger the event manually, apply .select() without an
 argument:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').select();
 });") (text . "") (text . "After this code executes, clicks on the Trigger button will also alert
 the message:
@@ -14156,7 +14158,7 @@ $(\":input\").select( function () {
 ")) ("longdesc" (text . "") (text . "The .serialize() method creates a text string in standard URL-encoded
 notation. It operates on a jQuery object representing a set of form
 elements. The form elements can be of several types:
-") (text . "") (js code nil "<form>
+") (text . "") (html . "<form>
   <div><input type=\"text\" name=\"a\" value=\"1\" id=\"a\" /></div>
   <div><input type=\"text\" name=\"b\" value=\"2\" id=\"b\" /></div>
   <div><input type=\"hidden\" name=\"c\" value=\"3\" id=\"c\" /></div>
@@ -14178,13 +14180,13 @@ elements. The form elements can be of several types:
 individual form elements, such as <input>, <textarea>, and <select>.
 However, it is typically easier to select the <form> tag itself for
 serialization:
-") (text . "") (js code nil "$('form').submit(function() {
+") (text . "") (js . "$('form').submit(function() {
   alert($(this).serialize());
   return false;
 });") (text . "") (text . "This produces a standard-looking query string:
 
 
-") (text . "") (js code nil "a=1&b=2&c=3&d=4&e=5") (text . "") (text . "Warning: selecting both the form and its children will cause duplicates
+") (text . "") (js . "a=1&b=2&c=3&d=4&e=5") (text . "") (text . "Warning: selecting both the form and its children will cause duplicates
 in the serialized string.
 
 ") (text . "") (text . "Note: Only \"successful controls\" are serialized to the string. No
@@ -14253,7 +14255,7 @@ an Ajax request.
 ready to be encoded as a JSON string. It operates on a jQuery object
 representing a set of form elements. The form elements can be of
 several types:
-") (text . "") (js code nil "<form>
+") (text . "") (html . "<form>
   <div><input type=\"text\" name=\"a\" value=\"1\" id=\"a\" /></div>
   <div><input type=\"text\" name=\"b\" value=\"2\" id=\"b\" /></div>
   <div><input type=\"hidden\" name=\"c\" value=\"3\" id=\"c\" /></div>
@@ -14279,13 +14281,13 @@ using a button. Data from file select elements is not serialized.
 ") (text . "") (text . "This method can act on a jQuery object that has selected individual
 form elements, such as <input>, <textarea>, and <select>. However, it
 is typically easier to select the <form> tag itself for serialization:
-") (text . "") (js code nil "$('form').submit(function() {
+") (text . "") (js . "$('form').submit(function() {
   console.log($(this).serializeArray());
   return false;
 });") (text . "") (text . "This produces the following data structure (provided that the browser
 supports console.log):
 
-") (text . "") (js code nil "[
+") (text . "") (js . "[
   {
     name: \"a\",
     value: \"1\"
@@ -14373,7 +14375,7 @@ results display.
 ")) ("longdesc" (text . "") (text . "With no parameters, the .show() method is the simplest way to display
 an element:
 
-") (text . "") (js code nil "$('.target').show();
+") (text . "") (js . "$('.target').show();
     ") (text . "") (text . "The matched elements will be revealed immediately, with no animation.
 This is roughly equivalent to calling .css(`display`, `block`), except
 that the display property is restored to whatever it was initially. If
@@ -14405,7 +14407,7 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
@@ -14501,7 +14503,7 @@ elements will be filtered by testing whether they match it.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -14512,7 +14514,7 @@ elements will be filtered by testing whether they match it.
     ") (text . "") (text . "If we begin at the third item, we can find its siblings:
 
 
-") (text . "") (js code nil "$('li.third-item').siblings().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1, 2, 4, and
+") (text . "") (js . "$('li.third-item').siblings().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1, 2, 4, and
 5. Since we do not supply a selector expression, all of the siblings
 are part of the object. If we had supplied one, only the matching items
 among these four would be included.
@@ -14570,7 +14572,7 @@ overhead of a function call.
 ") (text . "") (text . "Given a simple unordered list on the page:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>foo</li>
   <li>bar</li>
@@ -14578,7 +14580,7 @@ overhead of a function call.
     ") (text . "") (text . "Both .size() and .length identify the number of items:
 
 
-") (text . "") (js code nil "alert( \"Size: \" + $(\"li\").size() );
+") (text . "") (js . "alert( \"Size: \" + $(\"li\").size() );
 alert( \"Size: \" + $(\"li\").length );") (text . "") (text . "This results in two alerts:
 
 
@@ -14629,7 +14631,7 @@ included in the result.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
   <li>list item 1</li>
   <li>list item 2</li>
@@ -14640,13 +14642,13 @@ included in the result.
     ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js code nil "$('li').slice(2).css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 3, 4, and 5. Note
+") (text . "") (js . "$('li').slice(2).css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 3, 4, and 5. Note
 that the supplied index is zero-based, and refers to the position of
 elements within the jQuery object, not within the DOM tree.
 ") (text . "") (text . "The end parameter allows us to limit the selected range even further.
 For example:
 
-") (text . "") (js code nil "$('li').slice(2, 4).css('background-color', 'red');") (text . "") (text . "Now only items 3 and 4 are selected. The index is once again
+") (text . "") (js . "$('li').slice(2, 4).css('background-color', 'red');") (text . "") (text . "Now only items 3 and 4 are selected. The index is once again
 zero-based; the range extends up to but not including the specified
 index.
 ") (text . "") (text . " Negative Indices
@@ -14657,7 +14659,7 @@ method for arrays. One of the features that it mimics is the ability
 for negative numbers to be passed as either the start or end parameter.
 If a negative number is provided, this indicates a position starting
 from the end of the set, rather than the beginning. For example:
-") (text . "") (js code nil "$('li').slice(-2, -1).css('background-color', 'red');") (text . "") (text . "This time only list item 4 is turned red, since it is the only item in
+") (text . "") (js . "$('li').slice(-2, -1).css('background-color', 'red');") (text . "") (text . "This time only list item 4 is turned red, since it is the only item in
 the range between two from the end ( -2) and one from the end ( -1).
 
 ") (text . "")) ("examples" ((text . "") (text . "Turns divs yellow based on a random slice.
@@ -14746,13 +14748,13 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially hidden, we can show it slowly:
 
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').slideDown('slow', function() {
     // Animation complete.
   });
@@ -14858,13 +14860,13 @@ respectively.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "We will cause .slideToggle() to be called when another element is
 clicked:
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').slideToggle('slow', function() {
     // Animation complete.
   });
@@ -14975,13 +14977,13 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially shown, we can hide it slowly:
 
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').slideUp('slow', function() {
     // Animation complete.
   });
@@ -15101,13 +15103,13 @@ the animations in the queue represented by that string will be stopped.
 ") (text . "") (text . "The usefulness of the .stop() method is evident when we need to animate
 an element on mouseenter and mouseleave:
 
-") (text . "") (js code nil "<div id=\"hoverme\">
+") (text . "") (js . "<div id=\"hoverme\">
   Hover me
   <img id=\"hoverme\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
 </div>") (text . "") (text . "We can create a nice fade effect without the common problem of multiple
 queued animations by adding .stop(true, true) to the chain:
 
-") (text . "") (js code nil "$('#hoverme-stop-2').hover(function() {
+") (text . "") (js . "$('#hoverme-stop-2').hover(function() {
   $(this).find('img').stop(true, true).fadeOut();
 }, function() {
   $(this).find('img').stop(true, true).fadeIn();
@@ -15203,7 +15205,7 @@ certain form elements have focus.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js code nil "<form id=\"target\" action=\"destination.html\">
+") (text . "") (js . "<form id=\"target\" action=\"destination.html\">
   <input type=\"text\" value=\"Hello there\" />
   <input type=\"submit\" value=\"Go\" />
 </form>
@@ -15212,7 +15214,7 @@ certain form elements have focus.
 </div>") (text . "") (text . "The event handler can be bound to the form:
 
 
-") (text . "") (js code nil "$('#target').submit(function() {
+") (text . "") (js . "$('#target').submit(function() {
   alert('Handler for .submit() called.');
   return false;
 });") (text . "") (text . "Now when the form is submitted, the message is alerted. This happens
@@ -15220,7 +15222,7 @@ prior to the actual submission, so we can cancel the submit action by
 calling .preventDefault() on the event object or by returning false
 from our handler. We can trigger the event manually when another
 element is clicked:
-") (text . "") (js code nil "$('#other').click(function() {
+") (text . "") (js . "$('#other').click(function() {
   $('#target').submit();
 });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 display the message. In addition, the default submit action on the form
@@ -15274,7 +15276,7 @@ documents. The result of the .text() method is a string containing the
 combined text of all matched elements. (Due to variations in the HTML
 parsers in different browsers, the text returned may vary in newlines
 and other white space.) Consider the following HTML:
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (html . "<div class=\"demo-container\">
       <div class=\"demo-box\">Demonstration Box</div>
   <ul>
   <li>list item 1</li>
@@ -15323,7 +15325,7 @@ necessary so that it will render correctly in HTML. To do so, it calls
 the DOM method .createTextNode(), which replaces special characters
 with their HTML entity equivalents (such as &lt; for <). Consider the
 following HTML:
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (html . "<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
   <ul>
     <li>list item 1</li>
@@ -15333,23 +15335,23 @@ following HTML:
 ") (text . "") (text . "The code $(`div.demo-container`).text(`<p>This is a test.</p>`); will
 produce the following DOM output:
 
-") (text . "") (js code nil "<div class=\"demo-container\">
+") (text . "") (js . "<div class=\"demo-container\">
 &lt;p&gt;This is a test.&lt;/p&gt;
 </div>") (text . "") (text . "It will appear on a rendered page as though the tags were exposed, like
 this:
 
-") (text . "") (js code nil "<p>This is a test</p>") (text . "") (text . "The .text() method cannot be used on input elements. For input field
+") (text . "") (html . "<p>This is a test</p>") (text . "") (text . "The .text() method cannot be used on input elements. For input field
 text, use the .val() method.
 
 ") (text . "") (text . "As of jQuery 1.4, the .text() method allows us to set the text content
 by passing in a function.
 
-") (text . "") (js code nil "$('ul li').text(function(index) {
+") (text . "") (js . "$('ul li').text(function(index) {
   return 'item number ' + (index + 1);
 });") (text . "") (text . "Given an unordered list with three <li> elements, this example will
 produce the following DOM output:
 
-") (text . "") (js code nil "<ul>
+") (text . "") (html . "<ul>
   <li>item number 1</li>
   <li>item number 2</li>
   <li>item number 3</li>
@@ -15369,7 +15371,7 @@ produce the following DOM output:
 ")) ("longdesc" (text . "") (text . ".toArray() returns all of the elements in the jQuery set:
 
 
-") (text . "") (js code nil "alert($('li').toArray());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
+") (text . "") (js . "alert($('li').toArray());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
 standard array:
 
 ") (text . "") (text . "[<li id=\"foo\">, <li id=\"bar\">]
@@ -15413,13 +15415,13 @@ alternate clicks.
 ") (text . "") (text . "The .toggle() method binds a handler for the click event, so the rules
 outlined for the triggering of click apply here as well.
 
-") (text . "") (js code nil "For example, consider the HTML:
+") (text . "") (js . "For example, consider the HTML:
 <div id=\"target\">
   Click here
 </div>") (text . "") (text . "Event handlers can then be bound to the <div>:
 
 
-") (text . "") (js code nil "$('#target').toggle(function() {
+") (text . "") (js . "$('#target').toggle(function() {
   alert('First handler for .toggle() called.');
 }, function() {
   alert('Second handler for .toggle() called.');
@@ -15481,7 +15483,7 @@ instead.):
 ") (text . "") (text . "With no parameters, the .toggle() method simply toggles the visibility
 of elements:
 
-") (text . "") (js code nil "$('.target').toggle();") (text . "") (text . "The matched elements will be revealed or hidden immediately, with no
+") (text . "") (js . "$('.target').toggle();") (text . "") (text . "The matched elements will be revealed or hidden immediately, with no
 animation, by changing the CSS display property. If the element is
 initially displayed, it will be hidden; if hidden, it will be shown.
 The display property is saved and restored as needed. If an element has
@@ -15513,14 +15515,14 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js code nil "<div id=\"clickme\">
+") (text . "") (js . "<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
 ") (text . "") (text . "We will cause .toggle() to be called when another element is clicked:
 
 
-") (text . "") (js code nil "$('#clickme').click(function() {
+") (text . "") (js . "$('#clickme').click(function() {
   $('#book').toggle('slow', function() {
     // Animation complete.
   });
@@ -15538,10 +15540,10 @@ click:
 ") (text . "") (text . "The second version of the method accepts a Boolean parameter. If this
 parameter is true, then the matched elements are shown; if false, the
 elements are hidden. In essence, the statement:
-") (text . "") (js code nil "$('#foo').toggle(showOrHide);") (text . "") (text . "is equivalent to:
+") (text . "") (js . "$('#foo').toggle(showOrHide);") (text . "") (text . "is equivalent to:
 
 
-") (text . "") (js code nil "if ( showOrHide == true ) {
+") (text . "") (js . "if ( showOrHide == true ) {
   $('#foo').show();
 } else if ( showOrHide == false ) {
   $('#foo').hide();
@@ -15609,25 +15611,25 @@ first version, if an element in the matched set of elements already has
 the class, then it is removed; if an element does not have the class,
 then it is added. For example, we can apply .toggleClass() to a simple
 <div>:
-") (text . "") (js code nil "<div class=\"tumble\">Some text.</div>
+") (text . "") (html . "<div class=\"tumble\">Some text.</div>
     ") (text . "") (text . "The first time we apply $(`div.tumble`).toggleClass(`bounce`), we get
 the following:
 
-") (text . "") (js code nil "<div class=\"tumble bounce\">Some text.</div>
+") (text . "") (html . "<div class=\"tumble bounce\">Some text.</div>
     ") (text . "") (text . "The second time we apply $(`div.tumble`).toggleClass(`bounce`), the
 <div> class is returned to the single tumble value:
 
-") (text . "") (js code nil "<div class=\"tumble\">Some text.</div>") (text . "") (text . "Applying .toggleClass(`bounce spin`) to the same <div> alternates
+") (text . "") (html . "<div class=\"tumble\">Some text.</div>") (text . "") (text . "Applying .toggleClass(`bounce spin`) to the same <div> alternates
 between <div class=\"tumble bounce spin\"> and <div class=\"tumble\">.
 
 ") (text . "") (text . "The second version of .toggleClass() uses the second parameter for
 determining whether the class should be added or removed. If this
 parameter`s value is true, then the class is added; if false, the class
 is removed. In essence, the statement:
-") (text . "") (js code nil "$('#foo').toggleClass(className, addOrRemove);") (text . "") (text . "is equivalent to:
+") (text . "") (js . "$('#foo').toggleClass(className, addOrRemove);") (text . "") (text . "is equivalent to:
 
 
-") (text . "") (js code nil "if (addOrRemove) {
+") (text . "") (js . "if (addOrRemove) {
     $('#foo').addClass(className);
   }
   else {
@@ -15637,7 +15639,7 @@ is removed. In essence, the statement:
 class names on the element the first time .toggleClass() is called will
 be toggled. Also as of jQuery 1.4, the class name to be toggled can be
 determined by passing in a function.
-") (text . "") (js code nil "$('div.foo').toggleClass(function() {
+") (text . "") (js . "$('div.foo').toggleClass(function() {
   if ($(this).parent().is('.bar')) {
     return 'happy';
   } else {
@@ -15749,7 +15751,7 @@ are triggered when the corresponding event occurs. They can be fired
 manually, however, with the .trigger() method. A call to .trigger()
 executes the handlers in the same order they would be if the event were
 triggered naturally by the user:
-") (text . "") (js code nil "$('#foo').on('click', function() {
+") (text . "") (js . "$('#foo').on('click', function() {
       alert($(this).text());
     });
     $('#foo').trigger('click');") (text . "") (text . "As of jQuery 1.3, .trigger()ed events bubble up the DOM tree; an event
@@ -15765,7 +15767,7 @@ event, use .triggerHandler() instead.
 argument to .trigger() can become useful. For example, suppose we have
 bound a handler for the custom event to our element instead of the
 built-in click event as we did above:
-") (text . "") (js code nil "$('#foo').on('custom', function(event, param1, param2) {
+") (text . "") (js . "$('#foo').on('custom', function(event, param1, param2) {
   alert(param1 + \"\\n\" + param2);
 });
 $('#foo').trigger('custom', ['Custom', 'Event']);
@@ -15906,15 +15908,15 @@ $(\"<span>Focused!</span>\").appendTo(\"body\").fadeOut(1000);
 of jQuery 1.7, the .on() and .off() methods are preferred to attach and
 remove event handlers on elements.) In the simplest case, with no
 arguments, .unbind() removes all handlers attached to the elements:
-") (text . "") (js code nil "$('#foo').unbind();") (text . "") (text . "This version removes the handlers regardless of type. To be more
+") (text . "") (js . "$('#foo').unbind();") (text . "") (text . "This version removes the handlers regardless of type. To be more
 precise, we can pass an event type:
 
-") (text . "") (js code nil "$('#foo').unbind('click');") (text . "") (text . "By specifying the click event type, only handlers for that event type
+") (text . "") (js . "$('#foo').unbind('click');") (text . "") (text . "By specifying the click event type, only handlers for that event type
 will be unbound. This approach can still have negative ramifications if
 other scripts might be attaching behaviors to the same element,
 however. Robust and extensible applications typically demand the
 two-argument version for this reason:
-") (text . "") (js code nil "var handler = function() {
+") (text . "") (js . "var handler = function() {
   alert('The quick brown fox jumps over the lazy dog.');
 };
 $('#foo').bind('click', handler);
@@ -15922,7 +15924,7 @@ $('#foo').unbind('click', handler);
 ") (text . "") (text . "By naming the handler, we can be assured that no other functions are
 accidentally removed. Note that the following will not work:
 
-") (text . "") (js code nil "$('#foo').bind('click', function() {
+") (text . "") (js . "$('#foo').bind('click', function() {
   alert('The quick brown fox jumps over the lazy dog.');
 });
 
@@ -15947,16 +15949,16 @@ we can namespace the events and use this capability to narrow the scope
 of our unbinding actions. As shown in the discussion for the .bind()
 method, namespaces are defined by using a period ( .) character when
 binding a handler:
-") (text . "") (js code nil "$('#foo').bind('click.myEvents', handler);") (text . "") (text . "When a handler is bound in this fashion, we can still unbind it the
+") (text . "") (js . "$('#foo').bind('click.myEvents', handler);") (text . "") (text . "When a handler is bound in this fashion, we can still unbind it the
 normal way:
 
-") (text . "") (js code nil "$('#foo').unbind('click');") (text . "") (text . "However, if we want to avoid affecting other handlers, we can be more
+") (text . "") (js . "$('#foo').unbind('click');") (text . "") (text . "However, if we want to avoid affecting other handlers, we can be more
 specific:
 
-") (text . "") (js code nil "$('#foo').unbind('click.myEvents');") (text . "") (text . "We can also unbind all of the handlers in a namespace, regardless of
+") (text . "") (js . "$('#foo').unbind('click.myEvents');") (text . "") (text . "We can also unbind all of the handlers in a namespace, regardless of
 event type:
 
-") (text . "") (js code nil "$('#foo').unbind('.myEvents');") (text . "") (text . "It is particularly useful to attach namespaces to event bindings when
+") (text . "") (js . "$('#foo').unbind('.myEvents');") (text . "") (text . "It is particularly useful to attach namespaces to event bindings when
 we are developing plug-ins or otherwise writing code that may interact
 with other event-handling code in the future.
 ") (text . "") (text . " Using the Event Object
@@ -15965,7 +15967,7 @@ with other event-handling code in the future.
 ") (text . "") (text . "The third form of the .unbind() method is used when we wish to unbind a
 handler from within itself. For example, suppose we wish to trigger an
 event handler only three times:
-") (text . "") (js code nil "var timesClicked = 0;
+") (text . "") (js . "var timesClicked = 0;
 $('#foo').bind('click', function(event) {
   alert('The quick brown fox jumps over the lazy dog.');
   timesClicked++;
@@ -16124,7 +16126,7 @@ page reload will first create an unload event.
 ") (text . "") (text . "Any unload event handler should be bound to the window object:
 
 
-") (text . "") (js code nil "$(window).unload(function() {
+") (text . "") (js . "$(window).unload(function() {
   alert('Handler for .unload() called.');
 });
 ") (text . "") (text . "After this code executes, the alert will be displayed whenever the
@@ -16174,7 +16176,7 @@ null.
 ") (text . "") (text . "For selects and checkboxes, you can also use the :selected and :checked
 selectors to get at values, for example:
 
-") (text . "") (js code nil "$('select.foo option:selected').val();    // get the value from a dropdown select
+") (text . "") (js . "$('select.foo option:selected').val();    // get the value from a dropdown select
 $('select.foo').val();                    // get the value from a dropdown select even easier
 $('input:checkbox:checked').val();        // get the value from a checked checkbox
 $('input:radio[name=bar]:checked').val(); // get the value from a set of radio buttons") (text . "") (text . "  Note: At present, using .val() on textarea elements strips carriage
@@ -16183,7 +16185,7 @@ $('input:radio[name=bar]:checked').val(); // get the value from a set of radio b
   preserved (or added by browsers which do not include them in the raw
   value). A workaround for this issue can be achieved using a valHook
   as follows:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $.valHooks.textarea = {
   get: function( elem ) {
     return elem.value.replace( /\\r?\\n/g, \"\\r\\n\" );
@@ -16254,7 +16256,7 @@ multiple=\"multiple\"> the other elements will be deselected.
 ") (text . "") (text . "The .val() method allows us to set the value by passing in a function.
 As of jQuery 1.4, the function is passed two arguments, the current
 element`s index and its current value:
-") (text . "") (js code nil "$('input:text.items').val(function( index, value ) {
+") (text . "") (js . "$('input:text.items').val(function( index, value ) {
   return value + ' ' + this.className;
 });
 ") (text . "") (text . "This example appends the string \" items\" to the text inputs` values.
@@ -16328,7 +16330,7 @@ mathematical calculation.
 ") (text . "") (text . "This method is also able to find the width of the window and document.
 
 
-") (text . "") (js code nil "$(window).width();   // returns width of browser viewport
+") (text . "") (js . "$(window).width();   // returns width of browser viewport
       $(document).width(); // returns width of HTML document") (text . "") (text . "Note that .width() will always return the content width, regardless of
 the value of the CSS box-sizing property.
 
@@ -16431,16 +16433,16 @@ original set of elements for chaining purposes.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "Using .wrap(), we can insert an HTML structure around the inner <div>
 elements like so:
 
-") (text . "") (js code nil "$('.inner').wrap('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "$('.inner').wrap('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around each matched element:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"new\">
     <div class=\"inner\">Hello</div>
   </div>
@@ -16451,12 +16453,12 @@ result is a new <div> wrapped around each matched element:
 callback function. This callback function will be called once for every
 matched element; it should return a DOM element, jQuery object, or HTML
 snippet in which to wrap the corresponding element. For example:
-") (text . "") (js code nil "$('.inner').wrap(function() {
+") (text . "") (js . "$('.inner').wrap(function() {
   return '<div class=\"' + $(this).text() + '\" />';
 });") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
 wraps:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"Hello\">
     <div class=\"inner\">Hello</div>
   </div>
@@ -16519,16 +16521,16 @@ the set of matched elements, as a single group.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "Using .wrapAll(), we can insert an HTML structure around the inner
 <div> elements like so:
 
-") (text . "") (js code nil "$('.inner').wrapAll('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "$('.inner').wrapAll('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around all matched elements:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"new\">
     <div class=\"inner\">Hello</div>
     <div class=\"inner\">Goodbye</div>
@@ -16593,16 +16595,16 @@ each of the elements in the set of matched elements.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>") (text . "") (text . "Using .wrapInner(), we can insert an HTML structure around the content
 of each inner <div> elements like so:
 
-") (text . "") (js code nil "$('.inner').wrapInner('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "$('.inner').wrapInner('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around the content of each matched
 element:
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">
     <div class=\"new\">Hello</div>
   </div>
@@ -16614,12 +16616,12 @@ callback function. This callback function will be called once for every
 matched element; it should return a DOM element, jQuery object, or HTML
 snippet in which to wrap the content of the corresponding element. For
 example:
-") (text . "") (js code nil "$('.inner').wrapInner(function() {
+") (text . "") (js . "$('.inner').wrapInner(function() {
   return '<div class=\"' + this.nodeValue + '\" />';
 });") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
 wraps:
 
-") (text . "") (js code nil "<div class=\"container\">
+") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">
     <div class=\"Hello\">Hello</div>
   </div>
@@ -16629,7 +16631,7 @@ wraps:
 </div>") (text . "") (text . "Note: When passing a selector string to the .wrapInner() function, the
 expected input is well formed HTML with correctly closed tags. Examples
 of valid input include:
-") (text . "") (js code nil "
+") (text . "") (js . "
 $(elem).wrapInner(\"<div class='test' />\");
 $(elem).wrapInner(\"<div class='test'></div>\");
 $(elem).wrapInner(\"<div class=\\\"test\\\"></div>\");
@@ -16678,7 +16680,7 @@ is desired as well, .addBack() can help.
 ") (text . "") (text . "Consider a page with a simple list on it:
 
 
-") (text . "") (js code nil "
+") (text . "") (html . "
 <ul>
    <li>list item 1</li>
    <li>list item 2</li>
@@ -16689,7 +16691,7 @@ is desired as well, .addBack() can help.
 ") (text . "") (text . "The result of the following code is a red background behind items 3, 4
 and 5:
 
-") (text . "") (js code nil "$('li.third-item').nextAll().addBack()
+") (text . "") (js . "$('li.third-item').nextAll().addBack()
   .css('background-color', 'red');
 ") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
 the set containing just this item. The call to .nextAll() then pushes
