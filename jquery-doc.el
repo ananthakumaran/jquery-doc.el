@@ -25,7 +25,8 @@
 
 ;;; Code:
 
-(require 'auto-complete)
+(require 'auto-complete nil t)
+(require 'company nil t)
 (require 'jquery-doc-data)
 (require 'cl)
 (require 'xml)
@@ -336,30 +337,59 @@ Optional argument JQUERY-METHOD method-name."
 	(jquery-doc-insert buffer method-name)
 	(display-buffer buffer)))))
 
+(defconst jquery-doc-prefix-re
+  "\\(\\$\\.\\(?:[a-zA-Z0-9][_a-zA-Z0-9]*\\)?\\)\\="
+  "Regexp to match jQuery function call.")
+
+;; auto-complete
+
 (defun jquery-doc-documentation (method)
   "Return the documentation for METHOD as String."
   (let ((method (substring-no-properties method)))
     (jquery-doc-with-temp-buffer-as-string
       (jquery-doc-insert (current-buffer) method))))
 
-
-;; autocomplete
+;;;###autoload
 (defun jquery-doc-ac-prefix ()
-  (if (re-search-backward "\\(\\$\\.\\(?:[a-zA-Z0-9][_a-zA-Z0-9]*\\)?\\)\\=" nil t)
+  (if (re-search-backward jquery-doc-prefix-re nil t)
       (match-beginning 1)
     (ac-prefix-default)))
 
-(ac-define-prefix 'jquery-doc 'jquery-doc-ac-prefix)
-
-(ac-define-source jquery
+;;;###autoload
+(defvar ac-source-jquery
   '((candidates . jquery-doc-methods)
     (symbol . "f")
     (document . jquery-doc-documentation)
-    (prefix . jquery-doc)
+    (prefix . jquery-doc-ac-prefix)
     (cache)))
 
+;; company-mode
+
+(defvar company-jquery-modes '(js-mode js2-mode))
+
+;;;###autoload
+(defun company-jquery (command &optional arg &rest ignore)
+  "`company-mode' completion back-end using `jquery-doc'."
+  (interactive (list 'interactive))
+  (case command
+    (interactive (company-begin-backend 'company-jquery))
+    (prefix (when (memq major-mode company-jquery-modes)
+              (or (company-grab-line jquery-doc-prefix-re 1)
+                  (company-grab-symbol))))
+    (candidates (all-completions arg jquery-doc-methods))
+    (duplicates t)
+    (doc-buffer (let* ((inhibit-read-only t)
+                       (buf (company-doc-buffer)))
+                  (jquery-doc-insert buf arg)
+                  buf))))
+
+;; common
+
 (defun jquery-doc-setup ()
-  (setq ac-sources (append '(ac-source-jquery) ac-sources)))
+  (when (boundp 'ac-sources)
+    (pushnew 'ac-source-jquery ac-sources))
+  (when (boundp 'company-backends)
+    (pushnew 'company-jquery company-backends)))
 
 (provide 'jquery-doc)
 
