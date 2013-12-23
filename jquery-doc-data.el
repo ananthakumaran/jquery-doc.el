@@ -31,41 +31,57 @@ method constructs a new jQuery object from the union of those elements
 and the ones passed into the method. The argument to .add() can be
 pretty much anything that $() accepts, including a jQuery selector
 expression, references to DOM elements, or an HTML snippet.
+") (text . "") (text . "Do not assume that this method appends the elements to the existing
+collection in the order they are passed to the .add() method. When all
+elements are members of the same document, the resulting collection
+from .add() will be sorted in document order; that is, in order of each
+element`s appearance in the document. If the collection consists of
+elements from different documents or ones not in any document, the sort
+order is undefined. To create a jQuery object with elements in a
+well-defined order, use the $(array_of_DOM_elements) signature.
 ") (text . "") (text . "The updated set of elements can be used in a following (chained)
 method, or assigned to a variable for later use. For example:
 
 ") (text . "") (js . "
-$(\"p\").add(\"div\").addClass(\"widget\");
-var pdiv = $(\"p\").add(\"div\");
-") (text . "") (text . "The following will not save the added elements, because the .add()
+$( \"p\" ).add( \"div\" ).addClass( \"widget\" );
+var pdiv = $( \"p\" ).add( \"div\" );
+    ") (text . "") (text . "The following will not save the added elements, because the .add()
 method creates a new set and leaves the original set in pdiv unchanged:
 
 ") (text . "") (js . "
-var pdiv = $(\"p\");
-pdiv.add(\"div\");  // WRONG, pdiv will not change
-") (text . "") (text . "Consider a page with a simple list and a paragraph following it:
+var pdiv = $( \"p\" );
+pdiv.add( \"div\" ); // WRONG, pdiv will not change
+    ") (text . "") (text . "Consider a page with a simple list and a paragraph following it:
 
 
-") (text . "") (html . "<ul>
+") (text . "") (html . "
+<ul>
   <li>list item 1</li>
   <li>list item 2</li>
   <li>list item 3</li>
 </ul>
-<p>a paragraph</p>") (text . "") (text . "We can select the list items and then the paragraph by using either a
+<p>a paragraph</p>
+    ") (text . "") (text . "We can select the list items and then the paragraph by using either a
 selector or a reference to the DOM element itself as the .add()
 method`s argument:
-") (text . "") (js . "$('li').add('p').css('background-color', 'red');") (text . "") (text . "Or:
+") (text . "") (js . "
+$( \"li\" ).add( \"p\" ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "Or:
 
 
-") (text . "") (js . "$('li').add(document.getElementsByTagName('p')[0])
-  .css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind all four elements.
+") (text . "") (js . "
+$( \"li\" ).add( document.getElementsByTagName( \"p\" )[ 0 ] )
+  .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind all four elements.
 Using an HTML snippet as the .add() method`s argument (as in the third
 version), we can create additional elements on the fly and add those
 elements to the matched set of elements. Let`s say, for example, that
 we want to alter the background of the list items along with a newly
 created paragraph:
-") (text . "") (js . "$('li').add('<p id=\"new\">new paragraph</p>')
-  .css('background-color', 'red');") (text . "") (text . "Although the new paragraph has been created and its background color
+") (text . "") (js . "
+$( \"li\" ).add( \"<p id='new'>new paragraph</p>\" )
+  .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "Although the new paragraph has been created and its background color
 changed, it still does not appear on the page. To place it on the page,
 we could add one of the insertion methods to the chain.
 ") (text . "") (text . "As of jQuery 1.4 the results from .add() will always be returned in
@@ -78,36 +94,66 @@ selection before you added.
 jQuery object to set their backgrounds yellow.
 
 ") (text . "") (js . "
-
-$(\"div\").css(\"border\", \"2px solid red\")
-        .add(\"p\")
-        .css(\"background\", \"yellow\");
+$( \"div\" ).css( \"border\", \"2px solid red\" )
+  .add( \"p\" )
+  .css( \"background\", \"yellow\" );
 ") (text . "") (css . "
- div { width:60px; height:60px; margin:10px; float:left; }
- p { clear:left; font-weight:bold; font-size:16px;
-     color:blue; margin:0 10px; padding:2px; }
- ") (text . "") (html . "<div></div>
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 10px;
+    float: left;
+  }
+  p {
+    clear: left;
+    font-weight: bold;
+    font-size: 16px;
+    color: blue;
+    margin: 0 10px;
+    padding: 2px;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
 
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-
-  <p>Added this... (notice no border)</p>") (text . "")) ((text . "") (text . "Adds more elements, matched by the given expression, to the set of
+<p>Added this... (notice no border)</p>
+") (text . "")) ((text . "") (text . "Adds more elements, matched by the given expression, to the set of
 matched elements.
 
-") (text . "") (js . "$(\"p\").add(\"span\").css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p><span>Hello Again</span>") (text . "")) ((text . "") (text . "Adds more elements, created on the fly, to the set of matched elements.
+") (text . "") (js . "
+$( \"p\" ).add( \"span\" ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<p>Hello</p>
+<span>Hello Again</span>
+") (text . "")) ((text . "") (text . "Adds more elements, created on the fly, to the set of matched elements.
 
 
-") (text . "") (js . "$(\"p\").clone().add(\"<span>Again</span>\").appendTo(document.body);") (text . "") (html . "<p>Hello</p>") (text . "")) ((text . "") (text . "Adds one or more Elements to the set of matched elements.
+") (text . "") (js . "
+$( \"p\" ).clone().add( \"<span>Again</span>\" ).appendTo( document.body );
+") (text . "") (html . "
+<p>Hello</p>
+") (text . "")) ((text . "") (text . "Adds one or more Elements to the set of matched elements.
 
-") (text . "") (js . "$(\"p\").add(document.getElementById(\"a\")).css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p><span id=\"a\">Hello Again</span>") (text . "")) ((text . "") (text . "Demonstrates how to add (or push) elements to an existing collection
+") (text . "") (js . "
+$( \"p\" ).add( document.getElementById( \"a\" ) ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<p>Hello</p>
+<span id=\"a\">Hello Again</span>
+") (text . "")) ((text . "") (text . "Demonstrates how to add (or push) elements to an existing collection
 
-") (text . "") (js . "var collection = $(\"p\");
-// capture the new collection
-collection = collection.add(document.getElementById(\"a\"));
-collection.css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p><span id=\"a\">Hello Again</span>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+var collection = $( \"p\" );
+// Capture the new collection
+collection = collection.add( document.getElementById( \"a\" ) );
+collection.css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<p>Hello</p>
+<span id=\"a\">Hello Again</span>
+") (text . ""))))) jquery-doc-hash)
 
 (push "addClass" jquery-doc-methods)
 
@@ -126,61 +172,89 @@ assigned to the elements.
 ") (text . "") (text . "More than one class may be added at a time, separated by a space, to
 the set of matched elements, like so:
 
-") (text . "") (js . "$(\"p\").addClass(\"myClass yourClass\");") (text . "") (text . "This method is often used with .removeClass() to switch elements`
+") (text . "") (js . "
+$( \"p\" ).addClass( \"myClass yourClass\" );
+    ") (text . "") (text . "This method is often used with .removeClass() to switch elements`
 classes from one to another, like so:
 
-") (text . "") (js . "$(\"p\").removeClass(\"myClass noClass\").addClass(\"yourClass\");") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
+") (text . "") (js . "
+$( \"p\" ).removeClass( \"myClass noClass\" ).addClass( \"yourClass\" );
+    ") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
 while yourClass is added.
 
 ") (text . "") (text . "As of jQuery 1.4, the .addClass() method`s argument can receive a
 function.
 
-") (text . "") (js . "$(\"ul li:last\").addClass(function(index) {
+") (text . "") (js . "
+$( \"ul li\" ).addClass(function( index ) {
   return \"item-\" + index;
-});") (text . "") (text . "Given an unordered list with five <li> elements, this example adds the
-class \"item-4\" to the last <li>.
+});
+    ") (text . "") (text . "Given an unordered list with two <li> elements, this example adds the
+class \"item-0\" to the first <li> and \"item-1\" to the second.
 
 ") (text . "")) ("examples" ((text . "") (text . "Add the class \"selected\" to the matched elements.
 
 ") (text . "") (js . "
-  $(\"p\").last().addClass(\"selected\");
-  ") (text . "") (css . "
-  p { margin: 8px; font-size:16px; }
-  .selected { color:blue; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "
-  <p>Hello</p>
-  <p>and</p>
-  <p>Goodbye</p>
-  ") (text . "")) ((text . "") (text . "Add the classes \"selected\" and \"highlight\" to the matched elements.
+$( \"p\" ).last().addClass( \"selected\" );
+") (text . "") (css . "
+  p {
+    margin: 8px;
+    font-size: 16px;
+  }
+  .selected {
+    color: blue;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>and</p>
+<p>Goodbye</p>
+") (text . "")) ((text . "") (text . "Add the classes \"selected\" and \"highlight\" to the matched elements.
 
 ") (text . "") (js . "
-  $(\"p:last\").addClass(\"selected highlight\");
-  ") (text . "") (css . "
-  p { margin: 8px; font-size:16px; }
-  .selected { color:red; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>and</p>
-  <p>Goodbye</p>") (text . "")) ((text . "") (text . "Pass in a function to .addClass() to add the \"green\" class to a div
+$( \"p:last\" ).addClass( \"selected highlight\" );
+") (text . "") (css . "
+  p {
+    margin: 8px;
+    font-size: 16px;
+  }
+  .selected {
+    color: red;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>and</p>
+<p>Goodbye</p>
+") (text . "")) ((text . "") (text . "Pass in a function to .addClass() to add the \"green\" class to a div
 that already has a \"red\" class.
 
 ") (text . "") (js . "
-  $(\"div\").addClass(function(index, currentClass) {
-    var addedClass;
+$( \"div\" ).addClass(function( index, currentClass ) {
+  var addedClass;
 
-    if ( currentClass === \"red\" ) {
-      addedClass = \"green\";
-      $(\"p\").text(\"There is one green div\");
-    }
+  if ( currentClass === \"red\" ) {
+    addedClass = \"green\";
+    $( \"p\" ).text( \"There is one green div\" );
+  }
 
-    return addedClass;
-  });
+  return addedClass;
+});
 ") (text . "") (css . "
-  div { background: white; }
-  .red { background: red; }
-  .red.green { background: green; }
-  ") (text . "") (html . "
+  div {
+    background: white;
+  }
+  .red {
+    background: red;
+  }
+  .red.green {
+    background: green;
+  }
+") (text . "") (html . "
  <div>This div should be white</div>
  <div class=\"red\">This div will be green because it now has the \"green\" and \"red\" classes.
    It would be red if the addClass function failed.</div>
@@ -190,8 +264,8 @@ that already has a \"red\" class.
 
 (push "after" jquery-doc-methods)
 
-(puthash "after" (quote (("name" . "after") ("signatures" "after" (("content" "HTML string, DOM element, or jQuery object to insert after each element
-in the set of matched elements.
+(puthash "after" (quote (("name" . "after") ("signatures" "after" (("content" "HTML string, DOM element, array of elements, or jQuery object to insert
+after each element in the set of matched elements.
 
 " nil nil) ("content" "One or more additional DOM elements, arrays of elements, HTML strings,
 or jQuery objects to insert after each element in the set of matched
@@ -213,17 +287,22 @@ fly, and it is inserted after the target container.
 ") (text . "") (text . "Using the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "Content can be created and then inserted after several elements at
+</div>
+    ") (text . "") (text . "Content can be created and then inserted after several elements at
 once:
 
-") (text . "") (js . "$('.inner').after('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \".inner\" ).after( \"<p>Test</p>\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <p>Test</p>
@@ -232,14 +311,18 @@ once:
 </div>") (text . "") (text . "An element in the DOM can also be selected and inserted after another
 element:
 
-") (text . "") (js . "$('.container').after($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "
+$( \".container\" ).after( $( \"h2\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved rather than cloned:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
-<h2>Greetings</h2>") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+<h2>Greetings</h2>
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first.
 
 ") (text . "") (text . " Inserting Disconnected DOM nodes
@@ -248,27 +331,35 @@ inserted element will be created for each target after the first.
 ") (text . "") (text . "As of jQuery 1.4, .before() and .after() will also work on disconnected
 DOM nodes. For example, given the following code:
 
-") (text . "") (js . "$('<div/>').after('<p></p>');") (text . "") (text . "The result is a jQuery set containing a div and a paragraph, in that
+") (text . "") (js . "$( \"<div></div>\" ).after( \"<p></p>\" );") (text . "") (text . "The result is a jQuery set containing a div and a paragraph, in that
 order. That set can be further manipulated, even before it is inserted
 in the document.
-") (text . "") (js . "$('<div/>').after('<p></p>').addClass('foo')
-  .filter('p').attr('id', 'bar').html('hello')
-.end()
-.appendTo('body');") (text . "") (text . "This results in the following elements inserted just before the closing
+") (text . "") (js . "
+$( \"<div></div>\" )
+  .after( \"<p></p>\" )
+  .addClass( \"foo\" )
+  .filter( \"p\" )
+    .attr( \"id\", \"bar\" )
+    .html( \"hello\" )
+  .end()
+  .appendTo( \"body\" );
+    ") (text . "") (text . "This results in the following elements inserted just before the closing
 </body> tag:
 
 ") (text . "") (html . "
 <div class=\"foo\"></div>
 <p class=\"foo\" id=\"bar\">hello</p>
-") (text . "") (text . " Passing a Function
+    ") (text . "") (text . " Passing a Function
 
 
 ") (text . "") (text . "As of jQuery 1.4, .after() supports passing a function that returns the
 elements to insert.
 
-") (text . "") (js . "$('p').after(function() {
-  return '<div>' + this.className + '</div>';
-});") (text . "") (text . "This example inserts a <div> after each paragraph, with each new <div>
+") (text . "") (js . "
+$( \"p\" ).after(function() {
+  return \"<div>\" + this.className + \"</div>\";
+});
+    ") (text . "") (text . "This example inserts a <div> after each paragraph, with each new <div>
 containing the class name(s) of its preceding paragraph.
 
 ") (text . "") (text . " Additional Arguments
@@ -281,24 +372,50 @@ strings, and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> after the first paragraph:
 
-") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
-    newdiv2 = document.createElement('div'),
-    existingdiv1 = document.getElementById('foo');
+") (text . "") (js . "
+var $newdiv1 = $( \"<div id='object1'/>\" ),
+  newdiv2 = document.createElement( \"div\" ),
+  existingdiv1 = document.getElementById( \"foo\" );
 
-$('p').first().after($newdiv1, [newdiv2, existingdiv1]);
-") (text . "") (text . "Since .after() can accept any number of additional arguments, the same
+$( \"p\" ).first().after( $newdiv1, [ newdiv2, existingdiv1 ] );
+    ") (text . "") (text . "Since .after() can accept any number of additional arguments, the same
 result can be achieved by passing in the three <div>s as three separate
-arguments, like so: $(`p`).first().after($newdiv1, newdiv2,
-existingdiv1). The type and number of arguments will largely depend on
+arguments, like so: $( \"p\" ).first().after( $newdiv1, newdiv2,
+existingdiv1 ). The type and number of arguments will largely depend on
 the elements that are collected in the code.
 ") (text . "")) ("examples" ((text . "") (text . "Inserts some HTML after all paragraphs.
 
-") (text . "") (js . "$(\"p\").after(\"<b>Hello</b>\");") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p>I would like to say: </p>") (text . "")) ((text . "") (text . "Inserts a DOM element after all paragraphs.
+") (text . "") (js . "
+$( \"p\" ).after( \"<b>Hello</b>\" );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>I would like to say: </p>
+") (text . "")) ((text . "") (text . "Inserts a DOM element after all paragraphs.
 
-") (text . "") (js . "$(\"p\").after( document.createTextNode(\"Hello\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p>I would like to say: </p>") (text . "")) ((text . "") (text . "Inserts a jQuery object (similar to an Array of DOM Elements) after all
+") (text . "") (js . "
+$( \"p\" ).after( document.createTextNode( \"Hello\" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>I would like to say: </p>
+") (text . "")) ((text . "") (text . "Inserts a jQuery object (similar to an Array of DOM Elements) after all
 paragraphs.
 
-") (text . "") (js . "$(\"p\").after( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<b>Hello</b><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).after( $( \"b\" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<b>Hello</b>
+<p>I would like to say: </p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxComplete" jquery-doc-methods)
 
@@ -313,27 +430,30 @@ event. Any and all handlers that have been registered with the
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (html . "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "
+<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
 <div class=\"log\"></div>
-") (text . "") (text . "Attach the event handler to the document:
+    ") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js . "$(document).ajaxComplete(function() {
+") (text . "") (js . "
+$( document ).ajaxComplete(function() {
   $( \".log\" ).text( \"Triggered ajaxComplete handler.\" );
 });
-") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \".trigger\" ).click(function() {
+") (text . "") (js . "
+$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
-});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+});
+    ") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes, the log message is displayed.
 
-") (text . "") (text . "Note: Because .ajaxComplete() is implemented as a method of jQuery
-object instances, you can use the this keyword to refer to the selected
-elements within the callback function. As of jQuery 1.8, however, the
-.ajaxComplete() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxComplete() method should only be attached to
+document.
+
 ") (text . "") (text . "All ajaxComplete handlers are invoked, regardless of what Ajax request
 was completed. If you must differentiate between the requests, use the
 parameters passed to the handler. Each time an ajaxComplete handler is
@@ -341,19 +461,23 @@ executed, it is passed the event object, the XMLHttpRequest object, and
 the settings object that was used in the creation of the request. For
 example, you can restrict the callback to only handling events dealing
 with a particular URL:
-") (text . "") (js . "$(document).ajaxComplete(function(event, xhr, settings) {
+") (text . "") (js . "
+$( document ).ajaxComplete(function( event, xhr, settings ) {
   if ( settings.url === \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxComplete handler. The result is \" +
-                     xhr.responseHTML );
+      xhr.responseHTML );
   }
-});") (text . "") (text . "Note: You can get the returned ajax contents by looking at
+});
+    ") (text . "") (text . "Note: You can get the returned ajax contents by looking at
 xhr.responseXML or xhr.responseHTML for xml and html respectively.
 
 ") (text . "")) ("examples" ((text . "") (text . "Show a message when an Ajax request completes.
 
-") (text . "") (js . "$(document).ajaxComplete(function(event,request, settings) {
-   $( \"#msg\" ).append( \"<li>Request Complete.</li>\" );
- });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ajaxComplete(function( event,request, settings ) {
+  $( \"#msg\" ).append( \"<li>Request Complete.</li>\" );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxError" jquery-doc-methods)
 
@@ -364,47 +488,56 @@ error. This is an Ajax Event.
 
 ")) ("longdesc" (text . "") (text . "Whenever an Ajax request completes with an error, jQuery triggers the
 ajaxError event. Any and all handlers that have been registered with
-the .ajaxError() method are executed at this time.
+the .ajaxError() method are executed at this time. Note: This handler
+is not called for cross-domain script and cross-domain JSONP requests.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request.
 
 
-") (text . "") (html . "<button class=\"trigger\">Trigger</button>
+") (text . "") (html . "
+<button class=\"trigger\">Trigger</button>
 <div class=\"result\"></div>
-<div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
+<div class=\"log\"></div>
+    ") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js . "$(document).ajaxError(function() {
+") (text . "") (js . "
+$( document ).ajaxError(function() {
   $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
-});") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+});
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \"button.trigger\" ).click(function() {
+") (text . "") (js . "
+$( \"button.trigger\" ).on( \"click\", function() {
   $( \"div.result\" ).load( \"ajax/missing.html\" );
-});") (text . "") (text . "When the user clicks the button and the Ajax request fails, because the
+});
+    ") (text . "") (text . "When the user clicks the button and the Ajax request fails, because the
 requested file is missing, the log message is displayed.
 
-") (text . "") (text . "Note: Because .ajaxError() is implemented as a method of jQuery object
-instances, you can use the this keyword within the callback function to
-refer to the selected elements. As of jQuery 1.8, however, the
-.ajaxError() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxError() method should only be attached to
+document.
+
 ") (text . "") (text . "All ajaxError handlers are invoked, regardless of what Ajax request was
 completed. To differentiate between the requests, use the parameters
 passed to the handler. Each time an ajaxError handler is executed, it
 is passed the event object, the jqXHR object (prior to jQuery 1.5, the
 XHR object), and the settings object that was used in the creation of
-the request. If the request failed because JavaScript raised an
-exception, the exception object is passed to the handler as a fourth
-parameter. For example, to restrict the error callback to only handling
-events dealing with a particular URL:
-") (text . "") (js . "$( document ).ajaxError(function(event, jqxhr, settings, exception) {
+the request. When an HTTP error occurs, the fourth argument (
+thrownError) receives the textual portion of the HTTP status, such as
+\"Not Found\" or \"Internal Server Error.\" For example, to restrict the
+error callback to only handling events dealing with a particular URL:
+") (text . "") (js . "
+$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
   if ( settings.url == \"ajax/missing.html\" ) {
     $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
   }
 });") (text . "")) ("examples" ((text . "") (text . "Show a message when an Ajax request fails.
 
-") (text . "") (js . "$(document).ajaxError(function(event, request, settings) {
+") (text . "") (js . "
+$( document ).ajaxError(function( event, request, settings ) {
   $( \"#msg\" ).append( \"<li>Error requesting page \" + settings.url + \"</li>\" );
-});") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxSend" jquery-doc-methods)
 
@@ -419,25 +552,30 @@ ajaxSend event. Any and all handlers that have been registered with the
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (html . "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "
+<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
-<div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
+<div class=\"log\"></div>
+    ") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js . "$(document).ajaxSend(function() {
+") (text . "") (js . "
+$( document ).ajaxSend(function() {
   $( \".log\" ).text( \"Triggered ajaxSend handler.\" );
-});") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+});
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \".trigger\" ).click(function() {
+") (text . "") (js . "
+$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
-});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+});
+    ") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request is about to begin, the log message is displayed.
 
-") (text . "") (text . "Note: Because .ajaxSend() is implemented as a method of jQuery
-instances, you can use the this keyword to refer to the selected
-elements within the callback function. As of jQuery 1.8, however, the
-.ajaxSend() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxSend() method should only be attached to
+document.
+
 ") (text . "") (text . "All ajaxSend handlers are invoked, regardless of what Ajax request is
 to be sent. If you must differentiate between the requests, use the
 parameters passed to the handler. Each time an ajaxSend handler is
@@ -445,15 +583,19 @@ executed, it is passed the event object, the jqXHR object (in version
 1.4, XMLHttpRequestobject), and the settings object that was used in
 the creation of the Ajax request. For example, you can restrict the
 callback to only handling events dealing with a particular URL:
-") (text . "") (js . "$(document).ajaxSend(function(event, jqxhr, settings) {
+") (text . "") (js . "
+$( document ).ajaxSend(function( event, jqxhr, settings ) {
   if ( settings.url == \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxSend handler.\" );
   }
-});") (text . "")) ("examples" ((text . "") (text . "Show a message before an Ajax request is sent.
+});
+    ") (text . "")) ("examples" ((text . "") (text . "Show a message before an Ajax request is sent.
 
-") (text . "") (js . "$(document).ajaxSend(function(event, request, settings) {
-    $( \"#msg\" ).append( \"<li>Starting request at \" + settings.url + \"</li>\" );
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ajaxSend(function( event, request, settings ) {
+  $( \"#msg\" ).append( \"<li>Starting request at \" + settings.url + \"</li>\" );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxStart" jquery-doc-methods)
 
@@ -469,31 +611,38 @@ been registered with the .ajaxStart() method are executed at this time.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (html . "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "
+<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
-<div class=\"log\"></div>") (text . "") (text . "Attach the event handler to any element:
+<div class=\"log\"></div>
+    ") (text . "") (text . "Attach the event handler to any element:
 
 
-") (text . "") (js . "$(document).ajaxStart(function() {
+") (text . "") (js . "
+$( document ).ajaxStart(function() {
   $( \".log\" ).text( \"Triggered ajaxStart handler.\" );
-});") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+});
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \".trigger\" ).click(function() {
-  $( \".result\" ).load(\"ajax/test.html\");
-});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+") (text . "") (js . "
+$( \".trigger\" ).click(function() {
+  $( \".result\" ).load( \"ajax/test.html\" );
+});
+    ") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request is sent, the log message is displayed.
 
-") (text . "") (text . "Note: Because .ajaxStart() is implemented as a method of jQuery object
-instances, you can use the this keyword to refer to the selected
-elements within the callback function. As of jQuery 1.8, however, the
-.ajaxStart() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxStart() method should only be attached to
+document.
+
 ") (text . "")) ("examples" ((text . "") (text . "Show a loading message whenever an Ajax request starts (and none is
 already active).
 
-") (text . "") (js . "$(document).ajaxStart(function() {
-   $( \"#loading\" ).show();
- });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ajaxStart(function() {
+  $( \"#loading\" ).show();
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxStop" jquery-doc-methods)
 
@@ -511,30 +660,37 @@ returning false within the beforeSend callback function.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (html . "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "
+<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
-<div class=\"log\"></div>") (text . "") (text . "Attach the event handler to the document:
+<div class=\"log\"></div>
+    ") (text . "") (text . "Attach the event handler to the document:
 
 
-") (text . "") (js . "$( \".log\" ).ajaxStop(function() {
-  $(this).text( \"Triggered ajaxStop handler.\" );
-});") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+") (text . "") (js . "
+$( \".log\" ).ajaxStop(function() {
+  $( this ).text( \"Triggered ajaxStop handler.\" );
+});
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \".trigger\" ).click(function() {
+") (text . "") (js . "
+$( \".trigger\" ).click(function() {
   $( \".result\" ).load( \"ajax/test.html\" );
-});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+});
+    ") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes, the log message is displayed.
 
-") (text . "") (text . "Because .ajaxStop() is implemented as a method of jQuery object
-instances, you can use the this keyword to refer to the selected
-elements within the callback function. As of jQuery 1.8, however, the
-.ajaxStop() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxStop() method should only be attached to
+document.
+
 ") (text . "")) ("examples" ((text . "") (text . "Hide a loading message after all the Ajax requests have stopped.
 
-") (text . "") (js . "$(document).ajaxStop(function() {
-      $( \"#loading\" ).hide();
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ajaxStop(function() {
+  $( \"#loading\" ).hide();
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "ajaxSuccess" jquery-doc-methods)
 
@@ -549,25 +705,30 @@ the .ajaxSuccess() method are executed at this time.
 ") (text . "") (text . "To observe this method in action, set up a basic Ajax load request:
 
 
-") (text . "") (html . "<div class=\"trigger\">Trigger</div>
+") (text . "") (html . "
+<div class=\"trigger\">Trigger</div>
 <div class=\"result\"></div>
-<div class=\"log\"></div>") (text . "") (text . "Attach the event handler to any element:
+<div class=\"log\"></div>
+    ") (text . "") (text . "Attach the event handler to any element:
 
 
-") (text . "") (js . "$(document).ajaxSuccess(function() {
+") (text . "") (js . "
+$(document).ajaxSuccess(function() {
   $( \".log\" ).text( \"Triggered ajaxSuccess handler.\" );
-});") (text . "") (text . "Now, make an Ajax request using any jQuery method:
+});
+    ") (text . "") (text . "Now, make an Ajax request using any jQuery method:
 
 
-") (text . "") (js . "$( \".trigger\" ).on(\"click\", function() {
+") (text . "") (js . "
+$( \".trigger\" ).on( \"click\", function() {
   $( \".result\" ).load( \"ajax/test.html\" );
-});") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
+});
+    ") (text . "") (text . "When the user clicks the element with class trigger and the Ajax
 request completes successfully, the log message is displayed.
 
-") (text . "") (text . "Note: Because .ajaxSuccess() is implemented as a method of jQuery
-object instances, use the this keyword to refer to the selected
-elements within the callback function. As of jQuery 1.8, however, the
-.ajaxSuccess() method should only be attached to document.
+") (text . "") (text . "As of jQuery 1.8, the .ajaxSuccess() method should only be attached to
+document.
+
 ") (text . "") (text . "All ajaxSuccess handlers are invoked, regardless of what Ajax request
 was completed. If you must differentiate between the requests, you can
 use the parameters passed to the handler. Each time an ajaxSuccess
@@ -575,19 +736,23 @@ handler is executed, it is passed the event object, the XMLHttpRequest
 object, and the settings object that was used in the creation of the
 request. For example, you can restrict the callback to only handling
 events dealing with a particular URL:
-") (text . "") (js . "$(document).ajaxSuccess(function(event, xhr, settings) {
+") (text . "") (js . "
+$( document ).ajaxSuccess(function( event, xhr, settings ) {
   if ( settings.url == \"ajax/test.html\" ) {
     $( \".log\" ).text( \"Triggered ajaxSuccess handler. The ajax response was: \" +
-                      xhr.responseText );
+      xhr.responseText );
   }
-});") (text . "") (text . "Note: You can get the returned ajax contents by looking at
+});
+    ") (text . "") (text . "Note: You can get the returned ajax contents by looking at
 xhr.responseXML or xhr.responseText for xml and html respectively.
 
 ") (text . "")) ("examples" ((text . "") (text . "Show a message when an Ajax request completes successfully.
 
-") (text . "") (js . "$(document).ajaxSuccess(function(event, request, settings) {
-      $( \"#msg\" ).append( \"<li>Successful Request!</li>\" );
-      });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ajaxSuccess(function( event, request, settings ) {
+  $( \"#msg\" ).append( \"<li>Successful Request!</li>\" );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "andSelf" jquery-doc-methods)
 
@@ -606,44 +771,57 @@ is desired as well, .andSelf() can help.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
-") (text . "") (text . "The result of the following code is a red background behind items 3, 4
+    ") (text . "") (text . "The result of the following code is a red background behind items 3, 4
 and 5:
 
-") (text . "") (js . "$('li.third-item').nextAll().andSelf()
-  .css('background-color', 'red');
-") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
+") (text . "") (js . "
+$( \"li.third-item\" ).nextAll().andSelf()
+  .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
 the set containing just this item. The call to .nextAll() then pushes
 the set of items 4 and 5 onto the stack. Finally, the .andSelf()
 invocation merges these two sets together, creating a jQuery object
-that points to all three items in document order:
-{[<li.third-item>,<li>,<li> ]}.
+that points to all three items in document order: [ <li.third-item>,
+<li>, <li> ].
 ") (text . "")) ("examples" ((text . "") (text . "The .andSelf() method causes the previous set of DOM elements in the
 traversal stack to be added to the current set. In the first example,
 the top stack contains the set resulting from .find(\"p\"). In the second
 example, .andSelf() adds the previous set of elements on the stack --
-in this case $(\"div.after-andself\") -- to the current set, selecting
+in this case $( \"div.after-andself\" ) -- to the current set, selecting
 both the div and its enclosed paragraphs.
 ") (text . "") (js . "
-$(\"div.left, div.right\").find(\"div, div > p\").addClass(\"border\");
+$( \"div.left, div.right\" ).find( \"div, div > p\" ).addClass( \"border\" );
 
 // First Example
-$(\"div.before-andself\").find(\"p\").addClass(\"background\");
+$( \"div.before-andself\" ).find( \"p\" ).addClass( \"background\" );
 
 // Second Example
-$(\"div.after-andself\").find(\"p\").andSelf().addClass(\"background\");
+$( \"div.after-andself\" ).find( \"p\" ).andSelf().addClass( \"background\" );
 ") (text . "") (css . "
-p, div { margin:5px; padding:5px; }
-.border { border: 2px solid red; }
-.background { background:yellow; }
-.left, .right { width: 45%; float: left;}
-.right { margin-left:3%; }
-    ") (text . "") (html . "
+  p, div {
+    margin: 5px;
+    padding: 5px;
+  }
+  .border {
+    border: 2px solid red;
+  }
+  .background {
+    background: yellow;
+  }
+  .left, .right {
+    width: 45%;
+    float: left;
+  }
+  .right {
+    margin-left: 3%;
+  }
+") (text . "") (html . "
 <div class=\"left\">
   <p><strong>Before <code>andSelf()</code></strong></p>
   <div class=\"before-andself\">
@@ -704,16 +882,18 @@ fontSize or the CSS equivalent `font-size` rather than simply `font`.
 ") (text . "") (text . "In addition to numeric values, each property can take the strings
 `show`, `hide`, and `toggle`. These shortcuts allow for custom hiding
 and showing animations that take into account the display type of the
-element.
+element. In order to use jQuery`s built-in toggle state tracking, the
+`toggle` keyword must be consistently given as the value of the
+property being animated.
 ") (text . "") (text . "Animated properties can also be relative. If a value is supplied with a
 leading += or -= sequence of characters, then the target value is
 computed by adding or subtracting the given number from the current
 value of the property.
-") (text . "") (text . "  Note: Unlike shorthand animation methods such as .slideDown() and
-  .fadeIn(), the .animate() method does not make hidden elements
-  visible as part of the effect. For example, given
-  $(`someElement`).hide().animate({height:`20px`}, 500), the animation
-  will run, but the element will remain hidden.
+") (text . "") (text . "Note: Unlike shorthand animation methods such as .slideDown() and
+.fadeIn(), the .animate() method does not make hidden elements visible
+as part of the effect. For example, given $( \"someElement\"
+).hide().animate({height: \"20px\"}, 500), the animation will run, but
+the element will remain hidden.
 ") (text . "") (text . " Duration
 
 
@@ -736,23 +916,26 @@ for the animation as a whole.
 ") (text . "") (text . "To animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
 <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\"
-  style=\"position: relative; left: 10px;\" />") (text . "") (text . "To animate the opacity, left offset, and height of the image
+  style=\"position: relative; left: 10px;\">
+    ") (text . "") (text . "To animate the opacity, left offset, and height of the image
 simultaneously:
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').animate({
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).animate({
     opacity: 0.25,
-    left: '+=50',
-    height: 'toggle'
+    left: \"+=50\",
+    height: \"toggle\"
   }, 5000, function() {
     // Animation complete.
   });
 });
-") (text . "") (text . "
+    ") (text . "") (text . "
 
 ") (text . "") (text . "Note that the target value of the height property is `toggle`. Since
 the image was visible before, the animation shrinks the height to 0 to
@@ -766,17 +949,17 @@ during this second animation.
 ") (text . "") (text . "Directional properties ( top, right, bottom, left) have no discernible
 effect on elements if their position style property is static, which it
 is by default.
-") (text . "") (text . "  Note: The jQuery UI project extends the .animate() method by
-  allowing some non-numeric styles such as colors to be animated. The
-  project also includes mechanisms for specifying animations through
-  CSS classes rather than individual attributes.
-") (text . "") (text . "  Note: if attempting to animate an element with a height or width of
-  0px, where contents of the element are visible due to overflow,
-  jQuery may clip this overflow during animation. By fixing the
-  dimensions of the original element being hidden however, it is
-  possible to ensure that the animation runs smoothly. A clearfix can
-  be used to automatically fix the dimensions of your main element
-  without the need to set this manually.
+") (text . "") (text . "Note: The jQuery UI project extends the .animate() method by allowing
+some non-numeric styles such as colors to be animated. The project also
+includes mechanisms for specifying animations through CSS classes
+rather than individual attributes.
+") (text . "") (text . "Note: if attempting to animate an element with a height or width of
+0px, where contents of the element are visible due to overflow, jQuery
+may clip this overflow during animation. By fixing the dimensions of
+the original element being hidden however, it is possible to ensure
+that the animation runs smoothly. A clearfix can be used to
+automatically fix the dimensions of your main element without the need
+to set this manually.
 ") (text . "") (text . " Step Function
 
 
@@ -793,16 +976,17 @@ set to the DOM element being animated.
 ") (text . "") (text . "Note that the step function is called for each animated property on
 each animated element. For example, given two list items, the step
 function fires four times at each step of the animation:
-") (text . "") (js . "$('li').animate({
+") (text . "") (js . "
+$( \"li\" ).animate({
   opacity: .5,
-  height: '50%'
-},
-{
-  step: function(now, fx) {
-    var data = fx.elem.id + ' ' + fx.prop + ': ' + now;
-    $('body').append('<div>' + data + '</div>');
+  height: \"50%\"
+}, {
+  step: function( now, fx ) {
+    var data = fx.elem.id + \" \" + fx.prop + \": \" + now;
+    $( \"body\" ).append( \"<div>\" + data + \"</div>\" );
   }
-});") (text . "") (text . " Easing
+});
+    ") (text . "") (text . " Easing
 
 
 ") (text . "") (text . "The remaining parameter of .animate() is a string naming an easing
@@ -826,45 +1010,48 @@ function is used.
 ") (text . "") (text . "For example, to simultaneously animate the width and height with the
 swing easing function and the opacity with the linear easing function:
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').animate({
-    width: ['toggle', 'swing'],
-    height: ['toggle', 'swing'],
-    opacity: 'toggle'
-  }, 5000, 'linear', function() {
-      $(this).after('<div>Animation complete.</div>');
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).animate({
+    width: [ \"toggle\", \"swing\" ],
+    height: [ \"toggle\", \"swing\" ],
+    opacity: \"toggle\"
+  }, 5000, \"linear\", function() {
+    $( this ).after( \"<div>Animation complete.</div>\" );
   });
-});") (text . "") (text . "In the second version of .animate(), the options object can include the
+});
+    ") (text . "") (text . "In the second version of .animate(), the options object can include the
 specialEasing property, which is itself an object of CSS properties and
 their corresponding easing functions. For example, to simultaneously
 animate the width using the linear easing function and the height using
 the easeOutBounce easing function:
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').animate({
-    width: 'toggle',
-    height: 'toggle'
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).animate({
+    width: \"toggle\",
+    height: \"toggle\"
   }, {
     duration: 5000,
     specialEasing: {
-      width: 'linear',
-      height: 'easeOutBounce'
+      width: \"linear\",
+      height: \"easeOutBounce\"
     },
     complete: function() {
-      $(this).after('<div>Animation complete.</div>');
+      $( this ).after( \"<div>Animation complete.</div>\" );
     }
   });
-});") (text . "") (text . "As previously noted, a plugin is required for the easeOutBounce
+});
+    ") (text . "") (text . "As previously noted, a plugin is required for the easeOutBounce
 function.
 
 ") (text . "")) ("examples" ((text . "") (text . "Click the button to animate the div with a number of different
 properties.
 
 ") (text . "") (js . "
+// Using multiple unit types within one animation.
 
-/* Using multiple unit types within one animation. */
-
-$(\"#go\").click(function(){
-  $(\"#block\").animate({
+$( \"#go\" ).click(function() {
+  $( \"#block\" ).animate({
     width: \"70%\",
     opacity: 0.4,
     marginLeft: \"0.6in\",
@@ -872,37 +1059,39 @@ $(\"#go\").click(function(){
     borderWidth: \"10px\"
   }, 1500 );
 });
-") (text . "") (html . "<button id=\"go\">&raquo; Run</button>
-
-<div id=\"block\">Hello!</div>") (text . "") (css . "
-div {
-background-color:#bca;
-width:100px;
-border:1px solid green;
-}
+") (text . "") (html . "
+<button id=\"go\">&raquo; Run</button>
+<div id=\"block\">Hello!</div>
+") (text . "") (css . "
+  div {
+    background-color: #bca;
+    width: 100px;
+    border: 1px solid green;
+  }
 ") (text . "")) ((text . "") (text . "Animates a div`s left property with a relative value. Click several
 times on the buttons to see the relative animations queued up.
 
 ") (text . "") (js . "
-$(\"#right\").click(function(){
-  $(\".block\").animate({\"left\": \"+=50px\"}, \"slow\");
+$( \"#right\" ).click(function() {
+  $( \".block\" ).animate({ \"left\": \"+=50px\" }, \"slow\" );
 });
 
-$(\"#left\").click(function(){
-  $(\".block\").animate({\"left\": \"-=50px\"}, \"slow\");
+$( \"#left\" ).click(function(){
+  $( \".block\" ).animate({ \"left\": \"-=50px\" }, \"slow\" );
 });
-
-") (text . "") (html . "<button id=\"left\">&laquo;</button> <button id=\"right\">&raquo;</button>
+") (text . "") (html . "
+<button id=\"left\">&laquo;</button>
+<button id=\"right\">&raquo;</button>
 <div class=\"block\"></div>
 ") (text . "") (css . "
-div {
-  position:absolute;
-  background-color:#abc;
-  left:50px;
-  width:90px;
-  height:90px;
-  margin:5px;
-}
+  div {
+    position: absolute;
+    background-color: #abc;
+    left: 50px;
+    width: 90px;
+    height: 90px;
+    margin: 5px;
+  }
 ") (text . "")) ((text . "") (text . "The first button shows how an unqueued animation works. It expands the
 div out to 90% width while the font-size is increasing. Once the
 font-size change is complete, the border animation will begin. The
@@ -910,51 +1099,61 @@ second button starts a traditional chained animation, where each
 animation will start once the previous animation on the element has
 completed.
 ") (text . "") (js . "
-
-$( \"#go1\" ).click(function(){
-  $( \"#block1\" ).animate( { width: \"90%\" }, { queue: false, duration: 3000 })
-     .animate({ fontSize: \"24px\" }, 1500 )
-     .animate({ borderRightWidth: \"15px\" }, 1500 );
+$( \"#go1\" ).click(function() {
+  $( \"#block1\" )
+    .animate({
+      width: \"90%\"
+    }, {
+      queue: false,
+      duration: 3000
+    })
+    .animate({ fontSize: \"24px\" }, 1500 )
+    .animate({ borderRightWidth: \"15px\" }, 1500 );
 });
 
-$( \"#go2\" ).click(function(){
-  $( \"#block2\" ).animate({ width: \"90%\" }, 1000 )
-     .animate({ fontSize: \"24px\" }, 1000 )
-     .animate({ borderLeftWidth: \"15px\" }, 1000 );
+$( \"#go2\" ).click(function() {
+  $( \"#block2\" )
+    .animate({ width: \"90%\" }, 1000 )
+    .animate({ fontSize: \"24px\" }, 1000 )
+    .animate({ borderLeftWidth: \"15px\" }, 1000 );
 });
 
-$( \"#go3\" ).click(function(){
+$( \"#go3\" ).click(function() {
   $( \"#go1\" ).add( \"#go2\" ).click();
 });
 
-$( \"#go4\" ).click(function(){
-  $( \"div\" ).css({ width: \"\", fontSize: \"\", borderWidth: \"\" });
+$( \"#go4\" ).click(function() {
+  $( \"div\" ).css({
+    width: \"\",
+    fontSize: \"\",
+    borderWidth: \"\"
+  });
 });
-
-") (text . "") (html . "<button id=\"go1\">&raquo; Animate Block1</button>
+") (text . "") (html . "
+<button id=\"go1\">&raquo; Animate Block1</button>
 <button id=\"go2\">&raquo; Animate Block2</button>
 <button id=\"go3\">&raquo; Animate Both</button>
-
 <button id=\"go4\">&raquo; Reset</button>
 <div id=\"block1\">Block1</div>
-<div id=\"block2\">Block2</div>") (text . "") (css . "
-div {
-  background-color:#bca;
-  width:200px;
-  height:1.1em;
-  text-align:center;
-  border:2px solid green;
-  margin:3px;
-  font-size:14px;
-}
-button {
-  font-size:14px;
-}
+<div id=\"block2\">Block2</div>
+") (text . "") (css . "
+  div {
+    background-color: #bca;
+    width: 200px;
+    height: 1.1em;
+    text-align: center;
+    border: 2px solid green;
+    margin: 3px;
+    font-size: 14px;
+  }
+  button {
+    font-size: 14px;
+  }
 ") (text . "")) ((text . "") (text . "Animates the first div`s left property and synchronizes the remaining
 divs, using the step function to set their left properties at each
 stage of the animation.
 ") (text . "") (js . "
-$( \"#go\" ).click(function(){
+$( \"#go\" ).click(function() {
   $( \".block:first\" ).animate({
     left: 100
   }, {
@@ -965,67 +1164,96 @@ $( \"#go\" ).click(function(){
   });
 });
 ") (text . "") (css . "
-div {
-   position: relative;
-   background-color: #abc;
-   width: 40px;
-   height: 40px;
-   float: left;
-   margin: 5px;
-}
+  div {
+    position: relative;
+    background-color: #abc;
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin: 5px;
+  }
 ") (text . "") (html . "
 <p><button id=\"go\">Run »</button></p>
-<div class=\"block\"></div> <div class=\"block\"></div>
-<div class=\"block\"></div> <div class=\"block\"></div>
-<div class=\"block\"></div> <div class=\"block\"></div>
+<div class=\"block\"></div>
+<div class=\"block\"></div>
+<div class=\"block\"></div>
+<div class=\"block\"></div>
+<div class=\"block\"></div>
+<div class=\"block\"></div>
 ") (text . "")) ((text . "") (text . "Animate all paragraphs to toggle both height and opacity, completing
 the animation within 600 milliseconds.
 
-") (text . "") (js . "$( \"p\" ).animate({
-  height: \"toggle\", opacity: \"toggle\"
-}, \"slow\" );") (text . "")) ((text . "") (text . "Animate all paragraphs to a left style of 50 and opacity of 1 (opaque,
+") (text . "") (js . "
+$( \"p\" ).animate({
+  height: \"toggle\",
+  opacity: \"toggle\"
+}, \"slow\" );
+") (text . "")) ((text . "") (text . "Animate all paragraphs to a left style of 50 and opacity of 1 (opaque,
 visible), completing the animation within 500 milliseconds.
 
-") (text . "") (js . "$( \"p\" ).animate({
-  left: 50, opacity: 1
+") (text . "") (js . "
+$( \"p\" ).animate({
+  left: 50,
+  opacity: 1
 }, 500 );
 ") (text . "")) ((text . "") (text . "Animate the left and opacity style properties of all paragraphs; run
 the animation outside the queue, so that it will automatically start
 without waiting for its turn.
-") (text . "") (js . "$( \"p\" ).animate({
-  left: \"50px\", opacity: 1
-}, { duration: 500, queue: false });") (text . "")) ((text . "") (text . "An example of using an `easing` function to provide a different style
+") (text . "") (js . "
+$( \"p\" ).animate({
+  left: \"50px\",
+  opacity: 1
+}, {
+  duration: 500,
+  queue: false
+});
+") (text . "")) ((text . "") (text . "An example of using an `easing` function to provide a different style
 of animation. This will only work if you have a plugin that provides
 this easing function. Note, this code will do nothing unless the
 paragraph element is hidden.
-") (text . "") (js . "$( \"p\" ).animate({
+") (text . "") (js . "
+$( \"p\" ).animate({
   opacity: \"show\"
-}, \"slow\", \"easein\" );") (text . "")) ((text . "") (text . "Animates all paragraphs to toggle both height and opacity, completing
+}, \"slow\", \"easein\" );
+") (text . "")) ((text . "") (text . "Animates all paragraphs to toggle both height and opacity, completing
 the animation within 600 milliseconds.
 
-") (text . "") (js . "$( \"p\" ).animate({
-  height: \"toggle\", opacity: \"toggle\"
-}, { duration: \"slow\" });") (text . "")) ((text . "") (text . "Use an easing function to provide a different style of animation. This
+") (text . "") (js . "
+$( \"p\" ).animate({
+  height: \"toggle\",
+  opacity: \"toggle\"
+}, {
+  duration: \"slow\"
+});
+") (text . "")) ((text . "") (text . "Use an easing function to provide a different style of animation. This
 will only work if you have a plugin that provides this easing function.
 
-") (text . "") (js . "$( \"p\" ).animate({
+") (text . "") (js . "
+$( \"p\" ).animate({
   opacity: \"show\"
-}, { duration: \"slow\", easing: \"easein\" });") (text . "")) ((text . "") (text . "Animate all paragraphs and execute a callback function when the
+}, {
+  duration: \"slow\",
+  easing: \"easein\"
+});
+") (text . "")) ((text . "") (text . "Animate all paragraphs and execute a callback function when the
 animation is complete. The first argument is an object of CSS
 properties, the second specifies that the animation should take 1000
 milliseconds to complete, the third states the easing type, and the
 fourth argument is an anonymous callback function.
-") (text . "") (js . "$( \"p\" ).animate({
-  height: 200, width: 400, opacity: 0.5
+") (text . "") (js . "
+$( \"p\" ).animate({
+  height: 200,
+  width: 400,
+  opacity: 0.5
 }, 1000, \"linear\", function() {
-  alert(\"all done\");
+  alert( \"all done\" );
 });
 ") (text . ""))))) jquery-doc-hash)
 
 (push "append" jquery-doc-methods)
 
-(puthash "append" (quote (("name" . "append") ("signatures" "append" (("content" "DOM element, HTML string, or jQuery object to insert at the end of each
-element in the set of matched elements.
+(puthash "append" (quote (("name" . "append") ("signatures" "append" (("content" "DOM element, array of elements, HTML string, or jQuery object to insert
+at the end of each element in the set of matched elements.
 
 " nil nil) ("content" "One or more additional DOM elements, arrays of elements, HTML strings,
 or jQuery objects to insert at the end of each element in the set of
@@ -1051,19 +1279,22 @@ inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
-") (text . "") (text . "You can create content and insert it into several elements at once:
+    ") (text . "") (text . "You can create content and insert it into several elements at once:
 
 
-") (text . "") (js . "$('.inner').append('<p>Test</p>');
-") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \".inner\" ).append( \"<p>Test</p>\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     Hello
@@ -1074,19 +1305,21 @@ inserted into the target container.
     <p>Test</p>
   </div>
 </div>
-") (text . "") (text . "You can also select an element on the page and insert it into another:
+    ") (text . "") (text . "You can also select an element on the page and insert it into another:
 
 
-") (text . "") (js . "$('.container').append($('h2'));
-") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "
+$( \".container\" ).append( $( \"h2\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved into the target (not cloned):
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
   <h2>Greetings</h2>
 </div>
-") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first.
 
 ") (text . "") (text . " Additional Arguments
@@ -1099,43 +1332,56 @@ strings, and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> as the last three child nodes of the body:
 
-") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
-    newdiv2 = document.createElement('div'),
-    existingdiv1 = document.getElementById('foo');
+") (text . "") (js . "
+var $newdiv1 = $( \"<div id='object1'/>\" ),
+  newdiv2 = document.createElement( \"div\" ),
+  existingdiv1 = document.getElementById( \"foo\" );
 
-$('body').append($newdiv1, [newdiv2, existingdiv1]);
-") (text . "") (text . "Since .append() can accept any number of additional arguments, the same
+$( \"body\" ).append( $newdiv1, [ newdiv2, existingdiv1 ] );
+    ") (text . "") (text . "Since .append() can accept any number of additional arguments, the same
 result can be achieved by passing in the three <div>s as three separate
-arguments, like so: $(`body`).append($newdiv1, newdiv2, existingdiv1).
-The type and number of arguments will largely depend on how you collect
-the elements in your code.
+arguments, like so: $(`body`).append( $newdiv1, newdiv2, existingdiv1
+). The type and number of arguments will largely depend on how you
+collect the elements in your code.
 ") (text . "")) ("examples" ((text . "") (text . "Appends some HTML to all paragraphs.
 
 ") (text . "") (js . "
-  $(\"p\").append(\"<strong>Hello</strong>\");
+$( \"p\" ).append( \"<strong>Hello</strong>\" );
 ") (text . "") (css . "
-  p { background:yellow; }
-") (text . "") (html . "<p>I would like to say: </p>") (text . "")) ((text . "") (text . "Appends an Element to all paragraphs.
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>I would like to say: </p>
+") (text . "")) ((text . "") (text . "Appends an Element to all paragraphs.
 
 ") (text . "") (js . "
-  $(\"p\").append(document.createTextNode(\"Hello\"));
+$( \"p\" ).append( document.createTextNode( \"Hello\" ) );
 ") (text . "") (css . "
-  p { background:yellow; }
-") (text . "") (html . "<p>I would like to say: </p>
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>I would like to say: </p>
 ") (text . "")) ((text . "") (text . "Appends a jQuery object (similar to an Array of DOM Elements) to all
 paragraphs.
 
 ") (text . "") (js . "
-  $(\"p\").append( $(\"strong\") );
+$( \"p\" ).append( $( \"strong\" ) );
 ") (text . "") (css . "
-  p { background:yellow; }
-") (text . "") (html . "<strong>Hello world!!!</strong><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<strong>Hello world!!!</strong>
+<p>I would like to say: </p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "appendTo" jquery-doc-methods)
 
-(puthash "appendTo" (quote (("name" . "appendTo") ("signatures" "appendTo" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
-elements will be inserted at the end of the element(s) specified by
-this parameter.
+(puthash "appendTo" (quote (("name" . "appendTo") ("signatures" "appendTo" (("target" "A selector, element, HTML string, array of elements, or jQuery object;
+the matched set of elements will be inserted at the end of the
+element(s) specified by this parameter.
 " nil nil))) ("desc" (text . "Insert every element in the set of matched elements to the end of the
 target.
 
@@ -1149,19 +1395,22 @@ inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
-") (text . "") (text . "We can create content and insert it into several elements at once:
+    ") (text . "") (text . "We can create content and insert it into several elements at once:
 
 
-") (text . "") (js . "$('<p>Test</p>').appendTo('.inner');
-") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \"<p>Test</p>\" ).appendTo( \".inner\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     Hello
@@ -1172,29 +1421,41 @@ inserted into the target container.
     <p>Test</p>
   </div>
 </div>
-") (text . "") (text . "We can also select an element on the page and insert it into another:
+    ") (text . "") (text . "We can also select an element on the page and insert it into another:
 
 
-") (text . "") (js . "$('h2').appendTo($('.container'));
-") (text . "") (text . "If an element selected this way is inserted into a single location
-elsewhere in the DOM, it will be moved into the target (not cloned):
-
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (js . "
+$( \"h2\" ).appendTo( $( \".container\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
+elsewhere in the DOM, it will be moved into the target (not cloned) and
+a new set consisting of the inserted element is returned:
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
   <h2>Greetings</h2>
 </div>
-") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first, and
 that new set (the original element plus clones) is returned.
+") (text . "") (text . "Before jQuery 1.9, the append-to-single-element case did not create a
+new set, but instead returned the original set which made it difficult
+to use the .end() method reliably when being used with an unknown
+number of elements.
 ") (text . "")) ("examples" ((text . "") (text . "Append all spans to the element with the ID \"foo\" (Check append()
 documentation for more examples)
 
 ") (text . "") (js . "
-$(\"span\").appendTo(\"#foo\");
-") (text . "") (css . "#foo { background:yellow; }") (text . "") (html . "<span>I have nothing more to say... </span>
+$( \"span\" ).appendTo( \"#foo\" );
+") (text . "") (css . "
+  #foo {
+    background: yellow;
+  }
+") (text . "") (html . "
+<span>I have nothing more to say... </span>
 
-  <div id=\"foo\">FOO! </div>") (text . ""))))) jquery-doc-hash)
+<div id=\"foo\">FOO! </div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "attr" jquery-doc-methods)
 
@@ -1206,10 +1467,6 @@ matched elements.
 ")) ("longdesc" (text . "") (text . "The .attr() method gets the attribute value for only the first element
 in the matched set. To get the value for each element individually, use
 a looping construct such as jQuery`s .each() or .map() method.
-") (text . "") (text . "As of jQuery 1.6, the .attr() method returns undefined for attributes
-that have not been set. In addition, .attr() should not be used on
-plain objects, arrays, the window, or the document. To retrieve and
-change DOM properties, use the .prop() method.
 ") (text . "") (text . "Using jQuery`s .attr() method to get the value of an element`s
 attribute has two main benefits:
 
@@ -1219,23 +1476,106 @@ attribute has two main benefits:
     reported inconsistently across browsers, and even across versions
     of a single browser. The .attr() method reduces such
     inconsistencies.
-") (text . "") (text . "  Note: Attribute values are strings with the exception of a few
-  attributes such as value and tabindex.
+") (text . "") (text . "Note: Attribute values are strings with the exception of a few
+attributes such as value and tabindex.
 
-") (text . "")) ("examples" ((text . "") (text . "Find the title attribute of the first <em> in the page.
+") (text . "") (text . "Note: Attempting to change the type attribute (or property) of an input
+element created via HTML or already in an HTML document will result in
+an error being thrown by Internet Explorer 6, 7, or 8.
+") (text . "") (text . "As of jQuery 1.6, the .attr() method returns undefined for attributes
+that have not been set. To retrieve and change DOM properties such as
+the checked, selected, or disabled state of form elements, use the
+.prop() method.
+") (text . "") (text . " Attributes vs. Properties
+
+
+") (text . "") (text . "The difference between attributes and properties can be important in
+specific situations. Before jQuery 1.6, the .attr() method sometimes
+took property values into account when retrieving some attributes,
+which could cause inconsistent behavior. As of jQuery 1.6, the .prop()
+method provides a way to explicitly retrieve property values, while
+.attr() retrieves attributes.
+") (text . "") (text . "For example, selectedIndex, tagName, nodeName, nodeType, ownerDocument,
+defaultChecked, and defaultSelected should be retrieved and set with
+the .prop() method. Prior to jQuery 1.6, these properties were
+retrievable with the .attr() method, but this was not within the scope
+of attr. These do not have corresponding attributes and are only
+properties.
+") (text . "") (text . "Concerning boolean attributes, consider a DOM element defined by the
+HTML markup <input type=\"checkbox\" checked=\"checked\" />, and assume it
+is in a JavaScript variable named elem:
+") (text . "") (text . "elem.checked true (Boolean) Will change with checkbox state
+$( elem ).prop( \"checked\" ) true (Boolean) Will change with checkbox
+state
+elem.getAttribute( \"checked\" ) \"checked\" (String) Initial state of the
+checkbox; does not change
+$( elem ).attr( \"checked\" ) (1.6) \"checked\" (String) Initial state of
+the checkbox; does not change
+$( elem ).attr( \"checked\" ) (1.6.1+) \"checked\" (String) Will change
+with checkbox state
+$( elem ).attr( \"checked\" ) (pre-1.6) true (Boolean) Changed with
+checkbox state
+") (text . "") (text . "
+
+") (text . "") (text . "According to the W3C forms specification, the checked attribute is a
+boolean attribute , which means the corresponding property is true if
+the attribute is present at all--even if, for example, the attribute
+has no value or is set to empty string value or even \"false\". This is
+true of all boolean attributes.
+") (text . "") (text . "Nevertheless, the most important concept to remember about the checked
+attribute is that it does not correspond to the checked property. The
+attribute actually corresponds to the defaultChecked property and
+should be used only to set the initial value of the checkbox. The
+checked attribute value does not change with the state of the checkbox,
+while the checked property does. Therefore, the
+cross-browser-compatible way to determine if a checkbox is checked is
+to use the property:
+") (text . "") (text . "  * if ( elem.checked )
+  * if ( $( elem ).prop( \"checked\" ) )
+  * if ( $( elem ).is( \":checked\" ) )
+") (text . "") (text . "The same is true for other dynamic attributes, such as selected and
+value.
+
+") (text . "")) ("examples" ((text . "") (text . "Display the checked attribute and property of a checkbox as it changes.
+
 
 ") (text . "") (js . "
-var title = $(\"em\").attr(\"title\");
-  $(\"div\").text(title);
+$( \"input\" )
+  .change(function() {
+    var $input = $( this );
+    $( \"p\" ).html( \".attr( 'checked' ): <b>\" + $input.attr( \"checked\" ) + \"</b><br>\" +
+      \".prop( 'checked' ): <b>\" + $input.prop( \"checked\" ) + \"</b><br>\" +
+      \".is( ':checked' ): <b>\" + $input.is( \":checked\" ) + \"</b>\" );
+  })
+  .change();
 ") (text . "") (css . "
-  em { color:blue; font-weight:bold; }
-  div { color:red; }
+  p {
+    margin: 20px 0 0;
+  }
+  b {
+    color: blue;
+  }
 ") (text . "") (html . "
-<p>
-  Once there was a <em title=\"huge, gigantic\">large</em> dinosaur...
-</p>
+<input id=\"check1\" type=\"checkbox\" checked=\"checked\">
+<label for=\"check1\">Check me</label>
+<p></p>
+") (text . "")) ((text . "") (text . "Find the title attribute of the first <em> in the page.
 
-  The title of the emphasis is:<div></div>
+") (text . "") (js . "
+var title = $( \"em\" ).attr( \"title\" );
+$( \"div\" ).text( title );
+") (text . "") (css . "
+  em {
+    color: blue;
+    font-weight: bold;
+  }
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Once there was a <em title=\"huge, gigantic\">large</em> dinosaur...</p>
+
+The title of the emphasis is:<div></div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "attr" jquery-doc-methods)
@@ -1256,27 +1596,32 @@ attribute value as arguments.
 ")) ("longdesc" (text . "") (text . "The .attr() method is a convenient way to set the value of
 attributes--especially when setting multiple attributes or using values
 returned by a function. Consider the following image:
-") (text . "") (js . "<img id=\"greatphoto\" src=\"brush-seller.jpg\" alt=\"brush seller\" />") (text . "") (text . " Setting a simple attribute
+") (text . "") (js . "<img id=\"greatphoto\" src=\"brush-seller.jpg\" alt=\"brush seller\">") (text . "") (text . " Setting a simple attribute
 
 
 ") (text . "") (text . "To change the alt attribute, simply pass the name of the attribute and
 its new value to the .attr() method:
 
-") (text . "") (js . "$('#greatphoto').attr('alt', 'Beijing Brush Seller');") (text . "") (text . "Add an attribute the same way:
+") (text . "") (js . "
+$( \"#greatphoto\" ).attr( \"alt\", \"Beijing Brush Seller\" );
+      ") (text . "") (text . "Add an attribute the same way:
 
 
-") (text . "") (js . "$('#greatphoto')
-.attr('title', 'Photo by Kelly Clark');") (text . "") (text . " Setting several attributes at once
+") (text . "") (js . "
+$( \"#greatphoto\" ).attr( \"title\", \"Photo by Kelly Clark\" );
+      ") (text . "") (text . " Setting several attributes at once
 
 
 ") (text . "") (text . "To change the alt attribute and add the title attribute at the same
 time, pass both sets of names and values into the method at once using
 a plain JavaScript object. Each key-value pair in the object adds or
 modifies an attribute:
-") (text . "") (js . "$('#greatphoto').attr({
-  alt: 'Beijing Brush Seller',
-  title: 'photo by Kelly Clark'
-});") (text . "") (text . "When setting multiple attributes, the quotes around attribute names are
+") (text . "") (js . "
+$( \"#greatphoto\" ).attr({
+  alt: \"Beijing Brush Seller\",
+  title: \"photo by Kelly Clark\"
+});
+      ") (text . "") (text . "When setting multiple attributes, the quotes around attribute names are
 optional.
 
 ") (text . "") (text . "WARNING: When setting the `class` attribute, you must always use
@@ -1291,9 +1636,11 @@ because the type attribute cannot be changed in Internet Explorer.
 ") (text . "") (text . "By using a function to set attributes, you can compute the value based
 on other properties of the element. For example, to concatenate a new
 value with an existing value:
-") (text . "") (js . "$('#greatphoto').attr('title', function(i, val) {
-  return val + ' - photo by Kelly Clark'
-});") (text . "") (text . "This use of a function to compute attribute values can be particularly
+") (text . "") (js . "
+$( \"#greatphoto\" ).attr( \"title\", function( i, val ) {
+  return val + \" - photo by Kelly Clark\";
+});
+      ") (text . "") (text . "This use of a function to compute attribute values can be particularly
 useful when modifying the attributes of multiple elements at once.
 
 ") (text . "") (text . "Note: If nothing is returned in the setter function (ie.
@@ -1303,52 +1650,64 @@ only when certain criteria are met.
 ") (text . "")) ("examples" ((text . "") (text . "Set some attributes for all <img>s in the page.
 
 ") (text . "") (js . "
-$(\"img\").attr({
+$( \"img\" ).attr({
   src: \"/resources/hat.gif\",
   title: \"jQuery\",
   alt: \"jQuery Logo\"
 });
-$(\"div\").text($(\"img\").attr(\"alt\"));
+$( \"div\" ).text( $( \"img\" ).attr( \"alt\" ) );
 ") (text . "") (css . "
-  img { padding:10px; }
-  div { color:red; font-size:24px; }
+  img {
+    padding: 10px;
+  }
+  div {
+    color: red;
+    font-size: 24px;
+  }
 ") (text . "") (html . "
-  <img />
-  <img />
-  <img />
+<img>
+<img>
+<img>
 
-  <div><B>Attribute of Ajax</B></div>
+<div><b>Attribute of Ajax</b></div>
 ") (text . "")) ((text . "") (text . "Set the id for divs based on the position in the page.
 
 ") (text . "") (js . "
-$(\"div\").attr(\"id\", function (arr) {
-  return \"div-id\" + arr;
-})
-.each(function () {
-  $(\"span\", this).html(\"(ID = '<b>\" + this.id + \"</b>')\");
+$( \"div\" )
+  .attr( \"id\", function( arr ) {
+    return \"div-id\" + arr;
+  })
+  .each(function() {
+    $( \"span\", this ).html( \"(id = '<b>\" + this.id + \"</b>')\" );
 });
 ") (text . "") (css . "
-  div { color:blue; }
-  span { color:red; }
-  b { font-weight:bolder; }
-        ") (text . "") (html . "
-  <div>Zero-th <span></span></div>
-  <div>First <span></span></div>
-  <div>Second <span></span></div>
+  div {
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+  b {
+    font-weight: bolder;
+  }
+") (text . "") (html . "
+<div>Zero-th <span></span></div>
+<div>First <span></span></div>
+<div>Second <span></span></div>
 ") (text . "")) ((text . "") (text . "Set the src attribute from title attribute on the image.
 
 ") (text . "") (js . "
-$(\"img\").attr(\"src\", function() {
-    return \"/resources/\" + this.title;
+$( \"img\" ).attr( \"src\", function() {
+  return \"/resources/\" + this.title;
 });
 ") (text . "") (html . "
-<img title=\"hat.gif\"/>
+<img title=\"hat.gif\">
 ") (text . ""))))) jquery-doc-hash)
 
 (push "before" jquery-doc-methods)
 
-(puthash "before" (quote (("name" . "before") ("signatures" "before" (("content" "HTML string, DOM element, or jQuery object to insert before each
-element in the set of matched elements.
+(puthash "before" (quote (("name" . "before") ("signatures" "before" (("content" "HTML string, DOM element, array of elements, or jQuery object to insert
+before each element in the set of matched elements.
 
 " nil nil) ("content" "One or more additional DOM elements, arrays of elements, HTML strings,
 or jQuery objects to insert before each element in the set of matched
@@ -1370,39 +1729,51 @@ is inserted before the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "You can create content and insert it before several elements at once:
+</div>
+    ") (text . "") (text . "You can create content and insert it before several elements at once:
 
 
-") (text . "") (js . "$('.inner').before('<p>Test</p>');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \".inner\" ).before( \"<p>Test</p>\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <p>Test</p>
   <div class=\"inner\">Hello</div>
   <p>Test</p>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "You can also select an element on the page and insert it before
+</div>
+    ") (text . "") (text . "You can also select an element on the page and insert it before
 another:
 
-") (text . "") (js . "$('.container').before($('h2'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "
+$( \".container\" ).before( $( \"h2\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved before the target (not cloned):
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+</div>
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first.
 
 ") (text . "") (text . "In jQuery 1.4, .before() and .after() will also work on disconnected
 DOM nodes:
 
-") (text . "") (js . "$(\"<div/>\").before(\"<p></p>\");") (text . "") (text . "The result is a jQuery set that contains a paragraph and a div (in that
+") (text . "") (js . "
+$( \"<div>\" ).before( \"<p></p>\" );
+    ") (text . "") (text . "The result is a jQuery set that contains a paragraph and a div (in that
 order).
 
 ") (text . "") (text . " Additional Arguments
@@ -1415,24 +1786,49 @@ and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> before the first paragraph:
 
-") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
-    newdiv2 = document.createElement('div'),
-    existingdiv1 = document.getElementById('foo');
+") (text . "") (js . "
+var newdiv1 = $( \"<div id='object1'/>\" ),
+  newdiv2 = document.createElement( \"div\" ),
+  existingdiv1 = document.getElementById( \"foo\" );
 
-$('p').first().before($newdiv1, [newdiv2, existingdiv1]);
-") (text . "") (text . "Since .before() can accept any number of additional arguments, the same
+$( \"p\" ).first().before( newdiv1, [ newdiv2, existingdiv1 ] );
+    ") (text . "") (text . "Since .before() can accept any number of additional arguments, the same
 result can be achieved by passing in the three <div>s as three separate
-arguments, like so: $(`p`).first().before($newdiv1, newdiv2,
-existingdiv1). The type and number of arguments will largely depend on
+arguments, like so: $( \"p\" ).first().before( $newdiv1, newdiv2,
+existingdiv1 ). The type and number of arguments will largely depend on
 how you collect the elements in your code.
 ") (text . "")) ("examples" ((text . "") (text . "Inserts some HTML before all paragraphs.
 
-") (text . "") (js . "$(\"p\").before(\"<b>Hello</b>\");") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what I said...</p>") (text . "")) ((text . "") (text . "Inserts a DOM element before all paragraphs.
+") (text . "") (js . "
+$( \"p\" ).before( \"<b>Hello</b>\" );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p> is what I said...</p>
+") (text . "")) ((text . "") (text . "Inserts a DOM element before all paragraphs.
 
-") (text . "") (js . "$(\"p\").before( document.createTextNode(\"Hello\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what I said...</p>") (text . "")) ((text . "") (text . "Inserts a jQuery object (similar to an Array of DOM Elements) before
+") (text . "") (js . "
+$( \"p\" ).before( document.createTextNode( \"Hello\" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p> is what I said...</p>
+") (text . "")) ((text . "") (text . "Inserts a jQuery object (similar to an Array of DOM Elements) before
 all paragraphs.
 
-") (text . "") (js . "$(\"p\").before( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what I said...</p><b>Hello</b>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).before( $( \"b\" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p> is what I said...</p><b>Hello</b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "bind" jquery-doc-methods)
 
@@ -1469,7 +1865,7 @@ events are never called by the browser, but may be triggered manually
 from other JavaScript code using .trigger() or .triggerHandler().
 ") (text . "") (text . "If the eventType string contains a period ( .) character, then the
 event is namespaced. The period character separates the event from its
-namespace. For example, in the call .bind(`click.name`, handler), the
+namespace. For example, in the call .bind( \"click.name\", handler ), the
 string click is the event type, and the string name is the namespace.
 Namespacing allows us to unbind or trigger some events of a type
 without affecting others. See the discussion of .unbind() for more
@@ -1486,10 +1882,10 @@ propagation path.
 
 
 ") (text . "") (js . "
-$('#foo').bind('click', function() {
-  alert('User clicked on \"foo.\"');
+$( \"#foo\" ).bind( \"click\", function() {
+  alert( \"User clicked on 'foo.'\" );
 });
-") (text . "") (text . "This code will cause the element with an ID of foo to respond to the
+    ") (text . "") (text . "This code will cause the element with an ID of foo to respond to the
 click event. When a user clicks inside this element thereafter, the
 alert will be shown.
 ") (text . "") (text . " Multiple Events
@@ -1499,35 +1895,36 @@ alert will be shown.
 separated by a space:
 
 ") (text . "") (js . "
-$('#foo').bind('mouseenter mouseleave', function() {
-  $(this).toggleClass('entered');
+$( \"#foo\" ).bind( \"mouseenter mouseleave\", function() {
+  $( this ).toggleClass( \"entered\" );
 });
-") (text . "") (text . "The effect of this on <div id=\"foo\"> (when it does not initially have
+    ") (text . "") (text . "The effect of this on <div id=\"foo\"> (when it does not initially have
 the \"entered\" class) is to add the \"entered\" class when the mouse
 enters the <div> and remove the class when the mouse leaves.
 ") (text . "") (text . "As of jQuery 1.4 we can bind multiple event handlers simultaneously by
 passing an object of event type/handler pairs:
 
 ") (text . "") (js . "
-$('#foo').bind({
+$( \"#foo\" ).bind({
   click: function() {
-    // do something on click
+    // Do something on click
   },
   mouseenter: function() {
-    // do something on mouseenter
+    // Do something on mouseenter
   }
 });
-") (text . "") (text . " Event Handlers
+    ") (text . "") (text . " Event Handlers
 
 
 ") (text . "") (text . "The handler parameter takes a callback function, as shown above. Within
 the handler, the keyword this refers to the DOM element to which the
 handler is bound. To make use of the element in jQuery, it can be
 passed to the normal $() function. For example:
-") (text . "") (js . "$('#foo').bind('click', function() {
-  alert($(this).text());
+") (text . "") (js . "
+$( \"#foo\" ).bind( \"click\", function() {
+  alert( $( this ).text() );
 });
-") (text . "") (text . "After this code is executed, when the user clicks inside the element
+    ") (text . "") (text . "After this code is executed, when the user clicks inside the element
 with an ID of foo, its text contents will be shown as an alert.
 
 ") (text . "") (text . "As of jQuery 1.4.2 duplicate event handlers can be bound to an element
@@ -1556,13 +1953,15 @@ full Event Object.
 ") (text . "") (text . "Using the event object in a handler looks like this:
 
 
-") (text . "") (js . "$(document).ready(function() {
-  $('#foo').bind('click', function(event) {
-    alert('The mouse cursor is at ('
-      + event.pageX + ', ' + event.pageY + ')');
+") (text . "") (js . "
+$( document ).ready(function() {
+  $( \"#foo\" ).bind( \"click\", function( event ) {
+    alert( \"The mouse cursor is at (\" +
+      event.pageX + \", \" + event.pageY +
+      \")\" );
   });
 });
-") (text . "") (text . "Note the parameter added to the anonymous function. This code will
+    ") (text . "") (text . "Note the parameter added to the anonymous function. This code will
 cause a click on the element with ID foo to report the page coordinates
 of the mouse cursor at the time of the click.
 ") (text . "") (text . " Passing Event Data
@@ -1573,39 +1972,45 @@ this argument allows us to pass additional information to the handler.
 One handy use of this parameter is to work around issues caused by
 closures. For example, suppose we have two event handlers that both
 refer to the same external variable:
-") (text . "") (js . "var message = 'Spoon!';
-$('#foo').bind('click', function() {
-  alert(message);
+") (text . "") (js . "
+var message = \"Spoon!\";
+$( \"#foo\" ).bind( \"click\", function() {
+  alert( message );
 });
-message = 'Not in the face!';
-$('#bar').bind('click', function() {
-  alert(message);
+message = \"Not in the face!\";
+$( \"#bar\" ).bind( \"click\", function() {
+  alert( message );
 });
-") (text . "") (text . "Because the handlers are closures that both have message in their
+    ") (text . "") (text . "Because the handlers are closures that both have message in their
 environment, both will display the message Not in the face! when
 triggered. The variable`s value has changed. To sidestep this, we can
 pass the message in using eventData:
-") (text . "") (js . "var message = 'Spoon!';
-$('#foo').bind('click', {msg: message}, function(event) {
-  alert(event.data.msg);
+") (text . "") (js . "
+var message = \"Spoon!\";
+$( \"#foo\" ).bind( \"click\", {
+  msg: message
+}, function( event ) {
+  alert( event.data.msg );
 });
-message = 'Not in the face!';
-$('#bar').bind('click', {msg: message}, function(event) {
-  alert(event.data.msg);
+message = \"Not in the face!\";
+$( \"#bar\" ).bind( \"click\", {
+  msg: message
+}, function( event ) {
+  alert( event.data.msg );
 });
-") (text . "") (text . "This time the variable is not referred to directly within the handlers;
+    ") (text . "") (text . "This time the variable is not referred to directly within the handlers;
 instead, the variable is passed in by value through eventData, which
 fixes the value at the time the event is bound. The first handler will
 now display Spoon! while the second will alert Not in the face!
-") (text . "") (text . "  Note that objects are passed to functions by reference, which
-  further complicates this scenario.
+") (text . "") (text . "Note that objects are passed to functions by reference, which further
+complicates this scenario.
 
 ") (text . "") (text . "If eventData is present, it is the second argument to the .bind()
 method; if no additional data needs to be sent to the handler, then the
 callback is passed as the second and final argument.
-") (text . "") (text . "  See the .trigger() method reference for a way to pass data to a
-  handler at the time the event happens rather than when the handler
-  is bound.
+") (text . "") (text . "See the .trigger() method reference for a way to pass data to a handler
+at the time the event happens rather than when the handler is bound.
+
 ") (text . "") (text . "As of jQuery 1.4 we can no longer attach data (and thus, events) to
 object, embed, or applet elements because critical errors occur when
 attaching data to Java applets.
@@ -1620,77 +2025,109 @@ browser, and is often user-configurable.
 are window relative, so in this case relative to the demo iframe.
 
 ") (text . "") (js . "
-$(\"p\").bind(\"click\", function(event){
-var str = \"( \" + event.pageX + \", \" + event.pageY + \" )\";
-$(\"span\").text(\"Click happened! \" + str);
+$( \"p\" ).bind( \"click\", function( event ) {
+  var str = \"( \" + event.pageX + \", \" + event.pageY + \" )\";
+  $( \"span\" ).text( \"Click happened! \" + str );
 });
-$(\"p\").bind(\"dblclick\", function(){
-$(\"span\").text(\"Double-click happened in \" + this.nodeName);
+$( \"p\" ).bind( \"dblclick\", function() {
+  $( \"span\" ).text( \"Double-click happened in \" + this.nodeName );
 });
-$(\"p\").bind(\"mouseenter mouseleave\", function(event){
-$(this).toggleClass(\"over\");
+$( \"p\" ).bind( \"mouseenter mouseleave\", function( event ) {
+  $( this ).toggleClass( \"over\" );
 });
-
 ") (text . "") (css . "
-p { background:yellow; font-weight:bold; cursor:pointer;
-padding:5px; }
-p.over { background: #ccc; }
-span { color:red; }
-") (text . "") (html . "<p>Click or double click here.</p>
-<span></span>") (text . "")) ((text . "") (text . "To display each paragraph`s text in an alert box whenever it is
+  p {
+    background: yellow;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+  }
+  p.over {
+     background: #ccc;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Click or double click here.</p>
+<span></span>
+") (text . "")) ((text . "") (text . "To display each paragraph`s text in an alert box whenever it is
 clicked:
 
-") (text . "") (js . "$(\"p\").bind(\"click\", function(){
-alert( $(this).text() );
-});") (text . "")) ((text . "") (text . "You can pass some extra data before the event handler:
-
-") (text . "") (js . "function handler(event) {
-alert(event.data.foo);
-}
-$(\"p\").bind(\"click\", {foo: \"bar\"}, handler)") (text . "")) ((text . "") (text . "Cancel a default action and prevent it from bubbling up by returning
-false:
-
-") (text . "") (js . "$(\"form\").bind(\"submit\", function() { return false; })") (text . "")) ((text . "") (text . "Cancel only the default action by using the .preventDefault() method.
-
-") (text . "") (js . "$(\"form\").bind(\"submit\", function(event) {
-event.preventDefault();
-});") (text . "")) ((text . "") (text . "Stop an event from bubbling without preventing the default action by
-using the .stopPropagation() method.
-
-") (text . "") (js . "$(\"form\").bind(\"submit\", function(event) {
-  event.stopPropagation();
-});") (text . "")) ((text . "") (text . "Bind custom events.
+") (text . "") (js . "
+$( \"p\" ).bind( \"click\", function() {
+  alert( $( this ).text() );
+});
+") (text . "")) ((text . "") (text . "You can pass some extra data before the event handler:
 
 ") (text . "") (js . "
+function handler( event ) {
+  alert( event.data.foo );
+}
+$( \"p\" ).bind( \"click\", {
+  foo: \"bar\"
+}, handler );
+") (text . "")) ((text . "") (text . "Cancel a default action and prevent it from bubbling up by returning
+false:
 
-$(\"p\").bind(\"myCustomEvent\", function(e, myName, myValue){
-$(this).text(myName + \", hi there!\");
-$(\"span\").stop().css(\"opacity\", 1)
-.text(\"myName = \" + myName)
-.fadeIn(30).fadeOut(1000);
-});
-$(\"button\").click(function () {
-$(\"p\").trigger(\"myCustomEvent\", [ \"John\" ]);
-});
+") (text . "") (js . "
+$( \"form\" ).bind( \"submit\", function() {
+  return false;
+})
+") (text . "")) ((text . "") (text . "Cancel only the default action by using the .preventDefault() method.
 
+") (text . "") (js . "
+$( \"form\" ).bind( \"submit\", function( event ) {
+  event.preventDefault();
+});
+") (text . "")) ((text . "") (text . "Stop an event from bubbling without preventing the default action by
+using the .stopPropagation() method.
+
+") (text . "") (js . "
+$( \"form\" ).bind( \"submit\", function( event ) {
+  event.stopPropagation();
+});
+") (text . "")) ((text . "") (text . "Bind custom events.
+
+") (text . "") (js . "
+$( \"p\" ).bind( \"myCustomEvent\", function( e, myName, myValue ) {
+  $( this ).text( myName + \", hi there!\" );
+  $( \"span\" )
+    .stop()
+    .css( \"opacity\", 1 )
+    .text( \"myName = \" + myName )
+    .fadeIn( 30 )
+    .fadeOut( 1000 );
+  });
+$( \"button\" ).click(function() {
+  $( \"p\" ).trigger( \"myCustomEvent\", [ \"John\" ] );
+});
 ") (text . "") (css . "
-p { color:red; }
-span { color:blue; }
-") (text . "") (html . "<p>Has an attached custom event.</p>
-<button>Trigger custom event</button>
-<span style=\"display:none;\"></span>") (text . "")) ((text . "") (text . "Bind multiple events simultaneously.
-
-") (text . "") (js . "$(\"div.test\").bind({
-  click: function(){
-    $(this).addClass(\"active\");
-  },
-  mouseenter: function(){
-    $(this).addClass(\"inside\");
-  },
-  mouseleave: function(){
-    $(this).removeClass(\"inside\");
+  p {
+    color: red;
   }
-});") (text . ""))))) jquery-doc-hash)
+  span {
+    color: blue;
+  }
+") (text . "") (html . "
+<p>Has an attached custom event.</p>
+<button>Trigger custom event</button>
+<span style=\"display: none;\"></span>
+") (text . "")) ((text . "") (text . "Bind multiple events simultaneously.
+
+") (text . "") (js . "
+$( \"div.test\" ).bind({
+  click: function() {
+    $( this ).addClass( \"active\" );
+  },
+  mouseenter: function() {
+    $( this ).addClass( \"inside\" );
+  },
+  mouseleave: function() {
+    $( this ).removeClass( \"inside\" );
+  }
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "blur" jquery-doc-methods)
 
@@ -1703,8 +2140,8 @@ span { color:blue; }
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"blur\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`blur`, handler) in the first two
-variations, and .trigger(`blur`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"blur\", handler ) in the first two
+variations, and .trigger( \"blur\" ) in the third.
 
 ") (text . "") (text . "The blur event is sent to an element when it loses focus. Originally,
 this event was only applicable to form elements, such as <input>. In
@@ -1714,17 +2151,19 @@ such as the Tab key, or by mouse clicks elsewhere on the page.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
-  <input id=\"target\" type=\"text\" value=\"Field 1\" />
-  <input type=\"text\" value=\"Field 2\" />
+") (text . "") (js . "
+<form>
+  <input id=\"target\" type=\"text\" value=\"Field 1\">
+  <input type=\"text\" value=\"Field 2\">
 </form>
 <div id=\"other\">
   Trigger the handler
 </div>
 The event handler can be bound to the first input field:
-$('#target').blur(function() {
-  alert('Handler for .blur() called.');
-});") (text . "") (text . "Now if the first field has the focus, clicking elsewhere or tabbing
+$( \"#target\" ).blur(function() {
+  alert( \"Handler for .blur() called.\" );
+});
+    ") (text . "") (text . "Now if the first field has the focus, clicking elsewhere or tabbing
 away from it displays the alert:
 
 ") (text . "") (text . "Handler for .blur() called.
@@ -1733,9 +2172,11 @@ away from it displays the alert:
 ") (text . "") (text . "To trigger the event programmatically, apply .blur() without an
 argument:
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').blur();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).blur();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "The blur event does not bubble in Internet Explorer. Therefore, scripts
@@ -1745,7 +2186,9 @@ works around this limitation by mapping blur to the focusout event in
 its event delegation methods, .live() and .delegate() .
 ") (text . "")) ("examples" ((text . "") (text . "To trigger the blur event on all paragraphs:
 
-") (text . "") (js . "$(\"p\").blur();") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).blur();
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.add" jquery-doc-methods)
 
@@ -1757,41 +2200,38 @@ list.
 ")) ("longdesc" (text . "") (text . "This method returns the Callbacks object onto which it is attached (
 this).
 
-") (text . "") (text . "Example
+") (text . "")) ("examples" ((text . "") (text . "Use callbacks.add() to add new callbacks to a callback list:
 
-
-") (text . "") (text . "Use callbacks.add() to add new callbacks to a callback list:
-
-
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo: \" + value );
 };
 
-// another function to also be added to the list
-var bar = function( value ){
+// Another function to also be added to the list
+var bar = function( value ) {
   console.log( \"bar: \" + value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the function \"foo\" to the list
+// Add the function \"foo\" to the list
 callbacks.add( foo );
 
-// fire the items on the list
+// Fire the items on the list
 callbacks.fire( \"hello\" );
-// outputs: \"foo: hello\"
+// Outputs: \"foo: hello\"
 
-// add the function \"bar\" to the list
+// Add the function \"bar\" to the list
 callbacks.add( bar );
 
-// fire the items on the list again
+// Fire the items on the list again
 callbacks.fire( \"world\" );
 
-// outputs:
+// Outputs:
 // \"foo: world\"
 // \"bar: world\"
-") (text . "")) ("examples"))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.disable" jquery-doc-methods)
 
@@ -1800,33 +2240,30 @@ callbacks.fire( \"world\" );
 ")) ("longdesc" (text . "") (text . "This method returns the Callbacks object onto which it is attached (
 this).
 
-") (text . "") (text . "Example
+") (text . "")) ("examples" ((text . "") (text . "Use callbacks.disable() to disable further calls to a callback list:
 
-
-") (text . "") (text . "Use callbacks.disable() to disable further calls to a callback list:
-
-
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the above function to the list
+// Add the above function to the list
 callbacks.add( foo );
 
-// fire the items on the list
+// Fire the items on the list
 callbacks.fire( \"foo\" );
-// outputs: foo
+// Outputs: foo
 
-// disable further calls being possible
+// Disable further calls being possible
 callbacks.disable();
 
-// attempt to fire with \"foobar\" as an argument
+// Attempt to fire with \"foobar\" as an argument
 callbacks.fire( \"foobar\" );
 // foobar isn't output
-") (text . "")) ("examples"))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.empty" jquery-doc-methods)
 
@@ -1835,37 +2272,34 @@ callbacks.fire( \"foobar\" );
 ")) ("longdesc" (text . "") (text . "This method returns the Callbacks object onto which it is attached (
 this).
 
-") (text . "") (text . "Example
+") (text . "")) ("examples" ((text . "") (text . "Use callbacks.empty() to empty a list of callbacks:
 
-
-") (text . "") (text . "Use callbacks.empty() to empty a list of callbacks:
-
-
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value1, value2 ) {
   console.log( \"foo: \" + value1 + \",\" + value2 );
-}
+};
 
-// another function to also be added to the list
-var bar = function( value1, value2 ){
-    console.log( \"bar: \" + value1 + \",\" + value2 );
-}
+// Another function to also be added to the list
+var bar = function( value1, value2 ) {
+  console.log( \"bar: \" + value1 + \",\" + value2 );
+};
 
 var callbacks = $.Callbacks();
 
-// add the two functions
+// Add the two functions
 callbacks.add( foo );
 callbacks.add( bar );
 
-// empty the callbacks list
+// Empty the callbacks list
 callbacks.empty();
 
-// check to ensure all callbacks have been removed
+// Check to ensure all callbacks have been removed
 console.log( callbacks.has( foo ) );
 // false
 console.log( callbacks.has( bar ) );
 // false
-") (text . "")) ("examples"))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.fire" jquery-doc-methods)
 
@@ -1876,41 +2310,38 @@ console.log( callbacks.has( bar ) );
 ")) ("longdesc" (text . "") (text . "This method returns the Callbacks object onto which it is attached (
 this).
 
-") (text . "") (text . "Example
-
-
-") (text . "") (text . "Use callbacks.fire() to invoke the callbacks in a list with any
+") (text . "")) ("examples" ((text . "") (text . "Use callbacks.fire() to invoke the callbacks in a list with any
 arguments that have been passed:
 
 ") (text . "") (js . "
-// a sample logging function to be added to a callbacks list
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo:\" + value );
-}
+};
 
 var callbacks = $.Callbacks();
 
-// add the function \"foo\" to the list
+// Add the function \"foo\" to the list
 callbacks.add( foo );
 
-// fire the items on the list
-callbacks.fire( \"hello\" ); // outputs: \"foo: hello\"
-callbacks.fire( \"world\" ); // outputs: \"foo: world\"
+// Fire the items on the list
+callbacks.fire( \"hello\" ); // Outputs: \"foo: hello\"
+callbacks.fire( \"world\" ); // Outputs: \"foo: world\"
 
-// add another function to the list
+// Add another function to the list
 var bar = function( value ){
-    console.log( \"bar:\" + value );
-}
+  console.log( \"bar:\" + value );
+};
 
-// add this function to the list
+// Add this function to the list
 callbacks.add( bar );
 
-// fire the items on the list again
+// Fire the items on the list again
 callbacks.fire( \"hello again\" );
-// outputs:
+// Outputs:
 // \"foo: hello again\"
 // \"bar: hello again\"
-") (text . "")) ("examples"))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.fireWith" jquery-doc-methods)
 
@@ -1925,57 +2356,52 @@ list.
 ")) ("longdesc" (text . "") (text . "This method returns the Callbacks object onto which it is attached (
 this).
 
-") (text . "") (text . "Example
-
-
-") (text . "") (text . "Use callbacks.fireWith() to fire a list of callbacks with a specific
+") (text . "")) ("examples" ((text . "") (text . "Use callbacks.fireWith() to fire a list of callbacks with a specific
 context and an array of arguments:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var log = function( value1, value2 ) {
   console.log( \"Received: \" + value1 + \",\" + value2 );
 };
 
 var callbacks = $.Callbacks();
 
-// add the log method to the callbacks list
+// Add the log method to the callbacks list
 callbacks.add( log );
 
-// fire the callbacks on the list using the context \"window\"
+// Fire the callbacks on the list using the context \"window\"
 // and an arguments array
 
-callbacks.fireWith( window, [\"foo\",\"bar\"]);
-
-// outputs: \"Received: foo, bar\"
-") (text . "")) ("examples"))) jquery-doc-hash)
+callbacks.fireWith( window, [ \"foo\",\"bar\" ] );
+// Outputs: \"Received: foo, bar\"
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.fired" jquery-doc-methods)
 
 (puthash "callbacks.fired" (quote (("name" . "callbacks.fired") ("signatures" "callbacks.fired" nil) ("desc" (text . "Determine if the callbacks have already been called at least once.
 
-")) ("longdesc" (text . "") (text . "Example
-
-
-") (text . "") (text . "Use callbacks.fired() to determine if the callbacks in a list have been
+")) ("longdesc") ("examples" ((text . "") (text . "Use callbacks.fired() to determine if the callbacks in a list have been
 called at least once:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo:\" + value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the function \"foo\" to the list
+// Add the function \"foo\" to the list
 callbacks.add( foo );
 
-// fire the items on the list
-callbacks.fire( \"hello\" ); // outputs: \"foo: hello\"
-callbacks.fire( \"world\" ); // outputs: \"foo: world\"
+// Fire the items on the list
+callbacks.fire( \"hello\" ); // Outputs: \"foo: hello\"
+callbacks.fire( \"world\" ); // Outputs: \"foo: world\"
 
-// test to establish if the callbacks have been called
+// Test to establish if the callbacks have been called
 console.log( callbacks.fired() );
-") (text . "")) ("examples"))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "callbacks.has" jquery-doc-methods)
 
@@ -1986,23 +2412,23 @@ console.log( callbacks.fired() );
 ")) ("longdesc") ("examples" ((text . "") (text . "Use callbacks.has() to check if a callback list contains a specific
 callback:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value1, value2 ) {
   console.log( \"Received: \" + value1 + \",\" + value2 );
 };
 
-// a second function which will not be added to the list
+// A second function which will not be added to the list
 var bar = function( value1, value2 ) {
   console.log( \"foobar\" );
-}
+};
 
 var callbacks = $.Callbacks();
 
-// add the log method to the callbacks list
+// Add the log method to the callbacks list
 callbacks.add( foo );
 
-// determine which callbacks are in the list
-
+// Determine which callbacks are in the list
 console.log( callbacks.has( foo ) );
 // true
 console.log( callbacks.has( bar ) );
@@ -2022,37 +2448,41 @@ callback list is locked.
 ") (text . "")) ("examples" ((text . "") (text . "Use callbacks.lock() to lock a callback list to avoid further changes
 being made to the list state:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo:\" + value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the logging function to the callback list
+// Add the logging function to the callback list
 callbacks.add( foo );
 
-// fire the items on the list, passing an argument
+// Fire the items on the list, passing an argument
 callbacks.fire( \"hello\" );
-// outputs \"foo: hello\"
+// Outputs \"foo: hello\"
 
-// lock the callbacks list
+// Lock the callbacks list
 callbacks.lock();
 
-// try firing the items again
+// Try firing the items again
 callbacks.fire( \"world\" );
 
-// as the list was locked, no items
-// were called, so \"world\" isn\"t logged
+// As the list was locked, no items were called,
+// so \"world\" isn't logged
 ") (text . "")) ((text . "") (text . "Use callbacks.lock() to lock a callback list with \"memory,\" and then
 resume using the list:
 
-") (text . "") (html . "<div id=\"log\"></div>") (text . "") (js . "// simple function for logging results
-var log = function( value) {
+") (text . "") (html . "
+<div id=\"log\"></div>
+") (text . "") (js . "
+// Simple function for logging results
+var log = function( value ) {
   $( \"#log\" ).append( \"<p>\" + value + \"</p>\" );
 };
 
-// two sample functions to be added to a callbacks list
+// Two sample functions to be added to a callbacks list
 var foo = function( value ) {
   log( \"foo: \" + value );
 };
@@ -2060,36 +2490,36 @@ var bar = function( value ) {
   log( \"bar: \" + value );
 };
 
-// create the callbacks object with the \"memory\" flag
+// Create the callbacks object with the \"memory\" flag
 var callbacks = $.Callbacks( \"memory\" );
 
-// add the foo logging function to the callback list
+// Add the foo logging function to the callback list
 callbacks.add( foo );
 
-// fire the items on the list, passing an argument
+// Fire the items on the list, passing an argument
 callbacks.fire( \"hello\" );
-// outputs \"foo: hello\"
+// Outputs \"foo: hello\"
 
-// lock the callbacks list
+// Lock the callbacks list
 callbacks.lock();
 
-// try firing the items again
+// Try firing the items again
 callbacks.fire( \"world\" );
-// as the list was locked, no items were called,
+// As the list was locked, no items were called,
 // so \"foo: world\" isn't logged
 
-// add the foo function to the callback list again
+// Add the foo function to the callback list again
 callbacks.add( foo );
 
-// try firing the items again
+// Try firing the items again
 callbacks.fire( \"silentArgument\" );
-// outputs \"foo: hello\" because the argument value was stored in memory
+// Outputs \"foo: hello\" because the argument value was stored in memory
 
-// add the bar function to the callback list
+// Add the bar function to the callback list
 callbacks.add( bar );
 
 callbacks.fire( \"youHadMeAtHello\" );
-// outputs \"bar: hello\" because the list is still locked,
+// Outputs \"bar: hello\" because the list is still locked,
 // and the argument value is still stored in memory
 ") (text . ""))))) jquery-doc-hash)
 
@@ -2099,24 +2529,25 @@ callbacks.fire( \"youHadMeAtHello\" );
 
 ")) ("longdesc") ("examples" ((text . "") (text . "Use callbacks.locked() to determine the lock-state of a callback list:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
-  console.log( \"foo: \" + value);
+  console.log( \"foo: \" + value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the logging function to the callback list
+// Add the logging function to the callback list
 callbacks.add( foo );
 
-// fire the items on the list, passing an argument
+// Fire the items on the list, passing an argument
 callbacks.fire( \"hello\" );
-// outputs \"foo: hello\"
+// Outputs \"foo: hello\"
 
-// lock the callbacks list
+// Lock the callbacks list
 callbacks.lock();
 
-// test the lock-state of the list
+// Test the lock-state of the list
 console.log ( callbacks.locked() );
 // true
 ") (text . ""))))) jquery-doc-hash)
@@ -2133,27 +2564,28 @@ this).
 
 ") (text . "")) ("examples" ((text . "") (text . "Use callbacks.remove() to remove callbacks from a callback list:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
 var foo = function( value ) {
   console.log( \"foo: \" + value );
 };
 
 var callbacks = $.Callbacks();
 
-// add the function \"foo\" to the list
+// Add the function \"foo\" to the list
 callbacks.add( foo );
 
-// fire the items on the list
+// Fire the items on the list
 callbacks.fire( \"hello\" );
-// outputs: \"foo: hello\"
+// Outputs: \"foo: hello\"
 
-// remove \"foo\" from the callback list
+// Remove \"foo\" from the callback list
 callbacks.remove( foo );
 
-// fire the items on the list again
+// Fire the items on the list again
 callbacks.fire( \"world\" );
 
-// nothing output as \"foo\" is no longer in the list
+// Nothing output as \"foo\" is no longer in the list
 ") (text . ""))))) jquery-doc-hash)
 
 (push "change" jquery-doc-methods)
@@ -2167,8 +2599,8 @@ callbacks.fire( \"world\" );
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"change\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`change`, handler) in the first two
-variations, and .trigger(`change`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"change\", handler ) in the first two
+variations, and .trigger( \"change\" ) in the third.
 
 ") (text . "") (text . "The change event is sent to an element when its value changes. This
 event is limited to <input> elements, <textarea> boxes and <select>
@@ -2179,8 +2611,9 @@ loses focus.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<form>
-  <input class=\"target\" type=\"text\" value=\"Field 1\" />
+") (text . "") (html . "
+<form>
+  <input class=\"target\" type=\"text\" value=\"Field 1\">
   <select class=\"target\">
     <option value=\"option1\" selected=\"selected\">Option 1</option>
     <option value=\"option2\">Option 2</option>
@@ -2188,19 +2621,24 @@ loses focus.
 </form>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "The event handler can be bound to the text input and the select box:
+</div>
+    ") (text . "") (text . "The event handler can be bound to the text input and the select box:
 
 
-") (text . "") (js . "$('.target').change(function() {
-  alert('Handler for .change() called.');
-});") (text . "") (text . "Now when the second option is selected from the dropdown, the alert is
+") (text . "") (js . "
+$( \".target\" ).change(function() {
+  alert( \"Handler for .change() called.\" );
+});
+    ") (text . "") (text . "Now when the second option is selected from the dropdown, the alert is
 displayed. It is also displayed if you change the text in the field and
 then click away. If the field loses focus without the contents having
 changed, though, the event is not triggered. To trigger the event
 manually, apply .change() without arguments:
-") (text . "") (js . "$('#other').click(function() {
-  $('.target').change();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \".target\" ).change();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message. The message will display twice, because the handler has
 been bound to the change event on both of the form elements.
 ") (text . "") (text . "As of jQuery 1.4, the change event bubbles in Internet Explorer,
@@ -2210,31 +2648,36 @@ behaving consistently with the event in other modern browsers.
 selected option and writes them in the div. It then triggers the event
 for the initial text draw.
 ") (text . "") (js . "
-$(\"select\").change(function () {
-  var str = \"\";
-  $(\"select option:selected\").each(function () {
-            str += $(this).text() + \" \";
-  });
-  $(\"div\").text(str);
-})
-.change();
+$( \"select\" )
+  .change(function () {
+    var str = \"\";
+    $( \"select option:selected\" ).each(function() {
+      str += $( this ).text() + \" \";
+    });
+    $( \"div\" ).text( str );
+  })
+  .change();
 ") (text . "") (css . "
-  div { color:red; }
-  ") (text . "") (html . "<select name=\"sweets\" multiple=\"multiple\">
-    <option>Chocolate</option>
-    <option selected=\"selected\">Candy</option>
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<select name=\"sweets\" multiple=\"multiple\">
+  <option>Chocolate</option>
+  <option selected=\"selected\">Candy</option>
+  <option>Taffy</option>
+  <option selected=\"selected\">Caramel</option>
+  <option>Fudge</option>
+  <option>Cookie</option>
+</select>
+<div></div>
+") (text . "")) ((text . "") (text . "To add a validity test to all text input elements:
 
-    <option>Taffy</option>
-    <option selected=\"selected\">Caramel</option>
-    <option>Fudge</option>
-    <option>Cookie</option>
-
-  </select>
-  <div></div>") (text . "")) ((text . "") (text . "To add a validity test to all text input elements:
-
-") (text . "") (js . "$(\"input[type='text']\").change( function() {
-  // check input ($(this).val()) for validity here
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"input[type='text']\" ).change(function() {
+  // Check input( $( this ).val() ) for validity here
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "children" jquery-doc-methods)
 
@@ -2244,7 +2687,7 @@ $(\"select\").change(function () {
 optionally filtered by a selector.
 
 ")) ("longdesc" (text . "") (text . "Given a jQuery object that represents a set of DOM elements, the
-.children() method allows us to search throughthe children of these
+.children() method allows us to search through the children of these
 elements in the DOM tree and construct a new jQuery object from the
 matching elements. The .children() method differs from .find() in that
 .children() only travels a single level down the DOM tree while .find()
@@ -2280,86 +2723,126 @@ it.
 ") (text . "") (text . "If we begin at the level-2 list, we can find its children:
 
 
-") (text . "") (js . "$('ul.level-2').children().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items A, B, and C.
+") (text . "") (js . "$( \"ul.level-2\" ).children().css( \"background-color\", \"red\" );") (text . "") (text . "The result of this call is a red background behind items A, B, and C.
 Since we do not supply a selector expression, all of the children are
 part of the returned jQuery object. If we had supplied one, only the
 matching items among these three would be included.
 ") (text . "")) ("examples" ((text . "") (text . "Find all children of the clicked element.
 
 ") (text . "") (js . "
+$( \"#container\" ).click(function ( event ) {
+  $( \"*\" ).removeClass( \"hilite\" );
+  var kids = $( event.target ).children();
+  var len = kids.addClass( \"hilite\" ).length;
 
-    $(\"#container\").click(function (e) {
-      $(\"*\").removeClass(\"hilite\");
-      var $kids = $(e.target).children();
-      var len = $kids.addClass(\"hilite\").length;
+  $( \"#results span:first\" ).text( len );
+  $( \"#results span:last\" ).text( event.target.tagName );
 
-      $(\"#results span:first\").text(len);
-      $(\"#results span:last\").text(e.target.tagName);
-
-      e.preventDefault();
-      return false;
-    });
+  event.preventDefault();
+});
 ") (text . "") (css . "
-  body { font-size:16px; font-weight:bolder; }
-  div { width:130px; height:82px; margin:10px; float:left;
-        border:1px solid blue; padding:4px; }
-  #container { width:auto; height:105px; margin:0; float:none;
-        border:none; }
-  .hilite { border-color:red; }
-  #results { display:block; color:red; }
-  p { margin:10px; border:1px solid transparent; }
-  span { color:blue; border:1px solid transparent; }
-  input { width:100px; }
-  em { border:1px solid transparent; }
-  a { border:1px solid transparent; }
-  b { border:1px solid transparent; }
-  button { border:1px solid transparent; }
-  ") (text . "") (html . "<div id=\"container\">
-
-    <div>
-      <p>This <span>is the <em>way</em> we</span>
+  body {
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  div {
+    width: 130px;
+    height: 82px;
+    margin: 10px;
+    float: left;
+    border: 1px solid blue;
+    padding: 4px;
+  }
+  #container {
+    width: auto;
+    height: 105px;
+    margin: 0;
+    float: none;
+    border: none;
+  }
+  .hilite {
+    border-color: red;
+  }
+  #results {
+    display: block;
+    color: red;
+  }
+  p, span, em, a, b, button {
+    border: 1px solid transparent;
+  }
+  p {
+    margin: 10px;
+  }
+  span {
+    color: blue;
+  }
+  input {
+    width: 100px;
+  }
+") (text . "") (html . "
+<div id=\"container\">
+  <div>
+    <p>This <span>is the <em>way</em> we</span>
       write <em>the</em> demo,</p>
+  </div>
 
-    </div>
-    <div>
-      <a href=\"#\"><b>w</b>rit<b>e</b></a> the <span>demo,</span> <button>write
-      the</button> demo,
-    </div>
+  <div>
+    <a href=\"#\"><b>w</b>rit<b>e</b></a> the <span>demo,</span> <button>write
+    the</button> demo,
+  </div>
 
-    <div>
-      This <span>the way we <em>write</em> the <em>demo</em> so</span>
+  <div>
+    This <span>the way we <em>write</em> the <em>demo</em> so</span>
+    <input type=\"text\" value=\"early\"> in
+  </div>
 
-      <input type=\"text\" value=\"early\" /> in
-    </div>
-    <p>
-      <span>t</span>he <span>m</span>orning.
-      <span id=\"results\">Found <span>0</span> children in <span>TAG</span>.</span>
+  <p>
+    <span>t</span>he <span>m</span>orning.
+    <span id=\"results\">Found <span>0</span> children in <span>TAG</span>.</span>
+  </p>
+</div>
+") (text . "")) ((text . "") (text . "Find all children of each div.
 
-    </p>
-  </div>") (text . "")) ((text . "") (text . "Find all children of each div.
+") (text . "") (js . "
+$( \"div\" ).children().css( \"border-bottom\", \"3px double red\" );
+") (text . "") (css . "
+  body {
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  span {
+    color: blue;
+  }
+  p {
+    margin: 5px 0;
+  }
+") (text . "") (html . "
+<p>Hello (this is a paragraph)</p>
 
-") (text . "") (js . "$(\"div\").children().css(\"border-bottom\", \"3px double red\");") (text . "") (css . "
-  body { font-size:16px; font-weight:bolder; }
-  span { color:blue; }
-  p { margin:5px 0; }
-  ") (text . "") (html . "<p>Hello (this is a paragraph)</p>
+<div><span>Hello Again (this span is a child of the a div)</span></div>
+<p>And <span>Again</span> (in another paragraph)</p>
 
-  <div><span>Hello Again (this span is a child of the a div)</span></div>
-  <p>And <span>Again</span> (in another paragraph)</p>
+<div>And One Last <span>Time</span> (most text directly in a div)</div>
+") (text . "")) ((text . "") (text . "Find all children with a class \"selected\" of each div.
 
-  <div>And One Last <span>Time</span> (most text directly in a div)</div>") (text . "")) ((text . "") (text . "Find all children with a class \"selected\" of each div.
-
-") (text . "") (js . "$(\"div\").children(\".selected\").css(\"color\", \"blue\");") (text . "") (css . "
-
-  body { font-size:16px; font-weight:bolder; }
-  p { margin:5px 0; }
-  ") (text . "") (html . "<div>
-    <span>Hello</span>
-    <p class=\"selected\">Hello Again</p>
-    <div class=\"selected\">And Again</div>
-
-    <p>And One Last Time</p>
-  </div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"div\" ).children( \".selected\" ).css( \"color\", \"blue\" );
+") (text . "") (css . "
+  body {
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  p {
+    margin: 5px 0;
+  }
+") (text . "") (html . "
+<div>
+  <span>Hello</span>
+  <p class=\"selected\">Hello Again</p>
+  <div class=\"selected\">And Again</div>
+  <p>And One Last Time</p>
+</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "clearQueue" jquery-doc-methods)
 
@@ -2378,39 +2861,54 @@ that has been added to a generic jQuery queue with the .queue() method.
 ") (text . "")) ("examples" ((text . "") (text . "Empty the queue.
 
 ") (text . "") (js . "
-$(\"#start\").click(function () {
+$( \"#start\" ).click(function() {
+  var myDiv = $( \"div\" );
+  myDiv.show( \"slow\" );
+  myDiv.animate({
+    left:\"+=200\"
+  }, 5000 );
 
-  var myDiv = $(\"div\");
-  myDiv.show(\"slow\");
-  myDiv.animate({left:'+=200'},5000);
-  myDiv.queue(function () {
-    var _this = $(this);
-    _this.addClass(\"newcolor\");
-    _this.dequeue();
+  myDiv.queue(function() {
+    var that = $( this );
+    that.addClass( \"newcolor\" );
+    that.dequeue();
   });
 
-  myDiv.animate({left:'-=200'},1500);
-  myDiv.queue(function () {
-    var _this = $(this);
-    _this.removeClass(\"newcolor\");
-    _this.dequeue();
+  myDiv.animate({
+    left:\"-=200\"
+  }, 1500 );
+  myDiv.queue(function() {
+    var that = $( this );
+    that.removeClass( \"newcolor\" );
+    that.dequeue();
   });
   myDiv.slideUp();
-
 });
 
-$(\"#stop\").click(function () {
-  var myDiv = $(\"div\");
+$( \"#stop\" ).click(function() {
+  var myDiv = $( \"div\" );
   myDiv.clearQueue();
   myDiv.stop();
-});") (text . "") (css . "
-div { margin:3px; width:40px; height:40px;
-    position:absolute; left:0px; top:30px;
-    background:green; display:none; }
-div.newcolor { background:blue; }
-") (text . "") (html . "<button id=\"start\">Start</button>
+});
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+") (text . "") (html . "
+<button id=\"start\">Start</button>
 <button id=\"stop\">Stop</button>
-<div></div>") (text . ""))))) jquery-doc-hash)
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "click" jquery-doc-methods)
 
@@ -2423,24 +2921,28 @@ div.newcolor { background:blue; }
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"click\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`click`, handler) in the first two
-variations, and .trigger(`click`) in the third. The click event is sent
-to an element when the mouse pointer is over the element, and the mouse
-button is pressed and released. Any HTML element can receive this
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"click\", handler ) in the first two
+variations, and .trigger( \"click\" ) in the third. The click event is
+sent to an element when the mouse pointer is over the element, and the
+mouse button is pressed and released. Any HTML element can receive this
 event. For example, consider the HTML:
-") (text . "") (js . "<div id=\"target\">
+") (text . "") (js . "
+<div id=\"target\">
   Click here
 </div>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "
+</div>
+    ") (text . "") (text . "
 
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js . "$(\"#target\").click(function() {
-  alert(\"Handler for .click() called.\");
-});") (text . "") (text . "Now if we click on this element, the alert is displayed:
+") (text . "") (js . "
+$( \"#target\" ).click(function() {
+  alert( \"Handler for .click() called.\" );
+});
+    ") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
 
 ") (text . "") (text . "Handler for .click() called.
@@ -2449,10 +2951,12 @@ event. For example, consider the HTML:
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js . "$(\"#other\").click(function() {
-  $(\"#target\").click();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
-the message.
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).click();
+});
+    ") (text . "") (text . "After this code executes, clicking on Trigger the handler will also
+alert the message.
 
 ") (text . "") (text . "The click event is only triggered after this exact series of events:
 
@@ -2467,18 +2971,27 @@ is not required, the mousedown or mouseup event may be more suitable.
 ") (text . "")) ("examples" ((text . "") (text . "Hide paragraphs on a page when they are clicked:
 
 ") (text . "") (js . "
-    $(\"p\").click(function () {
-      $(this).slideUp();
-    });
+$( \"p\" ).click(function() {
+  $( this ).slideUp();
+});
 ") (text . "") (css . "
-  p { color:red; margin:5px; cursor:pointer; }
-  p:hover { background:yellow; }
-  ") (text . "") (html . "<p>First Paragraph</p>
+  p {
+    color: red;
+    margin: 5px;
+    cursor: pointer;
+  }
+  p:hover {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>First Paragraph</p>
+<p>Second Paragraph</p>
+<p>Yet one more Paragraph</p>
+") (text . "")) ((text . "") (text . "Trigger the click event on all of the paragraphs on the page:
 
-  <p>Second Paragraph</p>
-  <p>Yet one more Paragraph</p>") (text . "")) ((text . "") (text . "Trigger the click event on all of the paragraphs on the page:
-
-") (text . "") (js . "$(\"p\").click();") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).click();
+") (text . ""))))) jquery-doc-hash)
 
 (push "clone" jquery-doc-methods)
 
@@ -2496,38 +3009,53 @@ the first argument`s value (which defaults to false).
 
 ")) ("longdesc" (text . "") (text . "The .clone() method performs a deep copy of the set of matched
 elements, meaning that it copies the matched elements as well as all of
-their descendant elements and text nodes. When used in conjunction with
-one of the insertion methods, .clone() is a convenient way to duplicate
-elements on a page. Consider the following HTML:
-") (text . "") (html . "<div class=\"container\">
+their descendant elements and text nodes. For performance reasons, the
+dynamic state of form elements (e.g., user data typed into input, and
+textarea or user selections made to a select) is not copied to the
+cloned elements. The clone operation sets these fields to their default
+values as specified in the HTML.
+") (text . "") (text . "When used in conjunction with one of the insertion methods, .clone() is
+a convenient way to duplicate elements on a page. Consider the
+following HTML:
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "") (text . "As shown in the discussion for .append() , normally when an element is
+</div>
+    ") (text . "") (text . "As shown in the discussion for .append() , normally when an element is
 inserted somewhere in the DOM, it is moved from its old location. So,
 given the code:
-") (text . "") (js . "$('.hello').appendTo('.goodbye');") (text . "") (text . "The resulting DOM structure would be:
+") (text . "") (js . "
+$( \".hello\" ).appendTo( \".goodbye\" );
+    ") (text . "") (text . "The resulting DOM structure would be:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"goodbye\">
     Goodbye
     <div class=\"hello\">Hello</div>
   </div>
-</div>") (text . "") (text . "To prevent this and instead create a copy of the element, you could
+</div>
+    ") (text . "") (text . "To prevent this and instead create a copy of the element, you could
 write the following:
 
-") (text . "") (js . "$('.hello').clone().appendTo('.goodbye');") (text . "") (text . "This would produce:
+") (text . "") (js . "
+$( \".hello\" ).clone().appendTo( \".goodbye\" );
+    ") (text . "") (text . "This would produce:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">
     Goodbye
     <div class=\"hello\">Hello</div>
   </div>
-</div>") (text . "") (text . "  Note: When using the .clone() method, you can modify the cloned
-  elements or their contents before (re-)inserting them into the
-  document.
+</div>
+    ") (text . "") (text . "Note: When using the .clone() method, you can modify the cloned
+elements or their contents before (re-)inserting them into the
+document.
 ") (text . "") (text . "Normally, any event handlers bound to the original element are not
 copied to the clone. The optional withDataAndEvents parameter allows us
 to change this behavior, and to instead make copies of all of the event
@@ -2537,58 +3065,26 @@ to the new copy.
 ") (text . "") (text . "However, objects and arrays within element data are not copied and will
 continue to be shared between the cloned element and the original
 element. To deep copy all data, copy each one manually:
-") (text . "") (js . "var $elem = $('#elem').data( \"arr\": [ 1 ] ), // Original element with attached data
+") (text . "") (js . "
+// Original element with attached data
+var $elem = $( \"#elem\" ).data( \"arr\": [ 1 ] ),
     $clone = $elem.clone( true )
-    .data( \"arr\", $.extend( [], $elem.data(\"arr\") ) ); // Deep copy to prevent data sharing
-") (text . "") (text . "As of jQuery 1.5, withDataAndEvents can be optionally enhanced with
+      // Deep copy to prevent data sharing
+      .data( \"arr\", $.extend( [], $elem.data( \"arr\" ) ) );
+    ") (text . "") (text . "As of jQuery 1.5, withDataAndEvents can be optionally enhanced with
 deepWithDataAndEvents to copy the events and data for all children of
 the cloned element.
-") (text . "") (text . "  Note: Using .clone() has the side-effect of producing elements with
-  duplicate id attributes, which are supposed to be unique. Where
-  possible, it is recommended to avoid cloning elements with this
-  attribute or using class attributes as identifiers instead.
+") (text . "") (text . "Note: Using .clone() has the side-effect of producing elements with
+duplicate id attributes, which are supposed to be unique. Where
+possible, it is recommended to avoid cloning elements with this
+attribute or using class attributes as identifiers instead.
 ") (text . "")) ("examples" ((text . "") (text . "Clones all b elements (and selects the clones) and prepends them to all
 paragraphs.
 
 ") (text . "") (js . "
-  $(\"b\").clone().prependTo(\"p\");
+$( \"b\" ).clone().prependTo( \"p\" );
 ") (text . "") (html . "
-  <b>Hello</b><p>, how are you?</p>
-") (text . "")) ((text . "") (text . "When using .clone() to clone a collection of elements that are not
-attached to the DOM, their order when inserted into the DOM is not
-guaranteed. However, it may be possible to preserve sort order with a
-workaround, as demonstrated:
-") (text . "") (css . "
-  #orig, #copy, #copy-correct {
-    float: left;
-    width: 20%;
-  }
-") (text . "") (js . "
-// sort order is not guaranteed here and may vary with browser
-$('#copy').append($('#orig .elem')
-          .clone()
-          .children('a')
-          .prepend('foo - ')
-          .parent()
-          .clone());
-
-// correct way to approach where order is maintained
-$('#copy-correct')
-          .append($('#orig .elem')
-          .clone()
-          .children('a')
-          .prepend('bar - ')
-          .end());
-") (text . "") (html . "
-<div id=\"orig\">
-    <div class=\"elem\"><a>1</a></div>
-    <div class=\"elem\"><a>2</a></div>
-    <div class=\"elem\"><a>3</a></div>
-    <div class=\"elem\"><a>4</a></div>
-    <div class=\"elem\"><a>5</a></div>
-</div>
-<div id=\"copy\"></div>
-<div id=\"copy-correct\"></div>
+<b>Hello</b><p>, how are you?</p>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "closest" jquery-doc-methods)
@@ -2620,8 +3116,9 @@ selector Travels up the DOM tree to the document`s root element, adding
 each ancestor element to a temporary collection; it then filters that
 collection based on a selector if one is supplied
 The returned jQuery object contains zero or one element for each
-element in the original set The returned jQuery object contains zero or
-more elements for each element in the original set
+element in the original set, in document order The returned jQuery
+object contains zero or more elements for each element in the original
+set, in reverse document order
 ") (text . "") (html . "
 <ul id=\"one\" class=\"level-1\">
   <li class=\"item-i\">I</li>
@@ -2640,31 +3137,38 @@ more elements for each element in the original set
   </li>
   <li class=\"item-iii\">III</li>
 </ul>
-") (text . "") (text . "Suppose we perform a search for <ul> elements starting at item A:
+      ") (text . "") (text . "Suppose we perform a search for <ul> elements starting at item A:
 
 
 ") (text . "") (js . "
-$('li.item-a').closest('ul')
-  .css('background-color', 'red');
-") (text . "") (text . "This will change the color of the level-2 <ul>, since it is the first
+$( \"li.item-a\" )
+  .closest( \"ul\" )
+  .css( \"background-color\", \"red\" );
+      ") (text . "") (text . "This will change the color of the level-2 <ul>, since it is the first
 encountered when traveling up the DOM tree.
 
 ") (text . "") (text . "Suppose we search for an <li> element instead:
 
 
-") (text . "") (js . "$('li.item-a').closest('li')
-  .css('background-color', 'red');
-") (text . "") (text . "This will change the color of list item A. The .closest() method begins
+") (text . "") (js . "
+$( \"li.item-a\" )
+  .closest( \"li\" )
+  .css( \"background-color\", \"red\" );
+      ") (text . "") (text . "This will change the color of list item A. The .closest() method begins
 its search with the element itself before progressing up the DOM tree,
 and stops when item A matches the selector.
 ") (text . "") (text . "We can pass in a DOM element as the context within which to search for
 the closest element.
 
-") (text . "") (js . "var listItemII = document.getElementById('ii');
-$('li.item-a').closest('ul', listItemII)
-  .css('background-color', 'red');
-$('li.item-a').closest('#one', listItemII)
-  .css('background-color', 'green');") (text . "") (text . "This will change the color of the level-2 <ul>, because it is both the
+") (text . "") (js . "
+var listItemII = document.getElementById( \"ii\" );
+$( \"li.item-a\" )
+  .closest( \"ul\", listItemII )
+  .css( \"background-color\", \"red\" );
+$( \"li.item-a\" )
+  .closest( \"#one\", listItemII )
+  .css( \"background-color\", \"green\" );
+      ") (text . "") (text . "This will change the color of the level-2 <ul>, because it is both the
 first <ul> ancestor of list item A and a descendant of list item II. It
 will not change the color of the level-1 <ul>, however, because it is
 not a descendant of list item II.
@@ -2672,30 +3176,46 @@ not a descendant of list item II.
 element toggles a yellow background when it or its descendent is
 clicked.
 ") (text . "") (js . "
-  $( document ).on(\"click\", function( e ) {
-    $( e.target ).closest(\"li\").toggleClass(\"hilight\");
-  });
+$( document ).on( \"click\", function( event ) {
+  $( event.target ).closest( \"li\" ).toggleClass( \"hilight\" );
+});
 ") (text . "") (css . "
-  li { margin: 3px; padding: 3px; background: #EEEEEE; }
-  li.hilight { background: yellow; }
-  ") (text . "") (html . "<ul>
-    <li><b>Click me!</b></li>
-    <li>You can also <b>Click me!</b></li>
-  </ul>") (text . "")) ((text . "") (text . "Pass a jQuery object to closest. The closest list element toggles a
+  li {
+    margin: 3px;
+    padding: 3px;
+    background: #EEEEEE;
+  }
+  li.hilight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<ul>
+  <li><b>Click me!</b></li>
+  <li>You can also <b>Click me!</b></li>
+</ul>
+") (text . "")) ((text . "") (text . "Pass a jQuery object to closest. The closest list element toggles a
 yellow background when it or its descendent is clicked.
 
 ") (text . "") (js . "
-  var $listElements = $(\"li\").css(\"color\", \"blue\");
-  $( document ).on(\"click\", function( e ) {
-    $( e.target ).closest( $listElements ).toggleClass(\"hilight\");
-  });
+var listElements = $( \"li\" ).css( \"color\", \"blue\" );
+$( document ).on( \"click\", function( event ) {
+  $( event.target ).closest( listElements ).toggleClass( \"hilight\" );
+});
 ") (text . "") (css . "
-  li { margin: 3px; padding: 3px; background: #EEEEEE; }
-  li.hilight { background: yellow; }
-  ") (text . "") (html . "<ul>
-    <li><b>Click me!</b></li>
-    <li>You can also <b>Click me!</b></li>
-  </ul>") (text . ""))))) jquery-doc-hash)
+  li {
+    margin: 3px;
+    padding: 3px;
+    background: #EEEEEE;
+  }
+  li.hilight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<ul>
+  <li><b>Click me!</b></li>
+  <li>You can also <b>Click me!</b></li>
+</ul>
+") (text . ""))))) jquery-doc-hash)
 
 (push "closest" jquery-doc-methods)
 
@@ -2728,30 +3248,33 @@ elements in the resulting jQuery object.
 an iframe, if the iframe is on the same domain as the main page.
 
 ") (text . "") (text . "Consider a simple <div> with a number of text nodes, each of which is
-separated by two line break elements ( <br />):
+separated by two line break elements ( <br>):
 
-") (text . "") (html . "<div class=\"container\">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed 
-  do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-  <br /><br />
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+") (text . "") (html . "
+<div class=\"container\">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  <br><br>
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco
   laboris nisi ut aliquip ex ea commodo consequat.
-  <br /> <br />
-  Duis aute irure dolor in reprehenderit in voluptate velit 
+  <br><br>
+  Duis aute irure dolor in reprehenderit in voluptate velit
   esse cillum dolore eu fugiat nulla pariatur.
 </div>
-") (text . "") (text . "We can employ the .contents() method to help convert this blob of text
+    ") (text . "") (text . "We can employ the .contents() method to help convert this blob of text
 into three well-formed paragraphs:
 
 ") (text . "") (js . "
-$('.container').contents().filter(function() {
-  return this.nodeType == 3;
-})
-  .wrap('<p></p>')
-.end()
-.filter('br')
-  .remove();
-") (text . "") (text . "This code first retrieves the contents of <div class=\"container\"> and
+$( \".container\" )
+  .contents()
+    .filter(function() {
+      return this.nodeType === 3;
+    })
+      .wrap( \"<p></p>\" )
+      .end()
+    .filter( \"br\" )
+    .remove();
+    ") (text . "") (text . "This code first retrieves the contents of <div class=\"container\"> and
 then filters it for text nodes, which are wrapped in paragraph tags.
 This is accomplished by testing the .nodeType property of the element.
 This DOM property holds a numeric code indicating the node`s type; text
@@ -2760,9 +3283,22 @@ nodes use the code 3. The contents are again filtered, this time for
 ") (text . "")) ("examples" ((text . "") (text . "Find all the text nodes inside a paragraph and wrap them with a bold
 tag.
 
-") (text . "") (js . "$(\"p\").contents().filter(function(){ return this.nodeType != 1; }).wrap(\"<b/>\");") (text . "") (html . "<p>Hello <a href=\"http://ejohn.org/\">John</a>, how are you doing?</p>") (text . "")) ((text . "") (text . "Change the background colour of links inside of an iframe.
+") (text . "") (js . "
+$( \"p\" )
+  .contents()
+  .filter(function(){
+    return this.nodeType !== 1;
+  })
+  .wrap( \"<b></b>\" );
+") (text . "") (html . "
+<p>Hello <a href=\"http://ejohn.org/\">John</a>, how are you doing?</p>
+") (text . "")) ((text . "") (text . "Change the background colour of links inside of an iframe.
 
-") (text . "") (js . "$(\"#frameDemo\").contents().find(\"a\").css(\"background-color\",\"#BADA55\");") (text . "") (html . "<iframe src=\"http://api.jquery.com/\" width=\"80%\" height=\"600\" id='frameDemo'></iframe> ") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"#frameDemo\" ).contents().find( \"a\" ).css( \"background-color\", \"#BADA55\" );
+") (text . "") (html . "
+<iframe src=\"//api.jquery.com/\" width=\"80%\" height=\"600\" id=\"frameDemo\"></iframe>
+") (text . ""))))) jquery-doc-hash)
 
 (push "css" jquery-doc-methods)
 
@@ -2785,62 +3321,90 @@ you can simply use \"float\", and jQuery will translate it to the correct
 value for each browser.
 ") (text . "") (text . "Also, jQuery can equally interpret the CSS and DOM formatting of
 multiple-word properties. For example, jQuery understands and returns
-the correct value for both .css(`background-color`) and
-.css(`backgroundColor`). Different browsers may return CSS color values
+the correct value for both .css( \"background-color\" ) and .css(
+\"backgroundColor\" ). Different browsers may return CSS color values
 that are logically but not textually equal, e.g., #FFF, #ffffff, and
 rgb(255,255,255).
-") (text . "") (text . "Shorthand CSS properties (e.g. margin, background, border) are not
-supported. For example, if you want to retrieve the rendered margin,
-use: $(elem).css(`marginTop`) and $(elem).css(`marginRight`), and so
-on.
+") (text . "") (text . "Retrieval of shorthand CSS properties (e.g., margin, background,
+border), although functional with some browsers, is not guaranteed. For
+example, if you want to retrieve the rendered border-width, use: $(
+elem ).css( \"borderTopWidth\" ), $( elem ).css( \"borderBottomWidth\" ),
+and so on.
 ") (text . "") (text . "As of jQuery 1.9, passing an array of style properties to .css() will
-result in an object of property-value pairs.
-
+result in an object of property-value pairs. For example, to retrieve
+all four rendered border-width values, you could use $( elem ).css([
+\"borderTopWidth\", \"borderRightWidth\", \"borderBottomWidth\",
+\"borderLeftWidth\" ]).
 ") (text . "")) ("examples" ((text . "") (text . "Get the background color of a clicked div.
 
 ") (text . "") (js . "
-$(\"div\").click(function () {
-  var color = $(this).css(\"background-color\");
-  $(\"#result\").html(\"That div is <span style='color:\" +
-                     color + \";'>\" + color + \"</span>.\");
+$( \"div\" ).click(function() {
+  var color = $( this ).css( \"background-color\" );
+  $( \"#result\" ).html( \"That div is <span style='color:\" +
+    color + \";'>\" + color + \"</span>.\" );
 });
-
 ") (text . "") (css . "
-div { width:60px; height:60px; margin:5px; float:left; }
-  ") (text . "") (html . "
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
+  }
+") (text . "") (html . "
 <span id=\"result\">&nbsp;</span>
 <div style=\"background-color:blue;\"></div>
 <div style=\"background-color:rgb(15,99,30);\"></div>
-
 <div style=\"background-color:#123456;\"></div>
-<div style=\"background-color:#f11;\"></div>") (text . "")) ((text . "") (text . "Get the width, height, text color, and background color of a clicked
+<div style=\"background-color:#f11;\"></div>
+") (text . "")) ((text . "") (text . "Get the width, height, text color, and background color of a clicked
 div.
 
 ") (text . "") (js . "
-$(\"div\").click(function () {
-  var html = [\"The clicked div has the following styles:\"];
+$( \"div\" ).click(function() {
+  var html = [ \"The clicked div has the following styles:\" ];
 
-  var styleProps = $(this).css( [\"width\", \"height\", \"color\", \"background-color\"] );
+  var styleProps = $( this ).css([
+    \"width\", \"height\", \"color\", \"background-color\"
+  ]);
   $.each( styleProps, function( prop, value ) {
     html.push( prop + \": \" + value );
   });
 
   $( \"#result\" ).html( html.join( \"<br>\" ) );
 });
-
 ") (text . "") (css . "
-div { height: 50px; margin: 5px; padding: 5px; float: left; }
-
-#box1 { width: 50px; color: yellow; background-color: blue; }
-#box2 { width: 80px; color: rgb(255,255,255); background-color: rgb(15,99,30); }
-#box3 { width: 40px; color: #fcc; background-color: #123456; }
-#box4 { width: 70px; background-color: #f11; }
+  div {
+    height: 50px;
+    margin: 5px;
+    padding: 5px;
+    float: left;
+  }
+  #box1 {
+    width: 50px;
+    color: yellow;
+    background-color: blue;
+  }
+  #box2 {
+    width: 80px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(15, 99, 30);
+  }
+  #box3 {
+    width: 40px;
+    color: #fcc;
+    background-color: #123456;
+  }
+  #box4 {
+    width: 70px;
+    background-color: #f11;
+  }
 ") (text . "") (html . "
 <p id=\"result\">&nbsp;</p>
 <div id=\"box1\">1</div>
 <div id=\"box2\">2</div>
 <div id=\"box3\">3</div>
-<div id=\"box4\">4</div>") (text . ""))))) jquery-doc-hash)
+<div id=\"box4\">4</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "css" jquery-doc-methods)
 
@@ -2863,22 +3427,22 @@ and value as separate parameters, or a single object of key-value
 pairs.
 ") (text . "") (text . "Also, jQuery can equally interpret the CSS and DOM formatting of
 multiple-word properties. For example, jQuery understands and returns
-the correct value for both .css({`background-color`: `#ffe`,
-`border-left`: `5px solid #ccc`}) and .css({backgroundColor: `#ffe`,
-borderLeft: `5px solid #ccc`}). Notice that with the DOM notation,
+the correct value for both .css({ \"background-color\": \"#ffe\",
+\"border-left\": \"5px solid #ccc\" }) and .css({backgroundColor: \"#ffe\",
+borderLeft: \"5px solid #ccc\" }). Notice that with the DOM notation,
 quotation marks around the property names are optional, but with CSS
 notation they`re required due to the hyphen in the name.
 ") (text . "") (text . "When using .css() as a setter, jQuery modifies the element`s style
-property. For example, $(`#mydiv`).css(`color`, `green`) is equivalent
-to document.getElementById(`mydiv`).style.color = `green`. Setting the
-value of a style property to an empty string -- e.g.
-$(`#mydiv`).css(`color`, ``) -- removes that property from an element
+property. For example, $( \"#mydiv\" ).css( \"color\", \"green\" ) is
+equivalent to document.getElementById( \"mydiv\" ).style.color = \"green\".
+Setting the value of a style property to an empty string -- e.g. $(
+\"#mydiv\" ).css( \"color\", \"\" ) -- removes that property from an element
 if it has already been directly applied, whether in the HTML style
 attribute, through jQuery`s .css() method, or through direct DOM
 manipulation of the style property. It does not, however, remove a
 style that has been applied with a CSS rule in a stylesheet or <style>
 element. Warning: one notable exception is that, for IE 8 and below,
-removing a shorthand property such as border or background> will remove
+removing a shorthand property such as border or background will remove
 that style entirely from the element, regardless of what is set in a
 stylesheet or <style> element.
 ") (text . "") (text . "As of jQuery 1.6, .css() accepts relative values similar to .animate().
@@ -2889,93 +3453,118 @@ padding-left of 25px.
 ") (text . "") (text . "As of jQuery 1.4, .css() allows us to pass a function as the property
 value:
 
-") (text . "") (js . "$('div.example').css('width', function(index) {
+") (text . "") (js . "
+$( \"div.example\" ).css( \"width\", function( index ) {
   return index * 50;
-});") (text . "") (text . "This example sets the widths of the matched elements to incrementally
+});
+      ") (text . "") (text . "This example sets the widths of the matched elements to incrementally
 larger values.
 
-") (text . "") (text . "Note: If nothing is returned in the setter function (ie.
-function(index, style){}), or if undefined is returned, the current
-value is not changed. This is useful for selectively setting values
-only when certain criteria are met.
-") (text . "")) ("examples" ((text . "") (text . "To change the color of any paragraph to red on mouseover event.
+") (text . "") (text . "Note: If nothing is returned in the setter function (ie. function(
+index, style ){} ), or if undefined is returned, the current value is
+not changed. This is useful for selectively setting values only when
+certain criteria are met.
+") (text . "")) ("examples" ((text . "") (text . "Change the color of any paragraph to red on mouseover event.
 
 ") (text . "") (js . "
-  $(\"p\").mouseover(function () {
-    $(this).css(\"color\",\"red\");
-  });
+$( \"p\" ).on( \"mouseover\", function() {
+  $( this ).css( \"color\", \"red\" );
+});
 ") (text . "") (css . "
-  p { color:blue; width:200px; font-size:14px; }
-  ") (text . "") (html . "
+  p {
+    color: blue;
+    width: 200px;
+    font-size: 14px;
+  }
+") (text . "") (html . "
   <p>Just roll the mouse over me.</p>
 
   <p>Or me to see a color change.</p>
-  ") (text . "")) ((text . "") (text . "Increase the width of #box by 200 pixels
+") (text . "")) ((text . "") (text . "Increase the width of #box by 200 pixels the first time it is clicked.
 
 ") (text . "") (js . "
-  $(\"#box\").one( \"click\", function () {
-    $( this ).css( \"width\",\"+=200\" );
-  });
+$( \"#box\" ).one( \"click\", function() {
+  $( this ).css( \"width\", \"+=200\" );
+});
 ") (text . "") (css . "
-  #box { background: black; color: snow; width:100px; padding:10px; }
-  ") (text . "") (html . "
-  <div id=\"box\">Click me to grow</div>
-  ") (text . "")) ((text . "") (text . "To highlight a clicked word in the paragraph.
+  #box {
+    background: black;
+    color: snow;
+    width: 100px;
+    padding: 10px;
+  }
+") (text . "") (html . "
+<div id=\"box\">Click me to grow</div>
+") (text . "")) ((text . "") (text . "Highlight a clicked word in the paragraph.
 
 ") (text . "") (js . "
-  var words = $(\"p:first\").text().split(\" \");
-  var text = words.join(\"</span> <span>\");
-  $(\"p:first\").html(\"<span>\" + text + \"</span>\");
-  $(\"span\").click(function () {
-    $(this).css(\"background-color\",\"yellow\");
-  });
-
+var words = $( \"p\" ).first().text().split( /\\s+/ );
+var text = words.join( \"</span> <span>\" );
+$( \"p\" ).first().html( \"<span>\" + text + \"</span>\" );
+$( \"span\" ).on( \"click\", function() {
+  $( this ).css( \"background-color\", \"yellow\" );
+});
 ") (text . "") (css . "
-  p { color:blue; font-weight:bold; cursor:pointer; }
-  ") (text . "") (html . "
+  p {
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+  }
+") (text . "") (html . "
 <p>
   Once upon a time there was a man
   who lived in a pizza parlor. This
   man just loved pizza and ate it all
   the time.  He went on to be the
   happiest man in the world.  The end.
-</p>") (text . "")) ((text . "") (text . "To set the color of all paragraphs to red and background to blue:
+</p>
+") (text . "")) ((text . "") (text . "Change the font weight and background color on mouseenter and
+mouseleave.
 
 ") (text . "") (js . "
-  $(\"p\").hover(function () {
-    $(this).css({'background-color' : 'yellow', 'font-weight' : 'bolder'});
-  }, function () {
-    var cssObj = {
-      'background-color' : '#ddd',
-      'font-weight' : '',
-      'color' : 'rgb(0,40,244)'
-    };
-    $(this).css(cssObj);
-  });
-") (text . "") (css . "
-  p { color:green; }
-") (text . "") (html . "
-  <p>Move the mouse over a paragraph.</p>
-  <p>Like this one or the one above.</p>
-") (text . "")) ((text . "") (text . "Increase the size of a div when you click it:
-
-") (text . "") (js . "
-  $(\"div\").click(function() {
-    $(this).css({
-      width: function(index, value) {
-        return parseFloat(value) * 1.2;
-      },
-      height: function(index, value) {
-        return parseFloat(value) * 1.2;
-      }
-
+$( \"p\" )
+  .on( \"mouseenter\", function() {
+    $( this ).css({
+      \"background-color\": \"yellow\",
+      \"font-weight\": \"bolder\"
     });
+  })
+  .on( \"mouseleave\", function() {
+    var styles = {
+      backgroundColor : \"#ddd\",
+      fontWeight: \"\"
+    };
+    $( this ).css( styles );
   });
 ") (text . "") (css . "
-  div { width: 20px; height: 15px; background-color: #f33; }
-  ") (text . "") (html . "
-  <div>click</div>
-  <div>click</div>
+  p {
+    color: green;
+  }
+") (text . "") (html . "
+<p>Move the mouse over a paragraph.</p>
+<p>Like this one or the one above.</p>
+") (text . "")) ((text . "") (text . "Increase the size of a div when you click it.
+
+") (text . "") (js . "
+$( \"div\" ).on( \"click\", function() {
+  $( this ).css({
+    width: function( index, value ) {
+      return parseFloat( value ) * 1.2;
+    },
+    height: function( index, value ) {
+      return parseFloat( value ) * 1.2;
+    }
+  });
+});
+") (text . "") (css . "
+  div {
+    width: 20px;
+    height: 15px;
+    background-color: #f33;
+  }
+") (text . "") (html . "
+<div>click</div>
+<div>click</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "data" jquery-doc-methods)
@@ -2996,12 +3585,12 @@ memory leaks.
 them later:
 
 ") (text . "") (js . "
-$('body').data('foo', 52);
-$('body').data('bar', { myType: 'test', count: 40 });
-
-$('body').data('foo'); // 52
-$('body').data(); // {foo: 52, bar: { myType: 'test', count: 40 }}
-") (text . "") (text . "In jQuery 1.4.3 setting an element`s data object with .data(obj)
+$( \"body\" ).data( \"foo\", 52 );
+$( \"body\" ).data( \"bar\", { myType: \"test\", count: 40 } );
+$( \"body\" ).data( { baz: [ 1, 2, 3 ] } );
+$( \"body\" ).data( \"foo\" ); // 52
+$( \"body\" ).data(); // { foo: 52, bar: { myType: \"test\", count: 40 }, baz: [ 1, 2, 3 ] }
+      ") (text . "") (text . "In jQuery 1.4.3 setting an element`s data object with .data(obj)
 extends the data previously stored with that element. jQuery itself
 uses the .data() method to save information under the names `events`
 and `handle`, and also reserves any data name starting with an
@@ -3017,18 +3606,24 @@ also set data.
 ") (text . "")) ("examples" ((text . "") (text . "Store then retrieve a value from the div element.
 
 ") (text . "") (js . "
-$(\"div\").data(\"test\", { first: 16, last: \"pizza!\" });
-$(\"span:first\").text($(\"div\").data(\"test\").first);
-$(\"span:last\").text($(\"div\").data(\"test\").last);
+$( \"div\" ).data( \"test\", { first: 16, last: \"pizza!\" } );
+$( \"span:first\" ).text( $( \"div\" ).data( \"test\" ).first );
+$( \"span:last\" ).text( $( \"div\" ).data( \"test\" ).last );
 ") (text . "") (css . "
-  div { color:blue; }
-  span { color:red; }
-  ") (text . "") (html . "<div>
-    The values stored were
-    <span></span>
-    and
-    <span></span>
-  </div>") (text . ""))))) jquery-doc-hash)
+  div {
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>
+  The values stored were
+  <span></span>
+  and
+  <span></span>
+</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "data" jquery-doc-methods)
 
@@ -3042,16 +3637,16 @@ in a way that is safe from circular references and therefore from
 memory leaks. We can retrieve several distinct values for a single
 element one at a time, or as a set:
 ") (text . "") (js . "
-alert($('body').data('foo'));
-alert($('body').data());
-") (text . "") (text . "The above lines alert the data values that were set on the body
+alert( $( \"body\" ).data( \"foo\" ) );
+alert( $( \"body\" ).data() );
+      ") (text . "") (text . "The above lines alert the data values that were set on the body
 element. If no data at all was set on that element, undefined is
 returned.
 ") (text . "") (js . "
-alert( $(\"body\").data(\"foo\")); //undefined
-$(\"body\").data(\"bar\", \"foobar\");
-alert( $(\"body\").data(\"bar\")); //foobar
-") (text . "") (text . " HTML5 data-* Attributes
+alert( $( \"body\" ).data( \"foo\" ) ); // undefined
+$( \"body\" ).data( \"bar\", \"foobar\" );
+alert( $( \"body\" ).data( \"bar\" ) ); // foobar
+      ") (text . "") (text . " HTML5 data-* Attributes
 
 
 ") (text . "") (text . "As of jQuery 1.4.3 HTML 5 data- attributes will be automatically pulled
@@ -3064,69 +3659,89 @@ specification.
 ") (text . "") (html . "<div data-role=\"page\" data-last-value=\"43\" data-hidden=\"true\" data-options='{\"name\":\"John\"}'></div>") (text . "") (text . "All of the following jQuery code will work.
 
 
-") (text . "") (js . "$(\"div\").data(\"role\") === \"page\";
-$(\"div\").data(\"lastValue\") === 43;
-$(\"div\").data(\"hidden\") === true;
-$(\"div\").data(\"options\").name === \"John\";") (text . "") (text . "Every attempt is made to convert the string to a JavaScript value (this
-includes booleans, numbers, objects, arrays, and null) otherwise it is
-left as a string. To retrieve the value`s attribute as a string without
-any attempt to convert it, use the attr() method. When the data
-attribute is an object (starts with `{`) or array (starts with `[`)
-then jQuery.parseJSON is used to parse the string; it must follow valid
-JSON syntax including quoted property names. The data- attributes are
-pulled in the first time the data property is accessed and then are no
-longer accessed or mutated (all data values are then stored internally
-in jQuery).
+") (text . "") (js . "
+$( \"div\" ).data( \"role\" ) === \"page\";
+$( \"div\" ).data( \"lastValue\" ) === 43;
+$( \"div\" ).data( \"hidden\" ) === true;
+$( \"div\" ).data( \"options\" ).name === \"John\";
+      ") (text . "") (text . "Every attempt is made to convert the string to a JavaScript value (this
+includes booleans, numbers, objects, arrays, and null). A value is only
+converted to a number if doing so doesn`t change the value`s
+representation. For example, \"1E02\" and \"100.000\" are equivalent as
+numbers (numeric value 100) but converting them would alter their
+representation so they are left as strings. The string value \"100\" is
+converted to the number 100.
+") (text . "") (text . "When the data attribute is an object (starts with `{`) or array (starts
+with `[`) then jQuery.parseJSON is used to parse the string; it must
+follow valid JSON syntax including quoted property names. If the value
+isn`t parseable as a JavaScript value, it is left as a string.
+") (text . "") (text . "To retrieve the value`s attribute as a string without any attempt to
+convert it, use the attr() method.
+
+") (text . "") (text . "The data- attributes are pulled in the first time the data property is
+accessed and then are no longer accessed or mutated (all data values
+are then stored internally in jQuery).
 ") (text . "") (text . "Calling .data() with no parameters retrieves all of the values as a
 JavaScript object. This object can be safely cached in a variable as
 long as a new object is not set with .data(obj). Using the object
 directly to get or set values is faster than making individual calls to
 .data() to get or set each value:
 ") (text . "") (js . "
-var mydata = $(\"#mydiv\").data();
+var mydata = $( \"#mydiv\" ).data();
 if ( mydata.count < 9 ) {
-    mydata.count = 43;
-    mydata.status = \"embiggened\";
+  mydata.count = 43;
+  mydata.status = \"embiggened\";
 }
-") (text . "")) ("examples" ((text . "") (text . "Get the data named \"blah\" stored at for an element.
+    ") (text . "")) ("examples" ((text . "") (text . "Get the data named \"blah\" stored at for an element.
 
 ") (text . "") (js . "
-$(\"button\").click(function(e) {
+$( \"button\" ).click(function() {
   var value;
 
-  switch ($(\"button\").index(this)) {
+  switch ( $( \"button\" ).index( this ) ) {
     case 0 :
-      value = $(\"div\").data(\"blah\");
+      value = $( \"div\" ).data( \"blah\" );
       break;
     case 1 :
-      $(\"div\").data(\"blah\", \"hello\");
+      $( \"div\" ).data( \"blah\", \"hello\" );
       value = \"Stored!\";
       break;
     case 2 :
-      $(\"div\").data(\"blah\", 86);
+      $( \"div\" ).data( \"blah\", 86 );
       value = \"Stored!\";
       break;
     case 3 :
-      $(\"div\").removeData(\"blah\");
+      $( \"div\" ).removeData( \"blah\" );
       value = \"Removed!\";
       break;
   }
 
-  $(\"span\").text(\"\" + value);
+  $( \"span\" ).text( \"\" + value );
 });
-
 ") (text . "") (css . "
-  div { margin:5px; background:yellow; }
-  button { margin:5px; font-size:14px; }
-  p { margin:5px; color:blue; }
-  span { color:red; }
-  ") (text . "") (html . "<div>A div</div>
-  <button>Get \"blah\" from the div</button>
-  <button>Set \"blah\" to \"hello\"</button>
-
-  <button>Set \"blah\" to 86</button>
-  <button>Remove \"blah\" from the div</button>
-  <p>The \"blah\" value of this div is <span>?</span></p>") (text . ""))))) jquery-doc-hash)
+  div {
+    margin: 5px;
+    background: yellow;
+  }
+  button {
+    margin: 5px;
+    font-size: 14px;
+  }
+  p {
+    margin: 5px;
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>A div</div>
+<button>Get \"blah\" from the div</button>
+<button>Set \"blah\" to \"hello\"</button>
+<button>Set \"blah\" to 86</button>
+<button>Remove \"blah\" from the div</button>
+<p>The \"blah\" value of this div is <span>?</span></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "dblclick" jquery-doc-methods)
 
@@ -3139,23 +3754,27 @@ $(\"button\").click(function(e) {
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"dblclick\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`dblclick`, handler) in the first two
-variations, and .trigger(`dblclick`) in the third. The dblclick event
-is sent to an element when the element is double-clicked. Any HTML
-element can receive this event. For example, consider the HTML:
-") (text . "") (js . "<div id=\"target\">
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"dblclick\", handler) in the first
+two variations, and .trigger( \"dblclick\" ) in the third. The dblclick
+event is sent to an element when the element is double-clicked. Any
+HTML element can receive this event. For example, consider the HTML:
+") (text . "") (js . "
+<div id=\"target\">
   Double-click here
 </div>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "
+</div>
+    ") (text . "") (text . "
 
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js . "$('#target').dblclick(function() {
-  alert('Handler for .dblclick() called.');
-});") (text . "") (text . "Now double-clicking on this element displays the alert:
+") (text . "") (js . "
+$( \"#target\" ).dblclick(function() {
+  alert( \"Handler for .dblclick() called.\" );
+});
+    ") (text . "") (text . "Now double-clicking on this element displays the alert:
 
 
 ") (text . "") (text . "Handler for .dblclick() called.
@@ -3164,9 +3783,11 @@ element can receive this event. For example, consider the HTML:
 ") (text . "") (text . "To trigger the event manually, apply .dblclick() without an argument:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').dblclick();
-});") (text . "") (text . "After this code executes, (single) clicks on Trigger the handler will
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).dblclick();
+});
+    ") (text . "") (text . "After this code executes, (single) clicks on Trigger the handler will
 also alert the message.
 
 ") (text . "") (text . "The dblclick event is only triggered after this exact series of events:
@@ -3189,21 +3810,32 @@ operating system and browser, and is often user-configurable.
 ") (text . "")) ("examples" ((text . "") (text . "To bind a \"Hello World!\" alert box the dblclick event on every
 paragraph on the page:
 
-") (text . "") (js . "$(\"p\").dblclick( function () { alert(\"Hello World!\"); });") (text . "")) ((text . "") (text . "Double click to toggle background color.
+") (text . "") (js . "
+$( \"p\" ).dblclick(function() {
+  alert( \"Hello World!\" );
+});
+") (text . "")) ((text . "") (text . "Double click to toggle background color.
 
 ") (text . "") (js . "
-  var divdbl = $(\"div:first\");
-  divdbl.dblclick(function () {
-    divdbl.toggleClass('dbl');
-  });
+var divdbl = $( \"div:first\" );
+divdbl.dblclick(function() {
+  divdbl.toggleClass( \"dbl\" );
+});
 ") (text . "") (css . "
-  div { background:blue;
-        color:white;
-        height:100px;
-        width:150px;
+  div {
+    background: blue;
+    color: white;
+    height: 100px;
+    width: 150px;
  }
-  div.dbl { background:yellow;color:black; }
-  ") (text . "") (html . "<div></div><span>Double click the block</span>") (text . ""))))) jquery-doc-hash)
+  div.dbl {
+    background: yellow;
+    color: black;
+  }
+") (text . "") (html . "
+<div></div>
+<span>Double click the block</span>
+") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.always" jquery-doc-methods)
 
@@ -3229,9 +3861,9 @@ for Deferred object.
 from a Deferred object, we can attach a callback for both success and
 error using the deferred.always() method.
 ") (text . "") (js . "
-$.get(\"test.php\").always( function() {
-  alert(\"$.get completed with success or error callback arguments\");
-} );
+$.get( \"test.php\" ).always(function() {
+  alert( \"$.get completed with success or error callback arguments\" );
+});
 ") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.done" jquery-doc-methods)
@@ -3258,43 +3890,43 @@ object.
 from a Deferred object, we can attach a success callback using the
 .done() method.
 ") (text . "") (js . "
-$.get(\"test.php\").done(function() {
-  alert(\"$.get succeeded\");
+$.get( \"test.php\" ).done(function() {
+  alert( \"$.get succeeded\" );
 });
 ") (text . "")) ((text . "") (text . "Resolve a Deferred object when the user clicks a button, triggering a
 number of callback functions:
 
 ") (text . "") (js . "
-/* 3 functions to call when the Deferred object is resolved */
+// 3 functions to call when the Deferred object is resolved
 function fn1() {
-  $(\"p\").append(\" 1 \");
+  $( \"p\" ).append( \" 1 \" );
 }
 function fn2() {
-  $(\"p\").append(\" 2 \");
+  $( \"p\" ).append( \" 2 \" );
 }
-function fn3(n) {
-  $(\"p\").append(n + \" 3 \" + n);
+function fn3( n ) {
+  $( \"p\" ).append( n + \" 3 \" + n );
 }
 
-/* create a deferred object */
+// Create a deferred object
 var dfd = $.Deferred();
 
-/* add handlers to be called when dfd is resolved */
+// Add handlers to be called when dfd is resolved
 dfd
-/* .done() can take any number of functions or arrays of functions */
-.done( [fn1, fn2], fn3, [fn2, fn1] )
-/* we can chain done methods, too */
-.done(function(n) {
-  $(\"p\").append(n + \" we're done.\");
-});
+// .done() can take any number of functions or arrays of functions
+  .done( [ fn1, fn2 ], fn3, [ fn2, fn1 ] )
+// We can chain done methods, too
+  .done(function( n ) {
+    $( \"p\" ).append( n + \" we're done.\" );
+  });
 
-/* resolve the Deferred object when the button is clicked */
-$(\"button\").on(\"click\", function() {
-  dfd.resolve(\"and\");
+// Resolve the Deferred object when the button is clicked
+$( \"button\" ).on( \"click\", function() {
+  dfd.resolve( \"and\" );
 });
 ") (text . "") (html . "
- <button>Go</button>
- <p>Ready...</p>
+<button>Go</button>
+<p>Ready...</p>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.fail" jquery-doc-methods)
@@ -3321,9 +3953,13 @@ Deferred object.
 from a Deferred, you can attach a success and failure callback using
 the deferred.done() and deferred.fail() methods.
 ") (text . "") (js . "
-$.get(\"test.php\")
-  .done(function(){ alert(\"$.get succeeded\"); })
-  .fail(function(){ alert(\"$.get failed!\"); });
+$.get( \"test.php\" )
+  .done(function() {
+    alert( \"$.get succeeded\" );
+  })
+  .fail(function() {
+    alert( \"$.get failed!\" );
+  });
 ") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.isRejected" jquery-doc-methods)
@@ -3437,9 +4073,9 @@ the same values as the original.
 
 ") (text . "") (js . "
 var defer = $.Deferred(),
-    filtered = defer.pipe(function( value ) {
-      return value * 2;
-    });
+  filtered = defer.pipe(function( value ) {
+    return value * 2;
+  });
 
 defer.resolve( 5 );
 filtered.done(function( value ) {
@@ -3449,9 +4085,9 @@ filtered.done(function( value ) {
 
 ") (text . "") (js . "
 var defer = $.Deferred(),
-    filtered = defer.pipe( null, function( value ) {
-      return value * 3;
-    });
+  filtered = defer.pipe( null, function( value ) {
+    return value * 3;
+  });
 
 defer.reject( 6 );
 filtered.fail(function( value ) {
@@ -3461,19 +4097,18 @@ filtered.fail(function( value ) {
 
 ") (text . "") (js . "
 var request = $.ajax( url, { dataType: \"json\" } ),
-    chained = request.pipe(function( data ) {
-      return $.ajax( url2, { data: { user: data.userId } } );
-    });
+  chained = request.pipe(function( data ) {
+    return $.ajax( url2, { data: { user: data.userId } } );
+  });
 
 chained.done(function( data ) {
   // data retrieved from url2 as provided by the first request
 });
-
 ") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.progress" jquery-doc-methods)
 
-(puthash "deferred.progress" (quote (("name" . "deferred.progress") ("signatures" "deferred.progress" (("progressCallbacks" "A function, or array of functions, that is called when the Deferred
+(puthash "deferred.progress" (quote (("name" . "deferred.progress") ("signatures" "deferred.progress" (("progressCallbacks" "A function, or array of functions, to be called when the Deferred
 generates progress notifications.
 
 " nil nil))) ("desc" (text . "Add handlers to be called when the Deferred object generates progress
@@ -3488,7 +4123,7 @@ progress callbacks will no longer be called, with the exception that
 any progressCallbacks added after the Deferred enters the resolved or
 rejected state are executed immediately when they are added, using the
 arguments that were passed to the .notify() or notifyWith() call. For
-more information, see the documentation jQuery.Deferred().
+more information, see the documentation for jQuery.Deferred().
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
 (push "deferred.promise" jquery-doc-methods)
@@ -3523,54 +4158,54 @@ rejected state) from the first timeout action. Also set a timer-based
 progress notification function, and call a progress handler that adds
 \"working...\" to the document body.
 ") (text . "") (js . "
-function asyncEvent(){
-    var dfd = new jQuery.Deferred();
+function asyncEvent() {
+  var dfd = new jQuery.Deferred();
 
-    // Resolve after a random interval
-    setTimeout(function(){
-        dfd.resolve(\"hurray\");
-    }, Math.floor(400+Math.random()*2000));
+  // Resolve after a random interval
+  setTimeout(function() {
+    dfd.resolve( \"hurray\" );
+  }, Math.floor( 400 + Math.random() * 2000 ) );
 
-    // Reject after a random interval
-    setTimeout(function(){
-        dfd.reject(\"sorry\");
-    }, Math.floor(400+Math.random()*2000));
+  // Reject after a random interval
+  setTimeout(function() {
+    dfd.reject( \"sorry\" );
+  }, Math.floor( 400 + Math.random() * 2000 ) );
 
-    // Show a \"working...\" message every half-second
-    setTimeout(function working(){
-        if ( dfd.state() === \"pending\" ) {
-            dfd.notify(\"working... \");
-            setTimeout(working, 500);
-        }
-    }, 1);
+  // Show a \"working...\" message every half-second
+  setTimeout(function working() {
+    if ( dfd.state() === \"pending\" ) {
+      dfd.notify( \"working... \" );
+      setTimeout( working, 500 );
+    }
+  }, 1 );
 
-    // Return the Promise so caller can't change the Deferred
-    return dfd.promise();
+  // Return the Promise so caller can't change the Deferred
+  return dfd.promise();
 }
 
 // Attach a done, fail, and progress handler for the asyncEvent
 $.when( asyncEvent() ).then(
-    function(status){
-        alert( status+', things are going well' );
-    },
-    function(status){
-        alert( status+', you fail this time' );
-    },
-    function(status){
-        $(\"body\").append(status);
-    }
+  function( status ) {
+    alert( status + \", things are going well\" );
+  },
+  function( status ) {
+    alert( status + \", you fail this time\" );
+  },
+  function( status ) {
+    $( \"body\" ).append( status );
+  }
 );
 ") (text . "")) ((text . "") (text . "Use the target argument to promote an existing object to a Promise:
 
 ") (text . "") (js . "
 // Existing object
 var obj = {
-  hello: function( name ) {
-    alert( \"Hello \" + name );
-  }
-},
-// Create a Deferred
-defer = $.Deferred();
+    hello: function( name ) {
+      alert( \"Hello \" + name );
+    }
+  },
+  // Create a Deferred
+  defer = $.Deferred();
 
 // Set object as a promise
 defer.promise( obj );
@@ -3580,27 +4215,27 @@ defer.resolve( \"John\" );
 
 // Use the object as a Promise
 obj.done(function( name ) {
-  obj.hello( name ); // will alert \"Hello John\"
-}).hello( \"Karl\" ); // will alert \"Hello Karl\"
+  obj.hello( name ); // Will alert \"Hello John\"
+}).hello( \"Karl\" ); // Will alert \"Hello Karl\"
 ") (text . ""))))) jquery-doc-hash)
 
 (push "deferred.reject" jquery-doc-methods)
 
 (puthash "deferred.reject" (quote (("name" . "deferred.reject") ("signatures" "deferred.reject" (("args" "Optional arguments that are passed to the failCallbacks.
 
-" nil nil))) ("desc" (text . "Reject a Deferred object and call any failCallbacks with the given
+" "true" nil))) ("desc" (text . "Reject a Deferred object and call any failCallbacks with the given
 args.
 
 ")) ("longdesc" (text . "") (text . "Normally, only the creator of a Deferred should call this method; you
 can prevent other code from changing the Deferred`s state by returning
 a restricted Promise object through deferred.promise() .
-") (text . "") (text . "When the Deferred is rejected, any failCallbacks added by deferred.then
-or deferred.fail are called. Callbacks are executed in the order they
-were added. Each callback is passed the args from the deferred.reject()
-call. Any failCallbacks added after the Deferred enters the rejected
-state are executed immediately when they are added, using the arguments
-that were passed to the .reject() call. For more information, see the
-documentation for Deferred object.
+") (text . "") (text . "When the Deferred is rejected, any failCallbacks added by
+deferred.then() or deferred.fail() are called. Callbacks are executed
+in the order they were added. Each callback is passed the args from the
+deferred.reject() call. Any failCallbacks added after the Deferred
+enters the rejected state are executed immediately when they are added,
+using the arguments that were passed to the deferred.reject() call. For
+more information, see the documentation for jQuery.Deferred().
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
 (push "deferred.rejectWith" jquery-doc-methods)
@@ -3628,16 +4263,16 @@ documentation for Deferred object.
 
 (puthash "deferred.resolve" (quote (("name" . "deferred.resolve") ("signatures" "deferred.resolve" (("args" "Optional arguments that are passed to the doneCallbacks.
 
-" nil nil))) ("desc" (text . "Resolve a Deferred object and call any doneCallbacks with the given
+" "true" nil))) ("desc" (text . "Resolve a Deferred object and call any doneCallbacks with the given
 args.
 
-")) ("longdesc" (text . "") (text . "When the Deferred is resolved, any doneCallbacks added by deferred.then
-or deferred.done are called. Callbacks are executed in the order they
-were added. Each callback is passed the args from the .resolve(). Any
-doneCallbacks added after the Deferred enters the resolved state are
-executed immediately when they are added, using the arguments that were
-passed to the .resolve() call. For more information, see the
-documentation for Deferred object.
+")) ("longdesc" (text . "") (text . "When the Deferred is resolved, any doneCallbacks added by
+deferred.then() or deferred.done() are called. Callbacks are executed
+in the order they were added. Each callback is passed the args from the
+deferred.resolve(). Any doneCallbacks added after the Deferred enters
+the resolved state are executed immediately when they are added, using
+the arguments that were passed to the deferred.resolve() call. For more
+information, see the documentation for jQuery.Deferred().
 ") (text . "")) ("examples"))) jquery-doc-hash)
 
 (push "deferred.resolveWith" jquery-doc-methods)
@@ -3735,9 +4370,12 @@ can be chained to this one, including additional .then() methods.
 from a Deferred object, we can attach handlers using the .then method.
 
 ") (text . "") (js . "
-$.get(\"test.php\").then(
-    function(){ alert(\"$.get succeeded\"); },
-    function(){ alert(\"$.get failed!\"); }
+$.get( \"test.php\" ).then(
+  function() {
+    alert( \"$.get succeeded\" );
+  }, function() {
+    alert( \"$.get failed!\" );
+  }
 );
 ") (text . "")) ((text . "") (text . "Filter the resolve value:
 
@@ -3746,11 +4384,10 @@ $.get(\"test.php\").then(
 <p></p>
 ") (text . "") (js . "
 var filterResolve = function() {
-
   var defer = $.Deferred(),
-      filtered = defer.then(function( value ) {
-        return value * 2;
-      });
+    filtered = defer.then(function( value ) {
+      return value * 2;
+    });
 
   defer.resolve( 5 );
   filtered.done(function( value ) {
@@ -3763,9 +4400,9 @@ $( \"button\" ).on( \"click\", filterResolve );
 
 ") (text . "") (js . "
 var defer = $.Deferred(),
-    filtered = defer.then( null, function( value ) {
-      return value * 3;
-    });
+  filtered = defer.then( null, function( value ) {
+    return value * 3;
+  });
 
 defer.reject( 6 );
 filtered.fail(function( value ) {
@@ -3775,14 +4412,13 @@ filtered.fail(function( value ) {
 
 ") (text . "") (js . "
 var request = $.ajax( url, { dataType: \"json\" } ),
-    chained = request.then(function( data ) {
-      return $.ajax( url2, { data: { user: data.userId } } );
-    });
+  chained = request.then(function( data ) {
+    return $.ajax( url2, { data: { user: data.userId } } );
+  });
 
 chained.done(function( data ) {
   // data retrieved from url2 as provided by the first request
 });
-
 ") (text . ""))))) jquery-doc-hash)
 
 (push "delay" jquery-doc-methods)
@@ -3808,29 +4444,44 @@ respectively.
 ") (text . "") (text . "Using the standard effects queue, we can, for example, set an
 800-millisecond delay between the .slideUp() and .fadeIn() of <div
 id=\"foo\">:
-") (text . "") (js . "$('#foo').slideUp(300).delay(800).fadeIn(400);") (text . "") (text . "When this statement is executed, the element slides up for 300
+") (text . "") (js . "
+$( \"#foo\" ).slideUp( 300 ).delay( 800 ).fadeIn( 400 );
+    ") (text . "") (text . "When this statement is executed, the element slides up for 300
 milliseconds and then pauses for 800 milliseconds before fading in for
 400 milliseconds.
-") (text . "") (text . "  The .delay() method is best for delaying between queued jQuery
-  effects. Because it is limited--it doesn`t, for example, offer a way
-  to cancel the delay-- .delay() is not a replacement for JavaScript`s
-  native setTimeout function, which may be more appropriate for
-  certain use cases.
+") (text . "") (text . "The .delay() method is best for delaying between queued jQuery effects.
+Because it is limited--it doesn`t, for example, offer a way to cancel
+the delay-- .delay() is not a replacement for JavaScript`s native
+setTimeout function, which may be more appropriate for certain use
+cases.
 ") (text . "")) ("examples" ((text . "") (text . "Animate the hiding and showing of two divs, delaying the first before
 showing it.
 
 ") (text . "") (css . "
-div { position: absolute; width: 60px; height: 60px; float: left; }
-.first { background-color: #3f3; left: 0;}
-.second { background-color: #33f; left: 80px;}
+  div {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    float: left;
+  }
+  .first {
+    background-color: #3f3;
+    left: 0;
+  }
+  .second {
+    background-color: #33f;
+    left: 80px;
+  }
 ") (text . "") (js . "
-    $(\"button\").click(function() {
-      $(\"div.first\").slideUp(300).delay(800).fadeIn(400);
-      $(\"div.second\").slideUp(300).fadeIn(400);
-    });") (text . "") (html . "
+$( \"button\" ).click(function() {
+  $( \"div.first\" ).slideUp( 300 ).delay( 800 ).fadeIn( 400 );
+  $( \"div.second\" ).slideUp( 300 ).fadeIn( 400 );
+});
+") (text . "") (html . "
 <p><button>Run</button></p>
 <div class=\"first\"></div>
-<div class=\"second\"></div>") (text . ""))))) jquery-doc-hash)
+<div class=\"second\"></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "delegate" jquery-doc-methods)
 
@@ -3865,20 +4516,24 @@ is in the .on() method. In general, these are the equivalent templates
 for the two methods:
 ") (text . "") (js . "
 // jQuery 1.4.3+
-$(elements).delegate( selector, events, data, handler );
+$( elements ).delegate( selector, events, data, handler );
 // jQuery 1.7+
-$(elements).on( events, selector, data, handler );
- ") (text . "") (text . "For example, the following .delegate() code:
+$( elements ).on( events, selector, data, handler );
+    ") (text . "") (text . "For example, the following .delegate() code:
 
 
-") (text . "") (js . "$(\"table\").delegate(\"td\", \"click\", function() {
-  $(this).toggleClass(\"chosen\");
-});") (text . "") (text . "is equivalent to the following code written using .on():
+") (text . "") (js . "
+$( \"table\" ).delegate( \"td\", \"click\", function() {
+  $( this ).toggleClass( \"chosen\" );
+});
+    ") (text . "") (text . "is equivalent to the following code written using .on():
 
 
-") (text . "") (js . "$(\"table\").on(\"click\", \"td\", function() {
-  $(this).toggleClass(\"chosen\");
-});") (text . "") (text . "To remove events attached with delegate(), see the .undelegate()
+") (text . "") (js . "
+$( \"table\" ).on( \"click\", \"td\", function() {
+  $( this ).toggleClass( \"chosen\" );
+});
+    ") (text . "") (text . "To remove events attached with delegate(), see the .undelegate()
 method.
 
 ") (text . "") (text . "Passing and handling event data works the same way as it does for
@@ -3888,48 +4543,73 @@ method.
 click event handler to all paragraphs - even new ones.
 
 ") (text . "") (js . "
-    $(\"body\").delegate(\"p\", \"click\", function(){
-      $(this).after(\"<p>Another paragraph!</p>\");
-    });
+$( \"body\" ).delegate( \"p\", \"click\", function() {
+  $( this ).after( \"<p>Another paragraph!</p>\" );
+});
 ") (text . "") (css . "
-  p { background:yellow; font-weight:bold; cursor:pointer;
-      padding:5px; }
-  p.over { background: #ccc; }
-  span { color:red; }
-  ") (text . "") (html . "<p>Click me!</p>
+  p {
+    background: yellow;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+  }
+  p.over {
+    background: #ccc;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Click me!</p>
 
-  <span></span>") (text . "")) ((text . "") (text . "To display each paragraph`s text in an alert box whenever it is
+<span></span>
+") (text . "")) ((text . "") (text . "To display each paragraph`s text in an alert box whenever it is
 clicked:
 
-") (text . "") (js . "$(\"body\").delegate(\"p\", \"click\", function(){
-  alert( $(this).text() );
-});") (text . "")) ((text . "") (text . "To cancel a default action and prevent it from bubbling up, return
+") (text . "") (js . "
+$( \"body\" ).delegate( \"p\", \"click\", function() {
+  alert( $( this ).text() );
+});
+") (text . "")) ((text . "") (text . "To cancel a default action and prevent it from bubbling up, return
 false:
 
-") (text . "") (js . "$(\"body\").delegate(\"a\", \"click\", function() { return false; })") (text . "")) ((text . "") (text . "To cancel only the default action by using the preventDefault method.
-
-") (text . "") (js . "$(\"body\").delegate(\"a\", \"click\", function(event){
-  event.preventDefault();
-});") (text . "")) ((text . "") (text . "Can bind custom events too.
+") (text . "") (js . "
+$( \"body\" ).delegate( \"a\", \"click\", function() {
+  return false;
+});
+") (text . "")) ((text . "") (text . "To cancel only the default action by using the preventDefault method.
 
 ") (text . "") (js . "
+$( \"body\" ).delegate( \"a\", \"click\", function( event ) {
+  event.preventDefault();
+});
+") (text . "")) ((text . "") (text . "Can bind custom events too.
 
-    $(\"body\").delegate(\"p\", \"myCustomEvent\", function(e, myName, myValue){
-      $(this).text(\"Hi there!\");
-      $(\"span\").stop().css(\"opacity\", 1)
-               .text(\"myName = \" + myName)
-               .fadeIn(30).fadeOut(1000);
-    });
-    $(\"button\").click(function () {
-      $(\"p\").trigger(\"myCustomEvent\");
-    });
-
+") (text . "") (js . "
+$( \"body\" ).delegate( \"p\", \"myCustomEvent\", function( e, myName, myValue ) {
+  $( this ).text( \"Hi there!\" );
+  $( \"span\" )
+    .stop()
+    .css( \"opacity\", 1 )
+    .text( \"myName = \" + myName )
+    .fadeIn( 30 )
+    .fadeOut( 1000 );
+});
+$( \"button\" ).click(function() {
+  $( \"p\" ).trigger( \"myCustomEvent\" );
+});
 ") (text . "") (css . "
-  p { color:red; }
-  span { color:blue; }
-  ") (text . "") (html . "<p>Has an attached custom event.</p>
-  <button>Trigger custom event</button>
-  <span style=\"display:none;\"></span>") (text . ""))))) jquery-doc-hash)
+  p {
+    color: red;
+  }
+  span {
+    color: blue;
+  }
+") (text . "") (html . "
+<p>Has an attached custom event.</p>
+<button>Trigger custom event</button>
+<span style=\"display:none;\"></span>
+") (text . ""))))) jquery-doc-hash)
 
 (push "dequeue" jquery-doc-methods)
 
@@ -3946,22 +4626,32 @@ sequence can continue.
 keep going.
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-  $(\"div\").animate({left:'+=200px'}, 2000);
-  $(\"div\").animate({top:'0px'}, 600);
-  $(\"div\").queue(function () {
-    $(this).toggleClass(\"red\");
-    $(this).dequeue();
-  });
-  $(\"div\").animate({left:'10px', top:'30px'}, 700);
+$( \"button\" ).click(function() {
+  $( \"div\" )
+    .animate({ left:\"+=200px\" }, 2000 )
+    .animate({ top:\"0px\" }, 600 )
+    .queue(function() {
+      $( this ).toggleClass( \"red\" ).dequeue();
+    })
+    .animate({ left:\"10px\", top:\"30px\" }, 700 );
 });
 ") (text . "") (css . "
-  div { margin:3px; width:50px; position:absolute;
-  height:50px; left:10px; top:30px;
-  background-color:yellow; }
-  div.red { background-color:red; }
-") (text . "") (html . "<button>Start</button>
-<div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    margin: 3px;
+    width: 50px;
+    position: absolute;
+    height: 50px;
+    left: 10px;
+    top: 30px;
+    background-color: yellow;
+  }
+  div.red {
+    background-color: red;
+  }
+") (text . "") (html . "
+<button>Start</button>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "detach" jquery-doc-methods)
 
@@ -3977,21 +4667,32 @@ later time.
 ") (text . "")) ("examples" ((text . "") (text . "Detach all paragraphs from the DOM
 
 ") (text . "") (js . "
-    $(\"p\").click(function(){
-      $(this).toggleClass(\"off\");
-    });
-    var p;
-    $(\"button\").click(function(){
-      if ( p ) {
-        p.appendTo(\"body\");
-        p = null;
-      } else {
-        p = $(\"p\").detach();
-      }
-    });") (text . "") (css . "p { background:yellow; margin:6px 0; } p.off { background: black; }") (text . "") (html . "<p>Hello</p>
-  how are
-  <p>you?</p>
-  <button>Attach/detach paragraphs</button>") (text . ""))))) jquery-doc-hash)
+$( \"p\" ).click(function() {
+  $( this ).toggleClass( \"off\" );
+});
+var p;
+$( \"button\" ).click(function() {
+  if ( p ) {
+    p.appendTo( \"body\" );
+    p = null;
+  } else {
+    p = $( \"p\" ).detach();
+  }
+});
+") (text . "") (css . "
+  p {
+    background: yellow;
+    margin: 6px 0;
+  }
+  p.off {
+    background: black;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+how are
+<p>you?</p>
+<button>Attach/detach paragraphs</button>
+") (text . ""))))) jquery-doc-hash)
 
 (push "die" jquery-doc-methods)
 
@@ -4020,18 +4721,26 @@ it must match exactly the selector initially used with .live().
 
 ") (text . "")) ("examples" ((text . "") (text . "To unbind all live events from all paragraphs, write:
 
-") (text . "") (js . "$(\"p\").die()") (text . "")) ((text . "") (text . "To unbind all live click events from all paragraphs, write:
+") (text . "") (js . "
+$( \"p\" ).die();
+") (text . "")) ((text . "") (text . "To unbind all live click events from all paragraphs, write:
 
-") (text . "") (js . "$(\"p\").die( \"click\" )") (text . "")) ((text . "") (text . "To unbind just one previously bound handler, pass the function in as
+") (text . "") (js . "
+$( \"p\" ).die( \"click\" );
+") (text . "")) ((text . "") (text . "To unbind just one previously bound handler, pass the function in as
 the second argument:
 
-") (text . "") (js . "var foo = function () {
-  // code to handle some kind of event
+") (text . "") (js . "
+var foo = function() {
+  // Code to handle some kind of event
 };
 
-$(\"p\").live(\"click\", foo); // ... now foo will be called when paragraphs are clicked ...
+// Now foo will be called when paragraphs are clicked
+$( \"p\" ).live( \"click\", foo );
 
-$(\"p\").die(\"click\", foo); // ... foo will no longer be called.") (text . ""))))) jquery-doc-hash)
+// Now foo will no longer be called
+$( \"p\" ).die( \"click\", foo );
+") (text . ""))))) jquery-doc-hash)
 
 (push "each" jquery-doc-methods)
 
@@ -4049,17 +4758,19 @@ keyword this refers to the element.
 ") (text . "") (text . "Suppose you have a simple unordered list on the page:
 
 
-") (text . "") (html . "<ul>
-    <li>foo</li>
-    <li>bar</li>
+") (text . "") (html . "
+<ul>
+  <li>foo</li>
+  <li>bar</li>
 </ul>
     ") (text . "") (text . "You can select the list items and iterate across them:
 
 
-") (text . "") (js . "$( \"li\" ).each(function( index ) {
-  console.log( index + \": \" + $(this).text() );
+") (text . "") (js . "
+$( \"li\" ).each(function( index ) {
+  console.log( index + \": \" + $( this ).text() );
 });
-  ") (text . "") (text . "A message is thus logged for each item in the list:
+    ") (text . "") (text . "A message is thus logged for each item in the list:
 
 
 ") (text . "") (text . "0: foo
@@ -4072,80 +4783,104 @@ false.
 the set of elements in the jQuery collection -- a process known as
 implicit iteration. When this occurs, it is often unnecessary to
 explicitly iterate with the .each() method:
-") (text . "") (js . "// The .each() method is unnecessary here:
+") (text . "") (js . "
+// The .each() method is unnecessary here:
 $( \"li\" ).each(function() {
-  $(this).addClass( \"foo\" );
+  $( this ).addClass( \"foo\" );
 });
 
 // Instead, you should rely on implicit iteration:
 $( \"li\" ).addClass( \"bar\" );
-") (text . "")) ("examples" ((text . "") (text . "Iterate over three divs and sets their color property.
+    ") (text . "")) ("examples" ((text . "") (text . "Iterate over three divs and sets their color property.
 
 ") (text . "") (js . "
-    $(document.body).click(function () {
-      $( \"div\" ).each(function (i) {
-        if ( this.style.color != \"blue\" ) {
-          this.style.color = \"blue\";
-        } else {
-          this.style.color = \"\";
-        }
-      });
-    });
+$( document.body ).click(function() {
+  $( \"div\" ).each(function( i ) {
+    if ( this.style.color !== \"blue\" ) {
+      this.style.color = \"blue\";
+    } else {
+      this.style.color = \"\";
+    }
+  });
+});
 ") (text . "") (css . "
-  div { color:red; text-align:center; cursor:pointer;
-        font-weight:bolder; width:300px; }
-  ") (text . "") (html . "<div>Click here</div>
-  <div>to iterate through</div>
-  <div>these divs.</div>") (text . "")) ((text . "") (text . "To access a jQuery object instead of the regular DOM element, use
-$(this). For example:
+  div {
+    color: red;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bolder;
+    width: 300px;
+  }
+") (text . "") (html . "
+<div>Click here</div>
+<div>to iterate through</div>
+<div>these divs.</div>
+") (text . "")) ((text . "") (text . "To access a jQuery object instead of the regular DOM element, use $(
+this ). For example:
 
 ") (text . "") (js . "
-    $( \"span\" ).click(function () {
-      $( \"li\" ).each(function(){
-        $( this ).toggleClass( \"example\" );
-      });
-    });
-
+$( \"span\" ).click(function() {
+  $( \"li\" ).each(function() {
+    $( this ).toggleClass( \"example\" );
+  });
+});
 ") (text . "") (css . "
-  ul { font-size:18px; margin:0; }
-  span { color:blue; text-decoration:underline; cursor:pointer; }
-  .example { font-style:italic; }
-  ") (text . "") (html . "To do list: <span>(click here to change)</span>
-  <ul>
-    <li>Eat</li>
-    <li>Sleep</li>
-
-    <li>Be merry</li>
-  </ul>") (text . "")) ((text . "") (text . "Use \"return\" to break out of each() loops early.
+  ul {
+    font-size: 18px;
+    margin: 0;
+  }
+  span {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .example {
+    font-style: italic;
+  }
+") (text . "") (html . "
+To do list: <span>(click here to change)</span>
+<ul>
+  <li>Eat</li>
+  <li>Sleep</li>
+  <li>Be merry</li>
+</ul>
+") (text . "")) ((text . "") (text . "Use return false to break out of each() loops early.
 
 ") (text . "") (js . "
-    $( \"button\" ).click(function () {
-      $( \"div\" ).each(function ( index, domEle) {
-        // domEle == this
-        $( domEle ).css( \"backgroundColor\", \"yellow\" );
-        if ( $(this).is( \"#stop\" ) ) {
-          $( \"span\" ).text( \"Stopped at div index #\" + index );
-          return false;
-        }
-      });
-    });
-
+$( \"button\" ).click(function() {
+  $( \"div\" ).each(function( index, element ) {
+    // element == this
+    $( element ).css( \"backgroundColor\", \"yellow\" );
+    if ( $( this ).is( \"#stop\" ) ) {
+      $( \"span\" ).text( \"Stopped at div index #\" + index );
+      return false;
+    }
+  });
+});
 ") (text . "") (css . "
-  div { width:40px; height:40px; margin:5px; float:left;
-        border:2px blue solid; text-align:center; }
-  span { color:red; }
-  ") (text . "") (html . "<button>Change colors</button>
-  <span></span>
-  <div></div>
-  <div></div>
-
-  <div></div>
-  <div></div>
-  <div id=\"stop\">Stop here</div>
-  <div></div>
-
-  <div></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    float: left;
+    border: 2px blue solid;
+    text-align: center;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<button>Change colors</button>
+<span></span>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div id=\"stop\">Stop here</div>
+<div></div>
+<div></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "empty" jquery-doc-methods)
 
@@ -4156,19 +4891,25 @@ also any text within the set of matched elements. This is because,
 according to the DOM specification, any string of text within an
 element is considered a child node of that element. Consider the
 following HTML:
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "") (text . "We can target any element for removal:
+</div>
+    ") (text . "") (text . "We can target any element for removal:
 
 
-") (text . "") (js . "$('.hello').empty();") (text . "") (text . "This will result in a DOM structure with the Hello text deleted:
+") (text . "") (js . "
+$( \".hello\" ).empty();
+    ") (text . "") (text . "This will result in a DOM structure with the Hello text deleted:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"hello\"></div>
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
+</div>
+    ") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
 they would be removed, too.
 
 ") (text . "") (text . "To avoid memory leaks, jQuery removes other constructs such as data and
@@ -4180,16 +4921,20 @@ handlers (so they can be re-added later), use .detach() instead.
 ") (text . "")) ("examples" ((text . "") (text . "Removes all child nodes (including text nodes) from all paragraphs
 
 ") (text . "") (js . "
-  $(\"button\").click(function () {
-    $(\"p\").empty();
-  });
+$( \"button\" ).click(function() {
+  $( \"p\" ).empty();
+});
 ") (text . "") (css . "
-  p { background:yellow; }
-") (text . "") (html . "<p>
-  Hello, <span>Person</span> <a href=\"javascript:;\">and person</a>
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>
+  Hello, <span>Person</span> <em>and person</em>.
 </p>
 
-<button>Call empty() on above paragraph</button>") (text . ""))))) jquery-doc-hash)
+<button>Call empty() on above paragraph</button>
+") (text . ""))))) jquery-doc-hash)
 
 (push "end" jquery-doc-methods)
 
@@ -4208,23 +4953,27 @@ of the stack.
 
 ") (text . "") (html . "
 <ul class=\"first\">
-   <li class=\"foo\">list item 1</li>
-   <li>list item 2</li>
-   <li class=\"bar\">list item 3</li>
+  <li class=\"foo\">list item 1</li>
+  <li>list item 2</li>
+  <li class=\"bar\">list item 3</li>
 </ul>
 <ul class=\"second\">
-   <li class=\"foo\">list item 1</li>
-   <li>list item 2</li>
-   <li class=\"bar\">list item 3</li>
+  <li class=\"foo\">list item 1</li>
+  <li>list item 2</li>
+  <li class=\"bar\">list item 3</li>
 </ul>
-") (text . "") (text . "The end() method is useful primarily when exploiting jQuery`s chaining
+    ") (text . "") (text . "The end() method is useful primarily when exploiting jQuery`s chaining
 properties. When not using chaining, we can usually just call up a
 previous object by variable name, so we don`t need to manipulate the
 stack. With end(), though, we can string all the method calls together:
 ") (text . "") (js . "
-$('ul.first').find('.foo').css('background-color', 'red')
-  .end().find('.bar').css('background-color', 'green');
-") (text . "") (text . "This chain searches for items with the class foo within the first list
+$( \"ul.first\" )
+  .find( \".foo\" )
+    .css( \"background-color\", \"red\" )
+  .end()
+  .find( \".bar\" )
+    .css( \"background-color\", \"green\" );
+    ") (text . "") (text . "This chain searches for items with the class foo within the first list
 only and turns their backgrounds red. Then end() returns the object to
 its state before the call to find(), so the second find() looks for
 `.bar` inside <ul class=\"first\">, not just inside that list`s <li
@@ -4235,12 +4984,14 @@ background, and none of the items from the second list do.
 filtering methods providing the openings of nested blocks and end()
 methods closing them:
 ") (text . "") (js . "
-$('ul.first').find('.foo')
-  .css('background-color', 'red')
-.end().find('.bar')
-  .css('background-color', 'green')
-.end();
-") (text . "") (text . "The last end() is unnecessary, as we are discarding the jQuery object
+$( \"ul.first\" )
+  .find( \".foo\" )
+    .css( \"background-color\", \"red\" )
+  .end()
+  .find( \".bar\" )
+    .css( \"background-color\", \"green\" )
+  .end();
+    ") (text . "") (text . "The last end() is unnecessary, as we are discarding the jQuery object
 immediately thereafter. However, when the code is written in this form,
 the end() provides visual symmetry and a sense of completion --making
 the program, at least to the eyes of some developers, more readable, at
@@ -4250,51 +5001,75 @@ call.
 the selection back to the paragraphs.
 
 ") (text . "") (js . "
-jQuery.fn.showTags = function (n) {
-  var tags = this.map(function () {
-                          return this.tagName;
-                        })
-                    .get().join(\", \");
-  $(\"b:eq(\" + n + \")\").text(tags);
+jQuery.fn.showTags = function( n ) {
+  var tags = this.map(function() {
+    return this.tagName;
+  })
+  .get()
+  .join( \", \" );
+  $( \"b:eq( \" + n + \" )\" ).text( tags );
   return this;
 };
 
-$(\"p\").showTags(0)
-      .find(\"span\")
-      .showTags(1)
-      .css(\"background\", \"yellow\")
-      .end()
-      .showTags(2)
-      .css(\"font-style\", \"italic\");
-
+$( \"p\" )
+  .showTags( 0 )
+  .find( \"span\" )
+    .showTags( 1 )
+    .css( \"background\", \"yellow\" )
+  .end()
+  .showTags( 2 )
+  .css( \"font-style\", \"italic\" );
 ") (text . "") (css . "
-  p, div { margin:1px; padding:1px; font-weight:bold;
-           font-size:16px; }
-  div { color:blue; }
-  b { color:red; }
-  ") (text . "") (html . "<p>
-    Hi there <span>how</span> are you <span>doing</span>?
-  </p>
+  p, div {
+    margin: 1px;
+    padding: 1px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  div {
+    color: blue;
+  }
+  b {
+    color: red;
+  }
+") (text . "") (html . "
+<p>
+  Hi there <span>how</span> are you <span>doing</span>?
+</p>
 
-  <p>
-    This <span>span</span> is one of
-    several <span>spans</span> in this
-    <span>sentence</span>.
-  </p>
+<p>
+  This <span>span</span> is one of
+  several <span>spans</span> in this
+  <span>sentence</span>.
+</p>
 
-  <div>
-    Tags in jQuery object initially: <b></b>
-  </div>
-  <div>
-    Tags in jQuery object after find: <b></b>
+<div>
+  Tags in jQuery object initially: <b></b>
+</div>
 
-  </div>
-  <div>
-    Tags in jQuery object after end: <b></b>
-  </div>") (text . "")) ((text . "") (text . "Selects all paragraphs, finds span elements inside these, and reverts
+<div>
+  Tags in jQuery object after find: <b></b>
+</div>
+
+<div>
+  Tags in jQuery object after end: <b></b>
+</div>
+") (text . "")) ((text . "") (text . "Selects all paragraphs, finds span elements inside these, and reverts
 the selection back to the paragraphs.
 
-") (text . "") (js . "$(\"p\").find(\"span\").end().css(\"border\", \"2px red solid\");") (text . "") (css . "p { margin:10px; padding:10px; }") (text . "") (html . "<p><span>Hello</span>, how are you?</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" )
+  .find( \"span\" )
+  .end()
+  .css( \"border\", \"2px red solid\" );
+") (text . "") (css . "
+  p {
+    margin: 10px;
+    padding: 10px;
+  }
+") (text . "") (html . "
+<p><span>Hello</span>, how are you?</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "eq" jquery-doc-methods)
 
@@ -4312,52 +5087,60 @@ The supplied index identifies the position of this element in the set.
 
 
 ") (text . "") (html . "
-  <ul>
-    <li>list item 1</li>
-    <li>list item 2</li>
-    <li>list item 3</li>
-    <li>list item 4</li>
-    <li>list item 5</li>
-  </ul>
-") (text . "") (text . "We can apply this method to the set of list items:
+<ul>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li>list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
+</ul>
+    ") (text . "") (text . "We can apply this method to the set of list items:
 
 
 ") (text . "") (js . "
-  $('li').eq(2).css('background-color', 'red');
-") (text . "") (text . "The result of this call is a red background for item 3. Note that the
+$( \"li\" ).eq( 2 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for item 3. Note that the
 supplied index is zero-based, and refers to the position of the element
 within the jQuery object, not within the DOM tree.
 ") (text . "") (text . "Providing a negative number indicates a position starting from the end
 of the set, rather than the beginning. For example:
 
 ") (text . "") (js . "
-  $('li').eq(-2).css('background-color', 'red');
-") (text . "") (text . "This time list item 4 is turned red, since it is two from the end of
+$( \"li\" ).eq( -2 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This time list item 4 is turned red, since it is two from the end of
 the set.
 
 ") (text . "") (text . "If an element cannot be found at the specified zero-based index, the
 method constructs a new jQuery object with an empty set and a length
 property of 0.
 ") (text . "") (js . "
-  $('li').eq(5).css('background-color', 'red');
-") (text . "") (text . "Here, none of the list items is turned red, since .eq(5) indicates the
-sixth of five list items.
+$( \"li\" ).eq( 5 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "Here, none of the list items is turned red, since .eq( 5 ) indicates
+the sixth of five list items.
 
 ") (text . "")) ("examples" ((text . "") (text . "Turn the div with index 2 blue by adding an appropriate class.
 
 ") (text . "") (js . "
-$(\"body\").find(\"div\").eq(2).addClass(\"blue\");
+$( \"body\" ).find( \"div\" ).eq( 2 ).addClass( \"blue\" );
 ") (text . "") (css . "
-  div { width:60px; height:60px; margin:10px; float:left;
-        border:2px solid blue; }
-  .blue { background:blue; }
-  ") (text . "") (html . "<div></div>
-  <div></div>
-  <div></div>
-
-  <div></div>
-  <div></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 10px;
+    float: left;
+    border: 2px solid blue;
+  }
+  .blue {
+    background: blue;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "error" jquery-doc-methods)
 
@@ -4369,7 +5152,7 @@ $(\"body\").find(\"div\").eq(2).addClass(\"blue\");
 
 " nil nil))) ("desc" (text . "Bind an event handler to the \"error\" JavaScript event.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`error`, handler).
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"error\", handler ).
 
 
 ") (text . "") (text . "The error event is sent to elements, such as images, that are
@@ -4378,26 +5161,28 @@ element was not loaded correctly.
 ") (text . "") (text . "For example, consider a page with a simple image element:
 
 
-") (text . "") (js . "<img alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
+") (text . "") (js . "
+<img alt=\"Book\" id=\"book\">
+    ") (text . "") (text . "The event handler can be bound to the image:
 
 
-") (text . "") (js . "$('#book')
+") (text . "") (js . "
+$( \"#book\" )
   .error(function() {
-    alert('Handler for .error() called.')
+    alert( \"Handler for .error() called.\" )
   })
-  .attr(\"src\", \"missing.png\");
+  .attr( \"src\", \"missing.png\" );
     ") (text . "") (text . "If the image cannot be loaded (for example, because it is not present
 at the supplied URL), the alert is displayed:
 
 ") (text . "") (text . "Handler for .error() called.
 
 
-") (text . "") (text . "  The event handler must be attached before the browser fires the
-  error event, which is why the example sets the src attribute after
-  attaching the handler. Also, the error event may not be correctly
-  fired when the page is served locally; error relies on HTTP status
-  codes and will generally not be triggered if the URL uses the file:
-  protocol.
+") (text . "") (text . "The event handler must be attached before the browser fires the error
+event, which is why the example sets the src attribute after attaching
+the handler. Also, the error event may not be correctly fired when the
+page is served locally; error relies on HTTP status codes and will
+generally not be triggered if the URL uses the file: protocol.
 ") (text . "") (text . "Note: A jQuery error event handler should not be attached to the window
 object. The browser fires the window`s error event when a script error
 occurs. However, the window error event receives different arguments
@@ -4405,11 +5190,13 @@ and has different return value requirements than conventional event
 handlers. Use window.onerror instead.
 ") (text . "")) ("examples" ((text . "") (text . "To hide the \"broken image\" icons for IE users, you can try:
 
-") (text . "") (js . "$(\"img\")
-  .error(function(){
-    $(this).hide();
+") (text . "") (js . "
+$( \"img\" )
+  .error(function() {
+    $( this ).hide();
   })
-  .attr(\"src\", \"missing.png\");") (text . ""))))) jquery-doc-hash)
+  .attr( \"src\", \"missing.png\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "event.isDefaultPrevented" jquery-doc-methods)
 
@@ -4418,11 +5205,13 @@ object.
 
 ")) ("longdesc" (text . "")) ("examples" ((text . "") (text . "Checks whether event.preventDefault() was called.
 
-") (text . "") (js . "$(\"a\").click(function(event){
+") (text . "") (js . "
+$( \"a\" ).click(function( event ) {
   alert( event.isDefaultPrevented() ); // false
   event.preventDefault();
   alert( event.isDefaultPrevented() ); // true
-});  ") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "event.isImmediatePropagationStopped" jquery-doc-methods)
 
@@ -4435,25 +5224,24 @@ this event object.
 ") (text . "")) ("examples" ((text . "") (text . "Checks whether event.stopImmediatePropagation() was called.
 
 ") (text . "") (js . "
-
-function immediatePropStopped(e) {
+function immediatePropStopped( event ) {
   var msg = \"\";
-  if ( e.isImmediatePropagationStopped() ) {
-    msg =  \"called\"
+  if ( event.isImmediatePropagationStopped() ) {
+    msg = \"called\";
   } else {
     msg = \"not called\";
   }
-  $(\"#stop-log\").append( \"<div>\" + msg + \"</div>\" );
+  $( \"#stop-log\" ).append( \"<div>\" + msg + \"</div>\" );
 }
 
-$(\"button\").click(function(event) {
-  immediatePropStopped(event);
+$( \"button\" ).click(function( event ) {
+  immediatePropStopped( event );
   event.stopImmediatePropagation();
-  immediatePropStopped(event);
+  immediatePropStopped( event );
 });
 ") (text . "") (html . "
-  <button>click me</button>
-  <div id=\"stop-log\"></div>
+<button>click me</button>
+<div id=\"stop-log\"></div>
   ") (text . ""))))) jquery-doc-hash)
 
 (push "event.isPropagationStopped" jquery-doc-methods)
@@ -4467,25 +5255,24 @@ object.
 ") (text . "")) ("examples" ((text . "") (text . "Checks whether event.stopPropagation() was called
 
 ") (text . "") (js . "
-
-function propStopped(e) {
+function propStopped( event ) {
   var msg = \"\";
-  if ( e.isPropagationStopped() ) {
-    msg =  \"called\"
+  if ( event.isPropagationStopped() ) {
+    msg = \"called\";
   } else {
     msg = \"not called\";
   }
-  $(\"#stop-log\").append( \"<div>\" + msg + \"</div>\" );
+  $( \"#stop-log\" ).append( \"<div>\" + msg + \"</div>\" );
 }
 
-$(\"button\").click(function(event) {
-  propStopped(event);
+$( \"button\" ).click(function(event) {
+  propStopped( event );
   event.stopPropagation();
-  propStopped(event);
+  propStopped( event );
 });
 ") (text . "") (html . "
-  <button>click me</button>
-  <div id=\"stop-log\"></div>
+<button>click me</button>
+<div id=\"stop-log\"></div>
   ") (text . ""))))) jquery-doc-hash)
 
 (push "event.preventDefault" jquery-doc-methods)
@@ -4499,11 +5286,11 @@ called by an event handler that was triggered by this event.
 ") (text . "")) ("examples" ((text . "") (text . "Cancel the default action (navigation) of the click.
 
 ") (text . "") (js . "
-$(\"a\").click(function(event) {
+$( \"a\" ).click(function( event ) {
   event.preventDefault();
-  $('<div/>')
-    .append('default ' + event.type + ' prevented')
-    .appendTo('#log');
+  $( \"<div>\" )
+    .append( \"default \" + event.type + \" prevented\" )
+    .appendTo( \"#log\" );
 });
 ") (text . "") (html . "
 <a href=\"http://jquery.com\">default click action is prevented</a>
@@ -4526,21 +5313,32 @@ was ever called (on that event object).
 ") (text . "")) ("examples" ((text . "") (text . "Prevents other event handlers from being called.
 
 ") (text . "") (css . "
-p { height: 30px; width: 150px; background-color: #ccf; }
-div {height: 30px; width: 150px; background-color: #cfc; }
+  p {
+    height: 30px;
+    width: 150px;
+    background-color: #ccf;
+  }
+  div {
+    height: 30px;
+    width: 150px;
+    background-color: #cfc;
+  }
 ") (text . "") (js . "
-$(\"p\").click(function(event){
+$( \"p\" ).click(function( event ) {
   event.stopImmediatePropagation();
 });
-$(\"p\").click(function(event){
+$( \"p\" ).click(function( event ) {
   // This function won't be executed
-  $(this).css(\"background-color\", \"#f00\");
+  $( this ).css( \"background-color\", \"#f00\" );
 });
-$(\"div\").click(function(event) {
+$( \"div\" ).click(function( event ) {
   // This function will be executed
-    $(this).css(\"background-color\", \"#f00\");
-});") (text . "") (html . "<p>paragraph</p>
-<div>division</div>") (text . ""))))) jquery-doc-hash)
+  $( this ).css( \"background-color\", \"#f00\" );
+});
+") (text . "") (html . "
+<p>paragraph</p>
+<div>division</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "event.stopPropagation" jquery-doc-methods)
 
@@ -4558,10 +5356,12 @@ running.
 
 ") (text . "")) ("examples" ((text . "") (text . "Kill the bubbling on the click event.
 
-") (text . "") (js . "$(\"p\").click(function(event){
+") (text . "") (js . "
+$( \"p\" ).click(function( event ) {
   event.stopPropagation();
-  // do something
-});  ") (text . ""))))) jquery-doc-hash)
+  // Do something
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "fadeIn" jquery-doc-methods)
 
@@ -4579,9 +5379,9 @@ running.
 
 " "true" nil))) ("desc" (text . "Display the matched elements by fading them to opaque.
 
-")) ("longdesc" (text . "") (text . "The .fadeIn() method animates the opacity of the matched elements.
-
-
+")) ("longdesc" (text . "") (text . "The .fadeIn() method animates the opacity of the matched elements. It
+is similar to the .fadeTo() method but that method does not unhide the
+element and can specify the final opacity level.
 ") (text . "") (text . "Durations are given in milliseconds; higher values indicate slower
 animations, not faster ones. The strings `fast` and `slow` can be
 supplied to indicate durations of 200 and 600 milliseconds,
@@ -4590,16 +5390,19 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
-      Click here
-    </div>
-    <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
-    With the element initially hidden, we can show it slowly:
-    $('#clickme').click(function() {
-      $('#book').fadeIn('slow', function() {
-        // Animation complete
-      });
-    });") (text . "") (text . "
+") (text . "") (js . "
+<div id=\"clickme\">
+  Click here
+</div>
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+
+// With the element initially hidden, we can show it slowly:
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).fadeIn( \"slow\", function() {
+    // Animation complete
+  });
+});
+    ") (text . "") (text . "
 
 ") (text . "") (text . " Easing
 
@@ -4628,46 +5431,76 @@ animations ( See the example for .promise() ).
 within 600 milliseconds.
 
 ") (text . "") (js . "
-$(document.body).click(function () {
-  $(\"div:hidden:first\").fadeIn(\"slow\");
+$( document.body ).click(function() {
+  $( \"div:hidden:first\" ).fadeIn( \"slow\" );
 });
-    ") (text . "") (css . "
-span { color:red; cursor:pointer; }
-div { margin:3px; width:80px; display:none;
-  height:80px; float:left; }
-  div#one { background:#f00; }
-  div#two { background:#0f0; }
-  div#three { background:#00f; }
-") (text . "") (html . "<span>Click here...</span>
-
-    <div id=\"one\"></div>
-    <div id=\"two\"></div>
-    <div id=\"three\"></div>") (text . "")) ((text . "") (text . "Fades a red block in over the text. Once the animation is done, it
+") (text . "") (css . "
+  span {
+    color: red;
+    cursor: pointer;
+  }
+  div {
+    margin: 3px;
+    width: 80px;
+    display: none;
+    height: 80px;
+    float: left;
+  }
+  #one {
+    background: #f00;
+  }
+  #two {
+    background: #0f0;
+  }
+  #three {
+    background: #00f;
+  }
+") (text . "") (html . "
+<span>Click here...</span>
+<div id=\"one\"></div>
+<div id=\"two\"></div>
+<div id=\"three\"></div>
+") (text . "")) ((text . "") (text . "Fades a red block in over the text. Once the animation is done, it
 quickly fades in more text on top.
 
 ") (text . "") (js . "
-$(\"a\").click(function () {
-  $(\"div\").fadeIn(3000, function () {
-    $(\"span\").fadeIn(100);
+$( \"a\" ).click(function() {
+  $( \"div\" ).fadeIn( 3000, function() {
+    $( \"span\" ).fadeIn( 100 );
   });
   return false;
 });
 ") (text . "") (css . "
-    p { position:relative; width:400px; height:90px; }
-    div { position:absolute; width:400px; height:65px;
-      font-size:36px; text-align:center;
-      color:yellow; background:red;
-      padding-top:25px;
-      top:0; left:0; display:none; }
-      span { display:none; }
-    ") (text . "") (html . "<p>
-      Let it be known that the party of the first part
-      and the party of the second part are henceforth
-      and hereto directed to assess the allegations
-      for factual correctness... (<a href=\"#\">click!</a>)
-      <div><span>CENSORED!</span></div>
-
-    </p>") (text . ""))))) jquery-doc-hash)
+  p {
+    position: relative;
+    width: 400px;
+    height: 90px;
+  }
+  div {
+    position: absolute;
+    width: 400px;
+    height: 65px;
+    font-size: 36px;
+    text-align: center;
+    color: yellow;
+    background: red;
+    padding-top: 25px;
+    top: 0;
+    left: 0;
+    display: none;
+  }
+  span {
+    display: none;
+  }
+") (text . "") (html . "
+<p>
+  Let it be known that the party of the first part
+  and the party of the second part are henceforth
+  and hereto directed to assess the allegations
+  for factual correctness... (<a href=\"#\">click!</a>)
+  <div><span>CENSORED!</span></div>
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "fadeOut" jquery-doc-methods)
 
@@ -4696,21 +5529,25 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially shown, we can hide it slowly:
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (text . "With the element initially shown, we can hide it slowly:
 
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').fadeOut('slow', function() {
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).fadeOut( \"slow\", function() {
     // Animation complete.
   });
-});") (text . "") (text . "
+});
+    ") (text . "") (text . "
 
-") (text . "") (text . "  Note: To avoid unnecessary DOM manipulation, .fadeOut() will not
-  hide an element that is already considered hidden. For information
-  on which elements jQuery considers hidden, see :hidden Selector.
+") (text . "") (text . "Note: To avoid unnecessary DOM manipulation, .fadeOut() will not hide
+an element that is already considered hidden. For information on which
+elements jQuery considers hidden, see :hidden Selector.
 ") (text . "") (text . " Easing
 
 
@@ -4738,64 +5575,82 @@ animations ( See the example for .promise() ).
 600 milliseconds.
 
 ") (text . "") (js . "
-  $(\"p\").click(function () {
-  $(\"p\").fadeOut(\"slow\");
-  });
-  ") (text . "") (css . "
-  p { font-size:150%; cursor:pointer; }
-  ") (text . "") (html . "<p>
+$( \"p\" ).click(function() {
+  $( \"p\" ).fadeOut( \"slow\" );
+});
+") (text . "") (css . "
+  p {
+    font-size: 150%;
+    cursor: pointer;
+  }
+") (text . "") (html . "
+<p>
   If you click on this paragraph
   you'll see it just fade away.
-  </p>") (text . "")) ((text . "") (text . "Fades out spans in one section that you click on.
+</p>
+") (text . "")) ((text . "") (text . "Fades out spans in one section that you click on.
 
 ") (text . "") (js . "
-
-  $(\"span\").click(function () {
-  $(this).fadeOut(1000, function () {
-  $(\"div\").text(\"'\" + $(this).text() + \"' has faded!\");
-  $(this).remove();
+$( \"span\" ).click(function() {
+  $( this ).fadeOut( 1000, function() {
+    $( \"div\" ).text( \"'\" + $( this ).text() + \"' has faded!\" );
+    $( this ).remove();
   });
-  });
-  $(\"span\").hover(function () {
-  $(this).addClass(\"hilite\");
-  }, function () {
-  $(this).removeClass(\"hilite\");
-  });
-
-  ") (text . "") (css . "
-  span { cursor:pointer; }
-  span.hilite { background:yellow; }
-  div { display:inline; color:red; }
-  ") (text . "") (html . "<h3>Find the modifiers - <div></div></h3>
-  <p>
+});
+$( \"span\" ).hover(function() {
+  $( this ).addClass( \"hilite\" );
+}, function() {
+  $( this ).removeClass( \"hilite\" );
+});
+") (text . "") (css . "
+  span {
+    cursor: pointer;
+  }
+  span.hilite {
+    background: yellow;
+  }
+  div {
+    display: inline;
+    color: red;
+  }
+") (text . "") (html . "
+<h3>Find the modifiers - <div></div></h3>
+<p>
   If you <span>really</span> want to go outside
   <span>in the cold</span> then make sure to wear
   your <span>warm</span> jacket given to you by
   your <span>favorite</span> teacher.
-  </p>") (text . "")) ((text . "") (text . "Fades out two divs, one with a \"linear\" easing and one with the
+</p>
+") (text . "")) ((text . "") (text . "Fades out two divs, one with a \"linear\" easing and one with the
 default, \"swing,\" easing.
 
 ") (text . "") (js . "
-$(\"#btn1\").click(function() {
+$( \"#btn1\" ).click(function() {
   function complete() {
-    $(\"<div/>\").text(this.id).appendTo(\"#log\");
+    $( \"<div>\" ).text( this.id ).appendTo( \"#log\" );
   }
-
-  $(\"#box1\").fadeOut(1600, \"linear\", complete);
-  $(\"#box2\").fadeOut(1600, complete);
+  $( \"#box1\" ).fadeOut( 1600, \"linear\", complete );
+  $( \"#box2\" ).fadeOut( 1600, complete );
 });
 
-$(\"#btn2\").click(function() {
-  $(\"div\").show();
-  $(\"#log\").empty();
+$( \"#btn2\" ).click(function() {
+  $( \"div\" ).show();
+  $( \"#log\" ).empty();
 });
-
 ") (text . "") (css . "
-.box,
-button { float:left; margin:5px 10px 5px 0; }
-.box { height:80px; width:80px; background:#090; }
-#log { clear:left; }
-
+  .box,
+  button {
+    float: left;
+    margin: 5px 10px 5px 0;
+  }
+  .box {
+    height: 80px;
+    width: 80px;
+    background: #090;
+  }
+  #log {
+    clear: left;
+  }
 ") (text . "") (html . "
 <button id=\"btn1\">fade out</button>
 <button id=\"btn2\">show</button>
@@ -4824,9 +5679,9 @@ button { float:left; margin:5px 10px 5px 0; }
 
 " "true" nil))) ("desc" (text . "Adjust the opacity of the matched elements.
 
-")) ("longdesc" (text . "") (text . "The .fadeTo() method animates the opacity of the matched elements.
-
-
+")) ("longdesc" (text . "") (text . "The .fadeTo() method animates the opacity of the matched elements. It
+is similar to the .fadeIn() method but that method unhides the element
+and always fades to 100% opacity.
 ") (text . "") (text . "Durations are given in milliseconds; higher values indicate slower
 animations, not faster ones. The strings `fast` and `slow` can be
 supplied to indicate durations of 200 and 600 milliseconds,
@@ -4842,89 +5697,130 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
-    Click here
-  </div>
-  <img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
-  With the element initially shown, we can dim it slowly:
-  $('#clickme').click(function() {
-    $('#book').fadeTo('slow', 0.5, function() {
-      // Animation complete.
-    });
+") (text . "") (js . "
+<div id=\"clickme\">
+  Click here
+</div>
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+// With the element initially shown, we can dim it slowly:
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).fadeTo( \"slow\" , 0.5, function() {
+    // Animation complete.
   });
-  ") (text . "") (text . "
+});
+    ") (text . "") (text . "
 
 ") (text . "") (text . "With duration set to 0, this method just changes the opacity CSS
-property, so .fadeTo(0, opacity) is the same as .css(`opacity`,
-opacity).
+property, so .fadeTo( 0, opacity ) is the same as .css( \"opacity\",
+opacity ).
 ") (text . "")) ("examples" ((text . "") (text . "Animates first paragraph to fade to an opacity of 0.33 (33%, about one
 third visible), completing the animation within 600 milliseconds.
 
 ") (text . "") (js . "
-$(\"p:first\").click(function () {
-$(this).fadeTo(\"slow\", 0.33);
+$( \"p:first\" ).click(function() {
+  $( this ).fadeTo( \"slow\", 0.33 );
 });
-") (text . "") (html . "<p>
+") (text . "") (html . "
+<p>
 Click this paragraph to see it fade.
 </p>
 
 <p>
 Compare to this one that won't fade.
-</p>") (text . "")) ((text . "") (text . "Fade div to a random opacity on each click, completing the animation
+</p>
+") (text . "")) ((text . "") (text . "Fade div to a random opacity on each click, completing the animation
 within 200 milliseconds.
 
 ") (text . "") (js . "
-$(\"div\").click(function () {
-$(this).fadeTo(\"fast\", Math.random());
+$( \"div\" ).click(function() {
+  $( this ).fadeTo( \"fast\", Math.random() );
 });
 ") (text . "") (css . "
-p { width:80px; margin:0; padding:5px; }
-div { width:40px; height:40px; position:absolute; }
-div#one { top:0; left:0; background:#f00; }
-div#two { top:20px; left:20px; background:#0f0; }
-div#three { top:40px; left:40px; background:#00f; }
-") (text . "") (html . "<p>And this is the library that John built...</p>
+  p {
+    width: 80px;
+    margin: 0;
+    padding: 5px;
+  }
+  div {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+  }
+  #one {
+    top: 0;
+    left: 0;
+    background: #f00;
+  }
+  #two {
+    top: 20px;
+    left: 20px;
+    background: #0f0;
+  }
+  #three {
+    top: 40px;
+    left:40px;
+    background:#00f;
+  }
+") (text . "") (html . "
+<p>And this is the library that John built...</p>
 
 <div id=\"one\"></div>
 <div id=\"two\"></div>
-<div id=\"three\"></div>") (text . "")) ((text . "") (text . "Find the right answer! The fade will take 250 milliseconds and change
+<div id=\"three\"></div>
+") (text . "")) ((text . "") (text . "Find the right answer! The fade will take 250 milliseconds and change
 various styles when it completes.
 
 ") (text . "") (js . "
-var getPos = function (n) {
-  return (Math.floor(n) * 90) + \"px\";
+var getPos = function( n ) {
+  return (Math.floor( n ) * 90) + \"px\";
 };
-$(\"p\").each(function (n) {
-  var r = Math.floor(Math.random() * 3);
-  var tmp = $(this).text();
-  $(this).text($(\"p:eq(\" + r + \")\").text());
-  $(\"p:eq(\" + r + \")\").text(tmp);
-  $(this).css(\"left\", getPos(n));
+$( \"p\" ).each(function( n ) {
+  var r = Math.floor( Math.random() * 3 );
+  var tmp = $( this ).text();
+  $( this ).text( $( \"p:eq(\" + r + \")\" ).text() );
+  $( \"p:eq(\" + r + \")\" ).text( tmp );
+  $( this ).css( \"left\", getPos( n ) );
 });
-$(\"div\").each(function (n) {
-  $(this).css(\"left\", getPos(n));
-})
-.css(\"cursor\", \"pointer\")
-.click(function () {
-    $(this).fadeTo(250, 0.25, function () {
-      $(this).css(\"cursor\", \"\")
-        .prev().css({\"font-weight\": \"bolder\",
-                     \"font-style\": \"italic\"});
-        });
+$( \"div\" )
+  .each(function( n ) {
+    $( this ).css( \"left\", getPos( n ) );
+  })
+  .css( \"cursor\", \"pointer\" )
+  .click( function() {
+    $( this ).fadeTo( 250, 0.25, function() {
+      $( this )
+        .css( \"cursor\", \"\" )
+        .prev()
+          .css({
+            \"font-weight\": \"bolder\",
+            \"font-style\": \"italic\"
+          });
     });
-
+  });
 ") (text . "") (css . "
-div, p { width:80px; height:40px; top:0; margin:0;
-position:absolute; padding-top:8px; }
-p { background:#fcc; text-align:center; }
-div { background:blue; }
-") (text . "") (html . "<p>Wrong</p>
+  div, p {
+    width: 80px;
+    height: 40px;
+    top: 0;
+    margin: 0;
+    position: absolute;
+    padding-top: 8px;
+  }
+  p {
+    background: #fcc;
+    text-align: center;
+  }
+  div {
+    background: blue;
+  }
+") (text . "") (html . "
+<p>Wrong</p>
 <div></div>
 <p>Wrong</p>
 <div></div>
-
 <p>Right!</p>
-<div></div>") (text . ""))))) jquery-doc-hash)
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "fadeToggle" jquery-doc-methods)
 
@@ -4972,19 +5868,18 @@ animations ( See the example for .promise() ).
 milliseconds and using a linear easing. Fades last paragraph in or out
 for 200 milliseconds, inserting a \"finished\" message upon completion.
 ") (text . "") (js . "
-$(\"button:first\").click(function() {
-  $(\"p:first\").fadeToggle(\"slow\", \"linear\");
+$( \"button:first\" ).click(function() {
+  $( \"p:first\" ).fadeToggle( \"slow\", \"linear\" );
 });
-$(\"button:last\").click(function () {
-  $(\"p:last\").fadeToggle(\"fast\", function () {
-    $(\"#log\").append(\"<div>finished</div>\");
+$( \"button:last\" ).click(function() {
+  $( \"p:last\" ).fadeToggle( \"fast\", function() {
+    $( \"#log\" ).append( \"<div>finished</div>\" );
   });
 });
 ") (text . "") (html . "
 <button>fadeToggle p1</button>
 <button>fadeToggle p2</button>
 <p>This paragraph has a slow, linear fade.</p>
-
 <p>This paragraph has a fast animation.</p>
 <div id=\"log\"></div>
 ") (text . ""))))) jquery-doc-hash)
@@ -5022,12 +5917,12 @@ result.
   <li>list item 5</li>
   <li>list item 6</li>
 </ul>
-") (text . "") (text . "We can apply this method to the set of list items:
+    ") (text . "") (text . "We can apply this method to the set of list items:
 
 
 ") (text . "") (js . "
-  $('li').filter(':even').css('background-color', 'red');
-") (text . "") (text . "The result of this call is a red background for items 1, 3, and 5, as
+$( \"li\" ).filter( \":even\" ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for items 1, 3, and 5, as
 they match the selector (recall that :even and :odd use 0-based
 indexing).
 ") (text . "") (text . " Using a Filter Function
@@ -5040,8 +5935,7 @@ filtered set; otherwise, it will be excluded. Suppose we have a
 somewhat more involved HTML snippet:
 ") (text . "") (html . "
 <ul>
-  <li><strong>list</strong> item 1 -
-    one strong tag</li>
+  <li><strong>list</strong> item 1 - one strong tag</li>
   <li><strong>list</strong> item <strong>2</strong> -
     two <span>strong tags</span></li>
   <li>list item 3</li>
@@ -5049,14 +5943,16 @@ somewhat more involved HTML snippet:
   <li>list item 5</li>
   <li>list item 6</li>
 </ul>
-") (text . "") (text . "We can select the list items, then filter them based on their contents:
+    ") (text . "") (text . "We can select the list items, then filter them based on their contents:
 
 
 ") (text . "") (js . "
-$('li').filter(function(index) {
-  return $('strong', this).length == 1;
-}).css('background-color', 'red');
-") (text . "") (text . "This code will alter the first list item only, as it contains exactly
+$( \"li\" )
+  .filter(function( index ) {
+    return $( \"strong\", this ).length === 1;
+  })
+    .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This code will alter the first list item only, as it contains exactly
 one <strong> tag. Within the filter function, this refers to each DOM
 element in turn. The parameter passed to the function tells us the
 index of that DOM element within the set matched by the jQuery object.
@@ -5064,58 +5960,73 @@ index of that DOM element within the set matched by the jQuery object.
 which indicates the 0-based position of the element within the
 unfiltered set of matched elements:
 ") (text . "") (js . "
-$('li').filter(function(index) {
-  return index % 3 == 2;
-}).css('background-color', 'red');
-") (text . "") (text . "This alteration to the code will cause the third and sixth list items
+$( \"li\" )
+  .filter(function( index ) {
+    return index % 3 === 2;
+  })
+    .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This alteration to the code will cause the third and sixth list items
 to be highlighted, as it uses the modulus operator ( %) to select every
 item with an index value that, when divided by 3, has a remainder of 2.
 ") (text . "")) ("examples" ((text . "") (text . "Change the color of all divs; then add a border to those with a
 \"middle\" class.
 
 ") (text . "") (js . "
-
-    $(\"div\").css(\"background\", \"#c8ebcc\")
-            .filter(\".middle\")
-            .css(\"border-color\", \"red\");
+$( \"div\" )
+  .css( \"background\", \"#c8ebcc\" )
+  .filter( \".middle\" )
+    .css( \"border-color\", \"red\" );
 ") (text . "") (css . "
-  div { width:60px; height:60px; margin:5px; float:left;
-        border:2px white solid;}
-  ") (text . "") (html . "<div></div>
-
-  <div class=\"middle\"></div>
-  <div class=\"middle\"></div>
-  <div class=\"middle\"></div>
-  <div class=\"middle\"></div>
-
-  <div></div>") (text . "")) ((text . "") (text . "Change the color of all divs; then add a border to the second one
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
+    border: 2px white solid;
+  }
+") (text . "") (html . "
+<div></div>
+<div class=\"middle\"></div>
+<div class=\"middle\"></div>
+<div class=\"middle\"></div>
+<div class=\"middle\"></div>
+<div></div>
+") (text . "")) ((text . "") (text . "Change the color of all divs; then add a border to the second one
 (index == 1) and the div with an id of \"fourth.\"
 
 ") (text . "") (js . "
-    $(\"div\").css(\"background\", \"#b4b0da\")
-            .filter(function (index) {
-                  return index == 1 || $(this).attr(\"id\") == \"fourth\";
-                })
-            .css(\"border\", \"3px double red\");
-
+$( \"div\" )
+  .css( \"background\", \"#b4b0da\" )
+  .filter(function( index ) {
+    return index === 1 || $( this ).attr( \"id\" ) === \"fourth\";
+  })
+    .css( \"border\", \"3px double red\" );
 ") (text . "") (css . "
-  div { width:60px; height:60px; margin:5px; float:left;
-        border:3px white solid; }
-  ") (text . "") (html . "
-  <div id=\"first\"></div>
-  <div id=\"second\"></div>
-  <div id=\"third\"></div>
-
-  <div id=\"fourth\"></div>
-  <div id=\"fifth\"></div>
-  <div id=\"sixth\"></div>") (text . "")) ((text . "") (text . "Select all divs and filter the selection with a DOM element, keeping
-only the one with an id of \"unique\".
-
-") (text . "") (js . "$(\"div\").filter( document.getElementById(\"unique\") )") (text . "")) ((text . "") (text . "Select all divs and filter the selection with a jQuery object, keeping
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
+    border: 3px white solid;
+  }
+") (text . "") (html . "
+<div id=\"first\"></div>
+<div id=\"second\"></div>
+<div id=\"third\"></div>
+<div id=\"fourth\"></div>
+<div id=\"fifth\"></div>
+<div id=\"sixth\"></div>
+") (text . "")) ((text . "") (text . "Select all divs and filter the selection with a DOM element, keeping
 only the one with an id of \"unique\".
 
 ") (text . "") (js . "
-$(\"div\").filter( $(\"#unique\") )") (text . ""))))) jquery-doc-hash)
+$( \"div\" ).filter( document.getElementById( \"unique\" ) );
+") (text . "")) ((text . "") (text . "Select all divs and filter the selection with a jQuery object, keeping
+only the one with an id of \"unique\".
+
+") (text . "") (js . "
+$( \"div\" ).filter( $( \"#unique\" ) );
+") (text . ""))))) jquery-doc-hash)
 
 (push "find" jquery-doc-methods)
 
@@ -5157,87 +6068,111 @@ will be filtered by testing whether they match this selector.
   </li>
   <li class=\"item-iii\">III</li>
 </ul>
-") (text . "") (text . "If we begin at item II, we can find list items within it:
+    ") (text . "") (text . "If we begin at item II, we can find list items within it:
 
 
-") (text . "") (js . "$('li.item-ii').find('li').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background on items A, B, 1, 2, 3, and
+") (text . "") (js . "
+$( \"li.item-ii\" ).find( \"li\" ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background on items A, B, 1, 2, 3, and
 C. Even though item II matches the selector expression, it is not
 included in the results; only descendants are considered candidates for
 the match.
-") (text . "") (text . "  Unlike in the rest of the tree traversal methods, the selector
-  expression is required in a call to .find(). If we need to retrieve
-  all of the descendant elements, we can pass in the universal
-  selector `*` to accomplish this.
-") (text . "") (text . "Selector context is implemented with the .find() method; therefore,
-$(`li.item-ii`).find(`li`) is equivalent to $(`li`, `li.item-ii`).
+") (text . "") (text . "Unlike in the rest of the tree traversal methods, the selector
+expression is required in a call to .find(). If we need to retrieve all
+of the descendant elements, we can pass in the universal selector `*`
+to accomplish this.
+") (text . "") (text . "Selector context is implemented with the .find() method; therefore, $(
+\"li.item-ii\" ).find( \"li\" ) is equivalent to $( \"li\", \"li.item-ii\" ).
 
 ") (text . "") (text . "As of jQuery 1.6, we can also filter the selection with a given jQuery
 collection or element. With the same nested list as above, if we start
 with:
-") (text . "") (js . "var $allListElements = $('li');") (text . "") (text . "And then pass this jQuery object to find:
+") (text . "") (js . "
+var allListElements = $( \"li\" );
+    ") (text . "") (text . "And then pass this jQuery object to find:
 
 
-") (text . "") (js . "$('li.item-ii').find( $allListElements );") (text . "") (text . "This will return a jQuery collection which contains only the list
+") (text . "") (js . "
+$( \"li.item-ii\" ).find( allListElements );
+    ") (text . "") (text . "This will return a jQuery collection which contains only the list
 elements that are descendants of item II.
 
 ") (text . "") (text . "Similarly, an element may also be passed to find:
 
 
 ") (text . "") (js . "
-var item1 = $('li.item-1')[0];
-$('li.item-ii').find( item1 ).css('background-color', 'red');
-") (text . "") (text . "The result of this call would be a red background on item 1.
+var item1 = $( \"li.item-1\" )[ 0 ];
+$( \"li.item-ii\" ).find( item1 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call would be a red background on item 1.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Starts with all paragraphs and searches for descendant span elements,
-same as $(\"p span\")
+same as $( \"p span\" )
 
 ") (text . "") (js . "
-  $(\"p\").find(\"span\").css('color','red');
-") (text . "") (html . "<p><span>Hello</span>, how are you?</p>
-<p>Me? I'm <span>good</span>.</p>") (text . "")) ((text . "") (text . "A selection using a jQuery collection of all span tags. Only spans
+$( \"p\" ).find( \"span\" ).css( \"color\", \"red\" );
+") (text . "") (html . "
+<p><span>Hello</span>, how are you?</p>
+<p>Me? I'm <span>good</span>.</p>
+") (text . "")) ((text . "") (text . "A selection using a jQuery collection of all span tags. Only spans
 within p tags are changed to red while others are left blue.
 
 ") (text . "") (css . "
-    span { color: blue; }
-  ") (text . "") (js . "
-  var $spans = $('span');
-  $(\"p\").find( $spans ).css('color','red');
-") (text . "") (html . "<p><span>Hello</span>, how are you?</p>
-  <p>Me? I'm <span>good</span>.</p>
-  <div>Did you <span>eat</span> yet?</div>") (text . "")) ((text . "") (text . "Add spans around each word then add a hover and italicize words with
+  span {
+    color: blue;
+  }
+") (text . "") (js . "
+var spans = $( \"span\" );
+$( \"p\" ).find( spans ).css( \"color\", \"red\" );
+") (text . "") (html . "
+<p><span>Hello</span>, how are you?</p>
+<p>Me? I'm <span>good</span>.</p>
+<div>Did you <span>eat</span> yet?</div>
+") (text . "")) ((text . "") (text . "Add spans around each word then add a hover and italicize words with
 the letter t.
 
 ") (text . "") (js . "
-  var newText = $(\"p\").text().split(\" \").join(\"</span> <span>\");
-  newText = \"<span>\" + newText + \"</span>\";
+var newText = $( \"p\" ).text().split( \" \" ).join( \"</span> <span>\" );
+newText = \"<span>\" + newText + \"</span>\";
 
-  $(\"p\").html( newText )
-    .find('span')
-    .hover(function() { 
-      $(this).addClass(\"hilite\"); 
-    },
-      function() { $(this).removeClass(\"hilite\"); 
+$( \"p\" )
+  .html( newText )
+  .find( \"span\" )
+    .hover(function() {
+      $( this ).addClass( \"hilite\" );
+    }, function() {
+      $( this ).removeClass( \"hilite\" );
     })
   .end()
-    .find(\":contains('t')\")
-    .css({\"font-style\":\"italic\", \"font-weight\":\"bolder\"});
-
+  .find( \":contains('t')\" )
+    .css({
+      \"font-style\": \"italic\",
+      \"font-weight\": \"bolder\"
+    });
 ") (text . "") (css . "
-  p { font-size:20px; width:200px; cursor:default; 
-      color:blue; font-weight:bold; margin:0 10px; }
-  .hilite { background:yellow; }
-  ") (text . "") (html . "<p>
+  p {
+    font-size: 20px;
+    width: 200px;
+    color: blue;
+    font-weight: bold;
+    margin: 0 10px;
+  }
+  .hilite {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>
   When the day is short
   find that which matters to you
   or stop believing
-  </p>") (text . ""))))) jquery-doc-hash)
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "first" jquery-doc-methods)
 
 (puthash "first" (quote (("name" . "first") ("signatures" "first" nil) ("desc" (text . "Reduce the set of matched elements to the first in the set.
 
-")) ("longdesc" (text . "Given a jQuery object that represents a set of DOM elements, the
+")) ("longdesc" (text . "") (text . "Given a jQuery object that represents a set of DOM elements, the
 .first() method constructs a new jQuery object from the first element
 in that set.
 ") (text . "") (text . "Consider a page with a simple list on it:
@@ -5251,15 +6186,29 @@ in that set.
   <li>list item 4</li>
   <li>list item 5</li>
 </ul>
-") (text . "") (text . "We can apply this method to the set of list items:
+    ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js . "$('li').first().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the first item.
+") (text . "") (js . "
+$( \"li\" ).first().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for the first item.
 
 
-")) ("examples" ((text . "") (text . "Highlight the first span in a paragraph.
+") (text . "")) ("examples" ((text . "") (text . "Highlight the first span in a paragraph.
 
-") (text . "") (css . ".highlight{background-color: yellow}") (text . "") (js . "$(\"p span\").first().addClass('highlight');") (text . "") (html . "<p><span>Look:</span> <span>This is some text in a paragraph.</span> <span>This is a note about it.</span></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (css . "
+  .highlight{
+    background-color: yellow
+  }
+") (text . "") (js . "
+$( \"p span\" ).first().addClass( \"highlight\" );
+") (text . "") (html . "
+<p>
+  <span>Look:</span>
+  <span>This is some text in a paragraph.</span>
+  <span>This is a note about it.</span>
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "focus" jquery-doc-methods)
 
@@ -5272,8 +6221,8 @@ in that set.
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"focus\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "  * This method is a shortcut for .on(`focus`, handler) in the first
-    and second variations, and .trigger(`focus`) in the third.
+")) ("longdesc" (text . "") (text . "  * This method is a shortcut for .on( \"focus\", handler ) in the first
+    and second variations, and .trigger( \"focus\" ) in the third.
   * The focus event is sent to an element when it gains focus. This
     event is implicitly applicable to a limited set of elements, such
     as form elements ( <input>, <select>, etc.) and links ( <a href>).
@@ -5285,27 +6234,29 @@ event on an element.
     browser, for example with a dotted line surrounding the element.
     The focus is used to determine which element is the first to
     receive keyboard-related events.
-") (text . "") (text . "  Attempting to set focus to a hidden element causes an error in
-  Internet Explorer. Take care to only use .focus() on elements that
-  are visible. To run an element`s focus event handlers without
-  setting focus to the element, use .triggerHandler(\"focus\") instead
-  of .focus().
+") (text . "") (text . "Attempting to set focus to a hidden element causes an error in Internet
+Explorer. Take care to only use .focus() on elements that are visible.
+To run an element`s focus event handlers without setting focus to the
+element, use .triggerHandler( \"focus\" ) instead of .focus().
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
-  <input id=\"target\" type=\"text\" value=\"Field 1\" />
-  <input type=\"text\" value=\"Field 2\" />
+") (text . "") (js . "
+<form>
+  <input id=\"target\" type=\"text\" value=\"Field 1\">
+  <input type=\"text\" value=\"Field 2\">
 </form>
 <div id=\"other\">
   Trigger the handler
 </div>
-") (text . "") (text . "The event handler can be bound to the first input field:
+    ") (text . "") (text . "The event handler can be bound to the first input field:
 
 
-") (text . "") (js . "$('#target').focus(function() {
-  alert('Handler for .focus() called.');
-});") (text . "") (text . "Now clicking on the first field, or tabbing to it from another field,
+") (text . "") (js . "
+$( \"#target\" ).focus(function() {
+  alert( \"Handler for .focus() called.\" );
+});
+    ") (text . "") (text . "Now clicking on the first field, or tabbing to it from another field,
 displays the alert:
 
 ") (text . "") (text . "Handler for .focus() called.
@@ -5314,9 +6265,11 @@ displays the alert:
 ") (text . "") (text . "We can trigger the event when another element is clicked:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').focus();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).focus();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "The focus event does not bubble in Internet Explorer. Therefore,
@@ -5326,20 +6279,30 @@ works around this limitation by mapping focus to the focusin event in
 its event delegation methods, .live() and .delegate() .
 ") (text . "")) ("examples" ((text . "") (text . "Fire focus.
 
-") (text . "") (css . "span {display:none;}") (text . "") (js . "
-$(\"input\").focus(function () {
-  $(this).next(\"span\").css('display','inline').fadeOut(1000);
+") (text . "") (css . "
+  span {
+    display: none;
+  }
+") (text . "") (js . "
+$( \"input\" ).focus(function() {
+  $( this ).next( \"span\" ).css( \"display\", \"inline\" ).fadeOut( 1000 );
 });
-") (text . "") (html . "<p><input type=\"text\" /> <span>focus fire</span></p>
-<p><input type=\"password\" /> <span>focus fire</span></p>") (text . "")) ((text . "") (text . "To stop people from writing in text input boxes, try:
+") (text . "") (html . "
+<p><input type=\"text\"> <span>focus fire</span></p>
+<p><input type=\"password\"> <span>focus fire</span></p>
+") (text . "")) ((text . "") (text . "To stop people from writing in text input boxes, try:
 
-") (text . "") (js . "$(\"input[type=text]\").focus(function(){
-  $(this).blur();
-});") (text . "")) ((text . "") (text . "To focus on a login input box with id `login` on page startup, try:
+") (text . "") (js . "
+$( \"input[type=text]\" ).focus(function() {
+  $( this ).blur();
+});
+") (text . "")) ((text . "") (text . "To focus on a login input box with id `login` on page startup, try:
 
-") (text . "") (js . "$(document).ready(function(){
-  $(\"#login\").focus();
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( document ).ready(function() {
+  $( \"#login\" ).focus();
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "focusin" jquery-doc-methods)
 
@@ -5363,12 +6326,18 @@ it supports event bubbling).
 
 ") (text . "")) ("examples" ((text . "") (text . "Watch for a focus to occur within the paragraphs on the page.
 
-") (text . "") (css . "span {display:none;}") (text . "") (js . "
-$(\"p\").focusin(function() {
-  $(this).find(\"span\").css('display','inline').fadeOut(1000);
+") (text . "") (css . "
+  span {
+    display: none;
+  }
+") (text . "") (js . "
+$( \"p\" ).focusin(function() {
+  $( this ).find( \"span\" ).css( \"display\", \"inline\" ).fadeOut( 1000 );
 });
-") (text . "") (html . "<p><input type=\"text\" /> <span>focusin fire</span></p>
-<p><input type=\"password\" /> <span>focusin fire</span></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (html . "
+<p><input type=\"text\"> <span>focusin fire</span></p>
+<p><input type=\"password\"> <span>focusin fire</span></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "focusout" jquery-doc-methods)
 
@@ -5380,8 +6349,8 @@ $(\"p\").focusin(function() {
 
 " nil nil))) ("desc" (text . "Bind an event handler to the \"focusout\" JavaScript event.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`focusout`, handler).
-
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"focusout\", handler ) when passed
+arguments, and .trigger( \"focusout\" ) when no arguments are passed.
 
 ") (text . "") (text . "The focusout event is sent to an element when it, or any element inside
 of it, loses focus. This is distinct from the blur event in that it
@@ -5391,64 +6360,62 @@ words, it supports event bubbling).
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Watch for a loss of focus to occur inside paragraphs and note the
-difference between the focusout count and the blur count.
-
+difference between the focusout count and the blur count. (The blur
+count does not change because those events do not bubble.)
 ") (text . "") (css . "
-.inputs { float: left; margin-right: 1em; }
-.inputs p { margin-top: 0; }
+  .inputs {
+    float: left;
+    margin-right: 1em;
+  }
+  .inputs p {
+    margin-top: 0;
+  }
 ") (text . "") (js . "
-var fo = 0, b = 0;
-$(\"p\").focusout(function() {
-  fo++;
-  $(\"#fo\")
-    .text(\"focusout fired: \" + fo + \"x\");
-}).blur(function() {
-  b++;
-  $(\"#b\")
-    .text(\"blur fired: \" + b + \"x\");
-
-});
+var focus = 0,
+  blur = 0;
+$( \"p\" )
+  .focusout(function() {
+    focus++;
+    $( \"#focus-count\" ).text( \"focusout fired: \" + focus + \"x\" );
+  })
+  .blur(function() {
+    blur++;
+    $( \"#blur-count\" ).text( \"blur fired: \" + blur + \"x\" );
+  });
 ") (text . "") (html . "
 <div class=\"inputs\">
   <p>
-    <input type=\"text\" /><br />
-    <input type=\"text\" />
+    <input type=\"text\"><br>
+    <input type=\"text\">
   </p>
   <p>
-    <input type=\"password\" />
+    <input type=\"password\">
   </p>
 </div>
-<div id=\"fo\">focusout fire</div>
-<div id=\"b\">blur fire</div>
+<div id=\"focus-count\">focusout fire</div>
+<div id=\"blur-count\">blur fire</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "get" jquery-doc-methods)
 
 (puthash "get" (quote (("name" . "get") ("signatures" "get" (("index" "A zero-based integer indicating which element to retrieve.
 
-" "true" nil))) ("desc" (text . "Retrieve the DOM elements matched by the jQuery object.
+" nil nil))) ("desc" (text . "Retrieve one of the DOM elements matched by the jQuery object.
 
 ")) ("longdesc" (text . "") (text . "The .get() method grants us access to the DOM nodes underlying each
-jQuery object. Suppose we had a simple unordered list on the page:
+jQuery object. Consider a simple unordered list:
 
 ") (text . "") (html . "
 <ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
 </ul>
-    ") (text . "") (text . "Without a parameter, .get() returns all of the elements:
+      ") (text . "") (text . "With an index specified, .get( index ) retrieves a single element:
 
 
-") (text . "") (js . "alert($('li').get());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
-standard array:
-
-") (text . "") (text . "[<li id=\"foo\">, <li id=\"bar\">]
-
-
-") (text . "") (text . "With an index specified, .get() will retrieve a single element:
-
-
-") (text . "") (js . "($('li').get(0));") (text . "") (text . "Since the index is zero-based, the first list item is returned:
+") (text . "") (js . "
+console.log( $( \"li\" ).get( 0 ) );
+      ") (text . "") (text . "Since the index is zero-based, the first list item is returned:
 
 
 ") (text . "") (text . "<li id=\"foo\">
@@ -5457,48 +6424,86 @@ standard array:
 ") (text . "") (text . "Each jQuery object also masquerades as an array, so we can use the
 array dereferencing operator to get at the list item instead:
 
-") (text . "") (js . "alert($('li')[0]);") (text . "") (text . "However, this syntax lacks some of the additional capabilities of
+") (text . "") (js . "
+console.log( $( \"li\" )[ 0 ] );
+      ") (text . "") (text . "However, this syntax lacks some of the additional capabilities of
 .get(), such as specifying a negative index:
 
-") (text . "") (js . "alert($('li').get(-1));") (text . "") (text . "A negative index is counted from the end of the matched set, so this
-example will return the last item in the list:
+") (text . "") (js . "
+console.log( $( \"li\" ).get( -1 ) );
+      ") (text . "") (text . "A negative index is counted from the end of the matched set, so this
+example returns the last item in the list:
 
 ") (text . "") (text . "<li id=\"bar\">
 
 
-") (text . "")) ("examples" ((text . "") (text . "Selects all divs in the document and returns the DOM Elements as an
-Array, then uses the built-in reverse-method to reverse that array.
+") (text . "")) ("examples" ((text . "") (text . "Display the tag name of the click element.
 
 ") (text . "") (js . "
-function disp(divs) {
-  var a = [];
-  for (var i = 0; i < divs.length; i++) {
-    a.push(divs[i].innerHTML);
-  }
-  $(\"span\").text(a.join(\" \"));
-}
-disp( $(\"div\").get().reverse() );
-") (text . "") (css . "
-  span { color:red; }
-  ") (text . "") (html . "Reversed - <span></span>
-
-  <div>One</div>
-  <div>Two</div>
-  <div>Three</div>") (text . "")) ((text . "") (text . "Gives the tag name of the element clicked on.
-
-") (text . "") (js . "
-$(\"*\", document.body).click(function (e) {
-  e.stopPropagation();
-  var domEl = $(this).get(0);
-  $(\"span:first\").text(\"Clicked on - \" + domEl.tagName);
+$( \"*\", document.body ).click(function( event ) {
+  event.stopPropagation();
+  var domElement = $( this ).get( 0 );
+  $( \"span:first\" ).text( \"Clicked on - \" + domElement.nodeName );
 });
 ") (text . "") (css . "
-  span { color:red; }
-  div { background:yellow; }
-  ") (text . "") (html . "<span>&nbsp;</span>
-  <p>In this paragraph is an <span>important</span> section</p>
+  span {
+    color: red;
+  }
+  div {
+    background: yellow;
+  }
+") (text . "") (html . "
+<span>&nbsp;</span>
+<p>In this paragraph is an <span>important</span> section</p>
+<div><input type=\"text\"></div>
+") (text . ""))))) jquery-doc-hash)
 
-  <div><input type=\"text\" /></div>") (text . ""))))) jquery-doc-hash)
+(push "get" jquery-doc-methods)
+
+(puthash "get" (quote (("name" . "get") ("signatures" "get" nil) ("desc" (text . "Retrieve the DOM elements matched by the jQuery object.
+
+")) ("longdesc" (text . "") (text . "Consider a simple unordered list:
+
+
+") (text . "") (html . "
+<ul>
+  <li id=\"foo\">foo</li>
+  <li id=\"bar\">bar</li>
+</ul>
+      ") (text . "") (text . "Without a parameter, .get() returns an array of all of the elements:
+
+
+") (text . "") (js . "
+console.log( $( \"li\" ).get() );
+      ") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
+standard array:
+
+") (text . "") (text . "[<li id=\"foo\">, <li id=\"bar\">]
+
+
+") (text . "")) ("examples" ((text . "") (text . "Select all divs in the document and return the DOM Elements as an
+Array; then use the built-in reverse() method to reverse that array.
+
+") (text . "") (js . "
+function display( divs ) {
+  var a = [];
+  for ( var i = 0; i < divs.length; i++ ) {
+    a.push( divs[ i ].innerHTML );
+  }
+  $( \"span\" ).text( a.join(\" \") );
+}
+display( $( \"div\" ).get().reverse() );
+") (text . "") (css . "
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+Reversed - <span></span>
+
+<div>One</div>
+<div>Two</div>
+<div>Three</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "has" jquery-doc-methods)
 
@@ -5529,19 +6534,25 @@ any of its descendant elements matches the selector.
   <li>list item 3</li>
   <li>list item 4</li>
 </ul>
-") (text . "") (text . "We can apply this method to the set of list items as follows:
+    ") (text . "") (text . "We can apply this method to the set of list items as follows:
 
 
-") (text . "") (js . "$('li').has('ul').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for item 2, as it is the
+") (text . "") (js . "
+$( \"li\" ).has( \"ul\" ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for item 2, as it is the
 only <li> that has a <ul> among its descendants.
 
 ") (text . "")) ("examples" ((text . "") (text . "Check if an element is inside another.
 
 ") (text . "") (js . "
-  $(\"ul\").append(\"<li>\" + ($(\"ul\").has(\"li\").length ? \"Yes\" : \"No\") + \"</li>\");
-  $(\"ul\").has(\"li\").addClass(\"full\");
+$( \"ul\" ).append( \"<li>\" +
+  ( $( \"ul\" ).has( \"li\" ).length ? \"Yes\" : \"No\" ) +
+  \"</li>\" );
+$( \"ul\" ).has( \"li\" ).addClass( \"full\" );
 ") (text . "") (css . "
-  .full { border: 1px solid red; }
+  .full {
+    border: 1px solid red;
+  }
 ") (text . "") (html . "
 <ul><li>Does the UL contain an LI?</li></ul>
 ") (text . ""))))) jquery-doc-hash)
@@ -5556,88 +6567,116 @@ class.
 ")) ("longdesc" (text . "") (text . "Elements may have more than one class assigned to them. In HTML, this
 is represented by separating the class names with a space:
 
-") (text . "") (html . "<div id=\"mydiv\" class=\"foo bar\"></div>") (text . "") (text . "The .hasClass() method will return true if the class is assigned to an
+") (text . "") (html . "
+<div id=\"mydiv\" class=\"foo bar\"></div>
+    ") (text . "") (text . "The .hasClass() method will return true if the class is assigned to an
 element, even if other classes also are. For example, given the HTML
 above, the following will return true:
-") (text . "") (js . "$('#mydiv').hasClass('foo')") (text . "") (text . "As would:
+") (text . "") (js . "
+$( \"#mydiv\" ).hasClass( \"foo\" )
+    ") (text . "") (text . "As would:
 
-
-") (text . "") (js . "$('#mydiv').hasClass('bar')") (text . "") (text . "While this would return false:
-
-
-") (text . "") (js . "$('#mydiv').hasClass('quux')") (text . "")) ("examples" ((text . "") (text . "Looks for the paragraph that contains `selected` as a class.
 
 ") (text . "") (js . "
-$(\"div#result1\").append($(\"p:first\").hasClass(\"selected\").toString());
-$(\"div#result2\").append($(\"p:last\").hasClass(\"selected\").toString());
-$(\"div#result3\").append($(\"p\").hasClass(\"selected\").toString());
-") (text . "") (css . "
-  p { margin: 8px; font-size:16px; }
-  .selected { color:red; }
-  ") (text . "") (html . "
-  <p>This paragraph is black and is the first paragraph.</p>
-  <p class=\"selected\">This paragraph is red and is the second paragraph.</p>
+$( \"#mydiv\" ).hasClass( \"bar\" )
+    ") (text . "") (text . "While this would return false:
 
-  <div id=\"result1\">First paragraph has selected class: </div>
-  <div id=\"result2\">Second paragraph has selected class: </div>
-  <div id=\"result3\">At least one paragraph has selected class: </div>") (text . ""))))) jquery-doc-hash)
+
+") (text . "") (js . "
+$( \"#mydiv\" ).hasClass( \"quux\" )
+    ") (text . "")) ("examples" ((text . "") (text . "Looks for the paragraph that contains `selected` as a class.
+
+") (text . "") (js . "
+$( \"#result1\" ).append( $( \"p:first\" ).hasClass( \"selected\" ).toString() );
+$( \"#result2\" ).append( $( \"p:last\" ).hasClass( \"selected\" ).toString() );
+$( \"#result3\" ).append( $( \"p\" ).hasClass( \"selected\" ).toString() ) ;
+") (text . "") (css . "
+  p {
+    margin: 8px;
+    font-size: 16px;
+  }
+  .selected {
+    color: red;
+  }
+") (text . "") (html . "
+<p>This paragraph is black and is the first paragraph.</p>
+<p class=\"selected\">This paragraph is red and is the second paragraph.</p>
+<div id=\"result1\">First paragraph has selected class: </div>
+<div id=\"result2\">Second paragraph has selected class: </div>
+<div id=\"result3\">At least one paragraph has selected class: </div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "height" jquery-doc-methods)
 
 (puthash "height" (quote (("name" . "height") ("signatures" "height" nil) ("desc" (text . "Get the current computed height for the first element in the set of
 matched elements.
 
-")) ("longdesc" (text . "") (text . "The difference between .css(`height`) and .height() is that the latter
-returns a unit-less pixel value (for example, 400) while the former
-returns a value with units intact (for example, 400px). The .height()
-method is recommended when an element`s height needs to be used in a
-mathematical calculation.
+")) ("longdesc" (text . "") (text . "The difference between .css( \"height\" ) and .height() is that the
+latter returns a unit-less pixel value (for example, 400) while the
+former returns a value with units intact (for example, 400px). The
+.height() method is recommended when an element`s height needs to be
+used in a mathematical calculation.
 ") (text . "") (text . "[0042_04_01.png]
 
 
 ") (text . "") (text . "This method is also able to find the height of the window and document.
 
 
-") (text . "") (js . "$(window).height();   // returns height of browser viewport
-$(document).height(); // returns height of HTML document") (text . "") (text . "Note that .height() will always return the content height, regardless
-of the value of the CSS box-sizing property.
-
-") (text . "") (text . "  Note: Although style and script tags will report a value for
-  .width() or height() when absolutely positioned and given
-  display:block, it is strongly discouraged to call those methods on
-  these tags. In addition to being a bad practice, the results may
-  also prove unreliable.
+") (text . "") (js . "
+$( window ).height(); // returns height of browser viewport
+$( document ).height(); // returns height of HTML document
+      ") (text . "") (text . "Note that .height() will always return the content height, regardless
+of the value of the CSS box-sizing property. As of jQuery 1.8, this may
+require retrieving the CSS height plus box-sizing property and then
+subtracting any potential border and padding on each element when the
+element has box-sizing: border-box. To avoid this penalty, use .css(
+\"height\" ) rather than .height().
+") (text . "") (text . "Note: Although style and script tags will report a value for .width()
+or height() when absolutely positioned and given display:block, it is
+strongly discouraged to call those methods on these tags. In addition
+to being a bad practice, the results may also prove unreliable.
 ") (text . "")) ("examples" ((text . "") (text . "Show various heights. Note the values are from the iframe so might be
 smaller than you expected. The yellow highlight shows the iframe body.
 
 ") (text . "") (js . "
-    function showHeight(ele, h) {
-      $(\"div\").text(\"The height for the \" + ele +
-                    \" is \" + h + \"px.\");
-    }
-    $(\"#getp\").click(function () {
-      showHeight(\"paragraph\", $(\"p\").height());
-    });
-    $(\"#getd\").click(function () {
-      showHeight(\"document\", $(document).height());
-    });
-    $(\"#getw\").click(function () {
-      showHeight(\"window\", $(window).height());
-    });
-
+function showHeight( element, height ) {
+  $( \"div\" ).text( \"The height for the \" + element + \" is \" + height + \"px.\" );
+}
+$( \"#getp\" ).click(function() {
+  showHeight( \"paragraph\", $( \"p\" ).height() );
+});
+$( \"#getd\" ).click(function() {
+  showHeight( \"document\", $( document ).height() );
+});
+$( \"#getw\" ).click(function() {
+  showHeight( \"window\", $( window ).height() );
+});
 ") (text . "") (css . "
-  body { background:yellow; }
-  button { font-size:12px; margin:2px; }
-  p { width:150px; border:1px red solid; }
-  div { color:red; font-weight:bold; }
-  ") (text . "") (html . "<button id=\"getp\">Get Paragraph Height</button>
-  <button id=\"getd\">Get Document Height</button>
-  <button id=\"getw\">Get Window Height</button>
+  body {
+    background: yellow;
+  }
+  button {
+    font-size: 12px;
+    margin: 2px;
+  }
+  p {
+    width: 150px;
+    border: 1px red solid;
+  }
+  div {
+    color: red;
+    font-weight: bold;
+  }
+") (text . "") (html . "
+<button id=\"getp\">Get Paragraph Height</button>
+<button id=\"getd\">Get Document Height</button>
+<button id=\"getw\">Get Window Height</button>
 
-  <div>&nbsp;</div>
-  <p>
-    Sample paragraph to test height
-  </p>") (text . ""))))) jquery-doc-hash)
+<div>&nbsp;</div>
+<p>
+  Sample paragraph to test height
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "height" jquery-doc-methods)
 
@@ -5663,16 +6702,29 @@ of the value of the CSS box-sizing property.
 
 ") (text . "")) ("examples" ((text . "") (text . "To set the height of each div on click to 30px plus a color change.
 
-") (text . "") (js . "$(\"div\").one('click', function () {
-      $(this).height(30)
-             .css({cursor:\"auto\", backgroundColor:\"green\"});
-    });") (text . "") (css . "div { width:50px; height:70px; float:left; margin:5px;
-        background:rgb(255,140,0); cursor:pointer; }  ") (text . "") (html . "<div></div>
-  <div></div>
-
-  <div></div>
-  <div></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"div\" ).one( \"click\", function() {
+  $( this ).height( 30 ).css({
+    cursor: \"auto\",
+    backgroundColor: \"green\"
+  });
+});
+") (text . "") (css . "
+  div {
+    width: 50px;
+    height: 70px;
+    float: left;
+    margin: 5px;
+    background: rgb(255,140,0);
+    cursor: pointer;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "hide" jquery-doc-methods)
 
@@ -5684,7 +6736,7 @@ of the value of the CSS box-sizing property.
 
 " nil nil)) (("duration" "A string or number determining how long the animation will run.
 
-" "true" nil) ("easing" "A string indicating which easing function to use for the transition.
+" nil nil) ("easing" "A string indicating which easing function to use for the transition.
 
 " "true" nil) ("complete" "A function to call once the animation is complete.
 
@@ -5693,13 +6745,14 @@ of the value of the CSS box-sizing property.
 ")) ("longdesc" (text . "") (text . "With no parameters, the .hide() method is the simplest way to hide an
 element:
 
-") (text . "") (js . "$('.target').hide();
+") (text . "") (js . "
+$( \".target\" ).hide();
     ") (text . "") (text . "The matched elements will be hidden immediately, with no animation.
-This is roughly equivalent to calling .css(`display`, `none`), except
+This is roughly equivalent to calling .css( \"display\", \"none\" ), except
 that the value of the display property is saved in jQuery`s data cache
 so that display can later be restored to its initial value. If an
-element has a display value of inline, then is hidden and shown, it
-will once again be displayed inline.
+element has a display value of inline and is hidden then shown, it will
+once again be displayed inline.
 ") (text . "") (text . "When a duration, a plain object, or a \"complete\" function is provided,
 .hide() becomes an animation method. The .hide() method animates the
 width, height, and opacity of the matched elements simultaneously. When
@@ -5728,78 +6781,98 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
-With the element initially shown, we can hide it slowly:
-$('#clickme').click(function() {
-  $('#book').hide('slow', function() {
-    alert('Animation complete.');
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (js . "
+// With the element initially shown, we can hide it slowly:
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).hide( \"slow\", function() {
+    alert( \"Animation complete.\" );
   });
-});") (text . "") (text . "
+});
+    ") (text . "") (text . "
 
 ") (text . "")) ("examples" ((text . "") (text . "Hides all paragraphs then the link on click.
 
 ") (text . "") (js . "
-    $(\"p\").hide();
-    $(\"a\").click(function ( event ) {
-      event.preventDefault();
-      $(this).hide();
-    });
-") (text . "") (html . "<p>Hello</p>
-  <a href=\"#\">Click to hide me too</a>
-  <p>Here is another paragraph</p>") (text . "")) ((text . "") (text . "Animates all shown paragraphs to hide slowly, completing the animation
+$( \"p\" ).hide();
+$( \"a\" ).click(function( event ) {
+  event.preventDefault();
+  $( this ).hide();
+});
+") (text . "") (html . "
+<p>Hello</p>
+<a href=\"#\">Click to hide me too</a>
+<p>Here is another paragraph</p>
+") (text . "")) ((text . "") (text . "Animates all shown paragraphs to hide slowly, completing the animation
 within 600 milliseconds.
 
 ") (text . "") (js . "
-    $(\"button\").click(function () {
-      $(\"p\").hide(\"slow\");
-    });
+$( \"button\" ).click(function() {
+  $( \"p\" ).hide( \"slow\" );
+});
 ") (text . "") (css . "
-  p { background:#dad; font-weight:bold; }
-  ") (text . "") (html . "<button>Hide 'em</button>
-
-  <p>Hiya</p>
-  <p>Such interesting text, eh?</p>") (text . "")) ((text . "") (text . "Animates all spans (words in this case) to hide fastly, completing each
+  p {
+    background: #dad;
+    font-weight: bold;
+  }
+") (text . "") (html . "
+<button>Hide 'em</button>
+<p>Hiya</p>
+<p>Such interesting text, eh?</p>
+") (text . "")) ((text . "") (text . "Animates all spans (words in this case) to hide fastly, completing each
 animation within 200 milliseconds. Once each animation is done, it
 starts the next one.
 ") (text . "") (js . "
-$(\"#hidr\").click(function () {
-  $(\"span:last-child\").hide(\"fast\", function () {
-    // use callee so don't have to name the function
-    $(this).prev().hide(\"fast\", arguments.callee);
+$( \"#hider\" ).click(function() {
+  $( \"span:last-child\" ).hide( \"fast\", function() {
+    // Use arguments.callee so we don't need a named function
+    $( this ).prev().hide( \"fast\", arguments.callee );
   });
 });
-$(\"#showr\").click(function () {
-  $(\"span\").show(2000);
+$( \"#shower\" ).click(function() {
+  $( \"span\" ).show( 2000 );
 });
 ") (text . "") (css . "
-  span { background:#def3ca; padding:3px; float:left; }
-  ") (text . "") (html . "<button id=\"hidr\">Hide</button>
-<button id=\"showr\">Show</button>
+  span {
+    background: #def3ca;
+    padding: 3px;
+    float: left;
+  }
+") (text . "") (html . "
+<button id=\"hider\">Hide</button>
+<button id=\"shower\">Show</button>
 <div>
-
   <span>Once</span> <span>upon</span> <span>a</span>
   <span>time</span> <span>there</span> <span>were</span>
   <span>three</span> <span>programmers...</span>
-
-</div>") (text . "")) ((text . "") (text . "Hides the divs when clicked over 2 seconds, then removes the div
+</div>
+") (text . "")) ((text . "") (text . "Hides the divs when clicked over 2 seconds, then removes the div
 element when its hidden. Try clicking on more than one box at a time.
 
 ") (text . "") (js . "
-for (var i = 0; i < 5; i++) {
-  $(\"<div>\").appendTo(document.body);
+for ( var i = 0; i < 5; i++ ) {
+  $( \"<div>\" ).appendTo( document.body );
 }
-$(\"div\").click(function () {
-  $(this).hide(2000, function () {
-    $(this).remove();
+$( \"div\" ).click(function() {
+  $( this ).hide( 2000, function() {
+    $( this ).remove();
   });
 });
 ") (text . "") (css . "
-  div { background:#ece023; width:30px;
-        height:40px; margin:2px; float:left; }
-  ") (text . "") (html . "<div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    background: #ece023;
+    width: 30px;
+    height: 40px;
+    margin: 2px;
+    float: left;
+  }
+") (text . "") (html . "
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "hover" jquery-doc-methods)
 
@@ -5813,50 +6886,63 @@ mouse pointer enters and leaves the elements.
 ")) ("longdesc" (text . "") (text . "The .hover() method binds handlers for both mouseenter and mouseleave
 events. You can use it to simply apply behavior to an element during
 the time the mouse is within the element.
-") (text . "") (text . "Calling $(selector).hover(handlerIn, handlerOut) is shorthand for:
+") (text . "") (text . "Calling $( selector ).hover( handlerIn, handlerOut ) is shorthand for:
 
 
-") (text . "") (js . "$(selector).mouseenter(handlerIn).mouseleave(handlerOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
+") (text . "") (js . "
+$( selector ).mouseenter( handlerIn ).mouseleave( handlerOut );
+      ") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
 details.
 
 ") (text . "")) ("examples" ((text . "") (text . "To add a special style to list items that are being hovered over, try:
 
 ") (text . "") (js . "
-$(\"li\").hover(
-  function () {
-    $(this).append($(\"<span> ***</span>\"));
-  },
-  function () {
-    $(this).find(\"span:last\").remove();
+$( \"li\" ).hover(
+  function() {
+    $( this ).append( $( \"<span> ***</span>\" ) );
+  }, function() {
+    $( this ).find( \"span:last\" ).remove();
   }
 );
 
-//li with fade class
-$(\"li.fade\").hover(function(){$(this).fadeOut(100);$(this).fadeIn(500);});
-
+$( \"li.fade\" ).hover(function() {
+  $( this ).fadeOut( 100 );
+  $( this ).fadeIn( 500 );
+});
 ") (text . "") (css . "
-  ul { margin-left:20px; color:blue; }
-  li { cursor:default; }
-  span { color:red; }
-") (text . "") (html . "<ul>
-    <li>Milk</li>
-    <li>Bread</li>
-    <li class='fade'>Chips</li>
-
-    <li class='fade'>Socks</li>
-  </ul>") (text . "")) ((text . "") (text . "To add a special style to table cells that are being hovered over, try:
-
-
-") (text . "") (js . "$(\"td\").hover(
-  function () {
-    $(this).addClass(\"hover\");
-  },
-  function () {
-    $(this).removeClass(\"hover\");
+  ul {
+    margin-left: 20px;
+    color: blue;
   }
-);") (text . "")) ((text . "") (text . "To unbind the above example use:
+  li {
+    cursor: default;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<ul>
+  <li>Milk</li>
+  <li>Bread</li>
+  <li class=\"fade\">Chips</li>
+  <li class=\"fade\">Socks</li>
+</ul>
+") (text . "")) ((text . "") (text . "To add a special style to table cells that are being hovered over, try:
 
-") (text . "") (js . "$(\"td\").off('mouseenter mouseleave');") (text . ""))))) jquery-doc-hash)
+
+") (text . "") (js . "
+$( \"td\" ).hover(
+  function() {
+    $( this ).addClass( \"hover\" );
+  }, function() {
+    $( this ).removeClass( \"hover\" );
+  }
+);
+") (text . "")) ((text . "") (text . "To unbind the above example use:
+
+") (text . "") (js . "
+$( \"td\" ).off( \"mouseenter mouseleave\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "hover" jquery-doc-methods)
 
@@ -5873,36 +6959,51 @@ differently within the handler depending on the event.type.
 ") (text . "") (text . "Calling $(selector).hover(handlerInOut) is shorthand for:
 
 
-") (text . "") (js . "$(selector).on(\"mouseenter mouseleave\", handlerInOut);") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
+") (text . "") (js . "
+$( selector ).on( \"mouseenter mouseleave\", handlerInOut );
+      ") (text . "") (text . "See the discussions for .mouseenter() and .mouseleave() for more
 details.
 
 ") (text . "")) ("examples" ((text . "") (text . "Slide the next sibling LI up or down on hover, and toggle a class.
 
 ") (text . "") (js . "
-$(\"li\")
-.filter(\":odd\")
-.hide()
- .end()
-.filter(\":even\")
-.hover(
-  function () {
-    $(this).toggleClass(\"active\")
-      .next().stop(true, true).slideToggle();
-  }
-);
+$( \"li\" )
+  .filter( \":odd\" )
+    .hide()
+  .end()
+  .filter( \":even\" )
+    .hover(function() {
+      $( this )
+        .toggleClass( \"active\" )
+        .next()
+          .stop( true, true )
+          .slideToggle();
+    });
 ") (text . "") (css . "
-  ul { margin-left:20px; color:blue; }
-  li { cursor:default; }
-  li.active { background:black;color:white; }
-  span { color:red; }
-  ") (text . "") (html . "<ul>
-    <li>Milk</li>
-    <li>White</li>
-    <li>Carrots</li>
-    <li>Orange</li>
-    <li>Broccoli</li>
-    <li>Green</li>
-  </ul>") (text . ""))))) jquery-doc-hash)
+  ul {
+    margin-left: 20px;
+    color: blue;
+  }
+  li {
+    cursor: default;
+  }
+  li.active {
+    background: black;
+    color: white;
+  }
+  span {
+    color:red;
+  }
+") (text . "") (html . "
+<ul>
+  <li>Milk</li>
+  <li>White</li>
+  <li>Carrots</li>
+  <li>Orange</li>
+  <li>Broccoli</li>
+  <li>Green</li>
+</ul>
+") (text . ""))))) jquery-doc-hash)
 
 (push "html" jquery-doc-methods)
 
@@ -5916,15 +7017,21 @@ elements.
 element. If the selector expression matches more than one element, only
 the first match will have its HTML content returned. Consider this
 code:
-") (text . "") (js . "$('div.demo-container').html();") (text . "") (text . "In order for the following <div>`s content to be retrieved, it would
+") (text . "") (js . "
+$( \"div.demo-container\" ).html();
+      ") (text . "") (text . "In order for the following <div>`s content to be retrieved, it would
 have to be the first one with class=\"demo-container\" in the document:
 
-") (text . "") (html . "<div class=\"demo-container\">
+") (text . "") (html . "
+<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
-  </div>") (text . "") (text . "The result would look like this:
+</div>
+      ") (text . "") (text . "The result would look like this:
 
 
-") (text . "") (html . "<div class=\"demo-box\">Demonstration Box</div>") (text . "") (text . "This method uses the browser`s innerHTML property. Some browsers may
+") (text . "") (html . "
+<div class=\"demo-box\">Demonstration Box</div>
+      ") (text . "") (text . "This method uses the browser`s innerHTML property. Some browsers may
 not return HTML that exactly replicates the HTML source in an original
 document. For example, Internet Explorer sometimes leaves off the
 quotes around attribute values if they contain only alphanumeric
@@ -5932,24 +7039,34 @@ characters.
 ") (text . "")) ("examples" ((text . "") (text . "Click a paragraph to convert it from html to text.
 
 ") (text . "") (js . "
-$(\"p\").click(function () {
-  var htmlStr = $(this).html();
-  $(this).text(htmlStr);
+$( \"p\" ).click(function() {
+  var htmlString = $( this ).html();
+  $( this ).text( htmlString );
 });
 ") (text . "") (css . "
-  p { margin:8px; font-size:20px; color:blue;
-      cursor:pointer; }
-  b { text-decoration:underline; }
-  button { cursor:pointer; }
-  ") (text . "") (html . "<p>
-    <b>Click</b> to change the <span id=\"tag\">html</span>
-  </p>
-  <p>
-    to a <span id=\"text\">text</span> node.
-  </p>
-  <p>
-    This <button name=\"nada\">button</button> does nothing.
-  </p>") (text . ""))))) jquery-doc-hash)
+  p {
+    margin: 8px;
+    font-size: 20px;
+    color: blue;
+    cursor: pointer;
+  }
+  b {
+    text-decoration: underline;
+  }
+  button {
+    cursor: pointer;
+  }
+") (text . "") (html . "
+<p>
+  <b>Click</b> to change the <span id=\"tag\">html</span>
+</p>
+<p>
+  to a <span id=\"text\">text</span> node.
+</p>
+<p>
+  This <button name=\"nada\">button</button> does nothing.
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "html" jquery-doc-methods)
 
@@ -5973,24 +7090,32 @@ new content.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"demo-container\">
+") (text . "") (html . "
+<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
-</div>") (text . "") (text . "The content of <div class=\"demo-container\"> can be set like this:
+</div>
+      ") (text . "") (text . "The content of <div class=\"demo-container\"> can be set like this:
 
 
-") (text . "") (js . "$('div.demo-container')
-  .html('<p>All new content. <em>You bet!</em></p>');") (text . "") (text . "That line of code will replace everything inside <div
+") (text . "") (js . "
+$( \"div.demo-container\" )
+  .html( \"<p>All new content. <em>You bet!</em></p>\" );
+      ") (text . "") (text . "That line of code will replace everything inside <div
 class=\"demo-container\">:
 
-") (text . "") (html . "<div class=\"demo-container\">
+") (text . "") (html . "
+<div class=\"demo-container\">
   <p>All new content. <em>You bet!</em></p>
-</div>") (text . "") (text . "As of jQuery 1.4, the .html() method allows the HTML content to be set
+</div>
+      ") (text . "") (text . "As of jQuery 1.4, the .html() method allows the HTML content to be set
 by passing in a function.
 
-") (text . "") (js . "$('div.demo-container').html(function() {
-  var emph = '<em>' + $('p').length + ' paragraphs!</em>';
-  return '<p>All new content for ' + emph + '</p>';
-});") (text . "") (text . "Given a document with six paragraphs, this example will set the HTML of
+") (text . "") (js . "
+$( \"div.demo-container\" ).html(function() {
+  var emphasis = \"<em>\" + $( \"p\" ).length + \" paragraphs!</em>\";
+  return \"<p>All new content for \" + emphasis + \"</p>\";
+});
+      ") (text . "") (text . "Given a document with six paragraphs, this example will set the HTML of
 <div class=\"demo-container\"> to <p>All new content for <em>6
 paragraphs!</em></p>.
 ") (text . "") (text . "This method uses the browser`s innerHTML property. Some browsers may
@@ -6003,28 +7128,40 @@ of a separate compatibility layer.
 text content of an HTML element may corrupt the text nodes of its
 children that are being removed from the document as a result of the
 operation. If you are keeping references to these DOM elements and need
-them to be unchanged, use .empty().html(string) instead of
+them to be unchanged, use .empty().html( string ) instead of
 .html(string) so that the elements are removed from the document before
 the new string is assigned to the element.
 ") (text . "")) ("examples" ((text . "") (text . "Add some html to each div.
 
-") (text . "") (js . "$(\"div\").html(\"<span class='red'>Hello <b>Again</b></span>\");") (text . "") (css . "
-  .red { color:red; }
-  ") (text . "") (html . "<span>Hello</span>
-  <div></div>
-  <div></div>
-  <div></div>") (text . "")) ((text . "") (text . "Add some html to each div then immediately do further manipulations to
+") (text . "") (js . "
+$( \"div\" ).html( \"<span class='red'>Hello <b>Again</b></span>\" );
+") (text . "") (css . "
+  .red {
+    color: red;
+  }
+") (text . "") (html . "
+<span>Hello</span>
+<div></div>
+<div></div>
+<div></div>
+") (text . "")) ((text . "") (text . "Add some html to each div then immediately do further manipulations to
 the inserted html.
 
 ") (text . "") (js . "
-    $(\"div\").html(\"<b>Wow!</b> Such excitement...\");
-    $(\"div b\").append(document.createTextNode(\"!!!\"))
-              .css(\"color\", \"red\");
+$( \"div\" ).html( \"<b>Wow!</b> Such excitement...\" );
+$( \"div b\" )
+  .append( document.createTextNode( \"!!!\" ) )
+  .css( \"color\", \"red\" );
 ") (text . "") (css . "
-  div { color:blue; font-size:18px; }
-  ") (text . "") (html . "<div></div>
-  <div></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    color: blue;
+    font-size: 18px;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "index" jquery-doc-methods)
 
@@ -6060,13 +7197,15 @@ Suppose we have a simple unordered list on the page:
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-") (text . "") (text . "If we retrieve one of the three list items (for example, through a DOM
+    ") (text . "") (text . "If we retrieve one of the three list items (for example, through a DOM
 function or as the context to an event handler), .index() can search
 for this list item within the set of matched elements:
 ") (text . "") (js . "
-var listItem = document.getElementById('bar');
-alert('Index: ' + $('li').index(listItem));
-We get back the zero-based position of the list item:
+var listItem = document.getElementById( \"bar\" );
+alert( \"Index: \" + $( \"li\" ).index( listItem ) );
+    ") (text . "") (text . "We get back the zero-based position of the list item:
+
+
 ") (text . "") (text . "Index: 1
 
 
@@ -6074,9 +7213,9 @@ We get back the zero-based position of the list item:
 three list items, .index() will search for that list item:
 
 ") (text . "") (js . "
-var listItem = $('#bar');
-alert('Index: ' + $('li').index(listItem));
-") (text . "") (text . "We get back the zero-based position of the list item:
+var listItem = $( \"#bar\" );
+alert( \"Index: \" + $( \"li\" ).index( listItem ) );
+    ") (text . "") (text . "We get back the zero-based position of the list item:
 
 
 ") (text . "") (text . "Index: 1
@@ -6086,9 +7225,9 @@ alert('Index: ' + $('li').index(listItem));
 argument contains more than one element, the first element within the
 matched set of elements will be used.
 ") (text . "") (js . "
-var listItems = $('li:gt(0)');
-alert('Index: ' + $('li').index(listItems));
-") (text . "") (text . "We get back the zero-based position of the first list item within the
+var listItems = $( \"li:gt(0)\" );
+alert( \"Index: \" + $( \"li\" ).index( listItems ) );
+    ") (text . "") (text . "We get back the zero-based position of the first list item within the
 matched set:
 
 ") (text . "") (text . "Index: 1
@@ -6098,9 +7237,9 @@ matched set:
 as a jQuery selector string. The first element among the object`s
 matched elements which also matches this selector is located.
 ") (text . "") (js . "
-var listItem = $('#bar');
-alert('Index: ' + listItem.index('li'));
-") (text . "") (text . "We get back the zero-based position of the list item:
+var listItem = $( \"#bar\" );
+alert( \"Index: \" + listItem.index( \"li\" ) );
+    ") (text . "") (text . "We get back the zero-based position of the list item:
 
 
 ") (text . "") (text . "Index: 1
@@ -6109,69 +7248,122 @@ alert('Index: ' + listItem.index('li'));
 ") (text . "") (text . "If we omit the argument, .index() will return the position of the first
 element within the set of matched elements in relation to its siblings:
 
-") (text . "") (js . "alert('Index: ' + $('#bar').index());") (text . "") (text . "Again, we get back the zero-based position of the list item:
+") (text . "") (js . "
+alert( \"Index: \" + $( \"#bar\" ).index() );
+    ") (text . "") (text . "Again, we get back the zero-based position of the list item:
 
 
 ") (text . "") (text . "Index: 1
 
 
-") (text . "")) ("examples" ((text . "") (text . "On click, returns the index (based zero) of that div in the page.
+") (text . "")) ("examples" ((text . "") (text . "On click, returns the index (zero-based) of that div in the page.
 
 ") (text . "") (js . "
-$(\"div\").click(function () {
-  // this is the dom element clicked
-  var index = $(\"div\").index(this);
-  $(\"span\").text(\"That was div index #\" + index);
+$( \"div\" ).click(function() {
+  // `this` is the DOM element that was clicked
+  var index = $( \"div\" ).index( this );
+  $( \"span\" ).text( \"That was div index #\" + index );
 });
 ") (text . "") (css . "
-div { background:yellow; margin:5px; }
-span { color:red; }
-") (text . "") (html . "<span>Click a div!</span>
+  div {
+    background: yellow;
+    margin: 5px;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<span>Click a div!</span>
 <div>First div</div>
 <div>Second div</div>
-<div>Third div</div>") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar.
+<div>Third div</div>
+") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar.
 
-") (text . "") (css . "div { font-weight: bold; color: #090; }") (text . "") (js . "var listItem = $('#bar');
-    $('div').html( 'Index: ' + $('li').index(listItem) );") (text . "") (html . "<ul>
+") (text . "") (css . "
+  div {
+    font-weight: bold;
+    color: #090;
+  }
+") (text . "") (js . "
+var listItem = $( \"#bar\" );
+$( \"div\" ).html( \"Index: \" + $( \"li\" ).index( listItem ) );
+") (text . "") (html . "
+<ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-<div></div>") (text . "")) ((text . "") (text . "Returns the index for the first item in the jQuery collection.
+<div></div>
+") (text . "")) ((text . "") (text . "Returns the index for the first item in the jQuery collection.
 
-") (text . "") (css . "div { font-weight: bold; color: #090; }") (text . "") (js . "var listItems = $('li:gt(0)');
-$('div').html( 'Index: ' + $('li').index(listItems) );
-") (text . "") (html . "<ul>
+") (text . "") (css . "
+  div {
+    font-weight: bold;
+    color: #090;
+  }
+") (text . "") (js . "
+var listItems = $( \"li:gt(0)\" \");
+$( \"div\" ).html( \"Index: \" + $( \"li\" ).index( listItems ) );
+") (text . "") (html . "
+<ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-<div></div>") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar in relation to all <li>
+<div></div>
+") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar in relation to all <li>
 elements.
 
-") (text . "") (css . "div { font-weight: bold; color: #090; }") (text . "") (js . "$('div').html('Index: ' +  $('#bar').index('li') );") (text . "") (html . "<ul>
+") (text . "") (css . "
+  div {
+    font-weight: bold;
+    color: #090;
+  }
+") (text . "") (js . "
+$( \"div\" ).html( \"Index: \" +  $( \"#bar\" ).index( \"li\" ) );
+") (text . "") (html . "
+<ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-<div></div>") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar in relation to its
+<div></div>
+") (text . "")) ((text . "") (text . "Returns the index for the element with ID bar in relation to its
 siblings.
 
-") (text . "") (css . "div { font-weight: bold; color: #090; }") (text . "") (js . "var barIndex = $('#bar').index();
-$('div').html( 'Index: ' +  barIndex );") (text . "") (html . "<ul>
+") (text . "") (css . "
+  div {
+    font-weight: bold;
+    color: #090;
+  }
+") (text . "") (js . "
+var barIndex = $( \"#bar\" ).index();
+$( \"div\" ).html( \"Index: \" +  barIndex );
+") (text . "") (html . "
+<ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-<div></div>") (text . "")) ((text . "") (text . "Returns -1, as there is no element with ID foobar.
+<div></div>
+") (text . "")) ((text . "") (text . "Returns -1, as there is no element with ID foobar.
 
-") (text . "") (css . "div { font-weight: bold; color: #090; }") (text . "") (js . "var foobar = $(\"li\").index( $('#foobar') );
-$('div').html('Index: ' + foobar);") (text . "") (html . "<ul>
+") (text . "") (css . "
+  div {
+    font-weight: bold;
+    color: #090;
+  }
+") (text . "") (js . "
+var foobar = $( \"li\" ).index( $( \"#foobar\" ) );
+$( \"div\" ).html( \"Index: \" + foobar );
+") (text . "") (html . "
+<ul>
   <li id=\"foo\">foo</li>
   <li id=\"bar\">bar</li>
   <li id=\"baz\">baz</li>
 </ul>
-<div></div>") (text . ""))))) jquery-doc-hash)
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "innerHeight" jquery-doc-methods)
 
@@ -6189,8 +7381,19 @@ these, use .height() instead.
 
 ") (text . "")) ("examples" ((text . "") (text . "Get the innerHeight of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"innerHeight:\" + p.innerHeight() );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; }") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text( \"innerHeight:\" + p.innerHeight() );
+") (text . "") (css . "
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "innerWidth" jquery-doc-methods)
 
@@ -6208,14 +7411,25 @@ these, use .width() instead.
 
 ") (text . "")) ("examples" ((text . "") (text . "Get the innerWidth of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"innerWidth:\" + p.innerWidth() );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; } ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text( \"innerWidth:\" + p.innerWidth() );
+") (text . "") (css . "
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "insertAfter" jquery-doc-methods)
 
-(puthash "insertAfter" (quote (("name" . "insertAfter") ("signatures" "insertAfter" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
-elements will be inserted after the element(s) specified by this
-parameter.
+(puthash "insertAfter" (quote (("name" . "insertAfter") ("signatures" "insertAfter" (("target" "A selector, element, array of elements, HTML string, or jQuery object;
+the matched set of elements will be inserted after the element(s)
+specified by this parameter.
 " nil nil))) ("desc" (text . "Insert every element in the set of matched elements after the target.
 
 ")) ("longdesc" (text . "") (text . "The .after() and .insertAfter() methods perform the same task. The
@@ -6228,47 +7442,68 @@ is inserted after the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
-  <div class=\"inner\">Hello</div>
-  <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "We can create content and insert it after several elements at once:
-
-
-") (text . "") (js . "$('<p>Test</p>').insertAfter('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
-
-
-") (text . "") (html . "<div class=\"container\">
-  <h2>Greetings</h2>
-  <div class=\"inner\">Hello</div>
-  <p>Test</p>
-  <div class=\"inner\">Goodbye</div>
-  <p>Test</p>
-</div>") (text . "") (text . "We can also select an element on the page and insert it after another:
-
-
-") (text . "") (js . "$('h2').insertAfter($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
-elsewhere in the DOM, it will be moved after the target (not cloned):
-
-") (text . "") (html . "<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
 </div>
-<h2>Greetings</h2>") (text . "") (text . "If there is more than one target element, however, cloned copies of the
-inserted element will be created for each target after the first, and
-that new set (the original element plus clones) is returned.
-") (text . "")) ("examples" ((text . "") (text . "Insert all paragraphs after an element with id of \"foo\". Same as
-$(\"#foo\").after(\"p\")
+    ") (text . "") (text . "We can create content and insert it after several elements at once:
+
 
 ") (text . "") (js . "
-$(\"p\").insertAfter(\"#foo\");
-") (text . "") (css . "#foo { background:yellow; }") (text . "") (html . "<p> is what I said... </p><div id=\"foo\">FOO!</div>") (text . ""))))) jquery-doc-hash)
+$( \"<p>Test</p>\" ).insertAfter( \".inner\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
+
+
+") (text . "") (html . "
+<div class=\"container\">
+  <h2>Greetings</h2>
+  <div class=\"inner\">Hello</div>
+  <p>Test</p>
+  <div class=\"inner\">Goodbye</div>
+  <p>Test</p>
+</div>
+    ") (text . "") (text . "We can also select an element on the page and insert it after another:
+
+
+") (text . "") (js . "
+$( \"h2\" ).insertAfter( $( \".container\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
+elsewhere in the DOM, it will be moved after the target (not cloned)
+and a new set consisting of the inserted element is returned:
+") (text . "") (html . "
+<div class=\"container\">
+  <div class=\"inner\">Hello</div>
+  <div class=\"inner\">Goodbye</div>
+</div>
+<h2>Greetings</h2>
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+inserted element will be created for each target after the first, and
+that new set (the original element plus clones) is returned.
+") (text . "") (text . "Before jQuery 1.9, the append-to-single-element case did not create a
+new set, but instead returned the original set which made it difficult
+to use the .end() method reliably when being used with an unknown
+number of elements.
+") (text . "")) ("examples" ((text . "") (text . "Insert all paragraphs after an element with id of \"foo\". Same as $(
+\"#foo\" ).after( \"p\" )
+
+") (text . "") (js . "
+$( \"p\" ).insertAfter( \"#foo\" );
+") (text . "") (css . "
+  #foo {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p> is what I said... </p>
+<div id=\"foo\">FOO!</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "insertBefore" jquery-doc-methods)
 
-(puthash "insertBefore" (quote (("name" . "insertBefore") ("signatures" "insertBefore" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
-elements will be inserted before the element(s) specified by this
-parameter.
+(puthash "insertBefore" (quote (("name" . "insertBefore") ("signatures" "insertBefore" (("target" "A selector, element, array of elements, HTML string, or jQuery object;
+the matched set of elements will be inserted before the element(s)
+specified by this parameter.
 " nil nil))) ("desc" (text . "Insert every element in the set of matched elements before the target.
 
 ")) ("longdesc" (text . "") (text . "The .before() and .insertBefore() methods perform the same task. The
@@ -6281,41 +7516,62 @@ is inserted before the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "We can create content and insert it before several elements at once:
+</div>
+    ") (text . "") (text . "We can create content and insert it before several elements at once:
 
 
-") (text . "") (js . "$('<p>Test</p>').insertBefore('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \"<p>Test</p>\" ).insertBefore( \".inner\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <p>Test</p>
   <div class=\"inner\">Hello</div>
   <p>Test</p>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "We can also select an element on the page and insert it before another:
+</div>
+    ") (text . "") (text . "We can also select an element on the page and insert it before another:
 
 
-") (text . "") (js . "$('h2').insertBefore($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
-elsewhere in the DOM, it will be moved before the target (not cloned):
-
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (js . "
+$( \"h2\" ).insertBefore( $( \".container\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
+elsewhere in the DOM, it will be moved before the target (not cloned)
+and a new set consisting of the inserted element is returned:
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+</div>
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first, and
 that new set (the original element plus clones) is returned.
-") (text . "")) ("examples" ((text . "") (text . "Insert all paragraphs before an element with id of \"foo\". Same as
-$(\"#foo\").before(\"p\")
+") (text . "") (text . "Before jQuery 1.9, the append-to-single-element case did not create a
+new set, but instead returned the original set which made it difficult
+to use the .end() method reliably when being used with an unknown
+number of elements.
+") (text . "")) ("examples" ((text . "") (text . "Insert all paragraphs before an element with id of \"foo\". Same as $(
+\"#foo\" ).before( \"p\" )
 
 ") (text . "") (js . "
-$(\"p\").insertBefore(\"#foo\");
-") (text . "") (css . "#foo { background:yellow; }") (text . "") (html . "<div id=\"foo\">FOO!</div><p>I would like to say: </p>") (text . ""))))) jquery-doc-hash)
+$( \"p\" ).insertBefore( \"#foo\" );
+") (text . "") (css . "
+  #foo {
+    background: yellow;
+  }
+") (text . "") (html . "
+<div id=\"foo\">FOO!</div>
+<p>I would like to say: </p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "is" jquery-doc-methods)
 
@@ -6345,15 +7601,17 @@ element:
   <li><span>list item 2</span></li>
   <li>list item 3</li>
 </ul>
-") (text . "") (text . "You can attach a click handler to the <ul> element, and then limit the
+    ") (text . "") (text . "You can attach a click handler to the <ul> element, and then limit the
 code to be triggered only when a list item itself, not one of its
 children, is clicked:
-") (text . "") (js . "$(\"ul\").click(function(event) {
-  var $target = $(event.target);
-  if ( $target.is(\"li\") ) {
-    $target.css(\"background-color\", \"red\");
+") (text . "") (js . "
+$( \"ul\" ).click(function( event ) {
+  var target = $( event.target );
+  if ( target.is( \"li\" ) ) {
+    target.css( \"background-color\", \"red\" );
   }
-});") (text . "") (text . "Now, when the user clicks on the word \"list\" in the first item or
+});
+    ") (text . "") (text . "Now, when the user clicks on the word \"list\" in the first item or
 anywhere in the third item, the clicked list item will be given a red
 background. However, when the user clicks on item 1 in the first item
 or anywhere in the second item, nothing will occur, because in those
@@ -6362,17 +7620,16 @@ respectively.
 ") (text . "") (text . "Prior to jQuery 1.7, in selector strings with positional selectors such
 as :first, :gt(), or :even, the positional filtering is done against
 the jQuery object passed to .is(), not against the containing document.
-So for the HTML shown above, an expression such as
-$(\"li:first\").is(\"li:last\") returns true, but
-$(\"li:first-child\").is(\"li:last-child\") returns false. In addition, a
-bug in Sizzle prevented many positional selectors from working
-properly. These two factors made positional selectors almost unusable
-in filters.
+So for the HTML shown above, an expression such as $( \"li:first\" ).is(
+\"li:last\" ) returns true, but $( \"li:first-child\" ).is( \"li:last-child\"
+) returns false. In addition, a bug in Sizzle prevented many positional
+selectors from working properly. These two factors made positional
+selectors almost unusable in filters.
 ") (text . "") (text . "Starting with jQuery 1.7, selector strings with positional selectors
 apply the selector against the document, and then determine whether the
 first element of the current jQuery set matches any of the resulting
-elements. So for the HTML shown above, an expression such as
-$(\"li:first\").is(\"li:last\") returns false. Note that since positional
+elements. So for the HTML shown above, an expression such as $(
+\"li:first\" ).is( \"li:last\" ) returns false. Note that since positional
 selectors are jQuery additions and not W3C standard, we recommend using
 the W3C selectors whenever feasible.
 ") (text . "") (text . " Using a Function
@@ -6391,104 +7648,155 @@ given a somewhat more involved HTML snippet:
   <li>list item 4</li>
   <li>list item 5</li>
 </ul>
-") (text . "") (text . "You can attach a click handler to every <li> that evaluates the number
+    ") (text . "") (text . "You can attach a click handler to every <li> that evaluates the number
 of <strong> elements within the clicked <li> at that time like so:
 
 ") (text . "") (js . "
-$(\"li\").click(function() {
-  var $li = $(this),
-    isWithTwo = $li.is(function() {
-      return $('strong', this).length === 2;
+$( \"li\" ).click(function() {
+  var li = $( this ),
+    isWithTwo = li.is(function() {
+      return $( \"strong\", this ).length === 2;
     });
   if ( isWithTwo ) {
-    $li.css(\"background-color\", \"green\");
+    li.css( \"background-color\", \"green\" );
   } else {
-    $li.css(\"background-color\", \"red\");
+    li.css( \"background-color\", \"red\" );
   }
 });
-") (text . "")) ("examples" ((text . "") (text . "Shows a few ways is() can be used inside an event handler.
+    ") (text . "")) ("examples" ((text . "") (text . "Shows a few ways is() can be used inside an event handler.
 
 ") (text . "") (js . "
-  $(\"div\").one('click', function () {
-    if ($(this).is(\":first-child\")) {
-      $(\"p\").text(\"It's the first div.\");
-    } else if ($(this).is(\".blue,.red\")) {
-      $(\"p\").text(\"It's a blue or red div.\");
-    } else if ($(this).is(\":contains('Peter')\")) {
-      $(\"p\").text(\"It's Peter!\");
-    } else {
-      $(\"p\").html(\"It's nothing <em>special</em>.\");
-    }
-    $(\"p\").hide().slideDown(\"slow\");
-    $(this).css({\"border-style\": \"inset\", cursor:\"default\"});
+$( \"div\" ).one( \"click\", function() {
+  if ( $( this ).is( \":first-child\" ) ) {
+    $( \"p\" ).text( \"It's the first div.\" );
+  } else if ( $( this ).is( \".blue,.red\" ) ) {
+    $( \"p\" ).text( \"It's a blue or red div.\" );
+  } else if ( $( this ).is( \":contains('Peter')\" ) ) {
+    $( \"p\" ).text( \"It's Peter!\" );
+  } else {
+    $( \"p\" ).html( \"It's nothing <em>special</em>.\" );
+  }
+  $( \"p\" ).hide().slideDown( \"slow\" );
+  $( this ).css({
+    \"border-style\": \"inset\",
+    cursor: \"default\"
   });
+});
 ") (text . "") (css . "
-  div { width:60px; height:60px; margin:5px; float:left;
-      border:4px outset; background:green; text-align:center;
-      font-weight:bolder; cursor:pointer; }
-  .blue { background:blue; }
-  .red { background:red; }
-  span { color:white; font-size:16px; }
-  p { color:red; font-weight:bolder; background:yellow;
-      margin:3px; clear:left; display:none; }
-") (text . "") (html . "<div></div>
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
+    border: 4px outset;
+    background: green;
+    text-align: center;
+    font-weight: bolder;
+    cursor: pointer;
+  }
+  .blue {
+    background: blue;
+  }
+  .red {
+    background: red;
+  }
+  span {
+    color: white;
+    font-size: 16px;
+  }
+  p {
+    color: red;
+    font-weight: bolder;
+    background: yellow;
+    margin: 3px;
+    clear: left;
+    display: none;
+  }
+") (text . "") (html . "
+<div></div>
 <div class=\"blue\"></div>
 <div></div>
 <div class=\"red\"></div>
-
 <div><br/><span>Peter</span></div>
 <div class=\"blue\"></div>
-<p>&nbsp;</p>") (text . "")) ((text . "") (text . "Returns true, because the parent of the input is a form element.
+<p>&nbsp;</p>
+") (text . "")) ((text . "") (text . "Returns true, because the parent of the input is a form element.
 
 ") (text . "") (js . "
-  var isFormParent = $(\"input[type='checkbox']\").parent().is(\"form\");
-  $(\"div\").text(\"isFormParent = \" + isFormParent);
-") (text . "") (css . "div { color:red; }") (text . "") (html . "<form><input type=\"checkbox\" /></form>
-<div></div>") (text . "")) ((text . "") (text . "Returns false, because the parent of the input is a p element.
+var isFormParent = $( \"input[type='checkbox']\" ).parent().is( \"form\" );
+$( \"div\" ).text( \"isFormParent = \" + isFormParent );
+") (text . "") (css . "
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<form>
+  <input type=\"checkbox\">
+</form>
+<div></div>
+") (text . "")) ((text . "") (text . "Returns false, because the parent of the input is a p element.
 
 ") (text . "") (js . "
-  var isFormParent = $(\"input[type='checkbox']\").parent().is(\"form\");
-  $(\"div\").text(\"isFormParent = \" + isFormParent);
-") (text . "") (css . "div { color:red; }") (text . "") (html . "<form><p><input type=\"checkbox\" /></p></form>
-  <div></div>") (text . "")) ((text . "") (text . "Checks against an existing collection of alternating list elements.
+var isFormParent = $( \"input[type='checkbox']\" ).parent().is( \"form\" );
+$( \"div\" ).text( \"isFormParent = \" + isFormParent );
+") (text . "") (css . "
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<form>
+  <p><input type=\"checkbox\"></p>
+</form>
+<div></div>
+") (text . "")) ((text . "") (text . "Checks against an existing collection of alternating list elements.
 Blue, alternating list elements slide up while others turn red.
 
 ") (text . "") (js . "
-  var $alt = $(\"#browsers li:nth-child(2n)\").css(\"background\", \"#00FFFF\");
-  $('li').click(function() {
-    var $li = $(this);
-    if ( $li.is( $alt ) ) {
-      $li.slideUp();
-    } else {
-      $li.css(\"background\", \"red\");
-    }
-  });
-") (text . "") (css . "li { cursor:pointer; }") (text . "") (html . "
+var alt = $( \"#browsers li:nth-child(2n)\" ).css( \"background\", \"#0ff\" );
+$( \"li\" ).click(function() {
+  var li = $( this );
+  if ( li.is( alt ) ) {
+    li.slideUp();
+  } else {
+    li.css( \"background\", \"red\" );
+  }
+});
+") (text . "") (css . "
+  li {
+    cursor: pointer;
+  }
+") (text . "") (html . "
 <ul id=\"browsers\">
   <li>Chrome</li>
   <li>Safari</li>
   <li>Firefox</li>
   <li>Opera</li>
-</ul>") (text . "")) ((text . "") (text . "An alternate way to achieve the above example using an element rather
+</ul>
+") (text . "")) ((text . "") (text . "An alternate way to achieve the above example using an element rather
 than a jQuery object. Checks against an existing collection of
 alternating list elements. Blue, alternating list elements slide up
 while others turn red.
 ") (text . "") (js . "
-  var $alt = $(\"#browsers li:nth-child(2n)\").css(\"background\", \"#00FFFF\");
-  $('li').click(function() {
-    if ( $alt.is( this ) ) {
-      $(this).slideUp();
-    } else {
-      $(this).css(\"background\", \"red\");
-    }
-  });
-") (text . "") (css . "li { cursor:pointer; }") (text . "") (html . "
+var alt = $( \"#browsers li:nth-child(2n)\" ).css( \"background\", \"#0ff\" );
+$( \"li\" ).click(function() {
+  if ( alt.is( this ) ) {
+    $( this ).slideUp();
+  } else {
+    $( this ).css( \"background\", \"red\" );
+  }
+});
+") (text . "") (css . "
+  li {
+    cursor: pointer;
+  }
+") (text . "") (html . "
 <ul id=\"browsers\">
   <li>Chrome</li>
   <li>Safari</li>
   <li>Firefox</li>
   <li>Opera</li>
-</ul>") (text . ""))))) jquery-doc-hash)
+</ul>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.Callbacks" jquery-doc-methods)
 
@@ -6513,28 +7821,28 @@ callbacks.remove() , callbacks.fire() and callbacks.disable() .
 
 ") (text . "") (js . "
 function fn1( value ) {
-    console.log( value );
+  console.log( value );
 }
 
 function fn2( value ) {
-    fn1(\"fn2 says: \" + value);
-    return false;
+  console.log( \"fn2 says: \" + value );
+  return false;
 }
-") (text . "") (text . "These can be added as callbacks to a $.Callbacks list and invoked as
+    ") (text . "") (text . "These can be added as callbacks to a $.Callbacks list and invoked as
 follows:
 
 ") (text . "") (js . "
 var callbacks = $.Callbacks();
 callbacks.add( fn1 );
 
-// outputs: foo!
+// Outputs: foo!
 callbacks.fire( \"foo!\" );
 
 callbacks.add( fn2 );
 
-// outputs: bar!, fn2 says: bar!
+// Outputs: bar!, fn2 says: bar!
 callbacks.fire( \"bar!\" );
-") (text . "") (text . "The result of this is that it becomes simple to construct complex lists
+    ") (text . "") (text . "The result of this is that it becomes simple to construct complex lists
 of callbacks where input values can be passed through to as many
 functions as needed with ease.
 ") (text . "") (text . "Two specific methods were being used above: .add() and .fire(). The
@@ -6548,19 +7856,19 @@ a practical example of .remove() being used:
 var callbacks = $.Callbacks();
 callbacks.add( fn1 );
 
-// outputs: foo!
+// Outputs: foo!
 callbacks.fire( \"foo!\" );
 
 callbacks.add( fn2 );
 
-// outputs: bar!, fn2 says: bar!
+// Outputs: bar!, fn2 says: bar!
 callbacks.fire( \"bar!\" );
 
 callbacks.remove( fn2 );
 
-// only outputs foobar, as fn2 has been removed.
+// Only outputs foobar, as fn2 has been removed.
 callbacks.fire( \"foobar\" );
-") (text . "") (text . "  Supported Flags
+    ") (text . "") (text . "  Supported Flags
 
 
 ") (text . "") (text . "The flags argument is an optional argument to $.Callbacks(), structured
@@ -6599,10 +7907,11 @@ callbacks.fire( \"foobar\" );
 output:
 foo
 */
-") (text . "") (text . "$.Callbacks( \"memory\" ):
+    ") (text . "") (text . "$.Callbacks( \"memory\" ):
 
 
-") (text . "") (js . "var callbacks = $.Callbacks( \"memory\" );
+") (text . "") (js . "
+var callbacks = $.Callbacks( \"memory\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
 callbacks.add( fn2 );
@@ -6618,13 +7927,14 @@ bar
 fn2 says:bar
 foobar
 */
-") (text . "") (text . "$.Callbacks( \"unique\" ):
+    ") (text . "") (text . "$.Callbacks( \"unique\" ):
 
 
-") (text . "") (js . "var callbacks = $.Callbacks( \"unique\" );
+") (text . "") (js . "
+var callbacks = $.Callbacks( \"unique\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
-callbacks.add( fn1 ); // repeat addition
+callbacks.add( fn1 ); // Repeat addition
 callbacks.add( fn2 );
 callbacks.fire( \"bar\" );
 callbacks.remove( fn2 );
@@ -6637,18 +7947,18 @@ bar
 fn2 says:bar
 foobar
 */
-") (text . "") (text . "$.Callbacks( \"stopOnFalse\" ):
+    ") (text . "") (text . "$.Callbacks( \"stopOnFalse\" ):
 
 
 ") (text . "") (js . "
-function fn1( value ){
-    console.log( value );
-    return false;
+function fn1( value ) {
+  console.log( value );
+  return false;
 }
 
-function fn2( value ){
-    fn1( \"fn2 says: \" + value );
-    return false;
+function fn2( value ) {
+  fn1( \"fn2 says: \" + value );
+  return false;
 }
 
 var callbacks = $.Callbacks( \"stopOnFalse\" );
@@ -6665,7 +7975,7 @@ foo
 bar
 foobar
 */
-") (text . "") (text . "Because $.Callbacks() supports a list of flags rather than just one,
+    ") (text . "") (text . "Because $.Callbacks() supports a list of flags rather than just one,
 setting several flags has a cumulative effect similar to \"&&\". This
 means it`s possible to combine flags to create callback lists that,
 say, both are unique and ensure if list was already fired, adding more
@@ -6676,19 +7986,19 @@ $.Callbacks(\"unique memory\")).
 
 ") (text . "") (js . "
 function fn1( value ) {
-    console.log( value );
-    return false;
+  console.log( value );
+  return false;
 }
 
 function fn2( value ) {
-    fn1( \"fn2 says: \" + value );
-    return false;
+  fn1( \"fn2 says: \" + value );
+  return false;
 }
 
 var callbacks = $.Callbacks( \"unique memory\" );
 callbacks.add( fn1 );
 callbacks.fire( \"foo\" );
-callbacks.add( fn1 ); // repeat addition
+callbacks.add( fn1 ); // Repeat addition
 callbacks.add( fn2 );
 callbacks.fire( \"bar\" );
 callbacks.add( fn2 );
@@ -6714,14 +8024,14 @@ to define short-hand versions for convenience:
 
 ") (text . "") (js . "
 var callbacks = $.Callbacks(),
-    add = callbacks.add,
-    remove = callbacks.remove,
-    fire = callbacks.fire;
+  add = callbacks.add,
+  remove = callbacks.remove,
+  fire = callbacks.fire;
 
 add( fn1 );
 fire( \"hello world\" );
 remove( fn1 );
-") (text . "") (text . "  $.Callbacks, $.Deferred and Pub/Sub
+    ") (text . "") (text . "  $.Callbacks, $.Deferred and Pub/Sub
 
 
 ") (text . "") (text . "The general idea behind pub/sub (Publish/Subscribe, or, the Observer
@@ -6735,30 +8045,31 @@ subject). Publishers notify subscribers when events occur.
 it`s possible to implement a Pub/Sub system using only callback lists.
 Using $.Callbacks as a topics queue, a system for publishing and
 subscribing to topics can be implemented as follows:
-") (text . "") (js . "var topics = {};
+") (text . "") (js . "
+var topics = {};
 
 jQuery.Topic = function( id ) {
-    var callbacks,
-        method,
-        topic = id && topics[ id ];
+  var callbacks, method,
+    topic = id && topics[ id ];
 
-    if ( !topic ) {
-        callbacks = jQuery.Callbacks();
-        topic = {
-            publish: callbacks.fire,
-            subscribe: callbacks.add,
-            unsubscribe: callbacks.remove
-        };
-        if ( id ) {
-            topics[ id ] = topic;
-        }
+  if ( !topic ) {
+    callbacks = jQuery.Callbacks();
+    topic = {
+      publish: callbacks.fire,
+      subscribe: callbacks.add,
+      unsubscribe: callbacks.remove
+    };
+    if ( id ) {
+      topics[ id ] = topic;
     }
-    return topic;
+  }
+  return topic;
 };
-") (text . "") (text . "This can then be used by parts of your application to publish and
+    ") (text . "") (text . "This can then be used by parts of your application to publish and
 subscribe to events of interest quite easily:
 
-") (text . "") (js . "// Subscribers
+") (text . "") (js . "
+// Subscribers
 $.Topic( \"mailArrived\" ).subscribe( fn1 );
 $.Topic( \"mailArrived\" ).subscribe( fn2 );
 $.Topic( \"mailSent\" ).subscribe( fn1 );
@@ -6778,21 +8089,22 @@ hello world!
 fn2 says: hello world!
 woo! mail!
 */
-") (text . "") (text . "While this is useful, the implementation can be taken further. Using
+    ") (text . "") (text . "While this is useful, the implementation can be taken further. Using
 $.Deferreds, it`s possible to ensure publishers only publish
 notifications for subscribers once particular tasks have been completed
 (resolved). See the below code sample for some further comments on how
 this could be used in practice:
-") (text . "") (js . "// subscribe to the mailArrived notification
+") (text . "") (js . "
+// Subscribe to the mailArrived notification
 $.Topic( \"mailArrived\" ).subscribe( fn1 );
 
-// create a new instance of Deferreds
+// Create a new instance of Deferreds
 var dfd = $.Deferred();
 
-// define a new topic (without directly publishing)
+// Define a new topic (without directly publishing)
 var topic = $.Topic( \"mailArrived\" );
 
-// when the deferred has been resolved, publish a
+// When the deferred has been resolved, publish a
 // notification to subscribers
 dfd.done( topic.publish );
 
@@ -6803,7 +8115,7 @@ dfd.done( topic.publish );
 // messages are only published once the task has actually
 // finished.
 dfd.resolve( \"it's been published!\" );
-") (text . "")) ("examples"))) jquery-doc-hash)
+    ") (text . "")) ("examples"))) jquery-doc-hash)
 
 (push "$.ajax" jquery-doc-methods)
 
@@ -6825,7 +8137,9 @@ $.ajax() can be used more flexibly.
 ") (text . "") (text . "At its simplest, the $.ajax() function can be called with no arguments:
 
 
-") (text . "") (js . "$.ajax();") (text . "") (text . "Note: Default settings can be set globally by using the $.ajaxSetup()
+") (text . "") (js . "
+$.ajax();
+    ") (text . "") (text . "Note: Default settings can be set globally by using the $.ajaxSetup()
 function.
 
 ") (text . "") (text . "This example, using no options, loads the contents of the current page,
@@ -6849,15 +8163,16 @@ to modify the response content-type header:
 ") (text . "") (js . "
 $.ajax({
   url: \"http://fiddle.jshell.net/favicon.png\",
-  beforeSend: function ( xhr ) {
-    xhr.overrideMimeType(\"text/plain; charset=x-user-defined\");
+  beforeSend: function( xhr ) {
+    xhr.overrideMimeType( \"text/plain; charset=x-user-defined\" );
   }
-}).done(function ( data ) {
-  if( console && console.log ) {
-    console.log(\"Sample of data:\", data.slice(0, 100));
-  }
-});
-") (text . "") (text . "The jqXHR objects returned by $.ajax() as of jQuery 1.5 implement the
+})
+  .done(function( data ) {
+    if ( console && console.log ) {
+      console.log( \"Sample of data:\", data.slice( 0, 100 ) );
+    }
+  });
+    ") (text . "") (text . "The jqXHR objects returned by $.ajax() as of jQuery 1.5 implement the
 Promise interface, giving them all the properties, methods, and
 behavior of a Promise (see Deferred object for more information). These
 methods take one or more function arguments that are called when the
@@ -6866,16 +8181,16 @@ callbacks on a single request, and even to assign callbacks after the
 request may have completed. (If the request is already complete, the
 callback is fired immediately.) Available Promise methods of the jqXHR
 object include:
-") (text . "") (text . "  * jqXHR.done(function(data, textStatus, jqXHR) {});
+") (text . "") (text . "  * jqXHR.done(function( data, textStatus, jqXHR ) {});
     An alternative construct to the success callback option, the
     .done() method replaces the deprecated jqXHR.success() method.
     Refer to deferred.done() for implementation details.
-  * jqXHR.fail(function(jqXHR, textStatus, errorThrown) {});
+  * jqXHR.fail(function( jqXHR, textStatus, errorThrown ) {});
     An alternative construct to the error callback option, the .fail()
     method replaces the deprecated .error() method. Refer to
     deferred.fail() for implementation details.
-  * jqXHR.always(function(data|jqXHR, textStatus, jqXHR|errorThrown) {
-    });
+  * jqXHR.always(function( data|jqXHR, textStatus, jqXHR|errorThrown )
+    { });
     An alternative construct to the complete callback option, the
     .always() method replaces the deprecated .complete() method.
     In response to a successful request, the function`s arguments are
@@ -6883,26 +8198,36 @@ object include:
     object. For failed requests the arguments are the same as those of
     .fail(): the jqXHR object, textStatus, and errorThrown. Refer to
     deferred.always() for implementation details.
-  * jqXHR.then(function(data, textStatus, jqXHR) {}, function(jqXHR,
-    textStatus, errorThrown) {});
+  * jqXHR.then(function( data, textStatus, jqXHR ) {}, function( jqXHR,
+    textStatus, errorThrown ) {});
     Incorporates the functionality of the .done() and .fail() methods,
     allowing (as of jQuery 1.8) the underlying Promise to be
     manipulated. Refer to deferred.then() for implementation details.
-") (text . "") (text . "  Deprecation Notice: The jqXHR.success(), jqXHR.error(), and
-  jqXHR.complete() callbacks are deprecated as of jQuery 1.8. To
-  prepare your code for their eventual removal, use jqXHR.done(),
-  jqXHR.fail(), and jqXHR.always() instead.
-") (text . "") (js . "// Assign handlers immediately after making the request,
-// and remember the jqxhr object for this request
+") (text . "") (text . "Deprecation Notice: The jqXHR.success(), jqXHR.error(), and
+jqXHR.complete() callbacks are deprecated as of jQuery 1.8. To prepare
+your code for their eventual removal, use jqXHR.done(), jqXHR.fail(),
+and jqXHR.always() instead.
+") (text . "") (js . "
+// Assign handlers immediately after making the request,
+// and remember the jqXHR object for this request
 var jqxhr = $.ajax( \"example.php\" )
-    .done(function() { alert(\"success\"); })
-    .fail(function() { alert(\"error\"); })
-    .always(function() { alert(\"complete\"); });
+  .done(function() {
+    alert( \"success\" );
+  })
+  .fail(function() {
+    alert( \"error\" );
+  })
+  .always(function() {
+    alert( \"complete\" );
+  });
 
-// perform other work here ...
+// Perform other work here ...
 
 // Set another completion function for the request above
-jqxhr.always(function() { alert(\"second complete\"); });") (text . "") (text . "The this reference within all callbacks is the object in the context
+jqxhr.always(function() {
+  alert( \"second complete\" );
+});
+    ") (text . "") (text . "The this reference within all callbacks is the object in the context
 option passed to $.ajax in the settings; if context is not specified,
 this is a reference to the Ajax settings themselves.
 ") (text . "") (text . "For backward compatibility with XMLHttpRequest, a jqXHR object will
@@ -7051,37 +8376,6 @@ specified using the xhr option. The returned object can generally be
 discarded, but does provide a lower-level interface for observing and
 manipulating the request. In particular, calling .abort() on the object
 will halt the request before it completes.
-") (text . "") (text . "At present, due to a bug in Firefox where .getAllResponseHeaders()
-returns the empty string although .getResponseHeader(`Content-Type`)
-returns a non-empty string, automatically decoding JSON CORS responses
-in Firefox with jQuery is not supported.
-") (text . "") (text . "A workaround to this is possible by overriding jQuery.ajaxSettings.xhr
-as follows:
-
-") (text . "") (js . "
-var _super = jQuery.ajaxSettings.xhr;
-jQuery.ajaxSettings.xhr = function () {
-  var xhr = _super(),
-      getAllResponseHeaders = xhr.getAllResponseHeaders;
-
-  xhr.getAllResponseHeaders = function () {
-    if ( getAllResponseHeaders() ) {
-      return getAllResponseHeaders();
-    }
-    var allHeaders = \"\";
-
-    $( [\"Cache-Control\", \"Content-Language\", \"Content-Type\",
-        \"Expires\", \"Last-Modified\", \"Pragma\"] )
-    .each(function (i, header_name) {
-      if ( xhr.getResponseHeader( header_name ) ) {
-        allHeaders += header_name + \": \" + xhr.getResponseHeader( header_name ) + \"\\n\";
-      }
-      return allHeaders;
-    });
-  };
-
-  return xhr;
-};
 ") (text . "") (text . " Extending Ajax
 
 
@@ -7101,13 +8395,13 @@ $.ajaxSetup({
     mycustomtype: /mycustomtype/
   },
   converters: {
-    \"mycustomtype json\": function ( result ) {
-      // do stuff
+    \"mycustomtype json\": function( result ) {
+      // Do stuff
       return newresult;
     }
   }
 });
-") (text . "") (text . "This extra object is necessary because the response Content-Types and
+    ") (text . "") (text . "This extra object is necessary because the response Content-Types and
 data types never have a strict one-to-one correspondance (hence the
 regular expression).
 ") (text . "") (text . "To convert from a supported type (e.g text, json) to a custom data type
@@ -7120,64 +8414,76 @@ $.ajaxSetup({
   },
   converters: {
     \"text mycustomtype\": true,
-    \"mycustomtype json\": function ( result ) {
-      // do stuff
+    \"mycustomtype json\": function( result ) {
+      // Do stuff
       return newresult;
     }
   }
 });
-") (text . "") (text . "The above now allows passing from text to mycustomtype and then
+    ") (text . "") (text . "The above now allows passing from text to mycustomtype and then
 mycustomtype to json.
 
 ") (text . "")) ("examples" ((text . "") (text . "Save some data to the server and notify the user once it`s complete.
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   type: \"POST\",
   url: \"some.php\",
   data: { name: \"John\", location: \"Boston\" }
-}).done(function( msg ) {
-  alert( \"Data Saved: \" + msg );
-});") (text . "")) ((text . "") (text . "Retrieve the latest version of an HTML page.
+})
+  .done(function( msg ) {
+    alert( \"Data Saved: \" + msg );
+  });
+") (text . "")) ((text . "") (text . "Retrieve the latest version of an HTML page.
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   url: \"test.html\",
   cache: false
-}).done(function( html ) {
-  $(\"#results\").append(html);
-});") (text . "")) ((text . "") (text . "Send an xml document as data to the server. By setting the processData
+})
+  .done(function( html ) {
+    $( \"#results\" ).append( html );
+  });
+") (text . "")) ((text . "") (text . "Send an xml document as data to the server. By setting the processData
 option to false, the automatic conversion of data to strings is
 prevented.
-") (text . "") (js . "var xmlDocument = [create xml document];
+") (text . "") (js . "
+var xmlDocument = [create xml document];
 var xmlRequest = $.ajax({
   url: \"page.php\",
   processData: false,
   data: xmlDocument
 });
 
-xmlRequest.done(handleResponse);") (text . "")) ((text . "") (text . "Send an id as data to the server, save some data to the server, and
+xmlRequest.done( handleResponse );
+") (text . "")) ((text . "") (text . "Send an id as data to the server, save some data to the server, and
 notify the user once it`s complete. If the request fails, alert the
 user.
-") (text . "") (js . "var menuId = $(\"ul.nav\").first().attr(\"id\");
+") (text . "") (js . "
+var menuId = $( \"ul.nav\" ).first().attr( \"id\" );
 var request = $.ajax({
   url: \"script.php\",
   type: \"POST\",
-  data: {id : menuId},
+  data: { id : menuId },
   dataType: \"html\"
 });
 
-request.done(function(msg) {
-  $(\"#log\").html( msg );
+request.done(function( msg ) {
+  $( \"#log\" ).html( msg );
 });
 
-request.fail(function(jqXHR, textStatus) {
+request.fail(function( jqXHR, textStatus ) {
   alert( \"Request failed: \" + textStatus );
-});") (text . "")) ((text . "") (text . "Load and execute a JavaScript file.
+});
+") (text . "")) ((text . "") (text . "Load and execute a JavaScript file.
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   type: \"GET\",
   url: \"test.js\",
   dataType: \"script\"
-});") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.ajaxPrefilter" jquery-doc-methods)
 
@@ -7192,10 +8498,10 @@ request is sent and before they are processed by $.ajax().
 this:
 
 ") (text . "") (js . "
-$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
   // Modify options, control originalOptions, store jqXHR, etc
 });
-") (text . "") (text . "where:
+    ") (text . "") (text . "where:
 
 
 ") (text . "") (text . "  * options are the request options
@@ -7217,17 +8523,17 @@ $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
     currentRequests[ options.url ] = jqXHR;
   }
 });
-") (text . "") (text . "Prefilters can also be used to modify existing options. For example,
+    ") (text . "") (text . "Prefilters can also be used to modify existing options. For example,
 the following proxies cross-domain requests through
 http://mydomain.net/proxy/:
 ") (text . "") (js . "
-$.ajaxPrefilter( function( options ) {
+$.ajaxPrefilter(function( options ) {
   if ( options.crossDomain ) {
     options.url = \"http://mydomain.net/proxy/\" + encodeURIComponent( options.url );
     options.crossDomain = false;
   }
 });
-") (text . "") (text . "If the optional dataTypes argument is supplied, the prefilter will be
+    ") (text . "") (text . "If the optional dataTypes argument is supplied, the prefilter will be
 only be applied to requests with the indicated dataTypes. For example,
 the following only applies the given prefilter to JSON and script
 requests:
@@ -7235,7 +8541,7 @@ requests:
 $.ajaxPrefilter( \"json script\", function( options, originalOptions, jqXHR ) {
   // Modify options, control originalOptions, store jqXHR, etc
 });
-") (text . "") (text . "The $.ajaxPrefilter() method can also redirect a request to another
+    ") (text . "") (text . "The $.ajaxPrefilter() method can also redirect a request to another
 dataType by returning that dataType. For example, the following sets a
 request as \"script\" if the URL has some specific properties defined in
 a custom isActuallyScript() function:
@@ -7245,7 +8551,7 @@ $.ajaxPrefilter(function( options ) {
     return \"script\";
   }
 });
-") (text . "") (text . "This would ensure not only that the request is considered \"script\" but
+    ") (text . "") (text . "This would ensure not only that the request is considered \"script\" but
 also that all the prefilters specifically attached to the script
 dataType would be applied to it.
 ") (text . "")) ("examples"))) jquery-doc-hash)
@@ -7255,7 +8561,8 @@ dataType would be applied to it.
 (puthash "$.ajaxSetup" (quote (("name" . "$.ajaxSetup") ("signatures" "$.ajaxSetup" (("options" "A set of key/value pairs that configure the default Ajax request. All
 options are optional.
 
-" nil nil))) ("desc" (text . "Set default values for future Ajax requests.
+" nil nil))) ("desc" (text . "Set default values for future Ajax requests. Its use is not
+recommended.
 
 ")) ("longdesc" (text . "") (text . "For details on the settings available for $.ajaxSetup(), see $.ajax() .
 
@@ -7263,31 +8570,42 @@ options are optional.
 ") (text . "") (text . "All subsequent Ajax calls using any function will use the new settings,
 unless overridden by the individual calls, until the next invocation of
 $.ajaxSetup().
+") (text . "") (text . "Note: The settings specified here will affect all calls to $.ajax or
+Ajax-based derivatives such as $.get(). This can cause undesirable
+behavior since other callers (for example, plugins) may be expecting
+the normal default settings. For that reason we strongly recommend
+against using this API. Instead, set the options explicitly in the call
+or define a simple plugin to do so.
 ") (text . "") (text . "For example, the following sets a default for the url parameter before
 pinging the server repeatedly:
 
-") (text . "") (js . "$.ajaxSetup({
-  url: 'ping.php'
-});") (text . "") (text . "Now each time an Ajax request is made, the \"ping.php\" URL will be used
+") (text . "") (js . "
+$.ajaxSetup({
+  url: \"ping.php\"
+});
+    ") (text . "") (text . "Now each time an Ajax request is made, the \"ping.php\" URL will be used
 automatically:
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   // url not set here; uses ping.php
-  data: {'name': 'Dan'}
-});") (text . "") (text . "  Note: Global callback functions should be set with their respective
-  global Ajax event handler methods-- .ajaxStart() , .ajaxStop() ,
-  .ajaxComplete() , .ajaxError() , .ajaxSuccess() , .ajaxSend()
-  --rather than within the options object for $.ajaxSetup().
+  data: { \"name\": \"Dan\" }
+});
+    ") (text . "") (text . "Note: Global callback functions should be set with their respective
+global Ajax event handler methods-- .ajaxStart() , .ajaxStop() ,
+.ajaxComplete() , .ajaxError() , .ajaxSuccess() , .ajaxSend() --rather
+than within the options object for $.ajaxSetup().
 ") (text . "")) ("examples" ((text . "") (text . "Sets the defaults for Ajax requests to the url \"/xmlhttp/\", disables
 global handlers and uses POST instead of GET. The following Ajax
 requests then sends some data without having to set anything else.
-") (text . "") (js . "$.ajaxSetup({
-   url: \"/xmlhttp/\",
-   global: false,
-   type: \"POST\"
-
- });
- $.ajax({ data: myData });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$.ajaxSetup({
+  url: \"/xmlhttp/\",
+  global: false,
+  type: \"POST\"
+});
+$.ajax({ data: myData });
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.ajaxTransport" jquery-doc-methods)
 
@@ -7309,19 +8627,19 @@ a function that returns a transport instead.
 registration looks like this:
 
 ") (text . "") (js . "
-$.ajaxTransport( function( options, originalOptions, jqXHR ) {
+$.ajaxTransport(function( options, originalOptions, jqXHR ) {
   if( /* transportCanHandleRequest */ ) {
     return {
       send: function( headers, completeCallback ) {
-        /* send code */
+        // Send code
       },
       abort: function() {
-        /* abort code */
+        // Abort code
       }
     };
   }
 });
-") (text . "") (text . "where:
+    ") (text . "") (text . "where:
 
 
 ") (text . "") (text . "  * options are the request options
@@ -7337,7 +8655,7 @@ $.ajaxTransport( function( options, originalOptions, jqXHR ) {
 
 ") (text . "") (js . "
 function( status, statusText, responses, headers ) {}
-") (text . "") (text . "where:
+    ") (text . "") (text . "where:
 
 
 ") (text . "") (text . "  * status is the HTTP status code of the response, like 200 for a
@@ -7356,43 +8674,34 @@ a specific dataType:
 
 ") (text . "") (js . "
 $.ajaxTransport( \"script\", function( options, originalOptions, jqXHR ) {
-    /* Will only be called for script requests */
+  // Will only be called for script requests
 });
-") (text . "") (text . "The following example shows how a minimal image transport could be
+    ") (text . "") (text . "The following example shows how a minimal image transport could be
 implemented:
 
 ") (text . "") (js . "
 $.ajaxTransport( \"image\", function( s ) {
-
   if ( s.type === \"GET\" && s.async ) {
-
     var image;
-
     return {
-
       send: function( _ , callback ) {
-
         image = new Image();
-
         function done( status ) {
           if ( image ) {
-            var statusText = ( status == 200 ) ? \"success\" : \"error\",
-            tmp = image;
+            var statusText = ( status === 200 ) ? \"success\" : \"error\",
+              tmp = image;
             image = image.onreadystatechange = image.onerror = image.onload = null;
             callback( status, statusText, { image: tmp } );
           }
         }
-
         image.onreadystatechange = image.onload = function() {
           done( 200 );
         };
         image.onerror = function() {
           done( 404 );
         };
-
         image.src = s.url;
       },
-
       abort: function() {
         if ( image ) {
           image = image.onreadystatechange = image.onerror = image.onload = null;
@@ -7401,7 +8710,7 @@ $.ajaxTransport( \"image\", function( s ) {
     };
   }
 });
-") (text . "") (text . " Handling Custom Data Types
+    ") (text . "") (text . " Handling Custom Data Types
 
 
 ") (text . "") (text . "The jQuery Ajax implementation comes with a set of standard dataTypes,
@@ -7415,30 +8724,27 @@ converters, which effectively illustrates how they can be used:
 
 ") (text . "") (js . "
 // List of data converters
-// 1) key format is \"source_type destination_type\"
+// 1) Key format is \"source_type destination_type\"
 //    (a single space in-between)
-// 2) the catchall symbol \"*\" can be used for source_type
+// 2) The catchall symbol \"*\" can be used for source_type
 converters: {
-
   // Convert anything to text
   \"* text\": window.String,
-
   // Text to html (true = no transformation)
   \"text html\": true,
-
   // Evaluate text as a json expression
   \"text json\": jQuery.parseJSON,
-
   // Parse text as xml
   \"text xml\": jQuery.parseXML
 }
-") (text . "") (text . "When you specify a converters option globally in $.ajaxSetup() or per
+    ") (text . "") (text . "When you specify a converters option globally in $.ajaxSetup() or per
 call in $.ajax(), the object will map onto the default converters,
 overwriting those you specify and leaving the others intact.
 ") (text . "") (text . "For example, the jQuery source uses $.ajaxSetup() to add a converter
 for \"text script\":
 
-") (text . "") (js . "jQuery.ajaxSetup({
+") (text . "") (js . "
+jQuery.ajaxSetup({
   accepts: {
     script: \"text/javascript, application/javascript\"
   },
@@ -7448,7 +8754,8 @@ for \"text script\":
   converters: {
     \"text script\": jQuery.globalEval
   }
-});") (text . "")) ("examples"))) jquery-doc-hash)
+});
+    ") (text . "")) ("examples"))) jquery-doc-hash)
 
 (push "$.contains" jquery-doc-methods)
 
@@ -7465,13 +8772,15 @@ first argument, whether it is a direct child or nested more deeply.
 Otherwise, it returns false. Only element nodes are supported; if the
 second argument is a text or comment node, $.contains() will return
 false.
-") (text . "") (text . "  Note: The first argument must be a DOM element, not a jQuery object
-  or plain JavaScript object.
+") (text . "") (text . "Note: The first argument must be a DOM element, not a jQuery object or
+plain JavaScript object.
 
 ") (text . "")) ("examples" ((text . "") (text . "Check if an element is a descendant of another.
 
-") (text . "") (js . "$.contains( document.documentElement, document.body ); // true
-$.contains( document.body, document.documentElement ); // false") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$.contains( document.documentElement, document.body ); // true
+$.contains( document.body, document.documentElement ); // false
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.data" jquery-doc-methods)
 
@@ -7494,25 +8803,36 @@ DOM elements are removed via jQuery methods, and when the user leaves
 the page. We can set several distinct values for a single element and
 retrieve them later:
 ") (text . "") (js . "
-jQuery.data(document.body, 'foo', 52);
-jQuery.data(document.body, 'bar', 'test');
-") (text . "") (text . "Note: this method currently does not provide cross-platform support for
+jQuery.data( document.body, \"foo\", 52 );
+jQuery.data( document.body, \"bar\", \"test\" );
+      ") (text . "") (text . "Note: this method currently does not provide cross-platform support for
 setting data on XML documents, as Internet Explorer does not allow data
 to be attached via expando properties.
 ") (text . "")) ("examples" ((text . "") (text . "Store then retrieve a value from the div element.
 
-") (text . "") (js . "var div = $(\"div\")[0];
-    jQuery.data(div, \"test\", { first: 16, last: \"pizza!\" });
-    $(\"span:first\").text(jQuery.data(div, \"test\").first);
-    $(\"span:last\").text(jQuery.data(div, \"test\").last);") (text . "") (css . "
-  div { color:blue; }
-  span { color:red; }
-  ") (text . "") (html . "<div>
+") (text . "") (js . "
+var div = $( \"div\" )[ 0 ];
+jQuery.data( div, \"test\", {
+  first: 16,
+  last: \"pizza!\"
+});
+$( \"span:first\" ).text( jQuery.data( div, \"test\" ).first );
+$( \"span:last\" ).text( jQuery.data( div, \"test\" ).last );
+") (text . "") (css . "
+  div {
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>
   The values stored were
   <span></span>
   and
   <span></span>
-</div>") (text . ""))))) jquery-doc-hash)
+</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.data" jquery-doc-methods)
 
@@ -7535,56 +8855,68 @@ method has already retrieved them.
 elements in a way that is safe from circular references and therefore
 from memory leaks. We can retrieve several distinct values for a single
 element one at a time, or as a set:
-") (text . "") (js . "alert(jQuery.data( document.body, 'foo' ));
-alert(jQuery.data( document.body ));") (text . "") (text . "The above lines alert the data values that were set on the body
+") (text . "") (js . "
+alert( jQuery.data( document.body, \"foo\" ) );
+alert( jQuery.data( document.body ) );
+      ") (text . "") (text . "The above lines alert the data values that were set on the body
 element. If nothing was set on that element, an empty string is
 returned.
-") (text . "") (text . "Calling jQuery.data(element) retrieves all of the element`s associated
-values as a JavaScript object. Note that jQuery itself uses this method
-to store data for internal use, such as event handlers, so do not
-assume that it contains only data that your own code has stored.
+") (text . "") (text . "Calling jQuery.data( element ) retrieves all of the element`s
+associated values as a JavaScript object. Note that jQuery itself uses
+this method to store data for internal use, such as event handlers, so
+do not assume that it contains only data that your own code has stored.
 ") (text . "") (text . "Note: this method currently does not provide cross-platform support for
 setting data on XML documents, as Internet Explorer does not allow data
 to be attached via expando properties.
 ") (text . "")) ("examples" ((text . "") (text . "Get the data named \"blah\" stored at for an element.
 
 ") (text . "") (js . "
-$(\"button\").click(function(e) {
-  var value, div = $(\"div\")[0];
-
-  switch ($(\"button\").index(this)) {
-    case 0 :
-      value = jQuery.data(div, \"blah\");
-      break;
-    case 1 :
-      jQuery.data(div, \"blah\", \"hello\");
-      value = \"Stored!\";
-      break;
-    case 2 :
-      jQuery.data(div, \"blah\", 86);
-      value = \"Stored!\";
-      break;
-    case 3 :
-      jQuery.removeData(div, \"blah\");
-      value = \"Removed!\";
-      break;
+$( \"button\" ).click( function() {
+  var value,
+    div = $( \"div\" )[ 0 ];
+  switch ( $( \"button\" ).index( this ) ) {
+  case 0 :
+    value = jQuery.data( div, \"blah\" );
+    break;
+  case 1 :
+    jQuery.data( div, \"blah\", \"hello\" );
+    value = \"Stored!\";
+    break;
+  case 2 :
+    jQuery.data( div, \"blah\", 86 );
+    value = \"Stored!\";
+    break;
+  case 3 :
+    jQuery.removeData( div, \"blah\" );
+    value = \"Removed!\";
+    break;
   }
-
-  $(\"span\").text(\"\" + value);
+  $( \"span\" ).text( \"\" + value );
 });
-
 ") (text . "") (css . "
-div { margin:5px; background:yellow; }
-button { margin:5px; font-size:14px; }
-p { margin:5px; color:blue; }
-span { color:red; }
-  ") (text . "") (html . "<div>A div</div>
+  div {
+    margin: 5px;
+    background: yellow;
+  }
+  button {
+    margin: 5px;
+    font-size: 14px;
+  }
+  p {
+    margin: 5px;
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>A div</div>
 <button>Get \"blah\" from the div</button>
 <button>Set \"blah\" to \"hello\"</button>
-
 <button>Set \"blah\" to 86</button>
 <button>Remove \"blah\" from the div</button>
-<p>The \"blah\" value of this div is <span>?</span></p>") (text . ""))))) jquery-doc-hash)
+<p>The \"blah\" value of this div is <span>?</span></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.dequeue" jquery-doc-methods)
 
@@ -7605,20 +8937,34 @@ the sequence can continue.
 ") (text . "")) ("examples" ((text . "") (text . "Use jQuery.dequeue() to end a custom queue function which allows the
 queue to keep going.
 
-") (text . "") (js . "$(\"button\").click(function () {
-  $(\"div\").animate({left:'+=200px'}, 2000);
-  $(\"div\").animate({top:'0px'}, 600);
-  $(\"div\").queue(function () {
-    $(this).toggleClass(\"red\");
-     $.dequeue( this );
-          });
-  $(\"div\").animate({left:'10px', top:'30px'}, 700);
-});") (text . "") (css . "div {
-  margin:3px; width:50px; position:absolute;
-  height:50px; left:10px; top:30px;
-  background-color:yellow;
-}
-div.red { background-color:red; }  ") (text . "") (html . "<button>Start</button>  <div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"button\" ).click(function() {
+  $( \"div\" )
+    .animate({ left: '+=200px' }, 2000 )
+    .animate({ top: '0px' }, 600 )
+    .queue(function() {
+      $( this ).toggleClass( \"red\" );
+      $.dequeue( this );
+    })
+    .animate({ left:'10px', top:'30px' }, 700 );
+});
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 50px;
+    position: absolute;
+    height: 50px;
+    left: 10px;
+    top: 30px;
+    background-color: yellow;
+  }
+  div.red {
+    background-color: red;
+  }
+") (text . "") (html . "
+<button>Start</button>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.each" jquery-doc-methods)
 
@@ -7640,10 +8986,11 @@ also be accessed through the this keyword, but Javascript will always
 wrap the this value as an Object even if it is a simple string or
 number value.) The method returns its first argument, the object that
 was iterated.
-") (text . "") (js . "$.each([52, 97], function(index, value) {
-  alert(index + ': ' + value);
+") (text . "") (js . "
+$.each([ 52, 97 ], function( index, value ) {
+  alert( index + \": \" + value );
 });
-") (text . "") (text . "This produces two messages:
+    ") (text . "") (text . "This produces two messages:
 
 
 ") (text . "") (text . "0: 52
@@ -7652,13 +8999,15 @@ was iterated.
 ") (text . "") (text . "If an object is used as the collection, the callback is passed a
 key-value pair each time:
 
-") (text . "") (js . "var obj = {
+") (text . "") (js . "
+var obj = {
   \"flammable\": \"inflammable\",
   \"duh\": \"no duh\"
 };
 $.each( obj, function( key, value ) {
   alert( key + \": \" + value );
-});") (text . "") (text . "Once again, this produces two messages:
+});
+    ") (text . "") (text . "Once again, this produces two messages:
 
 
 ") (text . "") (text . "flammable: inflammable
@@ -7672,36 +9021,47 @@ iteration.
 numeral
 
 ") (text . "") (js . "
-    var arr = [ \"one\", \"two\", \"three\", \"four\", \"five\" ];
-    var obj = { one:1, two:2, three:3, four:4, five:5 };
+var arr = [ \"one\", \"two\", \"three\", \"four\", \"five\" ];
+var obj = { one: 1, two: 2, three: 3, four: 4, five: 5 };
 
-    jQuery.each(arr, function() {
-      $(\"#\" + this).text(\"Mine is \" + this + \".\");
-       return (this != \"three\"); // will stop running after \"three\"
-   });
+jQuery.each( arr, function( i, val ) {
+  $( \"#\" + val ).text( \"Mine is \" + val + \".\" );
 
-    jQuery.each(obj, function(i, val) {
-      $(\"#\" + i).append(document.createTextNode(\" - \" + val));
-    });
+  // Will stop running after \"three\"
+  return ( val !== \"three\" );
+});
+
+jQuery.each( obj, function( i, val ) {
+  $( \"#\" + i ).append( document.createTextNode( \" - \" + val ) );
+});
 ") (text . "") (css . "
-  div { color:blue; }
-  div#five { color:red; }
-  ") (text . "") (html . "
-  <div id=\"one\"></div>
-  <div id=\"two\"></div>
-  <div id=\"three\"></div>
-  <div id=\"four\"></div>
-  <div id=\"five\"></div>") (text . "")) ((text . "") (text . "Iterates over items in an array, accessing both the current item and
+  div {
+    color: blue;
+  }
+  div#five {
+    color: red;
+  }
+") (text . "") (html . "
+<div id=\"one\"></div>
+<div id=\"two\"></div>
+<div id=\"three\"></div>
+<div id=\"four\"></div>
+<div id=\"five\"></div>
+") (text . "")) ((text . "") (text . "Iterates over items in an array, accessing both the current item and
 its index.
 
-") (text . "") (js . "$.each( ['a','b','c'], function(i, l){
-   alert( \"Index #\" + i + \": \" + l );
- });") (text . "")) ((text . "") (text . "Iterates over the properties in an object, accessing both the current
+") (text . "") (js . "
+$.each( [ \"a\", \"b\", \"c\" ], function( i, l ){
+  alert( \"Index #\" + i + \": \" + l );
+});
+") (text . "")) ((text . "") (text . "Iterates over the properties in an object, accessing both the current
 item and its key.
 
-") (text . "") (js . "$.each( { name: \"John\", lang: \"JS\" }, function(k, v){
-   alert( \"Key: \" + k + \", Value: \" + v );
- });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$.each({ name: \"John\", lang: \"JS\" }, function( k, v ) {
+  alert( \"Key: \" + k + \", Value: \" + v );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.error" jquery-doc-methods)
 
@@ -7714,7 +9074,9 @@ it and provide a better display (or more information) for the error
 messages.
 ") (text . "")) ("examples" ((text . "") (text . "Override jQuery.error for display in Firebug.
 
-") (text . "") (js . "jQuery.error = console.error;") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+jQuery.error = console.error;
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.extend" jquery-doc-methods)
 
@@ -7736,9 +9098,9 @@ sole argument.
 " "true" nil))) ("desc" (text . "Merge the contents of two or more objects together into the first
 object.
 
-")) ("longdesc" (text . "") (text . "When two or more objects are supplied to $.extend(), properties from
-all of the objects are added to the target object.
-
+")) ("longdesc" (text . "") (text . "When two or more object arguments are supplied to $.extend(),
+properties from all of the objects are added to the target object.
+Arguments that are null or undefined are ignored.
 ") (text . "") (text . "If only one argument is supplied to $.extend(), this means the target
 argument was omitted. In this case, the jQuery object itself is assumed
 to be the target. By doing this, you can add new functions to the
@@ -7750,10 +9112,11 @@ preserve both of the original objects, you can do so by passing an
 empty object as the target:
 ") (text . "") (js . "var object = $.extend({}, object1, object2);") (text . "") (text . "The merge performed by $.extend() is not recursive by default; if a
 property of the first object is itself an object or array, it will be
-completely overwritten by a property with the same key in the second
-object. The values are not merged. This can be seen in the example
-below by examining the value of banana. However, by passing true for
-the first function argument, objects will be recursively merged.
+completely overwritten by a property with the same key in the second or
+subsequent object. The values are not merged. This can be seen in the
+example below by examining the value of banana. However, by passing
+true for the first function argument, objects will be recursively
+merged.
 ") (text . "") (text . "Warning: Passing false for the first argument is not supported.
 
 
@@ -7773,28 +9136,28 @@ method instead.
 ") (text . "") (js . "
 var object1 = {
   apple: 0,
-  banana: {weight: 52, price: 100},
+  banana: { weight: 52, price: 100 },
   cherry: 97
 };
 var object2 = {
-  banana: {price: 200},
+  banana: { price: 200 },
   durian: 100
 };
 
-/* merge object2 into object1 */
-$.extend(object1, object2);
+// Merge object2 into object1
+$.extend( object1, object2 );
 
-var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
+var printObj = typeof JSON !== \"undefined\" ? JSON.stringify : function( obj ) {
   var arr = [];
-  $.each(obj, function(key, val) {
+  $.each( obj, function( key, val ) {
     var next = key + \": \";
-    next += $.isPlainObject(val) ? printObj(val) : val;
+    next += $.isPlainObject( val ) ? printObj( val ) : val;
     arr.push( next );
   });
-  return \"{ \" +  arr.join(\", \") + \" }\";
+  return \"{ \" +  arr.join( \", \" ) + \" }\";
 };
 
-$(\"#log\").append( printObj(object1) );
+$( \"#log\" ).append( printObj( object1 ) );
 ") (text . "") (html . "
 <div id=\"log\"></div>
 ") (text . "")) ((text . "") (text . "Merge two objects recursively, modifying the first.
@@ -7802,28 +9165,28 @@ $(\"#log\").append( printObj(object1) );
 ") (text . "") (js . "
 var object1 = {
   apple: 0,
-  banana: {weight: 52, price: 100},
+  banana: { weight: 52, price: 100 },
   cherry: 97
 };
 var object2 = {
-  banana: {price: 200},
+  banana: { price: 200 },
   durian: 100
 };
 
-/* merge object2 into object1, recursively */
-$.extend(true, object1, object2);
+// Merge object2 into object1, recursively
+$.extend( true, object1, object2 );
 
-var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
+var printObj = typeof JSON !== \"undefined\" ? JSON.stringify : function( obj ) {
   var arr = [];
-  $.each(obj, function(key, val) {
+  $.each( obj, function( key, val ) {
     var next = key + \": \";
-    next += $.isPlainObject(val) ? printObj(val) : val;
+    next += $.isPlainObject( val ) ? printObj( val ) : val;
     arr.push( next );
   });
-  return \"{ \" +  arr.join(\", \") + \" }\";
+  return \"{ \" +  arr.join( \", \" ) + \" }\";
 };
 
-$(\"#log\").append( printObj(object1) );
+$( \"#log\" ).append( printObj( object1 ) );
 ") (text . "") (html . "
 <div id=\"log\"></div>
 ") (text . "")) ((text . "") (text . "Merge defaults and options, without modifying the defaults. This is a
@@ -7833,24 +9196,22 @@ common plugin development pattern.
 var defaults = { validate: false, limit: 5, name: \"foo\" };
 var options = { validate: true, name: \"bar\" };
 
-/* merge defaults and options, without modifying defaults */
-var settings = $.extend({}, defaults, options);
+// Merge defaults and options, without modifying defaults
+var settings = $.extend( {}, defaults, options );
 
-var printObj = typeof JSON != \"undefined\" ? JSON.stringify : function(obj) {
+var printObj = typeof JSON !== \"undefined\" ? JSON.stringify : function( obj ) {
   var arr = [];
-  $.each(obj, function(key, val) {
+  $.each( obj, function( key, val ) {
     var next = key + \": \";
-    next += $.isPlainObject(val) ? printObj(val) : val;
+    next += $.isPlainObject( val ) ? printObj( val ) : val;
     arr.push( next );
   });
-  return \"{ \" +  arr.join(\", \") + \" }\";
+  return \"{ \" +  arr.join( \", \" ) + \" }\";
 };
 
-
-$(\"#log\").append( \"<div><b>defaults -- </b>\" + printObj(defaults) + \"</div>\" );
-$(\"#log\").append( \"<div><b>options -- </b>\" + printObj(options) + \"</div>\" );
-$(\"#log\").append( \"<div><b>settings -- </b>\" + printObj(settings) + \"</div>\" );
-
+$( \"#log\" ).append( \"<div><b>defaults -- </b>\" + printObj( defaults ) + \"</div>\" );
+$( \"#log\" ).append( \"<div><b>options -- </b>\" + printObj( options ) + \"</div>\" );
+$( \"#log\" ).append( \"<div><b>settings -- </b>\" + printObj( settings ) + \"</div>\" );
 ") (text . "") (html . "
 <div id=\"log\"></div>
 ") (text . ""))))) jquery-doc-hash)
@@ -7871,13 +9232,14 @@ $(\"#log\").append( \"<div><b>settings -- </b>\" + printObj(settings) + \"</div>
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   url: url,
   data: data,
   success: success,
   dataType: dataType
 });
-") (text . "") (text . "The success callback function is passed the returned data, which will
+    ") (text . "") (text . "The success callback function is passed the returned data, which will
 be an XML root element, text string, JavaScript file, or JSON object,
 depending on the MIME type of the response. It is also passed the text
 status of the response.
@@ -7889,11 +9251,12 @@ success callback are undefined.
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js . "$.get('ajax/test.html', function(data) {
-  $('.result').html(data);
-  alert('Load was performed.');
+") (text . "") (js . "
+$.get( \"ajax/test.html\", function( data ) {
+  $( \".result\" ).html( data );
+  alert( \"Load was performed.\" );
 });
-") (text . "") (text . "This example fetches the requested HTML snippet and inserts it on the
+    ") (text . "") (text . "This example fetches the requested HTML snippet and inserts it on the
 page.
 
 ") (text . "") (text . " The jqXHR Object
@@ -7913,20 +9276,29 @@ $.get(), to chain multiple .done(), .fail(), and .always() callbacks on
 a single request, and even to assign these callbacks after the request
 may have completed. If the request is already complete, the callback is
 fired immediately.
-") (text . "") (js . "// Assign handlers immediately after making the request,
+") (text . "") (js . "
+// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
-var jqxhr = $.get(\"example.php\", function() {
-  alert(\"success\");
+var jqxhr = $.get( \"example.php\", function() {
+  alert( \"success\" );
 })
-.done(function() { alert(\"second success\"); })
-.fail(function() { alert(\"error\"); })
-.always(function() { alert(\"finished\"); });
+  .done(function() {
+    alert( \"second success\" );
+  })
+  .fail(function() {
+    alert( \"error\" );
+  })
+  .always(function() {
+    alert( \"finished\" );
+  });
 
-// perform other work here ...
+// Perform other work here ...
 
 // Set another completion function for the request above
-jqxhr.always(function(){ alert(\"second finished\"); });
-") (text . "") (text . " Deprecation Notice
+jqxhr.always(function() {
+  alert( \"second finished\" );
+});
+    ") (text . "") (text . " Deprecation Notice
 
 
 ") (text . "") (text . "The jqXHR.success(), jqXHR.error(), and jqXHR.complete() callback
@@ -7935,31 +9307,43 @@ prepare your code for their eventual removal, use jqXHR.done(),
 jqXHR.fail(), and jqXHR.always() instead.
 ") (text . "")) ("examples" ((text . "") (text . "Request the test.php page, but ignore the return results.
 
-") (text . "") (js . "$.get(\"test.php\");") (text . "")) ((text . "") (text . "Request the test.php page and send some additional data along (while
+") (text . "") (js . "
+$.get( \"test.php\" );
+") (text . "")) ((text . "") (text . "Request the test.php page and send some additional data along (while
 still ignoring the return results).
 
-") (text . "") (js . "$.get(\"test.php\", { name: \"John\", time: \"2pm\" } );") (text . "")) ((text . "") (text . "Pass arrays of data to the server (while still ignoring the return
+") (text . "") (js . "
+$.get( \"test.php\", { name: \"John\", time: \"2pm\" } );
+") (text . "")) ((text . "") (text . "Pass arrays of data to the server (while still ignoring the return
 results).
 
-") (text . "") (js . "$.get(\"test.php\", { 'choices[]': [\"Jon\", \"Susan\"]} );") (text . "")) ((text . "") (text . "Alert the results from requesting test.php (HTML or XML, depending on
+") (text . "") (js . "
+$.get( \"test.php\", { \"choices[]\": [\"Jon\", \"Susan\"] } );
+") (text . "")) ((text . "") (text . "Alert the results from requesting test.php (HTML or XML, depending on
 what was returned).
 
-") (text . "") (js . "$.get(\"test.php\", function(data) {
-  alert(\"Data Loaded: \" + data);
-});") (text . "")) ((text . "") (text . "Alert the results from requesting test.cgi with an additional payload
+") (text . "") (js . "
+$.get( \"test.php\", function( data ) {
+  alert( \"Data Loaded: \" + data );
+});
+") (text . "")) ((text . "") (text . "Alert the results from requesting test.cgi with an additional payload
 of data (HTML or XML, depending on what was returned).
 
-") (text . "") (js . "$.get(\"test.cgi\", { name: \"John\", time: \"2pm\" })
-.done(function(data) {
-  alert(\"Data Loaded: \" + data);
-});") (text . "")) ((text . "") (text . "Get the test.php page contents, which has been returned in json format
-(<?php echo json_encode(array(\"name\"=>\"John\",\"time\"=>\"2pm\")); ?>), and
-add it to the page.
-") (text . "") (js . "$.get(\"test.php\",
-   function(data) {
-     $('body').append( \"Name: \" + data.name ) // John
-              .append( \"Time: \" + data.time ); //  2pm
-   }, \"json\");") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$.get( \"test.cgi\", { name: \"John\", time: \"2pm\" } )
+  .done(function( data ) {
+    alert( \"Data Loaded: \" + data );
+  });
+") (text . "")) ((text . "") (text . "Get the test.php page contents, which has been returned in json format
+(<?php echo json_encode( array( \"name\"=>\"John\",\"time\"=>\"2pm\" ) ); ?>),
+and add it to the page.
+") (text . "") (js . "
+$.get( \"test.php\", function( data ) {
+  $( \"body\" )
+    .append( \"Name: \" + data.name ) // John
+    .append( \"Time: \" + data.time ); //  2pm
+}, \"json\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.getJSON" jquery-doc-methods)
 
@@ -7967,46 +9351,48 @@ add it to the page.
 
 " nil nil) ("data" "A plain object or string that is sent to the server with the request.
 
-" "true" nil) ("success(data, textStatus, jqXHR)" "A callback function that is executed if the request succeeds.
+" "true" nil) ("success( data, textStatus, jqXHR )" "A callback function that is executed if the request succeeds.
 
 " "true" nil))) ("desc" (text . "Load JSON-encoded data from the server using a GET HTTP request.
 
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   dataType: \"json\",
   url: url,
   data: data,
   success: success
 });
-") (text . "") (text . "Data that is sent to the server is appended to the URL as a query
+    ") (text . "") (text . "Data that is sent to the server is appended to the URL as a query
 string. If the value of the data parameter is a plain object, it is
 converted to a string and url-encoded before it is appended to the URL.
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js . "$.getJSON('ajax/test.json', function(data) {
+") (text . "") (js . "
+$.getJSON( \"ajax/test.json\", function( data ) {
   var items = [];
-
-  $.each(data, function(key, val) {
-    items.push('<li id=\"' + key + '\">' + val + '</li>');
+  $.each( data, function( key, val ) {
+    items.push( \"<li id='\" + key + \"'>\" + val + \"</li>\" );
   });
 
-  $('<ul/>', {
-    'class': 'my-new-list',
-    html: items.join('')
-  }).appendTo('body');
+  $( \"<ul/>\", {
+    \"class\": \"my-new-list\",
+    html: items.join( \"\" )
+  }).appendTo( \"body\" );
 });
 ") (text . "") (text . "This example, of course, relies on the structure of the JSON file:
 
 
-") (text . "") (js . "{
+") (text . "") (js . "
+{
   \"one\": \"Singular sensation\",
   \"two\": \"Beady little eyes\",
   \"three\": \"Little birds pitch by my doorstep\"
 }
-") (text . "") (text . "Using this structure, the example loops through the requested data,
+    ") (text . "") (text . "Using this structure, the example loops through the requested data,
 builds an unordered list, and appends it to the body.
 
 ") (text . "") (text . "The success callback is passed the returned data, which is typically a
@@ -8018,14 +9404,13 @@ object (in jQuery 1.4, it received the XMLHttpRequest object). However,
 since JSONP and cross-domain GET requests do not use XHR, in those
 cases the jqXHR and textStatus parameters passed to the success
 callback are undefined.
-") (text . "") (text . "  Important: As of jQuery 1.4, if the JSON file contains a syntax
-  error, the request will usually fail silently. Avoid frequent
-  hand-editing of JSON data for this reason. JSON is a
-  data-interchange format with syntax rules that are stricter than
-  those of JavaScript`s object literal notation. For example, all
-  strings represented in JSON, whether they are properties or values,
-  must be enclosed in double-quotes. For details on the JSON format,
-  see http://json.org/.
+") (text . "") (text . "Important: As of jQuery 1.4, if the JSON file contains a syntax error,
+the request will usually fail silently. Avoid frequent hand-editing of
+JSON data for this reason. JSON is a data-interchange format with
+syntax rules that are stricter than those of JavaScript`s object
+literal notation. For example, all strings represented in JSON, whether
+they are properties or values, must be enclosed in double-quotes. For
+details on the JSON format, see http://json.org/.
 ") (text . "") (text . " JSONP
 
 
@@ -8039,55 +9424,92 @@ discussion of the jsonp data type in $.ajax() for more details.
 XMLHTTPRequest object. This jQuery XHR object, or \"jqXHR,\" returned by
 $.getJSON() implements the Promise interface, giving it all the
 properties, methods, and behavior of a Promise (see Deferred object for
-more information). For convenience and consistency with the callback
-names used by $.ajax() , it provides .error(), .success(), and
-.complete() methods. These methods take a function argument that is
-called when the request terminates, and the function receives the same
-arguments as the correspondingly-named $.ajax() callback.
+more information). The jqXHR.done() (for success), jqXHR.fail() (for
+error), and jqXHR.always() (for completion, whether success or error)
+methods take a function argument that is called when the request
+terminates. For information about the arguments this function receives,
+see the jqXHR Object section of the $.ajax() documentation.
 ") (text . "") (text . "The Promise interface in jQuery 1.5 also allows jQuery`s Ajax methods,
-including $.getJSON(), to chain multiple .success(), .complete(), and
-.error() callbacks on a single request, and even to assign these
+including $.getJSON(), to chain multiple .done(), .always(), and
+.fail() callbacks on a single request, and even to assign these
 callbacks after the request may have completed. If the request is
 already complete, the callback is fired immediately.
-") (text . "") (js . "// Assign handlers immediately after making the request,
+") (text . "") (js . "
+// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
-var jqxhr = $.getJSON(\"example.json\", function() {
-  alert(\"success\");
+var jqxhr = $.getJSON( \"example.json\", function() {
+  console.log( \"success\" );
 })
-.success(function() { alert(\"second success\"); })
-.error(function() { alert(\"error\"); })
-.complete(function() { alert(\"complete\"); });
+  .done(function() {
+    console.log( \"second success\" );
+  })
+  .fail(function() {
+    console.log( \"error\" );
+  })
+  .always(function() {
+    console.log( \"complete\" );
+  });
 
-// perform other work here ...
+// Perform other work here ...
 
 // Set another completion function for the request above
-jqxhr.complete(function(){ alert(\"second complete\"); });") (text . "")) ("examples" ((text . "") (text . "Loads the four most recent cat pictures from the Flickr JSONP API.
+jqxhr.complete(function() {
+  console.log( \"second complete\" );
+});
+    ") (text . "") (text . " Deprecation Notice
+
+
+") (text . "") (text . "The jqXHR.success(), jqXHR.error(), and jqXHR.complete() callback
+methods introduced in jQuery 1.5 are deprecated as of jQuery 1.8. To
+prepare your code for their eventual removal, use jqXHR.done(),
+jqXHR.fail(), and jqXHR.always() instead.
+") (text . "")) ("examples" ((text . "") (text . "Loads the four most recent pictures of Mount Rainier from the Flickr
+JSONP API.
 
 ") (text . "") (js . "
-$.getJSON(\"http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?\",
-  {
+(function() {
+  var flickerAPI = \"http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?\";
+  $.getJSON( flickerAPI, {
     tags: \"mount rainier\",
     tagmode: \"any\",
     format: \"json\"
-  },
-  function(data) {
-    $.each(data.items, function(i,item){
-      $(\"<img/>\").attr(\"src\", item.media.m).appendTo(\"#images\");
-      if ( i == 3 ) return false;
+  })
+    .done(function( data ) {
+      $.each( data.items, function( i, item ) {
+        $( \"<img>\" ).attr( \"src\", item.media.m ).appendTo( \"#images\" );
+        if ( i === 3 ) {
+          return false;
+        }
+      });
     });
-  });") (text . "") (html . "<div id=\"images\">
-
-</div>") (text . "") (css . "img{ height: 100px; float: left; }") (text . "")) ((text . "") (text . "Load the JSON data from test.js and access a name from the returned
+})();
+") (text . "") (html . "
+<div id=\"images\"></div>
+") (text . "") (css . "
+  img {
+    height: 100px;
+    float: left;
+  }
+") (text . "")) ((text . "") (text . "Load the JSON data from test.js and access a name from the returned
 JSON data.
 
-") (text . "") (js . "$.getJSON(\"test.js\", function(json) {
-   alert(\"JSON Data: \" + json.users[3].name);
- });") (text . "")) ((text . "") (text . "Load the JSON data from test.js, passing along additional data, and
-access a name from the returned JSON data.
-
-") (text . "") (js . "$.getJSON(\"test.js\", { name: \"John\", time: \"2pm\" }, function(json) {
-    alert(\"JSON Data: \" + json.users[3].name);
-    });") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$.getJSON( \"test.js\", function( json ) {
+  console.log( \"JSON Data: \" + json.users[ 3 ].name );
+ });
+ ") (text . "")) ((text . "") (text . "Load the JSON data from test.js, passing along additional data, and
+access a name from the returned JSON data. If an error occurs, log an
+error message instead.
+") (text . "") (js . "
+$.getJSON( \"test.js\", { name: \"John\", time: \"2pm\" } )
+  .done(function( json ) {
+    console.log( \"JSON Data: \" + json.users[ 3 ].name );
+  })
+  .fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + \", \" + error;
+    console.log( \"Request Failed: \" + err );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.getScript" jquery-doc-methods)
 
@@ -8101,12 +9523,13 @@ execute it.
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   url: url,
   dataType: \"script\",
   success: success
 });
-") (text . "") (text . "The script is executed in the global context, so it can refer to other
+    ") (text . "") (text . "The script is executed in the global context, so it can refer to other
 variables and use jQuery functions. Included scripts can have some
 impact on the current page.
 ") (text . "") (text . " Success Callback
@@ -8115,41 +9538,45 @@ impact on the current page.
 ") (text . "") (text . "The callback is fired once the script has been loaded but not
 necessarily executed.
 
-") (text . "") (js . "$(\".result\").html(\"<p>Lorem ipsum dolor sit amet.</p>\");") (text . "") (text . "Scripts are included and run by referencing the file name:
+") (text . "") (js . "
+$( \".result\" ).html( \"<p>Lorem ipsum dolor sit amet.</p>\" );
+    ") (text . "") (text . "Scripts are included and run by referencing the file name:
 
 
-") (text . "") (js . "$.getScript(\"ajax/test.js\", function(data, textStatus, jqxhr) {
-   console.log(data); //data returned
-   console.log(textStatus); //success
-   console.log(jqxhr.status); //200
-   console.log('Load was performed.');
-});") (text . "") (text . " Handling Errors
+") (text . "") (js . "
+$.getScript( \"ajax/test.js\", function( data, textStatus, jqxhr ) {
+  console.log( data ); // Data returned
+  console.log( textStatus ); // Success
+  console.log( jqxhr.status ); // 200
+  console.log( \"Load was performed.\" );
+});
+    ") (text . "") (text . " Handling Errors
 
 
 ") (text . "") (text . "As of jQuery 1.5, you may use .fail() to account for errors:
 
 
 ") (text . "") (js . "
-$.getScript(\"ajax/test.js\")
-.done(function(script, textStatus) {
-  console.log( textStatus );
-})
-.fail(function(jqxhr, settings, exception) {
-  $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
+$.getScript( \"ajax/test.js\" )
+  .done(function( script, textStatus ) {
+    console.log( textStatus );
+  })
+  .fail(function( jqxhr, settings, exception ) {
+    $( \"div.log\" ).text( \"Triggered ajaxError handler.\" );
 });
-") (text . "") (text . "Prior to jQuery 1.5, the global .ajaxError() callback event had to be
+    ") (text . "") (text . "Prior to jQuery 1.5, the global .ajaxError() callback event had to be
 used in order to handle $.getScript() errors:
 
 ") (text . "") (js . "
-$( \"div.log\" ).ajaxError(function(e, jqxhr, settings, exception) {
-  if (settings.dataType=='script') {
-    $(this).text( \"Triggered ajaxError handler.\" );
+$( \"div.log\" ).ajaxError(function( e, jqxhr, settings, exception ) {
+  if ( settings.dataType == \"script\" ) {
+    $( this ).text( \"Triggered ajaxError handler.\" );
   }
 });
-") (text . "") (text . " Caching Responses
+    ") (text . "") (text . " Caching Responses
 
 
-") (text . "") (text . "Be default, $.getScript() sets the cache setting to false. This appends
+") (text . "") (text . "By default, $.getScript() sets the cache setting to false. This appends
 a timestamped query parameter to the request URL to ensure that the
 browser downloads the script each time it is requested. You can
 override this feature by setting the cache property globally using
@@ -8158,15 +9585,16 @@ $.ajaxSetup() :
 $.ajaxSetup({
   cache: true
 });
-") (text . "") (text . "Alternatively, you could define a new method that uses the more
+    ") (text . "") (text . "Alternatively, you could define a new method that uses the more
 flexible $.ajax() method.
 
 ") (text . "")) ("examples" ((text . "") (text . "Define a $.cachedScript() method that allows fetching a cached script:
 
-") (text . "") (js . "jQuery.cachedScript = function(url, options) {
+") (text . "") (js . "
+jQuery.cachedScript = function( url, options ) {
 
-  // allow user to set any option except for dataType, cache, and url
-  options = $.extend(options || {}, {
+  // Allow user to set any option except for dataType, cache, and url
+  options = $.extend( options || {}, {
     dataType: \"script\",
     cache: true,
     url: url
@@ -8174,41 +9602,45 @@ flexible $.ajax() method.
 
   // Use $.ajax() since it is more flexible than $.getScript
   // Return the jqXHR object so we can chain callbacks
-  return jQuery.ajax(options);
+  return jQuery.ajax( options );
 };
 
 // Usage
-$.cachedScript(\"ajax/test.js\").done(function(script, textStatus) {
+$.cachedScript( \"ajax/test.js\" ).done(function( script, textStatus ) {
   console.log( textStatus );
 });
 ") (text . "")) ((text . "") (text . "Load the official jQuery Color Animation plugin dynamically and bind
 some color animations to occur once the new functionality is loaded.
 
 ") (text . "") (js . "
-(function() {
-  var url = \"https://raw.github.com/jquery/jquery-color/master/jquery.color.js\";
-  $.getScript(url, function() {
-    $(\"#go\").click(function(){
-      $(\".block\")
-        .animate( { backgroundColor: \"rgb(255, 180, 180)\" }, 1000 )
-        .delay(500)
-        .animate( { backgroundColor: \"olive\" }, 1000 )
-        .delay(500)
-        .animate( { backgroundColor: \"#00f\" }, 1000 );
-    });
+var url = \"https://raw.github.com/jquery/jquery-color/master/jquery.color.js\";
+$.getScript( url, function() {
+  $( \"#go\" ).click(function() {
+    $( \".block\" )
+      .animate({
+        backgroundColor: \"rgb(255, 180, 180)\"
+      }, 1000 )
+      .delay( 500 )
+      .animate({
+        backgroundColor: \"olive\"
+      }, 1000 )
+      .delay( 500 )
+      .animate({
+        backgroundColor: \"#00f\"
+      }, 1000 );
   });
-})();
+});
 ") (text . "") (html . "
 <button id=\"go\">&raquo; Run</button>
-
 <div class=\"block\"></div>
 ") (text . "") (css . "
-.block {
-   background-color: blue;
-   width: 150px;
-   height: 70px;
-   margin: 10px;
-}") (text . ""))))) jquery-doc-hash)
+  .block {
+     background-color: blue;
+     width: 150px;
+     height: 70px;
+     margin: 10px;
+  }
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.globalEval" jquery-doc-methods)
 
@@ -8221,12 +9653,13 @@ in that it`s executed within the global context (which is important for
 loading external scripts dynamically).
 ") (text . "")) ("examples" ((text . "") (text . "Execute a script in the global context.
 
-") (text . "") (js . "function test(){
-    jQuery.globalEval(\"var newVar = true;\")
-    }
-    test();
-    // newVar === true
-  ") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+function test() {
+  jQuery.globalEval( \"var newVar = true;\" )
+}
+test();
+// newVar === true
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.grep" jquery-doc-methods)
 
@@ -8255,35 +9688,49 @@ an index greater than 4. Then it removes all 9s.
 
 ") (text . "") (js . "
 var arr = [ 1, 9, 3, 8, 6, 1, 5, 9, 4, 7, 3, 8, 6, 9, 1 ];
-$(\"div\").text(arr.join(\", \"));
+$( \"div\" ).text( arr.join( \", \" ) );
 
-arr = jQuery.grep(arr, function(n, i){
-  return (n != 5 && i > 4);
+arr = jQuery.grep(arr, function( n, i ) {
+  return ( n !== 5 && i > 4 );
 });
-$(\"p\").text(arr.join(\", \"));
+$( \"p\" ).text( arr.join( \", \" ) );
 
-arr = jQuery.grep(arr, function (a) { return a != 9; });
-$(\"span\").text(arr.join(\", \"));
+arr = jQuery.grep(arr, function( a ) {
+  return a !== 9;
+});
 
+$( \"span\" ).text( arr.join( \", \" ) );
 ") (text . "") (css . "
-  div { color:blue; }
-  p { color:green; margin:0; }
-  span { color:red; }
-  ") (text . "") (html . "<div></div>
-  <p></p>
-  <span></span>
-  ") (text . "")) ((text . "") (text . "Filter an array of numbers to include only numbers bigger then zero.
+  div {
+    color: blue;
+  }
+  p {
+    color: green;
+    margin: 0;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div></div>
+<p></p>
+<span></span>
+") (text . "")) ((text . "") (text . "Filter an array of numbers to include only numbers bigger then zero.
 
-") (text . "") (js . "$.grep( [0,1,2], function(n,i){
-   return n > 0;
- });") (text . "") (text . "[1, 2]
+") (text . "") (js . "
+$.grep( [ 0, 1, 2 ], function( n, i ) {
+  return n > 0;
+});
+") (text . "") (text . "[ 1, 2 ]
 
 ") (text . "")) ((text . "") (text . "Filter an array of numbers to include numbers that are not bigger than
 zero.
 
-") (text . "") (js . "$.grep( [0,1,2], function(n,i){
+") (text . "") (js . "
+$.grep( [ 0, 1, 2 ], function( n, i ) {
     return n > 0;
-},true);") (text . "") (text . "[0]
+}, true );
+") (text . "") (text . "[ 0 ]
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8309,22 +9756,23 @@ also associates a data object with that element.
 ") (text . "")) ("examples" ((text . "") (text . "Set data on an element and see the results of hasData.
 
 ") (text . "") (js . "
-var $p = jQuery(\"p\"), p = $p[0];
-$p.append(jQuery.hasData(p)+\" \"); /* false */
+var $p = jQuery( \"p\" ), p = $p[ 0 ];
+$p.append( jQuery.hasData( p ) + \" \" ); // false
 
-$.data(p, \"testing\", 123);
-$p.append(jQuery.hasData(p)+\" \"); /* true*/
+$.data( p, \"testing\", 123 );
+$p.append( jQuery.hasData( p ) + \" \" ); // true
 
-$.removeData(p, \"testing\");
-$p.append(jQuery.hasData(p)+\" \"); /* false */
+$.removeData( p, \"testing\" );
+$p.append( jQuery.hasData( p ) + \" \" ); // false
 
-$p.on('click', function() {});
-$p.append(jQuery.hasData(p)+\" \"); /* true */
+$p.on( \"click\", function() {} );
+$p.append( jQuery.hasData( p ) + \" \" ); // true
 
-$p.off('click');
-$p.append(jQuery.hasData(p)+\" \"); /* false */
-
-") (text . "") (html . "<p>Results: </p>") (text . ""))))) jquery-doc-hash)
+$p.off( \"click\" );
+$p.append( jQuery.hasData( p ) + \" \" ); // false
+") (text . "") (html . "
+<p>Results: </p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.holdReady" jquery-doc-methods)
 
@@ -8339,19 +9787,19 @@ before allowing the ready event to occur, even though the DOM may be
 ready. This method must be called early in the document, such as in the
 <head> immediately after the jQuery script tag. Calling this method
 after the ready event has already fired will have no effect.
-") (text . "") (text . "To delay the ready event, first call $.holdReady(true). When the ready
-event should be released to execute, call $.holdReady(false). Note that
-multiple holds can be put on the ready event, one for each
-$.holdReady(true) call. The ready event will not actually fire until
+") (text . "") (text . "To delay the ready event, first call $.holdReady( true ). When the
+ready event should be released to execute, call $.holdReady( false ).
+Note that multiple holds can be put on the ready event, one for each
+$.holdReady( true ) call. The ready event will not actually fire until
 all holds have been released with a corresponding number of
-$.holdReady(false) calls and the normal document ready conditions are
+$.holdReady( false ) calls and the normal document ready conditions are
 met. (See ready for more information.)
 ") (text . "")) ("examples" ((text . "") (text . "Delay the ready event until a custom plugin has loaded.
 
 ") (text . "") (js . "
-$.holdReady(true);
-$.getScript(\"myplugin.js\", function() {
-  $.holdReady(false);
+$.holdReady( true );
+$.getScript( \"myplugin.js\", function() {
+  $.holdReady( false );
 });
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8375,20 +9823,26 @@ but 0 !== false), if we`re checking for the presence of value within
 array, we need to check if it`s not equal to (or greater than) -1.
 ") (text . "")) ("examples" ((text . "") (text . "Report the index of some elements in the array.
 
-") (text . "") (js . "var arr = [ 4, \"Pete\", 8, \"John\" ];
-var $spans = $(\"span\");
-$spans.eq(0).text(jQuery.inArray(\"John\", arr));
-$spans.eq(1).text(jQuery.inArray(4, arr));
-$spans.eq(2).text(jQuery.inArray(\"Karl\", arr));
-$spans.eq(3).text(jQuery.inArray(\"Pete\", arr, 2));
+") (text . "") (js . "
+var arr = [ 4, \"Pete\", 8, \"John\" ];
+var $spans = $( \"span\" );
+$spans.eq( 0 ).text( jQuery.inArray( \"John\", arr ) );
+$spans.eq( 1 ).text( jQuery.inArray( 4, arr ) );
+$spans.eq( 2 ).text( jQuery.inArray( \"Karl\", arr ) );
+$spans.eq( 3 ).text( jQuery.inArray( \"Pete\", arr, 2 ) );
 ") (text . "") (css . "
-  div { color:blue; }
-  span { color:red; }
+  div {
+    color: blue;
+  }
+  span {
+    color: red;
+  }
 ") (text . "") (html . "
 <div>\"John\" found at <span></span></div>
 <div>4 found at <span></span></div>
 <div>\"Karl\" not found, so <span></span></div>
-<div>\"Pete\" is in the array, but not at or after index 2, so <span></span></div>") (text . ""))))) jquery-doc-hash)
+<div>\"Pete\" is in the array, but not at or after index 2, so <span></span></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.isArray" jquery-doc-methods)
 
@@ -8401,7 +9855,11 @@ JavaScript array (not an array-like object, such as a jQuery object).
 
 ") (text . "")) ("examples" ((text . "") (text . "Finds out if the parameter is an array.
 
-") (text . "") (js . "$(\"b\").append( \"\" + $.isArray([]) );") (text . "") (html . "Is [] an Array? <b></b>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"b\" ).append( \"\" + $.isArray([]) );
+") (text . "") (html . "
+Is [] an Array? <b></b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.isEmptyObject" jquery-doc-methods)
 
@@ -8419,9 +9877,10 @@ browsers. To determine if an object is a plain JavaScript object, use
 $.isPlainObject()
 ") (text . "")) ("examples" ((text . "") (text . "Check an object to see if it`s empty.
 
-") (text . "") (js . "jQuery.isEmptyObject({}) // true
-      jQuery.isEmptyObject({ foo: \"bar\" }) // false
-    ") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+jQuery.isEmptyObject({}); // true
+jQuery.isEmptyObject({ foo: \"bar\" }); // false
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.isFunction" jquery-doc-methods)
 
@@ -8435,34 +9894,39 @@ detected as functions in browsers such as Internet Explorer.
 ") (text . "")) ("examples" ((text . "") (text . "Test a few parameter examples.
 
 ") (text . "") (js . "
-function stub() {
-}
+function stub() {}
 var objs = [
-      function () {},
-      { x:15, y:20 },
-      null,
-      stub,
-      \"function\"
-    ];
+  function() {},
+  { x:15, y:20 },
+  null,
+  stub,
+  \"function\"
+];
 
-jQuery.each(objs, function (i) {
-  var isFunc = jQuery.isFunction(objs[i]);
-  $(\"span\").eq(i).text(isFunc);
+jQuery.each( objs, function( i ) {
+  var isFunc = jQuery.isFunction( objs[ i ]);
+  $( \"span\" ).eq( i ).text( isFunc );
 });
 ") (text . "") (css . "
-  div { color:blue; margin:2px; font-size:14px; }
-  span { color:red; }
-  ") (text . "") (html . "
-  <div>jQuery.isFunction(objs[0]) = <span></span></div>
+  div {
+    color: blue;
+    margin: 2px;
+    font-size: 14px;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>jQuery.isFunction( objs[ 0 ] ) = <span></span></div>
+<div>jQuery.isFunction( objs[ 1 ] ) = <span></span></div>
+<div>jQuery.isFunction( objs[ 2 ] ) = <span></span></div>
+<div>jQuery.isFunction( objs[ 3 ] ) = <span></span></div>
+<div>jQuery.isFunction( objs[ 4 ] ) = <span></span></div>
+") (text . "")) ((text . "") (text . "Finds out if the parameter is a function.
 
-  <div>jQuery.isFunction(objs[1]) = <span></span></div>
-  <div>jQuery.isFunction(objs[2]) = <span></span></div>
-  <div>jQuery.isFunction(objs[3]) = <span></span></div>
-
-  <div>jQuery.isFunction(objs[4]) = <span></span></div>
-  ") (text . "")) ((text . "") (text . "Finds out if the parameter is a function.
-
-") (text . "") (js . "$.isFunction(function(){});") (text . "") (text . "true
+") (text . "") (js . "
+$.isFunction(function() {});
+") (text . "") (text . "true
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8478,21 +9942,21 @@ argument can be of any type.
 ") (text . "")) ("examples" ((text . "") (text . "Sample return values of $.isNumeric with various inputs.
 
 ") (text . "") (js . "
-$.isNumeric(\"-10\");  // true
-$.isNumeric(16);     // true
-$.isNumeric(0xFF);   // true
-$.isNumeric(\"0xFF\"); // true
-$.isNumeric(\"8e5\");  // true (exponential notation string)
-$.isNumeric(3.1415); // true
-$.isNumeric(+10);    // true
-$.isNumeric(0144);   // true (octal integer literal)
-$.isNumeric(\"\");     // false
-$.isNumeric({});     // false (empty object)
-$.isNumeric(NaN);    // false
-$.isNumeric(null);   // false
-$.isNumeric(true);   // false
-$.isNumeric(Infinity); // false
-$.isNumeric(undefined); // false
+$.isNumeric( \"-10\" );     // true
+$.isNumeric( 16 );        // true
+$.isNumeric( 0xFF );      // true
+$.isNumeric( \"0xFF\" );    // true
+$.isNumeric( \"8e5\" );     // true (exponential notation string)
+$.isNumeric( 3.1415 );    // true
+$.isNumeric( +10 );       // true
+$.isNumeric( 0144 );      // true (octal integer literal)
+$.isNumeric( \"\" );        // false
+$.isNumeric({});          // false (empty object)
+$.isNumeric( NaN );       // false
+$.isNumeric( null );      // false
+$.isNumeric( true );      // false
+$.isNumeric( Infinity );  // false
+$.isNumeric( undefined ); // false
 ") (text . ""))))) jquery-doc-hash)
 
 (push "$.isPlainObject" jquery-doc-methods)
@@ -8511,15 +9975,17 @@ inconsistently across browsers in certain instances.
 $.isPlainObject() as follows:
 
 ") (text . "") (js . "
-  console.log($.isPlainObject(document.location));
-") (text . "") (text . "which throws an invalid pointer exception in IE8. With this in mind,
+console.log( $.isPlainObject( document.location ) );
+    ") (text . "") (text . "which throws an invalid pointer exception in IE8. With this in mind,
 it`s important to be aware of any of the gotchas involved in using
 $.isPlainObject() against older browsers. A couple basic examples that
 do function correctly cross-browser can be found below.
 ") (text . "")) ("examples" ((text . "") (text . "Check an object to see if it`s a plain object.
 
-") (text . "") (js . "jQuery.isPlainObject({}) // true
-jQuery.isPlainObject(\"test\") // false") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+jQuery.isPlainObject({}) // true
+jQuery.isPlainObject( \"test\" ) // false
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.isWindow" jquery-doc-methods)
 
@@ -8532,7 +9998,11 @@ operating against a browser window (such as the current window or an
 iframe).
 ") (text . "")) ("examples" ((text . "") (text . "Finds out if the parameter is a window.
 
-") (text . "") (js . "$(\"b\").append( \"\" + $.isWindow(window) );") (text . "") (html . "Is 'window' a window? <b></b>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"b\" ).append( \"\" + $.isWindow( window ) );
+") (text . "") (html . "
+Is 'window' a window? <b></b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.isXMLDoc" jquery-doc-methods)
 
@@ -8543,8 +10013,10 @@ document).
 
 ")) ("longdesc") ("examples" ((text . "") (text . "Check an object to see if it`s in an XML document.
 
-") (text . "") (js . "jQuery.isXMLDoc(document) // false
-    jQuery.isXMLDoc(document.body) // false") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+jQuery.isXMLDoc( document ) // false
+jQuery.isXMLDoc( document.body ) // false
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.makeArray" jquery-doc-methods)
 
@@ -8564,23 +10036,29 @@ The object is now a plain array.
 ") (text . "")) ("examples" ((text . "") (text . "Turn a collection of HTMLElements into an Array of them.
 
 ") (text . "") (js . "
-    var elems = document.getElementsByTagName(\"div\"); // returns a nodeList
-    var arr = jQuery.makeArray(elems);
-    arr.reverse(); // use an Array method on list of dom elements
-    $(arr).appendTo(document.body);
+// Returns a NodeList
+var elems = document.getElementsByTagName( \"div\" );
+// Convert the NodeList to an Array
+var arr = jQuery.makeArray( elems );
+// Use an Array method on list of dom elements
+arr.reverse();
+$( arr ).appendTo( document.body );
 ") (text . "") (css . "
-  div { color:red; }
-  ") (text . "") (html . "<div>First</div>
-  <div>Second</div>
-  <div>Third</div>
-
-  <div>Fourth</div>") (text . "")) ((text . "") (text . "Turn a jQuery object into an array
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<div>First</div>
+<div>Second</div>
+<div>Third</div>
+<div>Fourth</div>
+") (text . "")) ((text . "") (text . "Turn a jQuery object into an array
 
 ") (text . "") (js . "
-    var obj = $('li');
-    var arr = $.makeArray(obj);
-") (text . "") (text . "(typeof obj === `object` && obj.jquery) === true; jQuery.isArray(arr)
-=== true;
+var obj = $( \"li\" );
+var arr = $.makeArray( obj );
+") (text . "") (text . "( typeof obj === \"object\" && obj.jquery ) === true; jQuery.isArray( arr
+) === true;
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8588,7 +10066,7 @@ The object is now a plain array.
 
 (puthash "$.map" (quote (("name" . "$.map") ("signatures" "$.map" (("array" "The Array to translate.
 
-" nil nil) ("callback(elementOfArray, indexInArray)" "The function to process each item against. The first argument to the
+" nil nil) ("callback( elementOfArray, indexInArray )" "The function to process each item against. The first argument to the
 function is the array item, the second argument is the index in array
 The function can return any value. Within the function, this refers to
 the global (window) object.
@@ -8614,16 +10092,16 @@ passed to $.map(). The jQuery library provides $.makeArray() for such
 conversions.
 ") (text . "") (js . "
 // The following object masquerades as an array.
-var fakeArray = {\"length\": 1, 0: \"Addy\", 1: \"Subtracty\"};
+var fakeArray = { \"length\": 2, 0: \"Addy\", 1: \"Subtracty\" };
 
 // Therefore, convert it to a real array
 var realArray = $.makeArray( fakeArray )
 
 // Now it can be used reliably with $.map()
-$.map( realArray, function(val, i) {
-  // do something
+$.map( realArray, function( val, i ) {
+  // Do something
 });
-") (text . "") (text . "The translation function that is provided to this method is called for
+    ") (text . "") (text . "The translation function that is provided to this method is called for
 each top-level element in the array or object and is passed two
 arguments: The element`s value and its index or key within the array or
 object.
@@ -8636,45 +10114,58 @@ object.
 ") (text . "")) ("examples" ((text . "") (text . "Use $.map() to change the values of an array.
 
 ") (text . "") (js . "
-    var arr = [ \"a\", \"b\", \"c\", \"d\", \"e\" ];
-    $(\"div\").text(arr.join(\", \"));
+var arr = [ \"a\", \"b\", \"c\", \"d\", \"e\" ];
+$( \"div\" ).text( arr.join( \", \" ) );
 
-    arr = jQuery.map(arr, function(n, i){
-      return (n.toUpperCase() + i);
-    });
-    $(\"p\").text(arr.join(\", \"));
+arr = jQuery.map( arr, function( n, i ) {
+  return ( n.toUpperCase() + i );
+});
+$( \"p\" ).text( arr.join( \", \" ) );
 
-    arr = jQuery.map(arr, function (a) {
-      return a + a;
-    });
-    $(\"span\").text(arr.join(\", \"));
-
+arr = jQuery.map( arr, function( a ) {
+  return a + a;
+});
+$( \"span\" ).text( arr.join( \", \" ) );
 ") (text . "") (css . "
-  div { color:blue; }
-  p { color:green; margin:0; }
-  span { color:red; }
-  ") (text . "") (html . "<div></div>
-  <p></p>
-  <span></span>
-  ") (text . "")) ((text . "") (text . "Map the original array to a new one and add 4 to each value.
+  div {
+    color: blue;
+  }
+  p {
+    color: green;
+    margin: 0;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div></div>
+<p></p>
+<span></span>
+") (text . "")) ((text . "") (text . "Map the original array to a new one and add 4 to each value.
 
-") (text . "") (js . "$.map( [0,1,2], function(n){
+") (text . "") (js . "
+$.map( [ 0, 1, 2 ], function( n ) {
   return n + 4;
-});") (text . "") (text . "[4, 5, 6]
+});
+") (text . "") (text . "[4, 5, 6]
 
 ") (text . "")) ((text . "") (text . "Map the original array to a new one, adding 1 to each value if it is
 bigger then zero and removing it if not.
 
-") (text . "") (js . "$.map( [0,1,2], function(n){
+") (text . "") (js . "
+$.map( [ 0, 1, 2 ], function( n ) {
   return n > 0 ? n + 1 : null;
-});") (text . "") (text . "[2, 3]
+});
+") (text . "") (text . "[ 2, 3 ]
 
 ") (text . "")) ((text . "") (text . "Map the original array to a new one; each element is added with its
 original value and the value plus one.
 
-") (text . "") (js . "$.map( [0,1,2], function(n){
+") (text . "") (js . "
+$.map( [ 0, 1, 2 ], function( n ) {
     return [ n, n + 1 ];
-});") (text . "") (text . "[0, 1, 1, 2, 2, 3]
+});
+") (text . "") (text . "[ 0, 1, 1, 2, 2, 3 ]
 
 ") (text . "")) ((text . "") (text . "Map the original object to a new array and double each value.
 
@@ -8682,7 +10173,8 @@ original value and the value plus one.
 var dimensions = { width: 10, height: 15, length: 20 };
 dimensions = $.map( dimensions, function( value, index ) {
   return value * 2;
-}); ") (text . "") (text . "[20, 30, 40]
+});
+") (text . "") (text . "[ 20, 30, 40 ]
 
 ") (text . "")) ((text . "") (text . "Map an object`s keys to an array.
 
@@ -8690,29 +10182,34 @@ dimensions = $.map( dimensions, function( value, index ) {
 var dimensions = { width: 10, height: 15, length: 20 };
 var keys = $.map( dimensions, function( value, key ) {
   return key;
-}); ") (text . "") (text . "[\"width\", \"height\", \"length\"]
+});
+") (text . "") (text . "[ \"width\", \"height\", \"length\" ]
 
 ") (text . "")) ((text . "") (text . "Map the original array to a new one; each element is squared.
 
 ") (text . "") (js . "
-$.map( [0,1,2,3], function (a) {
+$.map( [ 0, 1, 2, 3 ], function( a ) {
   return a * a;
-});") (text . "") (text . "[0, 1, 4, 9]
+});
+") (text . "") (text . "[ 0, 1, 4, 9 ]
 
 ") (text . "")) ((text . "") (text . "Map the original array to a new one, removing numbers less than 50 by
 returning null and subtracting 45 from the rest.
 
 ") (text . "") (js . "
-$.map( [0, 1, 52, 97], function (a) {
+$.map( [ 0, 1, 52, 97 ], function( a ) {
   return (a > 50 ? a - 45 : null);
-});") (text . "") (text . "[7, 52]
+});
+") (text . "") (text . "[ 7, 52 ]
 
 ") (text . "")) ((text . "") (text . "Augment the resulting array by returning an array inside the function.
 
-") (text . "") (js . "var array = [0, 1, 52, 97];
-array = $.map(array, function(a, index) {
-  return [a - 45, index];
-}); ") (text . "") (text . "[-45, 0, -44, 1, 7, 2, 52, 3]
+") (text . "") (js . "
+var array = [ 0, 1, 52, 97 ];
+array = $.map( array, function( a, index ) {
+  return [ a - 45, index ];
+});
+") (text . "") (text . "[ -45, 0, -44, 1, 7, 2, 52, 3]
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8732,7 +10229,9 @@ second.
 ") (text . "") (text . "If you need the original first array, make a copy of it before calling
 $.merge(). Fortunately, $.merge() itself can be used for this
 duplication:
-") (text . "") (js . "var newArray = $.merge([], oldArray);") (text . "") (text . "This shortcut creates a new, empty array and merges the contents of
+") (text . "") (js . "
+var newArray = $.merge([], oldArray);
+    ") (text . "") (text . "This shortcut creates a new, empty array and merges the contents of
 oldArray into it, effectively cloning the array.
 
 ") (text . "") (text . "Prior to jQuery 1.4, the arguments should be true Javascript Array
@@ -8740,18 +10239,23 @@ objects; use $.makeArray if they are not.
 
 ") (text . "")) ("examples" ((text . "") (text . "Merges two arrays, altering the first argument.
 
-") (text . "") (js . "$.merge( [0,1,2], [2,3,4] )") (text . "") (text . "[0,1,2,2,3,4]
+") (text . "") (js . "
+$.merge( [ 0, 1, 2 ], [ 2, 3, 4 ] )
+") (text . "") (text . "[ 0, 1, 2, 2, 3, 4 ]
 
 ") (text . "")) ((text . "") (text . "Merges two arrays, altering the first argument.
 
-") (text . "") (js . "$.merge( [3,2,1], [4,3,2] )  ") (text . "") (text . "[3,2,1,4,3,2]
+") (text . "") (js . "
+$.merge( [ 3, 2, 1 ], [ 4, 3, 2 ] )
+") (text . "") (text . "[ 3, 2, 1, 4, 3, 2 ]
 
 ") (text . "")) ((text . "") (text . "Merges two arrays, but uses a copy, so the original isn`t altered.
 
-") (text . "") (js . "var first = ['a','b','c'];
-var second = ['d','e','f'];
-$.merge( $.merge([],first), second);
-") (text . "") (text . "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\"]
+") (text . "") (js . "
+var first = [ \"a\", \"b\", \"c\" ];
+var second = [ \"d\", \"e\", \"f\" ];
+$.merge( $.merge( [], first ), second );
+") (text . "") (text . "[ \"a\", \"b\", \"c\", \"d\", \"e\", \"f\" ]
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -8769,30 +10273,30 @@ JavaScript library alongside jQuery, return control of $ back to the
 other library with a call to $.noConflict(). Old references of $ are
 saved during jQuery initialization; noConflict() simply restores them.
 ") (text . "") (text . "If for some reason two versions of jQuery are loaded (which is not
-recommended), calling $.noConflict(true) from the second version will
+recommended), calling $.noConflict( true ) from the second version will
 return the globally scoped jQuery variables to those of the first
 version.
 ") (text . "") (html . "
-<script type=\"text/javascript\" src=\"other_lib.js\"></script>
-<script type=\"text/javascript\" src=\"jquery.js\"></script>
-<script type=\"text/javascript\">
-  $.noConflict();
-  // Code that uses other library's $ can follow here.
+<script src=\"other_lib.js\"></script>
+<script src=\"jquery.js\"></script>
+<script>
+$.noConflict();
+// Code that uses other library's $ can follow here.
 </script>
-") (text . "") (text . "This technique is especially effective in conjunction with the .ready()
+    ") (text . "") (text . "This technique is especially effective in conjunction with the .ready()
 method`s ability to alias the jQuery object, as within callback passed
 to .ready() you can use $ if you wish without fear of conflicts later:
 ") (text . "") (html . "
-<script type=\"text/javascript\" src=\"other_lib.js\"></script>
-<script type=\"text/javascript\" src=\"jquery.js\"></script>
-<script type=\"text/javascript\">
-  $.noConflict();
-  jQuery(document).ready(function($) {
-    // Code that uses jQuery's $ can follow here.
-  });
-  // Code that uses other library's $ can follow here.
+<script src=\"other_lib.js\"></script>
+<script src=\"jquery.js\"></script>
+<script>
+$.noConflict();
+jQuery( document ).ready(function( $ ) {
+  // Code that uses jQuery's $ can follow here.
+});
+// Code that uses other library's $ can follow here.
 </script>
-") (text . "") (text . "If necessary, you can free up the jQuery name as well by passing true
+    ") (text . "") (text . "If necessary, you can free up the jQuery name as well by passing true
 as an argument to the method. This is rarely necessary, and if you must
 do this (for example, if you need to use multiple versions of the
 jQuery library on the same page), you need to consider that most
@@ -8800,34 +10304,45 @@ plug-ins rely on the presence of the jQuery variable and may not
 operate correctly in this situation.
 ") (text . "")) ("examples" ((text . "") (text . "Map the original object that was referenced by $ back to $.
 
-") (text . "") (js . "jQuery.noConflict();
+") (text . "") (js . "
+jQuery.noConflict();
 // Do something with jQuery
-jQuery(\"div p\").hide();
+jQuery( \"div p\" ).hide();
 // Do something with another library's $()
-$(\"content\").style.display = 'none';") (text . "")) ((text . "") (text . "Revert the $ alias and then create and execute a function to provide
+$( \"content\" ).style.display = \"none\";
+") (text . "")) ((text . "") (text . "Revert the $ alias and then create and execute a function to provide
 the $ as a jQuery alias inside the function`s scope. Inside the
 function the original $ object is not available. This works well for
 most plugins that don`t rely on any other library.
-") (text . "") (js . "jQuery.noConflict();
-(function($) {
+") (text . "") (js . "
+jQuery.noConflict();
+(function( $ ) {
   $(function() {
-    // more code using $ as alias to jQuery
+    // More code using $ as alias to jQuery
   });
 })(jQuery);
-// other code using $ as an alias to the other library") (text . "")) ((text . "") (text . "Create a different alias instead of jQuery to use in the rest of the
+
+// Other code using $ as an alias to the other library
+") (text . "")) ((text . "") (text . "Create a different alias instead of jQuery to use in the rest of the
 script.
 
-") (text . "") (js . "var j = jQuery.noConflict();
-// Do something with jQuery
-j(\"div p\").hide();
-// Do something with another library's $()
-$(\"content\").style.display = 'none';") (text . "")) ((text . "") (text . "Completely move jQuery to a new namespace in another object.
+") (text . "") (js . "
+var j = jQuery.noConflict();
 
-") (text . "") (js . "var dom = {};
-dom.query = jQuery.noConflict(true);") (text . "") (text . "// Do something with the new jQuery dom.query(\"div p\").hide(); // Do
-something with another library`s $() $(\"content\").style.display =
-`none`; // Do something with another version of jQuery jQuery(\"div >
-p\").hide();
+// Do something with jQuery
+j( \"div p\" ).hide();
+
+// Do something with another library's $()
+$( \"content\" ).style.display = \"none\";
+") (text . "")) ((text . "") (text . "Completely move jQuery to a new namespace in another object.
+
+") (text . "") (js . "
+var dom = {};
+dom.query = jQuery.noConflict( true );
+") (text . "") (text . "// Do something with the new jQuery dom.query( \"div p\" ).hide(); // Do
+something with another library`s $() $( \"content\" ).style.display =
+\"none\"; // Do something with another version of jQuery jQuery( \"div >
+p\" ).hide();
 ") (text . "")) ((text . "") (text . "Load two versions of jQuery (not recommended). Then, restore jQuery`s
 globally scoped variables to the first loaded jQuery.
 
@@ -8835,17 +10350,16 @@ globally scoped variables to the first loaded jQuery.
 <div id=\"log\">
   <h3>Before $.noConflict(true)</h3>
 </div>
-<script src=\"http://code.jquery.com/jquery-1.6.2.js\"></script>
+<script src=\"//code.jquery.com/jquery-1.6.2.js\"></script>
 ") (text . "") (js . "
 var $log = $( \"#log\" );
 
 $log.append( \"2nd loaded jQuery version ($): \" + $.fn.jquery + \"<br>\" );
 
-/*
-Restore globally scoped jQuery variables to the first version loaded
-(the newer version)
-*/
-jq162 = jQuery.noConflict(true);
+// Restore globally scoped jQuery variables to the first version loaded
+// (the newer version)
+
+jq162 = jQuery.noConflict( true );
 
 $log.append( \"<h3>After $.noConflict(true)</h3>\" );
 $log.append( \"1st loaded jQuery version ($): \" + $.fn.jquery + \"<br>\" );
@@ -8895,40 +10409,48 @@ function as a String.
 recursively to accommodate modern scripting languages and frameworks
 such as PHP and Ruby on Rails. You can disable this functionality
 globally by setting jQuery.ajaxSettings.traditional = true;.
+") (text . "") (text . "As of jQuery 1.8, the $.param() method no longer uses
+jQuery.ajaxSettings.traditional as its default setting and will default
+to false. For best compatibility across versions, call $.param() with
+an explicit value for the second argument and do not use defaults.
 ") (text . "") (text . "If the object passed is in an Array, it must be an array of objects in
 the format returned by .serializeArray()
 
-") (text . "") (js . "[{name:\"first\",value:\"Rick\"},
-{name:\"last\",value:\"Astley\"},
-{name:\"job\",value:\"Rock Star\"}]") (text . "") (text . "  Note: Because some frameworks have limited ability to parse
-  serialized arrays, developers should exercise caution when passing
-  an obj argument that contains objects or arrays nested within
-  another array.
-") (text . "") (text . "  Note: Because there is no universally agreed-upon specification for
-  param strings, it is not possible to encode complex data structures
-  using this method in a manner that works ideally across all
-  languages supporting such input. Until such time that there is, the
-  $.param method will remain in its current form.
+") (text . "") (js . "
+[
+  { name: \"first\", value: \"Rick\" },
+  { name: \"last\", value: \"Astley\" },
+  { name: \"job\", value: \"Rock Star\" }
+]
+    ") (text . "") (text . "Note: Because some frameworks have limited ability to parse serialized
+arrays, developers should exercise caution when passing an obj argument
+that contains objects or arrays nested within another array.
+") (text . "") (text . "Note: Because there is no universally agreed-upon specification for
+param strings, it is not possible to encode complex data structures
+using this method in a manner that works ideally across all languages
+supporting such input. Use JSON format as an alternative for encoding
+complex data instead.
 ") (text . "") (text . "In jQuery 1.4, HTML5 input elements are also serialized.
 
 
 ") (text . "") (text . "We can display a query string representation of an object and a
 URI-decoded version of the same as follows:
 
-") (text . "") (js . "var myObject = {
+") (text . "") (js . "
+var myObject = {
   a: {
     one: 1,
     two: 2,
     three: 3
   },
-  b: [1,2,3]
+  b: [ 1, 2, 3 ]
 };
-var recursiveEncoded = $.param(myObject);
-var recursiveDecoded = decodeURIComponent($.param(myObject));
+var recursiveEncoded = $.param( myObject );
+var recursiveDecoded = decodeURIComponent( $.param( myObject ) );
 
-alert(recursiveEncoded);
-alert(recursiveDecoded);
-") (text . "") (text . "The values of recursiveEncoded and recursiveDecoded are alerted as
+alert( recursiveEncoded );
+alert( recursiveDecoded );
+    ") (text . "") (text . "The values of recursiveEncoded and recursiveDecoded are alerted as
 follows:
 
 ") (text . "") (text . "a%5Bone%5D=1&a%5Btwo%5D=2&a%5Bthree%5D=3&b%5B%5D=1&b%5B%5D=2&b%5B%5D=3
@@ -8937,19 +10459,20 @@ a[one]=1&a[two]=2&a[three]=3&b[]=1&b[]=2&b[]=3
 ") (text . "") (text . "To emulate the behavior of $.param() prior to jQuery 1.4, we can set
 the traditional argument to true:
 
-") (text . "") (js . "var myObject = {
+") (text . "") (js . "
+var myObject = {
   a: {
     one: 1,
     two: 2,
     three: 3
   },
-  b: [1,2,3]
+  b: [ 1, 2, 3 ]
 };
-var shallowEncoded = $.param(myObject, true);
-var shallowDecoded = decodeURIComponent(shallowEncoded);
+var shallowEncoded = $.param( myObject, true );
+var shallowDecoded = decodeURIComponent( shallowEncoded );
 
-alert(shallowEncoded);
-alert(shallowDecoded);
+alert( shallowEncoded );
+alert( shallowDecoded );
 ") (text . "") (text . "The values of shallowEncoded and shallowDecoded are alerted as follows:
 
 
@@ -8959,24 +10482,35 @@ a=[object+Object]&b=1&b=2&b=3
 ") (text . "")) ("examples" ((text . "") (text . "Serialize a key/value object.
 
 ") (text . "") (js . "
-
-    var params = { width:1680, height:1050 };
-    var str = jQuery.param(params);
-    $(\"#results\").text(str);
-") (text . "") (css . "div { color:red; }") (text . "") (html . "<div id=\"results\"></div>") (text . "")) ((text . "") (text . "Serialize a few complex objects
+var params = { width:1680, height:1050 };
+var str = jQuery.param( params );
+$( \"#results\" ).text( str );
+") (text . "") (css . "
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+<div id=\"results\"></div>
+") (text . "")) ((text . "") (text . "Serialize a few complex objects
 
 ") (text . "") (js . "
 // <=1.3.2:
-$.param({ a: [2,3,4] }) // \"a=2&a=3&a=4\"
+$.param({ a: [ 2, 3, 4 ] }); // \"a=2&a=3&a=4\"
 // >=1.4:
-$.param({ a: [2,3,4] }) // \"a[]=2&a[]=3&a[]=4\"
+$.param({ a: [ 2, 3, 4 ] }); // \"a[]=2&a[]=3&a[]=4\"
 
 // <=1.3.2:
-$.param({ a: { b:1,c:2 }, d: [3,4,{ e:5 }] }) // \"a=[object+Object]&d=3&d=4&d=[object+Object]\"
-// >=1.4:
-$.param({ a: { b:1,c:2 }, d: [3,4,{ e:5 }] }) // \"a[b]=1&a[c]=2&d[]=3&d[]=4&d[2][e]=5\"
+$.param({ a: { b: 1, c: 2 }, d: [ 3, 4, { e: 5 } ] });
+// \"a=[object+Object]&d=3&d=4&d=[object+Object]\"
 
-") (text . "") (css . "div { color:red; }") (text . ""))))) jquery-doc-hash)
+// >=1.4:
+$.param({ a: { b: 1, c: 2 }, d: [ 3, 4, { e: 5 } ] });
+// \"a[b]=1&a[c]=2&d[]=3&d[]=4&d[2][e]=5\"
+") (text . "") (css . "
+  div {
+    color: red;
+  }
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.parseJSON" jquery-doc-methods)
 
@@ -8985,20 +10519,31 @@ $.param({ a: { b:1,c:2 }, d: [3,4,{ e:5 }] }) // \"a[b]=1&a[c]=2&d[]=3&d[]=4&d[2
 " nil nil))) ("desc" (text . "Takes a well-formed JSON string and returns the resulting JavaScript
 object.
 
-")) ("longdesc" (text . "") (text . "Passing in a malformed JSON string may result in an exception being
-thrown. For example, the following are all malformed JSON strings:
-
+")) ("longdesc" (text . "") (text . "Passing in a malformed JSON string results in a JavaScript exception
+being thrown. For example, the following are all malformed JSON
+strings:
 ") (text . "") (text . "  * {test: 1} (test does not have double quotes around it).
   * {`test`: 1} (`test` is using single quotes instead of double
     quotes).
-") (text . "") (text . "Additionally if you pass in nothing, an empty string, null, or
-undefined, `null` will be returned from parseJSON. Where the browser
-provides a native implementation of JSON.parse, jQuery uses it to parse
-the string. For details on the JSON format, see http://json.org/.
+") (text . "") (text . "The JSON standard does not permit \"control characters\" such as a tab or
+newline. An example like $.parseJSON( `{ \"testing\":\"1\\t2\\n3\" }` ) will
+throw an error in most implementations because the JavaScript parser
+converts the string`s tab and newline escapes into literal tab and
+newline; doubling the backslashes like \"1\\\\t2\\\\n3\" yields expected
+results. This problem is often seen when injecting JSON into a
+JavaScript file from a server-side language such as PHP.
+") (text . "") (text . "Where the browser provides a native implementation of JSON.parse,
+jQuery uses it to parse the string. For details on the JSON format, see
+http://json.org/.
+") (text . "") (text . "Prior to jQuery 1.9, $.parseJSON returned null instead of throwing an
+error if it was passed an empty string, null, or undefined, even though
+those are not valid JSON.
 ") (text . "")) ("examples" ((text . "") (text . "Parse a JSON string.
 
-") (text . "") (js . "var obj = jQuery.parseJSON('{\"name\":\"John\"}');
-alert( obj.name === \"John\" );") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+var obj = jQuery.parseJSON( '{ \"name\": \"John\" }' );
+alert( obj.name === \"John\" )
+;") (text . ""))))) jquery-doc-hash)
 
 (push "$.parseXML" jquery-doc-methods)
 
@@ -9018,17 +10563,17 @@ title node.
 <p id=\"anotherElement\"></p>
 ") (text . "") (js . "
 var xml = \"<rss version='2.0'><channel><title>RSS Title</title></channel></rss>\",
-    xmlDoc = $.parseXML( xml ),
-    $xml = $( xmlDoc ),
-    $title = $xml.find( \"title\" );
+  xmlDoc = $.parseXML( xml ),
+  $xml = $( xmlDoc ),
+  $title = $xml.find( \"title\" );
 
-/* append \"RSS Title\" to #someElement */
+// Append \"RSS Title\" to #someElement
 $( \"#someElement\" ).append( $title.text() );
 
-/* change the title to \"XML Title\" */
+// Change the title to \"XML Title\"
 $title.text( \"XML Title\" );
 
-/* append \"XML Title\" to #anotherElement */
+// Append \"XML Title\" to #anotherElement
 $( \"#anotherElement\" ).append( $title.text() );
 ") (text . ""))))) jquery-doc-hash)
 
@@ -9038,7 +10583,8 @@ $( \"#anotherElement\" ).append( $title.text() );
 
 " nil nil) ("data" "A plain object or string that is sent to the server with the request.
 
-" "true" nil) ("success(data, textStatus, jqXHR)" "A callback function that is executed if the request succeeds.
+" "true" nil) ("success(data, textStatus, jqXHR)" "A callback function that is executed if the request succeeds. Required
+if dataType is provided, but can be null in that case.
 
 " "true" nil) ("dataType" "The type of data expected from the server. Default: Intelligent Guess
 (xml, json, script, text, html).
@@ -9048,14 +10594,15 @@ $( \"#anotherElement\" ).append( $title.text() );
 ")) ("longdesc" (text . "") (text . "This is a shorthand Ajax function, which is equivalent to:
 
 
-") (text . "") (js . "$.ajax({
+") (text . "") (js . "
+$.ajax({
   type: \"POST\",
   url: url,
   data: data,
   success: success,
   dataType: dataType
 });
-") (text . "") (text . "The success callback function is passed the returned data, which will
+    ") (text . "") (text . "The success callback function is passed the returned data, which will
 be an XML root element or a text string depending on the MIME type of
 the response. It is also passed the text status of the response.
 ") (text . "") (text . "As of jQuery 1.5, the success callback function is also passed a
@@ -9064,10 +10611,11 @@ object).
 ") (text . "") (text . "Most implementations will specify a success handler:
 
 
-") (text . "") (js . "$.post('ajax/test.html', function(data) {
-  $('.result').html(data);
+") (text . "") (js . "
+$.post( \"ajax/test.html\", function( data ) {
+  $( \".result\" ).html( data );
 });
-") (text . "") (text . "This example fetches the requested HTML snippet and inserts it on the
+    ") (text . "") (text . "This example fetches the requested HTML snippet and inserts it on the
 page.
 
 ") (text . "") (text . "Pages fetched with POST are never cached, so the cache and ifModified
@@ -9090,20 +10638,29 @@ $.get(), to chain multiple .done(), .fail(), and .always() callbacks on
 a single request, and even to assign these callbacks after the request
 may have completed. If the request is already complete, the callback is
 fired immediately.
-") (text . "") (js . "// Assign handlers immediately after making the request,
+") (text . "") (js . "
+// Assign handlers immediately after making the request,
 // and remember the jqxhr object for this request
-var jqxhr = $.post(\"example.php\", function() {
-  alert(\"success\");
+var jqxhr = $.post( \"example.php\", function() {
+  alert( \"success\" );
 })
-.done(function() { alert(\"second success\"); })
-.fail(function() { alert(\"error\"); })
-.always(function() { alert(\"finished\"); });
+  .done(function() {
+    alert( \"second success\" );
+  })
+  .fail(function() {
+    alert( \"error\" );
+  })
+  .always(function() {
+    alert( \"finished\" );
+});
 
-// perform other work here ...
+// Perform other work here ...
 
 // Set another completion function for the request above
-jqxhr.always(function(){ alert(\"second finished\"); });
-") (text . "") (text . " Deprecation Notice
+jqxhr.always(function() {
+  alert( \"second finished\" );
+});
+    ") (text . "") (text . " Deprecation Notice
 
 
 ") (text . "") (text . "The jqXHR.success(), jqXHR.error(), and jqXHR.complete() callback
@@ -9112,62 +10669,75 @@ prepare your code for their eventual removal, use jqXHR.done(),
 jqXHR.fail(), and jqXHR.always() instead.
 ") (text . "")) ("examples" ((text . "") (text . "Request the test.php page, but ignore the return results.
 
-") (text . "") (js . "$.post(\"test.php\");") (text . "")) ((text . "") (text . "Request the test.php page and send some additional data along (while
+") (text . "") (js . "
+$.post( \"test.php\" );
+") (text . "")) ((text . "") (text . "Request the test.php page and send some additional data along (while
 still ignoring the return results).
 
-") (text . "") (js . "$.post(\"test.php\", { name: \"John\", time: \"2pm\" } );") (text . "")) ((text . "") (text . "Pass arrays of data to the server (while still ignoring the return
+") (text . "") (js . "
+$.post( \"test.php\", { name: \"John\", time: \"2pm\" } );
+") (text . "")) ((text . "") (text . "Pass arrays of data to the server (while still ignoring the return
 results).
 
-") (text . "") (js . "$.post(\"test.php\", { 'choices[]': [\"Jon\", \"Susan\"] });") (text . "")) ((text . "") (text . "Send form data using ajax requests
+") (text . "") (js . "
+$.post( \"test.php\", { 'choices[]': [ \"Jon\", \"Susan\" ] } );
+") (text . "")) ((text . "") (text . "Send form data using ajax requests
 
-") (text . "") (js . "$.post(\"test.php\", $(\"#testform\").serialize());") (text . "")) ((text . "") (text . "Alert the results from requesting test.php (HTML or XML, depending on
+") (text . "") (js . "
+$.post( \"test.php\", $( \"#testform\" ).serialize() );
+") (text . "")) ((text . "") (text . "Alert the results from requesting test.php (HTML or XML, depending on
 what was returned).
 
-") (text . "") (js . "$.post(\"test.php\", function(data) {
-  alert(\"Data Loaded: \" + data);
-});") (text . "")) ((text . "") (text . "Alert the results from requesting test.php with an additional payload
+") (text . "") (js . "
+$.post( \"test.php\", function( data ) {
+  alert( \"Data Loaded: \" + data );
+});
+") (text . "")) ((text . "") (text . "Alert the results from requesting test.php with an additional payload
 of data (HTML or XML, depending on what was returned).
 
-") (text . "") (js . "$.post(\"test.php\", { name: \"John\", time: \"2pm\" })
-.done(function(data) {
-  alert(\"Data Loaded: \" + data);
-});
+") (text . "") (js . "
+$.post( \"test.php\", { name: \"John\", time: \"2pm\" })
+  .done(function( data ) {
+    alert( \"Data Loaded: \" + data );
+  });
 ") (text . "")) ((text . "") (text . "Post to the test.php page and get content which has been returned in
 json format (<?php echo
 json_encode(array(\"name\"=>\"John\",\"time\"=>\"2pm\")); ?>).
-") (text . "") (js . "$.post(\"test.php\", { \"func\": \"getNameAndTime\" },
-  function(data){
-    console.log(data.name); // John
-    console.log(data.time); //  2pm
-  }, \"json\");") (text . "")) ((text . "") (text . "Post a form using ajax and put results in a div
+") (text . "") (js . "
+$.post( \"test.php\", { func: \"getNameAndTime\" }, function( data ) {
+  console.log( data.name ); // John
+  console.log( data.time ); // 2pm
+}, \"json\");
+") (text . "")) ((text . "") (text . "Post a form using ajax and put results in a div
 
 ") (text . "") (js . "
-/* attach a submit handler to the form */
-$(\"#searchForm\").submit(function(event) {
+// Attach a submit handler to the form
+$( \"#searchForm\" ).submit(function( event ) {
 
-  /* stop form from submitting normally */
+  // Stop form from submitting normally
   event.preventDefault();
 
-  /* get some values from elements on the page: */
+  // Get some values from elements on the page:
   var $form = $( this ),
-      term = $form.find( 'input[name=\"s\"]' ).val(),
-      url = $form.attr( 'action' );
+    term = $form.find( \"input[name='s']\" ).val(),
+    url = $form.attr( \"action\" );
 
-  /* Send the data using post */
+  // Send the data using post
   var posting = $.post( url, { s: term } );
 
-  /* Put the results in a div */
+  // Put the results in a div
   posting.done(function( data ) {
-    var content = $( data ).find( '#content' );
+    var content = $( data ).find( \"#content\" );
     $( \"#result\" ).empty().append( content );
   });
 });
-") (text . "") (html . "<form action=\"/\" id=\"searchForm\">
-   <input type=\"text\" name=\"s\" placeholder=\"Search...\" />
-   <input type=\"submit\" value=\"Search\" />
-  </form>
-  <!-- the result of the search will be rendered inside this div -->
-  <div id=\"result\"></div>
+") (text . "") (html . "
+<form action=\"/\" id=\"searchForm\">
+  <input type=\"text\" name=\"s\" placeholder=\"Search...\">
+  <input type=\"submit\" value=\"Search\">
+</form>
+<!-- the result of the search will be rendered inside this div -->
+<div id=\"result\"></div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "$.proxy" jquery-doc-methods)
@@ -9215,6 +10785,10 @@ during unbinding.
 ") (text . "") (text . "As of jQuery 1.6, any number of additional arguments may supplied to
 $.proxy(), and they will be passed to the function whose context will
 be changed.
+") (text . "") (text . "As of jQuery 1.9, when the context is null or undefined the proxied
+function will be called with the same this object as the proxy was
+called with. This allows $.proxy() to be used to partially apply the
+arguments of a function without changing the context.
 ") (text . "")) ("examples" ((text . "") (text . "Change the context of functions bound to a click handler using the
 \"function, context\" signature. Unbind the first handler after first
 click.
@@ -9224,45 +10798,43 @@ click.
 ") (text . "") (js . "
 var me = {
   type: \"zombie\",
-  test: function(event) {
-    /* Without proxy, `this` would refer to the event target */
-    /* use event.target to reference that element. */
+  test: function( event ) {
+    // Without proxy, `this` would refer to the event target
+    // use event.target to reference that element.
     var element = event.target;
-    $(element).css(\"background-color\", \"red\");
+    $( element ).css( \"background-color\", \"red\" );
 
-    /* With proxy, `this` refers to the me object encapsulating */
-    /* this function. */
-    $(\"#log\").append( \"Hello \" + this.type + \"<br>\" );
-    $(\"#test\").off(\"click\", this.test);
+    // With proxy, `this` refers to the me object encapsulating
+    // this function.
+    $( \"#log\" ).append( \"Hello \" + this.type + \"<br>\" );
+    $( \"#test\" ).off( \"click\", this.test );
   }
 };
 
 var you = {
   type: \"person\",
-  test: function(event) {
-    $(\"#log\").append( this.type + \" \" );
+  test: function( event ) {
+    $( \"#log\" ).append( this.type + \" \" );
   }
 };
 
-/* execute you.test() in the context of the `you` object */
-/* no matter where it is called */
-/* i.e. the `this` keyword will refer to `you` */
+// Execute you.test() in the context of the `you` object
+// no matter where it is called
+// i.e. the `this` keyword will refer to `you`
 var youClick = $.proxy( you.test, you );
 
-
-/* attach click handlers to #test */
-$(\"#test\")
-
-  /* this === \"zombie\"; handler unbound after first click */
+// attach click handlers to #test
+$( \"#test\" )
+  // this === \"zombie\"; handler unbound after first click
   .on( \"click\", $.proxy( me.test, me ) )
 
-  /* this === \"person\" */
+  // this === \"person\"
   .on( \"click\", youClick )
 
-  /* this === \"zombie\" */
+  // this === \"zombie\"
   .on( \"click\", $.proxy( you.test, me ) )
 
-  /* this === \"<button> element\" */
+  // this === \"<button> element\"
   .on( \"click\", you.test );
 ") (text . "")) ((text . "") (text . "Enforce the context of the function using the \"context, function name\"
 signature. Unbind the handler after first click.
@@ -9271,15 +10843,14 @@ signature. Unbind the handler after first click.
   <p><button id=\"test\">Test</button></p>
   <p id=\"log\"></p>
 ") (text . "") (js . "
-  var obj = {
-    name: \"John\",
-    test: function() {
-      $(\"#log\").append( this.name );
-      $(\"#test\").off(\"click\", obj.test);
-    }
-  };
-
-  $(\"#test\").on( \"click\", jQuery.proxy( obj, \"test\" ) );
+var obj = {
+  name: \"John\",
+  test: function() {
+    $( \"#log\" ).append( this.name );
+    $( \"#test\" ).off( \"click\", obj.test );
+  }
+};
+$( \"#test\" ).on( \"click\", jQuery.proxy( obj, \"test\" ) );
 ") (text . "")) ((text . "") (text . "Change the context of a function bound to the click handler,
 
 ") (text . "") (html . "
@@ -9287,30 +10858,30 @@ signature. Unbind the handler after first click.
 <div id=\"log\"></div>
 ") (text . "") (js . "
 var me = {
-  /* I'm a dog */
+  // I'm a dog
   type: \"dog\",
 
-  /* Note that event comes *after* one and two */
-  test: function(one, two, event) {
-    $(\"#log\")
+  // Note that event comes *after* one and two
+  test: function( one, two, event ) {
+    $( \"#log\" )
 
-      /* `one` maps to `you`, the 1st additional */
-      /* argument in the $.proxy function call */
+      // `one` maps to `you`, the 1st additional
+      // argument in the $.proxy function call
       .append( \"<h3>Hello \" + one.type + \":</h3>\" )
 
-      /* the `this` keyword refers to `me` */
-      /*(the 2nd, context, argument of $.proxy) */
+      // The `this` keyword refers to `me`
+      // (the 2nd, context, argument of $.proxy)
       .append( \"I am a \" + this.type + \", \" )
 
-      /* `two` maps to `they`, the 2nd additional */
-      /* argument in the $.proxy function call */
+      // `two` maps to `they`, the 2nd additional
+      // argument in the $.proxy function call
       .append( \"and they are \" + two.type + \".<br>\" )
 
-      /* the event type is \"click\" */
-      .append( \"Thanks for \" + event.type + \"ing \" )
+      // The event type is \"click\"
+      .append( \"Thanks for \" + event.type + \"ing.\" )
 
-      /* the clicked element is `event.target`, */
-      /* and its type is \"button\" */
+      // The clicked element is `event.target`,
+      // and its type is \"button\"
       .append( \"the \" + event.target.type + \".\" );
   }
 };
@@ -9318,14 +10889,13 @@ var me = {
 var you = { type: \"cat\" };
 var they = { type: \"fish\" };
 
-
-/* Set up handler to execute me.test() in the context */
-/* of `me`, with `you` and `they` as additional arguments */
+// Set up handler to execute me.test() in the context
+// of `me`, with `you` and `they` as additional arguments
 var proxy = $.proxy( me.test, me, you, they );
 
-$(\"#test\")
-.on( \"click\", proxy );
-    ") (text . ""))))) jquery-doc-hash)
+$( \"#test\" )
+  .on( \"click\", proxy );
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.queue" jquery-doc-methods)
 
@@ -9342,28 +10912,49 @@ instead.
 ") (text . "")) ("examples" ((text . "") (text . "Show the length of the queue.
 
 ") (text . "") (js . "
-  $(\"#show\").click(function () {
-    var n = jQuery.queue( $(\"div\")[0], \"fx\" );
-    $(\"span\").text(\"Queue length is: \" + n.length);
-  });
-  function runIt() {
-    $(\"div\").show(\"slow\");
-    $(\"div\").animate({left:'+=200'},2000);
-    $(\"div\").slideToggle(1000);
-    $(\"div\").slideToggle(\"fast\");
-    $(\"div\").animate({left:'-=200'},1500);
-    $(\"div\").hide(\"slow\");
-    $(\"div\").show(1200);
-    $(\"div\").slideUp(\"normal\", runIt);
+$( \"#show\" ).click(function() {
+  var n = jQuery.queue( $( \"div\" )[ 0 ], \"fx\" );
+  $( \"span\" ).text( \"Queue length is: \" + n.length );
+});
+
+function runIt() {
+  $( \"div\" )
+    .show( \"slow\" )
+    .animate({
+      left: \"+=200\"
+    }, 2000 )
+    .slideToggle( 1000 )
+    .slideToggle( \"fast\" )
+    .animate({
+      left: \"-=200\"
+    }, 1500 )
+    .hide( \"slow\" )
+    .show( 1200 )
+    .slideUp( \"normal\", runIt );
+}
+
+runIt();
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
   }
-  runIt();
-  ") (text . "") (css . "div { margin:3px; width:40px; height:40px;
-        position:absolute; left:0px; top:30px;
-        background:green; display:none; }
-  div.newcolor { background:blue; }
-  span { color:red; }  ") (text . "") (html . "<button id=\"show\">Show Length of Queue</button>
-  <span></span>
-  <div></div>
+  div.newcolor {
+    background: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<button id=\"show\">Show Length of Queue</button>
+<span></span>
+<div></div>
   ") (text . ""))))) jquery-doc-hash)
 
 (push "$.queue" jquery-doc-methods)
@@ -9401,56 +10992,79 @@ line executes.
 ") (text . "")) ("examples" ((text . "") (text . "Queue a custom function.
 
 ") (text . "") (js . "
- $(document.body).click(function () {
-    $(\"div\").show(\"slow\");
-    $(\"div\").animate({left:'+=200'},2000);
-    jQuery.queue( $(\"div\")[0], \"fx\", function () {
-      $(this).addClass(\"newcolor\");
-      jQuery.dequeue( this );
-    });
-    $(\"div\").animate({left:'-=200'},500);
-    jQuery.queue( $(\"div\")[0], \"fx\", function () {
-      $(this).removeClass(\"newcolor\");
-      jQuery.dequeue( this );
-    });
-    $(\"div\").slideUp();
-  });") (text . "") (css . "
-div { margin:3px; width:40px; height:40px;
-      position:absolute; left:0px; top:30px;
-      background:green; display:none; }
-div.newcolor { background:blue; }
-") (text . "") (html . "Click here...
-  <div></div>
-  ") (text . "")) ((text . "") (text . "Set a queue array to delete the queue.
+$( document.body ).click(function() {
+  var divs = $( \"div\" )
+    .show( \"slow\" )
+    .animate({ left: \"+=200\" }, 2000 );
+  jQuery.queue( divs[ 0 ], \"fx\", function() {
+    $( this ).addClass( \"newcolor\" );
+    jQuery.dequeue( this );
+  });
+  divs.animate({ left: \"-=200\" }, 500 );
+  jQuery.queue( divs[ 0 ], \"fx\", function() {
+    $( this ).removeClass( \"newcolor\" );
+    jQuery.dequeue( this );
+  });
+  divs.slideUp();
+});
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+") (text . "") (html . "
+Click here...
+<div></div>
+") (text . "")) ((text . "") (text . "Set a queue array to delete the queue.
 
 ") (text . "") (js . "
-   $(\"#start\").click(function () {
-      $(\"div\").show(\"slow\");
-      $(\"div\").animate({left:'+=200'},5000);
-      jQuery.queue( $(\"div\")[0], \"fx\", function () {
-        $(this).addClass(\"newcolor\");
-        jQuery.dequeue( this );
-      });
-      $(\"div\").animate({left:'-=200'},1500);
-      jQuery.queue( $(\"div\")[0], \"fx\", function () {
-        $(this).removeClass(\"newcolor\");
-        jQuery.dequeue( this );
-      });
-      $(\"div\").slideUp();
-    });
-    $(\"#stop\").click(function () {
-      jQuery.queue( $(\"div\")[0], \"fx\", [] );
-      $(\"div\").stop();
-    });
+$( \"#start\" ).click(function() {
+  var divs = $( \"div\" )
+    .show( \"slow\" )
+    .animate({ left: \"+=200\" }, 5000 );
+  jQuery.queue( divs[ 0 ], \"fx\", function() {
+    $( this ).addClass( \"newcolor\" );
+    jQuery.dequeue( this );
+  });
+  divs.animate({ left: \"-=200\" }, 1500 );
+  jQuery.queue( divs[ 0 ], \"fx\", function() {
+    $( this ).removeClass( \"newcolor\" );
+    jQuery.dequeue( this );
+  });
+  divs.slideUp();
+});
+$( \"#stop\" ).click(function() {
+  jQuery.queue( $( \"div\" )[ 0 ], \"fx\", [] );
+  $( \"div\" ).stop();
+});
 ") (text . "") (css . "
-  div { margin:3px; width:40px; height:40px;
-        position:absolute; left:0px; top:30px;
-        background:green; display:none; }
-  div.newcolor { background:blue; }
-  ") (text . "") (html . "
-  <button id=\"start\">Start</button>
-  <button id=\"stop\">Stop</button>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+") (text . "") (html . "
+<button id=\"start\">Start</button>
+<button id=\"stop\">Stop</button>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.removeData" jquery-doc-methods)
 
@@ -9470,20 +11084,28 @@ with no arguments, all values are removed.
 ") (text . "")) ("examples" ((text . "") (text . "Set a data store for 2 names then remove one of them.
 
 ") (text . "") (js . "
-var div = $(\"div\")[0];
-$(\"span:eq(0)\").text(\"\" + $(\"div\").data(\"test1\"));
-jQuery.data(div, \"test1\", \"VALUE-1\");
-jQuery.data(div, \"test2\", \"VALUE-2\");
-$(\"span:eq(1)\").text(\"\" + jQuery.data(div, \"test1\"));
-jQuery.removeData(div, \"test1\");
-$(\"span:eq(2)\").text(\"\" + jQuery.data(div, \"test1\"));
-$(\"span:eq(3)\").text(\"\" + jQuery.data(div, \"test2\"));") (text . "") (css . "
-    div { margin:2px; color:blue; }
-    span { color:red; }
-    ") (text . "") (html . "<div>value1 before creation: <span></span></div>
-    <div>value1 after creation: <span></span></div>
-    <div>value1 after removal: <span></span></div>
-    <div>value2 after removal: <span></span></div>") (text . ""))))) jquery-doc-hash)
+var div = $( \"div\" )[ 0 ];
+$( \"span:eq(0)\" ).text( \"\" + $( \"div\" ).data( \"test1\" ) );
+jQuery.data( div, \"test1\", \"VALUE-1\" );
+jQuery.data( div, \"test2\", \"VALUE-2\" );
+$( \"span:eq(1)\" ).text( \"\" + jQuery.data( div, \"test1\" ) );
+jQuery.removeData( div, \"test1\" );
+$( \"span:eq(2)\" ).text( \"\" + jQuery.data( div, \"test1\" ) );
+$( \"span:eq(3)\" ).text( \"\" + jQuery.data( div, \"test2\" ) );
+") (text . "") (css . "
+  div {
+    margin: 2px;
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>value1 before creation: <span></span></div>
+<div>value1 after creation: <span></span></div>
+<div>value1 after removal: <span></span></div>
+<div>value2 after removal: <span></span></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.sub" jquery-doc-methods)
 
@@ -9512,49 +11134,53 @@ some examples.
 
 ") (text . "")) ("examples" ((text . "") (text . "Adding a method to a jQuery sub so that it isn`t exposed externally:
 
-") (text . "") (js . "(function(){
+") (text . "") (js . "
+(function(){
   var sub$ = jQuery.sub();
-
-  sub$.fn.myCustomMethod = function(){
-    return 'just for me';
+  sub$.fn.myCustomMethod = function() {
+    return \"just for me\";
   };
 
-  sub$(document).ready(function() {
-    sub$('body').myCustomMethod() // 'just for me'
+  sub$( document ).ready(function() {
+    sub$( \"body\" ).myCustomMethod() // \"just for me\"
   });
 })();
 
-typeof jQuery('body').myCustomMethod // undefined") (text . "")) ((text . "") (text . "Override some jQuery methods to provide new functionality.
+typeof jQuery( \"body\" ).myCustomMethod // undefined
+") (text . "")) ((text . "") (text . "Override some jQuery methods to provide new functionality.
 
 ") (text . "") (js . "
 (function() {
   var myjQuery = jQuery.sub();
 
   myjQuery.fn.remove = function() {
+
     // New functionality: Trigger a remove event
-    this.trigger(\"remove\");
+    this.trigger( \"remove\" );
 
     // Be sure to call the original jQuery remove method
     return jQuery.fn.remove.apply( this, arguments );
   };
 
-  myjQuery(function($) {
-    $(\".menu\").click(function() {
-      $(this).find(\".submenu\").remove();
+  myjQuery(function( $ ) {
+    $( \".menu\" ).click(function() {
+      $( this ).find( \".submenu\" ).remove();
     });
 
     // A new remove event is now triggered from this copy of jQuery
-    $(document).on(\"remove\", function(e) {
-      $(e.target).parent().hide();
+    $( document ).on( \"remove\", function( event ) {
+      $( event.target ).parent().hide();
     });
   });
 })();
 
 // Regular jQuery doesn't trigger a remove event when removing an element
-// This functionality is only contained within the modified 'myjQuery'.") (text . "")) ((text . "") (text . "Create a plugin that returns plugin-specific methods.
+// This functionality is only contained within the modified 'myjQuery'.
+") (text . "")) ((text . "") (text . "Create a plugin that returns plugin-specific methods.
 
 ") (text . "") (js . "
 (function() {
+
   // Create a new copy of jQuery using sub()
   var plugin = jQuery.sub();
 
@@ -9570,19 +11196,21 @@ typeof jQuery('body').myCustomMethod // undefined") (text . "")) ((text . "") (t
 
   // Add our plugin to the original jQuery
   jQuery.fn.myplugin = function() {
-    this.addClass(\"plugin\");
+    this.addClass( \"plugin\" );
 
     // Make sure our plugin returns our special plugin version of jQuery
     return plugin( this );
   };
 })();
 
-$(document).ready(function() {
-  // Call the plugin, open method now exists
-  $('#main').myplugin().open();
+$( document ).ready(function() {
 
-  // Note: Calling just $(\"#main\").open() won't work as open doesn't exist!
-});") (text . ""))))) jquery-doc-hash)
+  // Call the plugin, open method now exists
+  $( \"#main\" ).myplugin().open();
+
+  // Note: Calling just $( \"#main\" ).open() won't work as open doesn't exist!
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.trim" jquery-doc-methods)
 
@@ -9594,18 +11222,20 @@ $(document).ready(function() {
 non-breaking spaces), and tabs from the beginning and end of the
 supplied string. If these whitespace characters occur in the middle of
 the string, they are preserved.
-") (text . "")) ("examples" ((text . "") (text . "Remove the two white spaces at the start and at the end of the string.
+") (text . "")) ("examples" ((text . "") (text . "Remove the white spaces at the start and at the end of the string.
 
 ") (text . "") (js . "
-  var str = \"         lots of spaces before and after         \";
-  $(\"#original\").html(\"Original String: '\" + str + \"'\");
-  $(\"#trimmed\").html(\"$.trim()'ed: '\" + $.trim(str) + \"'\");
+var str = \"         lots of spaces before and after         \";
+$( \"#original\" ).html( \"Original String: '\" + str + \"'\" );
+$( \"#trimmed\" ).html( \"$.trim()'ed: '\" + $.trim(str) + \"'\" );
 ") (text . "") (html . "
-      <pre id=\"original\"></pre>
-      <pre id=\"trimmed\"></pre>
-    ") (text . "")) ((text . "") (text . "Remove the two white spaces at the start and at the end of the string.
+<pre id=\"original\"></pre>
+<pre id=\"trimmed\"></pre>
+") (text . "")) ((text . "") (text . "Remove the white spaces at the start and at the end of the string.
 
-") (text . "") (js . "$.trim(\"    hello, how are you?    \");") (text . "") (text . "\"hello, how are you?\"
+") (text . "") (js . "
+$.trim(\"    hello, how are you?    \");
+") (text . "") (text . "\"hello, how are you?\"
 
 ") (text . ""))))) jquery-doc-hash)
 
@@ -9624,21 +11254,30 @@ an object. The [[Class]] is determined as follows:
        + jQuery.type() === \"undefined\"
        + jQuery.type( window.notDefined ) === \"undefined\"
        + jQuery.type( null ) === \"null\"
-  * If the object has an internal [[Class]] equivalent to one of the
-    browser`s built-in objects, the associated name is returned. ( More
-    details about this technique.)
+  * If the argument is either a primitive value or an instance of a
+    standard built-in ECMAScript object, the [[Class]] internal
+    property is used to determine the type. ( More details about this
+    technique.)
        + jQuery.type( true ) === \"boolean\"
+       + jQuery.type( new Boolean() ) === \"boolean\"
        + jQuery.type( 3 ) === \"number\"
+       + jQuery.type( new Number(3) ) === \"number\"
        + jQuery.type( \"test\" ) === \"string\"
+       + jQuery.type( new String(\"test\") ) === \"string\"
        + jQuery.type( function(){} ) === \"function\"
        + jQuery.type( [] ) === \"array\"
+       + jQuery.type( new Array() ) === \"array\"
        + jQuery.type( new Date() ) === \"date\"
        + jQuery.type( new Error() ) === \"error\" // as of jQuery 1.9
        + jQuery.type( /test/ ) === \"regexp\"
   * Everything else returns \"object\" as its type.
 ") (text . "")) ("examples" ((text . "") (text . "Find out if the parameter is a RegExp.
 
-") (text . "") (js . "$(\"b\").append( \"\" + jQuery.type(/test/) );") (text . "") (html . "Is it a RegExp? <b></b>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"b\" ).append( \"\" + jQuery.type( /test/ ) );
+") (text . "") (html . "
+Is it a RegExp? <b></b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.unique" jquery-doc-methods)
 
@@ -9648,34 +11287,40 @@ an object. The [[Class]] is determined as follows:
 Note that this only works on arrays of DOM elements, not strings or
 numbers.
 ")) ("longdesc" (text . "") (text . "The $.unique() function searches through an array of objects, sorting
-the array, and removing any duplicate nodes. This function only works
-on plain JavaScript arrays of DOM elements, and is chiefly used
-internally by jQuery.
+the array, and removing any duplicate nodes. A node is considered a
+duplicate if it is the exact same node as one already in the array; two
+different nodes with identical attributes are not considered to be
+duplicates. This function only works on plain JavaScript arrays of DOM
+elements, and is chiefly used internally by jQuery. You probably will
+never need to use it.
 ") (text . "") (text . "As of jQuery 1.4 the results will always be returned in document order.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Removes any duplicate elements from the array of divs.
 
 ") (text . "") (js . "
+// unique() must take a native array
+var divs = $( \"div\" ).get();
 
-  var divs = $(\"div\").get(); // unique() must take a native array
+// Add 3 elements of class dup too (they are divs)
+divs = divs.concat( $( \".dup\" ).get() );
+$( \"div:eq(1)\" ).text( \"Pre-unique there are \" + divs.length + \" elements.\" );
 
-  // add 3 elements of class dup too (they are divs)
-  divs = divs.concat($(\".dup\").get());
-  $(\"div:eq(1)\").text(\"Pre-unique there are \" + divs.length + \" elements.\");
-
-  divs = jQuery.unique(divs);
-  $(\"div:eq(2)\").text(\"Post-unique there are \" + divs.length + \" elements.\")
-                .css(\"color\", \"red\");
+divs = jQuery.unique( divs );
+$( \"div:eq(2)\" ).text( \"Post-unique there are \" + divs.length + \" elements.\" )
+  .css( \"color\", \"red\" );
 ") (text . "") (css . "
-  div { color:blue; }
-  ") (text . "") (html . "<div>There are 6 divs in this document.</div>
-  <div></div>
-  <div class=\"dup\"></div>
-  <div class=\"dup\"></div>
-
-  <div class=\"dup\"></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    color: blue;
+  }
+") (text . "") (html . "
+<div>There are 6 divs in this document.</div>
+<div></div>
+<div class=\"dup\"></div>
+<div class=\"dup\"></div>
+<div class=\"dup\"></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.when" jquery-doc-methods)
 
@@ -9691,17 +11336,21 @@ as deferred.then . When the Deferred is resolved or rejected, usually
 by the code that created the Deferred originally, the appropriate
 callbacks will be called. For example, the jqXHR object returned by
 jQuery.ajax() is a Promise and can be used this way:
-") (text . "") (js . "$.when( $.ajax(\"test.aspx\") ).then(function(data, textStatus, jqXHR){
-     alert( jqXHR.status ); // alerts 200
-});") (text . "") (text . "If a single argument is passed to jQuery.when and it is not a Deferred
+") (text . "") (js . "
+$.when( $.ajax( \"test.aspx\" ) ).then(function( data, textStatus, jqXHR ) {
+  alert( jqXHR.status ); // Alerts 200
+});
+    ") (text . "") (text . "If a single argument is passed to jQuery.when and it is not a Deferred
 or a Promise, it will be treated as a resolved Deferred and any
 doneCallbacks attached will be executed immediately. The doneCallbacks
 are passed the original argument. In this case any failCallbacks you
 might set are never called since the Deferred is never rejected. For
 example:
-") (text . "") (js . "$.when( { testing: 123 } ).done(
-    function(x) { alert(x.testing); } /* alerts \"123\" */
-    );") (text . "") (text . "In the case where multiple Deferred objects are passed to jQuery.when,
+") (text . "") (js . "
+$.when( { testing: 123 } ).done(function( x ) {
+  alert( x.testing ); // Alerts \"123\"
+});
+    ") (text . "") (text . "In the case where multiple Deferred objects are passed to jQuery.when,
 the method returns the Promise from a new \"master\" Deferred object that
 tracks the aggregate state of all the Deferreds it has been passed. The
 method will resolve its master Deferred as soon as all the Deferreds
@@ -9721,19 +11370,21 @@ the failCallback.
 ") (text . "")) ("examples" ((text . "") (text . "Execute a function after two ajax requests are successful. (See the
 jQuery.ajax() documentation for a complete description of success and
 error cases for an ajax request).
-") (text . "") (js . "$.when($.ajax(\"/page1.php\"), $.ajax(\"/page2.php\")).done(function(a1,  a2){
-  /* a1 and a2 are arguments resolved for the
-      page1 and page2 ajax requests, respectively */
-  var jqXHR = a1[2]; /* arguments are [ \"success\", statusText, jqXHR ] */
-  if ( /Whip It/.test(jqXHR.responseText) ) {
-    alert(\"First page has 'Whip It' somewhere.\");
+") (text . "") (js . "
+$.when( $.ajax( \"/page1.php\" ), $.ajax( \"/page2.php\" ) ).done(function( a1, a2 ) {
+  // a1 and a2 are arguments resolved for the page1 and page2 ajax requests, respectively.
+  // Each argument is an array with the following structure: [ data, statusText, jqXHR ]
+  var data = a1[ 0 ] + a2[ 0 ]; // a1[ 0 ] = \"Whip\", a2[ 0 ] = \" It\"
+  if ( /Whip It/.test( data ) ) {
+    alert( \"We got what we came for!\" );
   }
 });
 ") (text . "")) ((text . "") (text . "Execute the function myFunc when both ajax requests are successful, or
 myFailure if either one has an error.
 
-") (text . "") (js . "$.when($.ajax(\"/page1.php\"), $.ajax(\"/page2.php\"))
-  .then(myFunc, myFailure);
+") (text . "") (js . "
+$.when( $.ajax( \"/page1.php\" ), $.ajax( \"/page2.php\" ) )
+  .then( myFunc, myFailure );
 ") (text . ""))))) jquery-doc-hash)
 
 (push "jQuery" jquery-doc-methods)
@@ -9770,9 +11421,9 @@ example, to do a search within an event handler, the search can be
 restricted like so:
 ") (text . "") (js . "
 $( \"div.foo\" ).click(function() {
-  $(  \"span\", this ).addClass( \"bar\" );
+  $( \"span\", this ).addClass( \"bar\" );
 });
-") (text . "") (text . "When the search for the span selector is restricted to the context of
+      ") (text . "") (text . "When the search for the span selector is restricted to the context of
 this, only spans within the clicked element will get the additional
 class.
 ") (text . "") (text . "Internally, selector context is implemented with the .find() method, so
@@ -9792,9 +11443,9 @@ that has been passed to a callback function through the keyword this:
 
 ") (text . "") (js . "
 $( \"div.foo\" ).click(function() {
-  $(this).slideUp();
+  $( this ).slideUp();
 });
-") (text . "") (text . "This example causes elements to be hidden with a sliding animation when
+      ") (text . "") (text . "This example causes elements to be hidden with a sliding animation when
 clicked. Because the handler receives the clicked item in the this
 keyword as a bare DOM element, the element must be passed to the $()
 function before applying jQuery methods to it.
@@ -9802,10 +11453,10 @@ function before applying jQuery methods to it.
 so individual elements of the XML structure can be retrieved using
 .find() and other DOM traversal methods.
 ") (text . "") (js . "
-$.post( \"url.xml\", function(data) {
-  var $child = $(data).find(\"child\");
-})
-") (text . "") (text . " Cloning jQuery Objects
+$.post( \"url.xml\", function( data ) {
+  var $child = $( data ).find( \"child\" );
+});
+      ") (text . "") (text . " Cloning jQuery Objects
 
 
 ") (text . "") (text . "When a jQuery object is passed to the $() function, a clone of the
@@ -9827,57 +11478,69 @@ wrapped in jQuery are: .data(), .prop(), .on(), .off(), .trigger() and
 on a plain object will result in a new property on the object called
 jQuery{randomNumber} (eg. jQuery123456789).
 ") (text . "") (js . "
-// define a plain object
-var foo = {foo: \"bar\", hello: \"world\"};
+// Define a plain object
+var foo = { foo: \"bar\", hello: \"world\" };
 
 // Pass it to the jQuery function
 var $foo = $( foo );
 
-// test accessing property values
+// Test accessing property values
 var test1 = $foo.prop( \"foo\" ); // bar
 
-// test setting property values
+// Test setting property values
 $foo.prop( \"foo\", \"foobar\" );
 var test2 = $foo.prop( \"foo\" ); // foobar
 
-// test using .data() as summarized above
-$foo.data( \"keyName\", \"someValue\");
+// Test using .data() as summarized above
+$foo.data( \"keyName\", \"someValue\" );
 console.log( $foo ); // will now contain a jQuery{randomNumber} property
 
-// test binding an event name and triggering
+// Test binding an event name and triggering
 $foo.on( \"eventName\", function () {
-  console.log(\"eventName was called\");
+  console.log( \"eventName was called\" );
 });
 
-$foo.trigger( \"eventName\" ); // logs \"eventName was called\"
-") (text . "") (text . "Should .trigger( \"eventName\" ) be used, it will search for an
+$foo.trigger( \"eventName\" ); // Logs \"eventName was called\"
+      ") (text . "") (text . "Should .trigger( \"eventName\" ) be used, it will search for an
 \"eventName\" property on the object and attempt to execute it after any
 attached jQuery handlers are executed. It does not check whether the
 property is a function or not. To avoid this behavior, .triggerHandler(
 \"eventName\" ) should be used instead.
 ") (text . "") (js . "
-$foo.triggerHandler( \"eventName\" ); // also logs \"eventName was called\"
-") (text . "")) ("examples" ((text . "") (text . "Find all p elements that are children of a div element and apply a
+$foo.triggerHandler( \"eventName\" ); // Also logs \"eventName was called\"
+      ") (text . "")) ("examples" ((text . "") (text . "Find all p elements that are children of a div element and apply a
 border to them.
 
 ") (text . "") (js . "
-$( \"div > p\").css(\"border\", \"1px solid gray\");
-    ") (text . "") (html . "<p>one</p> <div><p>two</p></div> <p>three</p>") (text . "")) ((text . "") (text . "Find all inputs of type radio within the first form in the document.
+$( \"div > p\" ).css( \"border\", \"1px solid gray\" );
+") (text . "") (html . "
+<p>one</p>
+<div><p>two</p></div>
+<p>three</p>
+") (text . "")) ((text . "") (text . "Find all inputs of type radio within the first form in the document.
 
-") (text . "") (js . "$(\"input:radio\", document.forms[0]);") (text . "")) ((text . "") (text . "Find all div elements within an XML document from an Ajax response.
+") (text . "") (js . "
+$( \"input:radio\", document.forms[ 0 ] );
+") (text . "")) ((text . "") (text . "Find all div elements within an XML document from an Ajax response.
 
-") (text . "") (js . "$(\"div\", xml.responseXML);") (text . "")) ((text . "") (text . "Set the background color of the page to black.
+") (text . "") (js . "
+$( \"div\", xml.responseXML );
+") (text . "")) ((text . "") (text . "Set the background color of the page to black.
 
-") (text . "") (js . "$(document.body).css( \"background\", \"black\" );") (text . "")) ((text . "") (text . "Hide all the input elements within a form.
+") (text . "") (js . "
+$( document.body ).css( \"background\", \"black\" );
+") (text . "")) ((text . "") (text . "Hide all the input elements within a form.
 
-") (text . "") (js . "$(myForm.elements).hide()") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( myForm.elements ).hide();
+") (text . ""))))) jquery-doc-hash)
 
 (push "jQuery" jquery-doc-methods)
 
 (puthash "jQuery" (quote (("name" . "jQuery") ("signatures" "jQuery" (("html" "A string of HTML to create on the fly. Note that this parses HTML, not
 XML.
 
-" nil nil) ("ownerDocument" "A document in which the new elements will be created
+" nil nil) ("ownerDocument" "A document in which the new elements will be created.
 
 " "true" nil)) (("html" "A string defining a single, standalone, HTML element (e.g. <div/> or
 <div></div>).
@@ -9901,6 +11564,11 @@ object:
 ") (text . "") (js . "$( \"<p id='test'>My <em>new</em> text</p>\" ).appendTo( \"body\" );") (text . "") (text . "For explicit parsing of a string to HTML, use the $.parseHTML() method.
 
 
+") (text . "") (text . "By default, elements are created with an ownerDocument matching the
+document into which the jQuery library was loaded. Elements being
+injected into a different document should be created using that
+document, e.g., $(\"<p>hello iframe</p>\",
+$(\"#myiframe\").prop(\"contentWindow\").document).
 ") (text . "") (text . "If the HTML is more complex than a single tag without attributes, as it
 is in the above example, the actual creation of the elements is handled
 by the browser`s innerHTML mechanism. In most cases, jQuery creates a
@@ -9927,15 +11595,16 @@ a closing tag:
 ") (text . "") (js . "$( \"<a href='http://jquery.com'></a>\" );") (text . "") (text . "Tags that cannot contain elements may be quick-closed or not:
 
 
-") (text . "") (js . "$( \"<img />\" );
+") (text . "") (js . "
+$( \"<img>\" );
 $( \"<input>\" );
-") (text . "") (text . "When passing HTML to jQuery(), please also note that text nodes are not
+      ") (text . "") (text . "When passing HTML to jQuery(), please also note that text nodes are not
 treated as DOM elements. With the exception of a few methods (such as
 .content()), they are generally otherwise ignored or removed. E.g:
 ") (text . "") (js . "
-var el = $( \"1<br/>2<br/>3\" ); // returns [<br>, \"2\", <br>]
-el  = $( \"1<br/>2<br/>3 >\" ); // returns [<br>, \"2\", <br>, \"3 &gt;\"]
-") (text . "") (text . "This behavior is expected.
+var el = $( \"1<br>2<br>3\" ); // returns [<br>, \"2\", <br>]
+el = $( \"1<br>2<br>3 >\" ); // returns [<br>, \"2\", <br>, \"3 &gt;\"]
+      ") (text . "") (text . "This behavior is expected.
 
 
 ") (text . "") (text . "As of jQuery 1.4, the second argument to jQuery() can accept a plain
@@ -9954,22 +11623,27 @@ $( \"") (text . "") (text . "The name \"class\" must be quoted in the object sin
 reserved word, and \"className\" cannot be used since it refers to the
 DOM property, not the attribute.
 ") (text . "") (text . "While the second argument is convenient, its flexibility can lead to
-unintended consequences (e.g. $(\"<input>\", {size: \"4\"}) calling the
+unintended consequences (e.g. $( \"<input>\", {size: \"4\"} ) calling the
 .size() method instead of setting the size attribute). The previous
 code block could thus be written instead as:
 ") (text . "") (js . "
 $( \"") (text . "")) ("examples" ((text . "") (text . "Create a div element (and all of its contents) dynamically and append
 it to the body element. Internally, an element is created and its
 innerHTML property set to the given markup.
-") (text . "") (js . "$( \"<div><p>Hello</p></div>\" ).appendTo( \"body\" )") (text . "")) ((text . "") (text . "Create some DOM elements.
+") (text . "") (js . "
+$( \"<div><p>Hello</p></div>\" ).appendTo( \"body\" )
+") (text . "")) ((text . "") (text . "Create some DOM elements.
 
-") (text . "") (js . "$( \"<div/>\", {
+") (text . "") (js . "
+$( \"<div/>\", {
   \"class\": \"test\",
   text: \"Click me!\",
   click: function() {
     $( this ).toggleClass( \"test\" );
   }
-}).appendTo( \"body\" );") (text . ""))))) jquery-doc-hash)
+})
+  .appendTo( \"body\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "jQuery" jquery-doc-methods)
 
@@ -9977,21 +11651,24 @@ innerHTML property set to the given markup.
 
 " nil nil))) ("desc" (text . "Binds a function to be executed when the DOM has finished loading.
 
-")) ("longdesc" (text . "") (text . "This function behaves just like $(document).ready(), in that it should
-be used to wrap other $() operations on your page that depend on the
-DOM being ready. While this function is, technically, chainable, there
-really isn\"t much use for chaining against it.
+")) ("longdesc" (text . "") (text . "This function behaves just like $( document ).ready(), in that it
+should be used to wrap other $() operations on your page that depend on
+the DOM being ready. While this function is, technically, chainable,
+there really isn\"t much use for chaining against it.
 ") (text . "")) ("examples" ((text . "") (text . "Execute the function when the DOM is ready to be used.
 
-") (text . "") (js . "$(function(){
+") (text . "") (js . "
+$(function() {
   // Document is ready
 });
 ") (text . "")) ((text . "") (text . "Use both the shortcut for $(document).ready() and the argument to write
 failsafe jQuery code using the $ alias, without relying on the global
 alias.
-") (text . "") (js . "jQuery(function($) {
+") (text . "") (js . "
+jQuery(function( $ ) {
   // Your code using failsafe $ alias here...
-});") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "keydown" jquery-doc-methods)
 
@@ -10004,8 +11681,8 @@ alias.
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"keydown\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`keydown`, handler) in the first and
-second variations, and .trigger(`keydown`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"keydown\", handler ) in the first
+and second variations, and .trigger( \"keydown\" ) in the third.
 
 ") (text . "") (text . "The keydown event is sent to an element when the user first presses a
 key on the keyboard. It can be attached to any element, but the event
@@ -10015,17 +11692,21 @@ reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
-  <input id=\"target\" type=\"text\" value=\"Hello there\" />
+") (text . "") (js . "
+<form>
+  <input id=\"target\" type=\"text\" value=\"Hello there\">
 </form>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "The event handler can be bound to the input field:
+</div>
+    ") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js . "$('#target').keydown(function() {
-  alert('Handler for .keydown() called.');
-});") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
+") (text . "") (js . "
+$( \"#target\" ).keydown(function() {
+  alert( \"Handler for .keydown() called.\" );
+});
+    ") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
 displays the alert:
 
 ") (text . "") (text . "Handler for .keydown() called.
@@ -10034,9 +11715,11 @@ displays the alert:
 ") (text . "") (text . "To trigger the event manually, apply .keydown() without an argument:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').keydown();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).keydown();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "If key presses anywhere need to be caught (for example, to implement
@@ -10055,43 +11738,50 @@ the input.
 
 ") (text . "") (js . "
 var xTriggered = 0;
-$('#target').keydown(function(event) {
-  if (event.which == 13) {
-     event.preventDefault();
-   }
-   xTriggered++;
-   var msg = 'Handler for .keydown() called ' + xTriggered + ' time(s).';
-  $.print(msg, 'html');
-  $.print(event);
+$( \"#target\" ).keydown(function( event ) {
+  if ( event.which == 13 ) {
+   event.preventDefault();
+  }
+  xTriggered++;
+  var msg = \"Handler for .keydown() called \" + xTriggered + \" time(s).\";
+  $.print( msg, \"html\" );
+  $.print( event );
 });
 
-$('#other').click(function() {
-  $('#target').keydown();
-});") (text . "") (css . "
-fieldset { margin-bottom: 1em; }
-input { display: block; margin-bottom: .25em; }
-#print-output {
-  width: 100%;
-}
-.print-output-line {
-  white-space: pre;
-  padding: 5px;
-  font-family: monaco, monospace;
-  font-size: .7em;
-}
-
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).keydown();
+});
+") (text . "") (css . "
+  fieldset {
+    margin-bottom: 1em;
+  }
+  input {
+    display: block;
+    margin-bottom: .25em;
+  }
+  #print-output {
+    width: 100%;
+  }
+  .print-output-line {
+    white-space: pre;
+    padding: 5px;
+    font-family: monaco, monospace;
+    font-size: .7em;
+  }
 ") (text . "") (text . "460
 
-") (text . "") (html . "<form>
+") (text . "") (html . "
+<form>
   <fieldset>
     <label for=\"target\">Type Something:</label>
-    <input id=\"target\" type=\"text\" />
+    <input id=\"target\" type=\"text\">
   </fieldset>
 </form>
 <button id=\"other\">
   Trigger the handler
 </button>
-<script type=\"text/javascript\" src=\"/resources/events.js\"></script>") (text . ""))))) jquery-doc-hash)
+<script type=\"text/javascript\" src=\"/resources/events.js\"></script>
+") (text . ""))))) jquery-doc-hash)
 
 (push "keypress" jquery-doc-methods)
 
@@ -10107,47 +11797,52 @@ that event on an element.
 ")) ("longdesc" (text . "") (text . "Note: as the keypress event isn`t covered by any official
 specification, the actual behavior encountered when using it may differ
 across browsers, browser versions, and platforms.
-") (text . "") (text . "This method is a shortcut for .on(`keypress`, handler) in the first two
-variations, and .trigger(`keypress`) in the third.
+") (text . "") (text . "This method is a shortcut for .on( \"keypress\", handler ) in the first
+two variations, and .trigger( \"keypress\" ) in the third.
 
 ") (text . "") (text . "The keypress event is sent to an element when the browser registers
-keyboard input. This is similar to the keydown event, except in the
-case of key repeats. If the user presses and holds a key, a keydown
-event is triggered once, but separate keypress events are triggered for
-each inserted character. In addition, modifier keys (such as Shift)
-trigger keydown events but not keypress events.
+keyboard input. This is similar to the keydown event, except that
+modifier and non-printing keys such as Shift, Esc, and delete trigger
+keydown events but not keypress events. Other differences between the
+two events may arise depending on platform and browser.
 ") (text . "") (text . "A keypress event handler can be attached to any element, but the event
 is only sent to the element that has the focus. Focusable elements can
-vary between browsers, but form elements can always get focus so are
+vary between browsers, but form controls can always get focus so are
 reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
+") (text . "") (js . "
+<form>
   <fieldset>
-    <input id=\"target\" type=\"text\" value=\"Hello there\" />
+    <input id=\"target\" type=\"text\" value=\"Hello there\">
   </fieldset>
 </form>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "The event handler can be bound to the input field:
+</div>
+    ") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js . "$(\"#target\").keypress(function() {
-  alert(\"Handler for .keypress() called.\");
-});") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
-displays the alert:
+") (text . "") (js . "
+$( \"#target\" ).keypress(function() {
+  console.log( \"Handler for .keypress() called.\" );
+});
+    ") (text . "") (text . "Now when the insertion point is inside the field, pressing a key
+displays the log:
 
 ") (text . "") (text . "Handler for .keypress() called.
 
 
-") (text . "") (text . "The message repeats if the key is held down. To trigger the event
-manually, apply .keypress() without an argument::
+") (text . "") (text . "To trigger the event manually, apply .keypress() without an argument:
 
-") (text . "") (js . "$('#other').click(function() {
-  $(\"#target\").keypress();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
-the message.
+
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).keypress();
+});
+    ") (text . "") (text . "After this code executes, clicks on the Trigger the handler div will
+also log the message.
 
 ") (text . "") (text . "If key presses anywhere need to be caught (for example, to implement
 global shortcut keys on a page), it is useful to attach this behavior
@@ -10170,44 +11865,50 @@ demo relies on a simple $.print() plugin
 output.
 ") (text . "") (js . "
 var xTriggered = 0;
-$(\"#target\").keypress(function(event) {
+$( \"#target\" ).keypress(function( event ) {
   if ( event.which == 13 ) {
      event.preventDefault();
-   }
-   xTriggered++;
-   var msg = \"Handler for .keypress() called \" + xTriggered + \" time(s).\";
+  }
+  xTriggered++;
+  var msg = \"Handler for .keypress() called \" + xTriggered + \" time(s).\";
   $.print( msg, \"html\" );
   $.print( event );
 });
 
-$(\"#other\").click(function() {
-  $(\"#target\").keypress();
-});") (text . "") (css . "
-fieldset { margin-bottom: 1em; }
-input { display: block; margin-bottom: .25em; }
-#print-output {
-  width: 100%;
-}
-.print-output-line {
-  white-space: pre;
-  padding: 5px;
-  font-family: monaco, monospace;
-  font-size: .7em;
-}
-
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).keypress();
+});
+") (text . "") (css . "
+  fieldset {
+    margin-bottom: 1em;
+  }
+  input {
+    display: block;
+    margin-bottom: .25em;
+  }
+  #print-output {
+    width: 100%;
+  }
+  .print-output-line {
+    white-space: pre;
+    padding: 5px;
+    font-family: monaco, monospace;
+    font-size: .7em;
+  }
 ") (text . "") (text . "460
 
-") (text . "") (html . "<form>
+") (text . "") (html . "
+<form>
   <fieldset>
     <label for=\"target\">Type Something:</label>
-    <input id=\"target\" type=\"text\" />
+    <input id=\"target\" type=\"text\">
   </fieldset>
 </form>
 <button id=\"other\">
   Trigger the handler
 </button>
-<script src=\"http://api.jquery.com/resources/events.js\"></script>
-  ") (text . ""))))) jquery-doc-hash)
+<script src=\"/resources/events.js\"></script>
+") (text . ""))))) jquery-doc-hash)
 
 (push "keyup" jquery-doc-methods)
 
@@ -10220,8 +11921,8 @@ input { display: block; margin-bottom: .25em; }
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"keyup\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`keyup`, handler) in the first two
-variations, and .trigger(`keyup`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"keyup\", handler ) in the first two
+variations, and .trigger( \"keyup\" ) in the third.
 
 ") (text . "") (text . "The keyup event is sent to an element when the user releases a key on
 the keyboard. It can be attached to any element, but the event is only
@@ -10231,18 +11932,21 @@ reasonable candidates for this event type.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
-  <input id=\"target\" type=\"text\" value=\"Hello there\" />
+") (text . "") (js . "
+<form>
+  <input id=\"target\" type=\"text\" value=\"Hello there\">
 </form>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "The event handler can be bound to the input field:
+</div>
+    ") (text . "") (text . "The event handler can be bound to the input field:
 
 
-") (text . "") (js . "$('#target').keyup(function() {
-  alert('Handler for .keyup() called.');
+") (text . "") (js . "
+$( \"#target\" ).keyup(function() {
+  alert( \"Handler for .keyup() called.\" );
 });
-") (text . "") (text . "Now when the insertion point is inside the field and a key is pressed
+    ") (text . "") (text . "Now when the insertion point is inside the field and a key is pressed
 and released, the alert is displayed:
 
 ") (text . "") (text . "Handler for .keyup() called.
@@ -10251,9 +11955,11 @@ and released, the alert is displayed:
 ") (text . "") (text . "To trigger the event manually, apply .keyup() without arguments:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').keyup();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).keyup();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "If key presses anywhere need to be caught (for example, to implement
@@ -10272,44 +11978,51 @@ plugin) when a key is released in the input.
 
 ") (text . "") (js . "
 var xTriggered = 0;
-$('#target').keyup(function(event) {
-   xTriggered++;
-   var msg = 'Handler for .keyup() called ' + xTriggered + ' time(s).';
-  $.print(msg, 'html');
-  $.print(event);
-}).keydown(function(event) {
-  if (event.which == 13) {
+$( \"#target\" ).keyup(function( event ) {
+  xTriggered++;
+  var msg = \"Handler for .keyup() called \" + xTriggered + \" time(s).\";
+  $.print( msg, \"html\" );
+  $.print( event );
+}).keydown(function( event ) {
+  if ( event.which == 13 ) {
     event.preventDefault();
   }
 });
 
-$('#other').click(function() {
-  $('#target').keyup();
-});") (text . "") (css . "
-fieldset { margin-bottom: 1em; }
-input { display: block; margin-bottom: .25em; }
-#print-output {
-  width: 100%;
-}
-.print-output-line {
-  white-space: pre;
-  padding: 5px;
-  font-family: monaco, monospace;
-  font-size: .7em;
-}
-
+$( \"#other\").click(function() {
+  $( \"#target\" ).keyup();
+});
+") (text . "") (css . "
+  fieldset {
+    margin-bottom: 1em;
+  }
+  input {
+    display: block;
+    margin-bottom: .25em;
+  }
+  #print-output {
+    width: 100%;
+  }
+  .print-output-line {
+    white-space: pre;
+    padding: 5px;
+    font-family: monaco, monospace;
+    font-size: .7em;
+  }
 ") (text . "") (text . "460
 
-") (text . "") (html . "<form>
+") (text . "") (html . "
+<form>
   <fieldset>
     <label for=\"target\">Type Something:</label>
-    <input id=\"target\" type=\"text\" />
+    <input id=\"target\" type=\"text\">
   </fieldset>
 </form>
 <button id=\"other\">
   Trigger the handler
 </button>
-<script type=\"text/javascript\" src=\"/resources/events.js\"></script>") (text . ""))))) jquery-doc-hash)
+<script type=\"text/javascript\" src=\"/resources/events.js\"></script>
+") (text . ""))))) jquery-doc-hash)
 
 (push "last" jquery-doc-methods)
 
@@ -10329,15 +12042,25 @@ that set.
   <li>list item 4</li>
   <li>list item 5</li>
 </ul>
-") (text . "") (text . "We can apply this method to the set of list items:
+    ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js . "$('li').last().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the final item.
+") (text . "") (js . "
+$( \"li\" ).last().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for the final item.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Highlight the last span in a paragraph.
 
-") (text . "") (css . ".highlight{background-color: yellow}") (text . "") (js . "$(\"p span\").last().addClass('highlight');") (text . "") (html . "<p><span>Look:</span> <span>This is some text in a paragraph.</span> <span>This is a note about it.</span></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (css . "
+  .highlight {
+    background-color: yellow;
+  }
+") (text . "") (js . "
+$( \"p span\" ).last().addClass( \"highlight\" );
+") (text . "") (html . "
+<p><span>Look:</span> <span>This is some text in a paragraph.</span> <span>This is a note about it.</span></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "live" jquery-doc-methods)
 
@@ -10371,28 +12094,34 @@ information.
 straightforward; these are templates for equivalent calls for all three
 event attachment methods:
 ") (text . "") (js . "
-$(selector).live(events, data, handler);                // jQuery 1.3+
-$(document).delegate(selector, events, data, handler);  // jQuery 1.4.3+
-$(document).on(events, selector, data, handler);        // jQuery 1.7+
-") (text . "") (text . "The events argument can either be a space-separated list of event type
+$( selector ).live( events, data, handler );                // jQuery 1.3+
+$( document ).delegate( selector, events, data, handler );  // jQuery 1.4.3+
+$( document ).on( events, selector, data, handler );        // jQuery 1.7+
+    ") (text . "") (text . "The events argument can either be a space-separated list of event type
 names and optional namespaces, or an object of event name strings and
 handlers. The data argument is optional and can be omitted. For
 example, the following three method calls are functionally equivalent
 (but see below for more effective and performant ways to attach
 delegated event handlers):
 ") (text . "") (js . "
-$(\"a.offsite\").live(\"click\", function(){ alert(\"Goodbye!\"); });                // jQuery 1.3+
-$(document).delegate(\"a.offsite\", \"click\", function(){ alert(\"Goodbye!\"); });  // jQuery 1.4.3+
-$(document).on(\"click\", \"a.offsite\", function(){ alert(\"Goodbye!\"); });        // jQuery 1.7+
-") (text . "") (text . "Use of the .live() method is no longer recommended since later versions
+$( \"a.offsite\" ).live( \"click\", function() {
+  alert( \"Goodbye!\" ); // jQuery 1.3+
+});
+$( document ).delegate( \"a.offsite\", \"click\", function() {
+  alert( \"Goodbye!\" ); // jQuery 1.4.3+
+});
+$( document ).on( \"click\", \"a.offsite\", function() {
+  alert( \"Goodbye!\" );  // jQuery 1.7+
+});
+    ") (text . "") (text . "Use of the .live() method is no longer recommended since later versions
 of jQuery offer better methods that do not have its drawbacks. In
 particular, the following issues arise with the use of .live():
 ") (text . "") (text . "  * jQuery attempts to retrieve the elements specified by the selector
     before calling the .live() method, which may be time-consuming on
     large documents.
-  * Chaining methods is not supported. For example,
-    $(\"a\").find(\".offsite, .external\").live( ... ); is not valid and
-    does not work as expected.
+  * Chaining methods is not supported. For example, $( \"a\" ).find(
+    \".offsite, .external\" ).live( ... ); is not valid and does not work
+    as expected.
   * Since all .live() events are attached at the document element,
     events take the longest and slowest possible path before they are
     handled.
@@ -10414,8 +12143,8 @@ particular, the following issues arise with the use of .live():
     in stopping event handlers attached lower in the document; the
     event has already propagated to document.
   * The .live() method interacts with other event methods in ways that
-    can be surprising, e.g., $(document).off(\"click\") removes all click
-    handlers attached by any call to .live()!
+    can be surprising, e.g., $( document ).off( \"click\" ) removes all
+    click handlers attached by any call to .live()!
 ") (text . "") (text . "For pages still using .live(), this list of version-specific
 differences may be helpful:
 
@@ -10431,35 +12160,44 @@ differences may be helpful:
 ") (text . "")) ("examples" ((text . "") (text . "Cancel a default action and prevent it from bubbling up by returning
 false.
 
-") (text . "") (js . "$(\"a\").live(\"click\", function() { return false; })") (text . "")) ((text . "") (text . "Cancel only the default action by using the preventDefault method.
-
-") (text . "") (js . "$(\"a\").live(\"click\", function(event){
-  event.preventDefault();
-});") (text . "")) ((text . "") (text . "Bind custom events with .live().
+") (text . "") (js . "
+$( \"a\" ).live( \"click\", function() {
+  return false;
+});
+") (text . "")) ((text . "") (text . "Cancel only the default action by using the preventDefault method.
 
 ") (text . "") (js . "
-$(\"p\").live(\"myCustomEvent\", function(e, myName, myValue) {
-  $(this).text(\"Hi there!\");
-  $(\"span\").stop().css(\"opacity\", 1)
-           .text(\"myName = \" + myName)
-           .fadeIn(30).fadeOut(1000);
+$( \"a\" ).live( \"click\", function( event ) {
+  event.preventDefault();
 });
-$(\"button\").click(function () {
-  $(\"p\").trigger(\"myCustomEvent\");
+") (text . "")) ((text . "") (text . "Bind custom events with .live().
+
+") (text . "") (js . "
+$( \"p\" ).live( \"myCustomEvent\", function( event, myName, myValue ) {
+  $( this ).text( \"Hi there!\" );
+  $( \"span\" )
+    .stop()
+    .css( \"opacity\", 1 )
+    .text( \"myName = \" + myName )
+    .fadeIn( 30 )
+    .fadeOut( 1000 );
+  });
+$( \"button\" ).click(function() {
+  $( \"p\" ).trigger( \"myCustomEvent\" );
 });
 ") (text . "")) ((text . "") (text . "Use an object to bind multiple live event handlers. Note that .live()
 calls the click, mouseover, and mouseout event handlers for all
 paragraphs--even new ones.
 ") (text . "") (js . "
-$(\"p\").live({
+$( \"p\" ).live({
   click: function() {
-    $(this).after(\"<p>Another paragraph!</p>\");
+    $( this ).after( \"<p>Another paragraph!</p>\" );
   },
   mouseover: function() {
-    $(this).addClass(\"over\");
+    $( this ).addClass( \"over\" );
   },
   mouseout: function() {
-    $(this).removeClass(\"over\");
+    $( this ).removeClass( \"over\" );
   }
 });
 ") (text . ""))))) jquery-doc-hash)
@@ -10474,7 +12212,7 @@ $(\"p\").live({
 
 " nil nil))) ("desc" (text . "Bind an event handler to the \"load\" JavaScript event.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`load`, handler).
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"load\", handler ).
 
 
 ") (text . "") (text . "The load event is sent to an element when it and all sub-elements have
@@ -10484,48 +12222,56 @@ object.
 ") (text . "") (text . "For example, consider a page with a simple image:
 
 
-") (text . "") (js . "<img src=\"book.png\" alt=\"Book\" id=\"book\" />") (text . "") (text . "The event handler can be bound to the image:
+") (text . "") (js . "
+<img src=\"book.png\" alt=\"Book\" id=\"book\">
+    ") (text . "") (text . "The event handler can be bound to the image:
 
 
-") (text . "") (js . "$('#book').load(function() {
+") (text . "") (js . "
+$( \"#book\" ).load(function() {
   // Handler for .load() called.
-});") (text . "") (text . "As soon as the image has been loaded, the handler is called.
+});
+    ") (text . "") (text . "As soon as the image has been loaded, the handler is called.
 
 
 ") (text . "") (text . "In general, it is not necessary to wait for all images to be fully
 loaded. If code can be executed earlier, it is usually best to place it
 in a handler sent to the .ready() method.
-") (text . "") (text . "  The Ajax module also has a method named .load() . Which one is fired
-  depends on the set of arguments passed.
+") (text . "") (text . "The Ajax module also has a method named .load() . Which one is fired
+depends on the set of arguments passed.
 
-") (text . "") (text . "  Caveats of the load event when used with images
+") (text . "") (text . "Caveats of the load event when used with images
 
-  A common challenge developers attempt to solve using the .load()
-  shortcut is to execute a function when an image (or collection of
-  images) have completely loaded. There are several known caveats with
-  this that should be noted. These are:
+A common challenge developers attempt to solve using the .load()
+shortcut is to execute a function when an image (or collection of
+images) have completely loaded. There are several known caveats with
+this that should be noted. These are:
   * It doesn`t work consistently nor reliably cross-browser
   * It doesn`t fire correctly in WebKit if the image src is set to the
     same src as before
   * It doesn`t correctly bubble up the DOM tree
   * Can cease to fire for images that already live in the browser`s
     cache
-") (text . "") (text . "  Note: The .live() and .delegate() methods cannot be used to detect
-  the load event of an iframe. The load event does not correctly
-  bubble up the parent document and the event.target isn`t set by
-  Firefox, IE9 or Chrome, which is required to do event delegation.
+") (text . "") (text . "Note: The .live() and .delegate() methods cannot be used to detect the
+load event of an iframe. The load event does not correctly bubble up
+the parent document and the event.target isn`t set by Firefox, IE9 or
+Chrome, which is required to do event delegation.
 ") (text . "")) ("examples" ((text . "") (text . "Run a function when the page is fully loaded including graphics.
 
-") (text . "") (js . "$(window).load(function () {
-  // run code
-});") (text . "")) ((text . "") (text . "Add the class bigImg to all images with height greater then 100 upon
+") (text . "") (js . "
+$( window ).load(function() {
+  // Run code
+});
+") (text . "")) ((text . "") (text . "Add the class bigImg to all images with height greater than 100 upon
 each image load.
 
-") (text . "") (js . "$('img.userIcon').load(function(){
-  if($(this).height() > 100) {
-    $(this).addClass('bigImg');
+") (text . "") (js . "
+$( \"img.userIcon\" ).load(function() {
+  if ( $( this ).height() > 100) {
+    $( this ).addClass( \"bigImg\" );
   }
-});") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "load" jquery-doc-methods)
 
@@ -10538,9 +12284,9 @@ each image load.
 " "true" nil))) ("desc" (text . "Load data from the server and place the returned HTML into the matched
 element.
 
-")) ("longdesc" (text . "") (text . "  Note: The event handling suite also has a method named .load() .
-  jQuery determines which method to fire based on the set of arguments
-  passed to it.
+")) ("longdesc" (text . "") (text . "Note: The event handling suite also has a method named .load() . jQuery
+determines which method to fire based on the set of arguments passed to
+it.
 ") (text . "") (text . "This method is the simplest way to fetch data from the server. It is
 roughly equivalent to $.get(url, data, success) except that it is a
 method rather than global function and it has an implicit callback
@@ -10548,7 +12294,9 @@ function. When a successful response is detected (i.e. when textStatus
 is \"success\" or \"notmodified\"), .load() sets the HTML contents of the
 matched element to the returned data. This means that most uses of the
 method can be quite simple:
-") (text . "") (js . "$('#result').load('ajax/test.html');") (text . "") (text . "If no element is matched by the selector -- in this case, if the
+") (text . "") (js . "
+$( \"#result\" ).load( \"ajax/test.html\" );
+    ") (text . "") (text . "If no element is matched by the selector -- in this case, if the
 document does not contain an element with id=\"result\" -- the Ajax
 request will not be sent.
 ") (text . "") (text . " Callback Function
@@ -10558,9 +12306,11 @@ request will not be sent.
 post-processing and HTML insertion has been performed. The callback is
 fired once for each element in the jQuery collection, and this is set
 to each DOM element in turn.
-") (text . "") (js . "$('#result').load('ajax/test.html', function() {
-  alert('Load was performed.');
-});") (text . "") (text . "In the two examples above, if the current document does not contain an
+") (text . "") (js . "
+$( \"#result\" ).load( \"ajax/test.html\", function() {
+  alert( \"Load was performed.\" );
+});
+    ") (text . "") (text . "In the two examples above, if the current document does not contain an
 element with an ID of \"result,\" the .load() method is not executed.
 
 ") (text . "") (text . " Request Method
@@ -10581,7 +12331,9 @@ be loaded.
 ") (text . "") (text . "We could modify the example above to use only part of the document that
 is fetched:
 
-") (text . "") (js . "$('#result').load('ajax/test.html #container');") (text . "") (text . "When this method executes, it retrieves the content of ajax/test.html,
+") (text . "") (js . "
+$( \"#result\" ).load( \"ajax/test.html #container\" );
+    ") (text . "") (text . "When this method executes, it retrieves the content of ajax/test.html,
 but then jQuery parses the returned document to find the element with
 an ID of container. This element, along with its contents, is inserted
 into the element with an ID of result, and the rest of the retrieved
@@ -10605,49 +12357,61 @@ and thus are not executed. An example of both cases can be seen below:
 successfully execute.
 
 ") (text . "") (js . "
-$('#a').load('article.html');
-") (text . "") (text . "However, in the following case, script blocks in the document being
+$( \"#a\" ).load( \"article.html\" );
+    ") (text . "") (text . "However, in the following case, script blocks in the document being
 loaded into #b are stripped out and not executed:
 
 ") (text . "") (js . "
-$('#b').load('article.html #target');
-") (text . "")) ("examples" ((text . "") (text . "Load the main page`s footer navigation into an ordered list.
+$( \"#b\" ).load( \"article.html #target\" );
+    ") (text . "")) ("examples" ((text . "") (text . "Load the main page`s footer navigation into an ordered list.
 
 ") (text . "") (js . "
-  $(\"#new-nav\").load(\"/ #jq-footerNavigation li\");
+$( \"#new-nav\" ).load( \"/ #jq-footerNavigation li\" );
 ") (text . "") (css . "
- body{ font-size: 12px; font-family: Arial; }
- ") (text . "") (html . "
+  body {
+    font-size: 12px;
+    font-family: Arial;
+  }
+") (text . "") (html . "
 <b>Footer navigation:</b>
 <ol id=\"new-nav\"></ol>
 ") (text . "")) ((text . "") (text . "Display a notice if the Ajax request encounters an error.
 
 ") (text . "") (js . "
-$(\"#success\").load(\"/not-here.php\", function(response, status, xhr) {
-  if (status == \"error\") {
+$( \"#success\" ).load( \"/not-here.php\", function( response, status, xhr ) {
+  if ( status == \"error\" ) {
     var msg = \"Sorry but there was an error: \";
-    $(\"#error\").html(msg + xhr.status + \" \" + xhr.statusText);
+    $( \"#error\" ).html( msg + xhr.status + \" \" + xhr.statusText );
   }
 });
-  ") (text . "") (css . "
-  body{ font-size: 12px; font-family: Arial; }
-  ") (text . "") (html . "
+") (text . "") (css . "
+  body {
+    font-size: 12px;
+    font-family: Arial;
+  }
+") (text . "") (html . "
 <b>Successful Response (should be blank):</b>
 <div id=\"success\"></div>
 <b>Error Response:</b>
 <div id=\"error\"></div>
-  ") (text . "")) ((text . "") (text . "Load the feeds.html file into the div with the ID of feeds.
+") (text . "")) ((text . "") (text . "Load the feeds.html file into the div with the ID of feeds.
 
-") (text . "") (js . "$(\"#feeds\").load(\"feeds.html\");") (text . "") (text . "<div id=\"feeds\"><b>45</b> feeds found.</div>
+") (text . "") (js . "
+$( \"#feeds\" ).load( \"feeds.html\" );
+") (text . "") (text . "<div id=\"feeds\"><b>45</b> feeds found.</div>
 
 ") (text . "")) ((text . "") (text . "pass arrays of data to the server.
 
-") (text . "") (js . "$(\"#objectID\").load(\"test.php\", { 'choices[]': [\"Jon\", \"Susan\"] } );") (text . "")) ((text . "") (text . "Same as above, but will POST the additional parameters to the server
+") (text . "") (js . "
+$( \"#objectID\" ).load( \"test.php\", { \"choices[]\": [ \"Jon\", \"Susan\" ] } );
+") (text . "")) ((text . "") (text . "Same as above, but will POST the additional parameters to the server
 and a callback that is executed when the server is finished responding.
 
-") (text . "") (js . "$(\"#feeds\").load(\"feeds.php\", {limit: 25}, function(){
-alert(\"The last 25 entries in the feed have been loaded\");
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"#feeds\" ).load( \"feeds.php\", { limit: 25 }, function() {
+  alert( \"The last 25 entries in the feed have been loaded\" );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "map" jquery-doc-methods)
 
@@ -10687,12 +12451,17 @@ checkboxes in it:
     </div>
   </fieldset>
 </form>
-") (text . "") (text . "To get a comma-separated list of checkbox IDs:
+    ") (text . "") (text . "To get a comma-separated list of checkbox IDs:
 
 
-") (text . "") (js . "$(':checkbox').map(function() {
-      return this.id;
-    }).get().join();") (text . "") (text . "The result of this call is the string, \"two,four,six,eight\".
+") (text . "") (js . "
+$( \":checkbox\" )
+  .map(function() {
+    return this.id;
+  })
+  .get()
+  .join();
+    ") (text . "") (text . "The result of this call is the string, \"two,four,six,eight\".
 
 
 ") (text . "") (text . "Within the callback function, this refers to the current DOM element
@@ -10704,82 +12473,97 @@ inserted.
 ") (text . "")) ("examples" ((text . "") (text . "Build a list of all the values within a form.
 
 ") (text . "") (js . "
-    $(\"p\").append( $(\"input\").map(function(){
-      return $(this).val();
-    }).get().join(\", \") );
+$( \"p\" )
+  .append( $( \"input\" ).map(function() {
+    return $( this ).val();
+  })
+  .get()
+  .join( \", \" ) );
 ") (text . "") (css . "
-  p { color:red; }
-  ") (text . "") (html . "<p><b>Values: </b></p>
-  <form>
-    <input type=\"text\" name=\"name\" value=\"John\"/>
-
-    <input type=\"text\" name=\"password\" value=\"password\"/>
-    <input type=\"text\" name=\"url\" value=\"http://ejohn.org/\"/>
-
-  </form>") (text . "")) ((text . "") (text . "A contrived example to show some functionality.
+  p {
+    color: red;
+  }
+") (text . "") (html . "
+<p><b>Values: </b></p>
+<form>
+  <input type=\"text\" name=\"name\" value=\"John\">
+  <input type=\"text\" name=\"password\" value=\"password\">
+  <input type=\"text\" name=\"url\" value=\"http://ejohn.org/\">
+</form>
+") (text . "")) ((text . "") (text . "A contrived example to show some functionality.
 
 ") (text . "") (js . "
-var mappedItems = $(\"li\").map(function (index) {
-  var replacement = $(\"<li>\").text($(this).text()).get(0);
-  if (index == 0) {
-    /* make the first item all caps */
-    $(replacement).text($(replacement).text().toUpperCase());
-  } else if (index == 1 || index == 3) {
-    /* delete the second and fourth items */
+var mappedItems = $( \"li\" ).map(function( index ) {
+  var replacement = $( \"<li>\" ).text( $( this ).text() ).get( 0 );
+  if ( index === 0 ) {
+
+    // Make the first item all caps
+    $( replacement ).text( $( replacement ).text().toUpperCase() );
+  } else if ( index === 1 || index === 3 ) {
+
+    // Delete the second and fourth items
     replacement = null;
-  } else if (index == 2) {
-    /* make two of the third item and add some text */
-    replacement = [replacement,$(\"<li>\").get(0)];
-    $(replacement[0]).append(\"<b> - A</b>\");
-    $(replacement[1]).append(\"Extra <b> - B</b>\");
+  } else if ( index === 2 ) {
+
+    // Make two of the third item and add some text
+    replacement = [ replacement, $( \"<li>\" ).get( 0 ) ];
+    $( replacement[ 0 ] ).append( \"<b> - A</b>\" );
+    $( replacement[ 1 ] ).append( \"Extra <b> - B</b>\" );
   }
 
-  /* replacement will be a dom element, null,
-     or an array of dom elements */
+  // Replacement will be a dom element, null,
+  // or an array of dom elements
   return replacement;
 });
-$(\"#results\").append(mappedItems);
-
+$( \"#results\" ).append( mappedItems );
 ") (text . "") (css . "
-  body { font-size:16px; }
-  ul { float:left; margin:0 30px; color:blue; }
-  #results { color:red; }
-  ") (text . "") (html . "<ul>
-    <li>First</li>
-    <li>Second</li>
-    <li>Third</li>
-
-    <li>Fourth</li>
-    <li>Fifth</li>
-  </ul>
-  <ul id=\"results\">
-
-  </ul>") (text . "")) ((text . "") (text . "Equalize the heights of the divs.
+  body {
+    font-size: 16px;
+  }
+  ul {
+    float: left;
+    margin: 0 30px;
+    color: blue;
+  }
+  #results {
+    color: red;
+  }
+") (text . "") (html . "
+<ul>
+  <li>First</li>
+  <li>Second</li>
+  <li>Third</li>
+  <li>Fourth</li>
+  <li>Fifth</li>
+</ul>
+<ul id=\"results\">
+</ul>
+") (text . "")) ((text . "") (text . "Equalize the heights of the divs.
 
 ") (text . "") (js . "
 $.fn.equalizeHeights = function() {
-  var maxHeight = this.map(function(i,e) {
-    return $(e).height();
+  var maxHeight = this.map(function( i, e ) {
+    return $( e ).height();
   }).get();
-
-  return this.height( Math.max.apply(this, maxHeight) );
+  return this.height( Math.max.apply( this, maxHeight ) );
 };
 
-$('input').click(function(){
-  $('div').equalizeHeights();
+$( \"input\" ).click(function() {
+  $( \"div\" ).equalizeHeights();
 });
-
 ") (text . "") (css . "
-div { width: 40px; float:left; }
-input { clear:left}
-  ") (text . "") (html . "
-
+  div {
+    width: 40px;
+    float: left;
+  }
+  input {
+    clear: left;
+  }
+") (text . "") (html . "
 <input type=\"button\" value=\"equalize div heights\">
-
-<div style=\"background:red; height: 40px; \"></div>
-<div style=\"background:green; height: 70px;\"></div>
-<div style=\"background:blue; height: 50px; \"></div>
-
+<div style=\"background: red; height: 40px; \"></div>
+<div style=\"background: green; height: 70px;\"></div>
+<div style=\"background: blue; height: 50px; \"></div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "mousedown" jquery-doc-methods)
@@ -10793,8 +12577,8 @@ input { clear:left}
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"mousedown\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`mousedown`, handler) in the first
-variation, and .trigger(`mousedown`) in the second.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"mousedown\", handler) in the first
+variation, and .trigger( \"mousedown\" ) in the second.
 
 ") (text . "") (text . "The mousedown event is sent to an element when the mouse pointer is
 over the element, and the mouse button is pressed. Any HTML element can
@@ -10807,14 +12591,17 @@ receive this event.
 </div>
 <div id=\"other\">
   Trigger the handler
-</div>") (text . "") (text . "
+</div>
+    ") (text . "") (text . "
 
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js . "$('#target').mousedown(function() {
-  alert('Handler for .mousedown() called.');
-});") (text . "") (text . "Now if we click on this element, the alert is displayed:
+") (text . "") (js . "
+$( \"#target\" ).mousedown(function() {
+  alert( \"Handler for .mousedown() called.\" );
+});
+    ") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
 
 ") (text . "") (text . "Handler for .mousedown() called.
@@ -10823,9 +12610,11 @@ receive this event.
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').mousedown();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).mousedown();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "The mousedown event is sent when any mouse button is clicked. To act
@@ -10848,13 +12637,15 @@ know that the mousedown event is preferable for a particular situation.
 ") (text . "")) ("examples" ((text . "") (text . "Show texts when mouseup and mousedown event triggering.
 
 ") (text . "") (js . "
-    $(\"p\").mouseup(function(){
-      $(this).append('<span style=\"color:#F00;\">Mouse up.</span>');
-    }).mousedown(function(){
-      $(this).append('<span style=\"color:#00F;\">Mouse down.</span>');
-    });
-
-") (text . "") (html . "<p>Press mouse and release here.</p>
+$( \"p\" )
+  .mouseup(function() {
+    $( this ).append( \"<span style='color:#f00;'>Mouse up.</span>\" );
+  })
+  .mousedown(function() {
+    $( this ).append( \"<span style='color:#00f;'>Mouse down.</span>\" );
+  });
+") (text . "") (html . "
+<p>Press mouse and release here.</p>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "mouseenter" jquery-doc-methods)
@@ -10868,8 +12659,8 @@ know that the mousedown event is preferable for a particular situation.
 " nil nil)) nil) ("desc" (text . "Bind an event handler to be fired when the mouse enters an element, or
 trigger that handler on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`mouseenter`, handler) in the first
-two variations, and .trigger(`mouseenter`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"mouseenter\", handler ) in the first
+two variations, and .trigger( \"mouseenter\" ) in the third.
 
 ") (text . "") (text . "The mouseenter JavaScript event is proprietary to Internet Explorer.
 Because of the event`s general utility, jQuery simulates this event so
@@ -10879,7 +12670,8 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"outer\">
+") (text . "") (html . "
+<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -10893,14 +12685,18 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js . "$('#outer').mouseenter(function() {
-  $('#log').append('<div>Handler for .mouseenter() called.</div>');
-});") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
+") (text . "") (js . "
+$( \"#outer\" ).mouseenter(function() {
+  $( \"#log\" ).append( \"<div>Handler for .mouseenter() called.</div>\" );
+});
+    ") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
 appended to <div id=\"log\">. You can also trigger the event when another
 element is clicked:
-") (text . "") (js . "$('#other').click(function() {
-      $('#outer').mouseenter();
-    });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#outer\" ).mouseenter();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
 
 ") (text . "") (text . "The mouseenter event differs from mouseover in the way it handles event
@@ -10915,46 +12711,56 @@ element.
 fires when the pointer moves into the child element as well, while
 mouseenter fires only when the pointer moves into the bound element.
 ") (text . "") (css . "
-div.out {
-width:40%;
-height:120px;
-margin:0 15px;
-background-color:#D6EDFC;
-float:left;
-}
-div.in {
-width:60%;
-height:60%;
-background-color:#FFCC00;
-margin:10px auto;
-}
-p {
-line-height:1em;
-margin:0;
-padding:0;
-}
+  div.out {
+    width: 40%;
+    height: 120px;
+    margin: 0 15px;
+    background-color: #d6edfc;
+    float: left;
+  }
+  div.in {
+    width: 60%;
+    height: 60%;
+    background-color: #fc0;
+    margin: 10px auto;
+  }
+  p {
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+  }
 ") (text . "") (js . "
-    var i = 0;
-    $(\"div.overout\").mouseover(function(){
-      $(\"p:first\",this).text(\"mouse over\");
-      $(\"p:last\",this).text(++i);
-    }).mouseout(function(){
-      $(\"p:first\",this).text(\"mouse out\");
-    });
+var i = 0;
+$( \"div.overout\" )
+  .mouseover(function() {
+    $( \"p:first\", this ).text( \"mouse over\" );
+    $( \"p:last\", this ).text( ++i );
+  })
+  .mouseout(function() {
+    $( \"p:first\", this ).text( \"mouse out\" );
+  });
 
-    var n = 0;
-    $(\"div.enterleave\").mouseenter(function(){
-      $(\"p:first\",this).text(\"mouse enter\");
-      $(\"p:last\",this).text(++n);
-    }).mouseleave(function(){
-      $(\"p:first\",this).text(\"mouse leave\");
-    });
-
+var n = 0;
+$( \"div.enterleave\" )
+  .mouseenter(function() {
+    $( \"p:first\", this ).text( \"mouse enter\" );
+    $( \"p:last\", this ).text( ++n );
+  })
+  .mouseleave(function() {
+    $( \"p:first\", this ).text( \"mouse leave\" );
+  });
 ") (text . "") (html . "
-<div class=\"out overout\"><p>move your mouse</p><div class=\"in overout\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
+<div class=\"out overout\">
+  <p>move your mouse</p>
+  <div class=\"in overout\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
 
-<div class=\"out enterleave\"><p>move your mouse</p><div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
-
+<div class=\"out enterleave\">
+  <p>move your mouse</p>
+  <div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "mouseleave" jquery-doc-methods)
@@ -10979,7 +12785,8 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"outer\">
+") (text . "") (html . "
+<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -10993,14 +12800,18 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js . "$('#outer').mouseleave(function() {
-  $('#log').append('<div>Handler for .mouseleave() called.</div>');
-});") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
+") (text . "") (js . "
+$( \"#outer\" ).mouseleave(function() {
+  $( \"#log\" ).append( \"<div>Handler for .mouseleave() called.</div>\" );
+});
+    ") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
 appended to <div id=\"log\">. You can also trigger the event when another
 element is clicked:
-") (text . "") (js . "$('#other').click(function() {
-  $('#outer').mouseleave();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#outer\" ).mouseleave();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
 
 ") (text . "") (text . "The mouseleave event differs from mouseout in the way it handles event
@@ -11016,46 +12827,55 @@ mouseout fires when the pointer moves out of child element as well,
 while mouseleave fires only when the pointer moves out of the bound
 element.
 ") (text . "") (css . "
-div.out {
-width:40%;
-height:120px;
-margin:0 15px;
-background-color:#D6EDFC;
-float:left;
-}
-div.in {
-width:60%;
-height:60%;
-background-color:#FFCC00;
-margin:10px auto;
-}
-p {
-line-height:1em;
-margin:0;
-padding:0;
-}
+  div.out {
+    width: 40%;
+    height: 120px;
+    margin: 0 15px;
+    background-color: #d6edfc;
+    float: left;
+  }
+  div.in {
+    width: 60%;
+    height: 60%;
+    background-color: #fc0;
+    margin: 10px auto;
+  }
+  p {
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+  }
 ") (text . "") (js . "
-    var i = 0;
-    $(\"div.overout\").mouseover(function(){
-      $(\"p:first\",this).text(\"mouse over\");
-    }).mouseout(function(){
-      $(\"p:first\",this).text(\"mouse out\");
-      $(\"p:last\",this).text(++i);
-    });
+var i = 0;
+$( \"div.overout\" )
+  .mouseover(function() {
+    $( \"p:first\", this ).text( \"mouse over\" );
+  })
+  .mouseout(function() {
+    $( \"p:first\", this ).text( \"mouse out\" );
+    $( \"p:last\", this ).text( ++i );
+  });
 
-    var n = 0;
-    $(\"div.enterleave\").mouseenter(function(){
-      $(\"p:first\",this).text(\"mouse enter\");
-    }).mouseleave(function(){
-      $(\"p:first\",this).text(\"mouse leave\");
-      $(\"p:last\",this).text(++n);
-    });
-
+var n = 0;
+$( \"div.enterleave\" )
+  .mouseenter(function() {
+    $( \"p:first\", this ).text( \"mouse enter\" );
+  })
+  .mouseleave(function() {
+    $( \"p:first\", this ).text( \"mouse leave\" );
+    $( \"p:last\", this ).text( ++n );
+  });
 ") (text . "") (html . "
-<div class=\"out overout\"><p>move your mouse</p><div class=\"in overout\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
-
-<div class=\"out enterleave\"><p>move your mouse</p><div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
-
+<div class=\"out overout\">
+  <p>move your mouse</p>
+  <div class=\"in overout\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
+<div class=\"out enterleave\">
+  <p>move your mouse</p>
+  <div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "mousemove" jquery-doc-methods)
@@ -11069,8 +12889,8 @@ padding:0;
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"mousemove\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`mousemove`, handler) in the first
-two variations, and .trigger(`mousemove`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"mousemove\", handler ) in the first
+two variations, and .trigger( \"mousemove\" ) in the third.
 
 ") (text . "") (text . "The mousemove event is sent to an element when the mouse pointer moves
 inside the element. Any HTML element can receive this event.
@@ -11078,20 +12898,24 @@ inside the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"target\">
+") (text . "") (html . "
+<div id=\"target\">
   Move here
 </div>
 <div id=\"other\">
   Trigger the handler
 </div>
-<div id=\"log\"></div>") (text . "") (text . "The event handler can be bound to the target:
+<div id=\"log\"></div>
+    ") (text . "") (text . "The event handler can be bound to the target:
 
 
-") (text . "") (js . "$(\"#target\").mousemove(function(event) {
+") (text . "") (js . "
+$( \"#target\" ).mousemove(function( event ) {
   var msg = \"Handler for .mousemove() called at \";
   msg += event.pageX + \", \" + event.pageY;
-  $(\"#log\").append(\"<div>\" + msg + \"</div>\");
-});") (text . "") (text . "Now when the mouse pointer moves within the target button, the messages
+  $( \"#log\" ).append( \"<div>\" + msg + \"</div>\" );
+});
+    ") (text . "") (text . "Now when the mouse pointer moves within the target button, the messages
 are appended to <div id=\"log\">:
 
 ") (text . "") (text . "Handler for .mousemove() called at (399, 48)
@@ -11101,9 +12925,11 @@ Handler for .mousemove() called at (396, 42)
 ") (text . "") (text . "To trigger the event manually, apply .mousemove() without an argument:
 
 
-") (text . "") (js . "$(\"#other\").click(function() {
-  $(\"#target\").mousemove();
-});") (text . "") (text . "After this code executes, clicks on the Trigger button will also append
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).mousemove();
+});
+    ") (text . "") (text . "After this code executes, clicks on the Trigger button will also append
 the message:
 
 ") (text . "") (text . "Handler for .mousemove() called at (undefined, undefined)
@@ -11136,28 +12962,43 @@ typically be bound to an element high up in the DOM tree, such as
 Coordinates are relative to the window, which in this case is the
 iframe.
 ") (text . "") (js . "
-$(\"div\").mousemove(function(e){
-  var pageCoords = \"( \" + e.pageX + \", \" + e.pageY + \" )\";
-  var clientCoords = \"( \" + e.clientX + \", \" + e.clientY + \" )\";
-  $(\"span:first\").text(\"( e.pageX, e.pageY ) : \" + pageCoords);
-  $(\"span:last\").text(\"( e.clientX, e.clientY ) : \" + clientCoords);
+$( \"div\" ).mousemove(function( event ) {
+  var pageCoords = \"( \" + event.pageX + \", \" + event.pageY + \" )\";
+  var clientCoords = \"( \" + event.clientX + \", \" + event.clientY + \" )\";
+  $( \"span:first\" ).text( \"( event.pageX, event.pageY ) : \" + pageCoords );
+  $( \"span:last\" ).text( \"( event.clientX, event.clientY ) : \" + clientCoords );
 });
-
 ") (text . "") (text . "300
 
 ") (text . "") (css . "
-div { width:220px; height:170px; margin: 10px 50px 10px 10px;
-      background:yellow; border:2px groove; float:right; }
-p { margin:0; margin-left:10px; color:red; width:220px;
-    height:120px; padding-top:70px;
-    float:left; font-size:14px; }
-span { display:block; }
-") (text . "") (html . "<p>
+  div {
+    width: 220px;
+    height: 170px;
+    margin: 10px 50px 10px 10px;
+    background: yellow;
+    border: 2px groove;
+    float: right;
+  }
+  p {
+    margin: 0;
+    margin-left: 10px;
+    color: red;
+    width: 220px;
+    height: 120px;
+    padding-top: 70px;
+    float: left;
+    font-size: 14px;
+  }
+  span {
+    display: block;
+  }
+") (text . "") (html . "
+<p>
   <span>Move the mouse over the div.</span>
   <span>&nbsp;</span>
 </p>
-
-<div></div>") (text . ""))))) jquery-doc-hash)
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "mouseout" jquery-doc-methods)
 
@@ -11170,8 +13011,8 @@ span { display:block; }
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"mouseout\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`mouseout`, handler) in the first two
-variation, and .trigger(`mouseout`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"mouseout\", handler ) in the first
+two variation, and .trigger( \"mouseout\" ) in the third.
 
 ") (text . "") (text . "The mouseout event is sent to an element when the mouse pointer leaves
 the element. Any HTML element can receive this event.
@@ -11179,7 +13020,8 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"outer\">
+") (text . "") (html . "
+<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -11188,19 +13030,24 @@ the element. Any HTML element can receive this event.
 <div id=\"other\">
   Trigger the handler
 </div>
-<div id=\"log\"></div>") (text . "") (text . "
+<div id=\"log\"></div>
+    ") (text . "") (text . "
 
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js . "$('#outer').mouseout(function() {
-  $('#log').append('Handler for .mouseout() called.');
-});") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
+") (text . "") (js . "
+$( \"#outer\" ).mouseout(function() {
+  $( \"#log\" ).append( \"Handler for .mouseout() called.\" );
+});
+    ") (text . "") (text . "Now when the mouse pointer moves out of the Outer <div>, the message is
 appended to <div id=\"log\">. To trigger the event manually, apply
 .mouseout() without an argument::
-") (text . "") (js . "$('#other').click(function() {
-  $('#outer').mouseout();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#outer\" ).mouseout();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
 
 ") (text . "") (text . "This event type can cause many headaches due to event bubbling. For
@@ -11213,46 +13060,56 @@ mouseout fires when the pointer moves out of the child element as well,
 while mouseleave fires only when the pointer moves out of the bound
 element.
 ") (text . "") (css . "
-div.out {
-width:40%;
-height:120px;
-margin:0 15px;
-background-color:#D6EDFC;
-float:left;
-}
-div.in {
-width:60%;
-height:60%;
-background-color:#FFCC00;
-margin:10px auto;
-}
-p {
-line-height:1em;
-margin:0;
-padding:0;
-}
+  div.out {
+    width: 40%;
+    height: 120px;
+    margin: 0 15px;
+    background-color: #d6edfc;
+    float: left;
+  }
+  div.in {
+    width: 60%;
+    height: 60%;
+    background-color: #fc0;
+    margin: 10px auto;
+  }
+  p {
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+  }
 ") (text . "") (js . "
 var i = 0;
-$(\"div.overout\").mouseout(function(){
-  $(\"p:first\",this).text(\"mouse out\");
-  $(\"p:last\",this).text(++i);
-}).mouseover(function(){
-  $(\"p:first\",this).text(\"mouse over\");
-});
+$( \"div.overout\" )
+  .mouseout(function() {
+    $( \"p:first\", this ).text( \"mouse out\" );
+    $( \"p:last\", this ).text( ++i );
+  })
+  .mouseover(function() {
+    $( \"p:first\", this ).text( \"mouse over\" );
+  });
 
 var n = 0;
-$(\"div.enterleave\").on(\"mouseenter\",function(){
-  $(\"p:first\",this).text(\"mouse enter\");
-}).on(\"mouseleave\",function(){
-  $(\"p:first\",this).text(\"mouse leave\");
-  $(\"p:last\",this).text(++n);
-});
-
+$( \"div.enterleave\" )
+  .on( \"mouseenter\", function() {
+    $( \"p:first\", this ).text( \"mouse enter\" );
+  })
+  .on( \"mouseleave\", function() {
+    $( \"p:first\", this ).text( \"mouse leave\" );
+    $( \"p:last\", this ).text( ++n );
+  });
 ") (text . "") (html . "
-<div class=\"out overout\"><p>move your mouse</p><div class=\"in overout\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
+<div class=\"out overout\">
+  <p>move your mouse</p>
+  <div class=\"in overout\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
 
-<div class=\"out enterleave\"><p>move your mouse</p><div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div><p>0</p></div>
-
+<div class=\"out enterleave\">
+  <p>move your mouse</p>
+  <div class=\"in enterleave\"><p>move your mouse</p><p>0</p></div>
+  <p>0</p>
+</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "mouseover" jquery-doc-methods)
@@ -11266,8 +13123,8 @@ $(\"div.enterleave\").on(\"mouseenter\",function(){
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"mouseover\" JavaScript event, or trigger
 that event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`mouseover`, handler) in the first
-two variations, and .trigger(`mouseover`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"mouseover\", handler ) in the first
+two variations, and .trigger( \"mouseover\" ) in the third.
 
 ") (text . "") (text . "The mouseover event is sent to an element when the mouse pointer enters
 the element. Any HTML element can receive this event.
@@ -11275,7 +13132,8 @@ the element. Any HTML element can receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"outer\">
+") (text . "") (html . "
+<div id=\"outer\">
   Outer
   <div id=\"inner\">
     Inner
@@ -11284,19 +13142,24 @@ the element. Any HTML element can receive this event.
 <div id=\"other\">
   Trigger the handler
 </div>
-<div id=\"log\"></div>") (text . "") (text . "
+<div id=\"log\"></div>
+    ") (text . "") (text . "
 
 ") (text . "") (text . "The event handler can be bound to any element:
 
 
-") (text . "") (js . "$('#outer').mouseover(function() {
-  $('#log').append('<div>Handler for .mouseover() called.</div>');
-});") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
+") (text . "") (js . "
+$( \"#outer\" ).mouseover(function() {
+  $( \"#log\" ).append( \"<div>Handler for .mouseover() called.</div>\" );
+});
+    ") (text . "") (text . "Now when the mouse pointer moves over the Outer <div>, the message is
 appended to <div id=\"log\">. We can also trigger the event when another
 element is clicked:
-") (text . "") (js . "$('#other').click(function() {
-      $('#outer').mouseover();
-      });") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#outer\" ).mouseover();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
 
 ") (text . "") (text . "This event type can cause many headaches due to event bubbling. For
@@ -11309,28 +13172,44 @@ mouseover fires when the pointer moves into the child element as well,
 while mouseenter fires only when the pointer moves into the bound
 element.
 ") (text . "") (css . "
-div.out { width:40%; height:120px; margin:0 15px;
-          background-color:#D6EDFC; float:left; }
-div.in {  width:60%; height:60%;
-          background-color:#FFCC00; margin:10px auto; }
-p { line-height:1em; margin:0; padding:0; }
+  div.out {
+    width: 40%;
+    height: 120px;
+    margin: 0 15px;
+    background-color: #d6edfc;
+    float: left;
+  }
+  div.in {
+    width: 60%;
+    height: 60%;
+    background-color: #fc0;
+    margin: 10px auto;
+  }
+  p {
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+  }
 ") (text . "") (js . "
-  var i = 0;
-  $(\"div.overout\").mouseover(function() {
+var i = 0;
+$( \"div.overout\" )
+  .mouseover(function() {
     i += 1;
-    $(this).find(\"span\").text( \"mouse over x \" + i );
-  }).mouseout(function(){
-    $(this).find(\"span\").text(\"mouse out \");
+    $( this ).find( \"span\" ).text( \"mouse over x \" + i );
+  })
+  .mouseout(function() {
+    $( this ).find( \"span\" ).text( \"mouse out \" );
   });
 
-  var n = 0;
-  $(\"div.enterleave\").mouseenter(function() {
+var n = 0;
+$( \"div.enterleave\" )
+  .mouseenter(function() {
     n += 1;
-    $(this).find(\"span\").text( \"mouse enter x \" + n );
-  }).mouseleave(function() {
-    $(this).find(\"span\").text(\"mouse leave\");
+    $( this ).find( \"span\" ).text( \"mouse enter x \" + n );
+  })
+  .mouseleave(function() {
+    $( this ).find( \"span\" ).text( \"mouse leave\" );
   });
-
 ") (text . "") (html . "
 <div class=\"out overout\">
   <span>move your mouse</span>
@@ -11365,7 +13244,8 @@ receive this event.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<div id=\"target\">
+") (text . "") (js . "
+<div id=\"target\">
   Click here
 </div>
 <div id=\"other\">
@@ -11376,10 +13256,11 @@ receive this event.
 ") (text . "") (text . "The event handler can be bound to any <div>:
 
 
-") (text . "") (js . "$('#target').mouseup(function() {
-  alert('Handler for .mouseup() called.');
+") (text . "") (js . "
+$( \"#target\" ).mouseup(function() {
+  alert( \"Handler for .mouseup() called.\" );
 });
-") (text . "") (text . "Now if we click on this element, the alert is displayed:
+    ") (text . "") (text . "Now if we click on this element, the alert is displayed:
 
 
 ") (text . "") (text . "Handler for .mouseup() called.
@@ -11388,9 +13269,11 @@ receive this event.
 ") (text . "") (text . "We can also trigger the event when a different element is clicked:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').mouseup();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).mouseup();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also alert
 the message.
 
 ") (text . "") (text . "If the user clicks outside an element, drags onto it, and releases the
@@ -11401,13 +13284,15 @@ mouseup event is preferable for a particular situation.
 ") (text . "")) ("examples" ((text . "") (text . "Show texts when mouseup and mousedown event triggering.
 
 ") (text . "") (js . "
-    $(\"p\").mouseup(function(){
-      $(this).append('<span style=\"color:#F00;\">Mouse up.</span>');
-    }).mousedown(function(){
-      $(this).append('<span style=\"color:#00F;\">Mouse down.</span>');
-    });
-
-") (text . "") (html . "<p>Press mouse and release here.</p>
+$( \"p\" )
+  .mouseup(function() {
+    $( this ).append( \"<span style='color:#f00;'>Mouse up.</span>\" );
+  })
+  .mousedown(function() {
+    $( this ).append( \"<span style='color:#00f;'>Mouse down.</span>\" );
+  });
+") (text . "") (html . "
+<p>Press mouse and release here.</p>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "next" jquery-doc-methods)
@@ -11430,36 +13315,48 @@ jQuery object; otherwise, it is excluded.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
-") (text . "") (text . "If we begin at the third item, we can find the element which comes just
+    ") (text . "") (text . "If we begin at the third item, we can find the element which comes just
 after it:
 
-") (text . "") (js . "$('li.third-item').next().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 4. Since we do
+") (text . "") (js . "
+$( \"li.third-item\" ).next().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind item 4. Since we do
 not supply a selector expression, this following element is
 unequivocally included as part of the object. If we had supplied one,
 the element would be tested for a match before it was included.
 ") (text . "")) ("examples" ((text . "") (text . "Find the very next sibling of each disabled button and change its text
 \"this button is disabled\".
 
-") (text . "") (js . "$(\"button[disabled]\").next().text(\"this button is disabled\");") (text . "") (css . "
-
-  span { color:blue; font-weight:bold; }
-  button { width:100px; }
-  ") (text . "") (html . "<div><button disabled=\"disabled\">First</button> - <span></span></div>
-  <div><button>Second</button> - <span></span></div>
-
-  <div><button disabled=\"disabled\">Third</button> - <span></span></div>") (text . "")) ((text . "") (text . "Find the very next sibling of each paragraph. Keep only the ones with a
+") (text . "") (js . "
+$( \"button[disabled]\" ).next().text( \"this button is disabled\" );
+") (text . "") (css . "
+  span {
+    color: blue;
+    font-weight: bold;
+  }
+  button {
+    width: 100px;
+  }
+") (text . "") (html . "
+<div><button disabled=\"disabled\">First</button> - <span></span></div>
+<div><button>Second</button> - <span></span></div>
+<div><button disabled=\"disabled\">Third</button> - <span></span></div>
+") (text . "")) ((text . "") (text . "Find the very next sibling of each paragraph. Keep only the ones with a
 class \"selected\".
 
-") (text . "") (js . "$(\"p\").next(\".selected\").css(\"background\", \"yellow\");") (text . "") (html . "<p>Hello</p>
-
-  <p class=\"selected\">Hello Again</p>
-  <div><span>And Again</span></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).next( \".selected\" ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<p>Hello</p>
+<p class=\"selected\">Hello Again</p>
+<div><span>And Again</span></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "nextAll" jquery-doc-methods)
 
@@ -11480,50 +13377,71 @@ elements will be filtered by testing whether they match it.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
-") (text . "") (text . "If we begin at the third item, we can find the elements which come
+    ") (text . "") (text . "If we begin at the third item, we can find the elements which come
 after it:
 
-") (text . "") (js . "$('li.third-item').nextAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 4 and 5. Since
+") (text . "") (js . "
+$( \"li.third-item\" ).nextAll().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind items 4 and 5. Since
 we do not supply a selector expression, these following elements are
 unequivocally included as part of the object. If we had supplied one,
 the elements would be tested for a match before they were included.
 ") (text . "")) ("examples" ((text . "") (text . "Locate all the divs after the first and give them a class.
 
-") (text . "") (js . "$(\"div:first\").nextAll().addClass(\"after\");") (text . "") (css . "
-  div { width: 80px; height: 80px; background: #abc;
-        border: 2px solid black; margin: 10px; float: left; }
-  div.after { border-color: red; }
-  ") (text . "") (text . "150
+") (text . "") (js . "
+$( \"div:first\" ).nextAll().addClass( \"after\" );
+") (text . "") (css . "
+  div {
+    width: 80px;
+    height: 80px;
+    background: #abc;
+    border: 2px solid black;
+    margin: 10px;
+    float: left;
+  }
+  div.after {
+    border-color: red;
+  }
+") (text . "") (text . "150
 
-") (text . "") (html . "<div>first</div>
-  <div>sibling<div>child</div></div>
-  <div>sibling</div>
-
-  <div>sibling</div>") (text . "")) ((text . "") (text . "Locate all the paragraphs after the second child in the body and give
+") (text . "") (html . "
+<div>first</div>
+<div>sibling<div>child</div></div>
+<div>sibling</div>
+<div>sibling</div>") (text . "")) ((text . "") (text . "Locate all the paragraphs after the second child in the body and give
 them a class.
 
 ") (text . "") (js . "
-    $(\":nth-child(1)\").nextAll(\"p\").addClass(\"after\");
+$( \":nth-child(1)\" ).nextAll( \"p\" ).addClass( \"after\" );
 ") (text . "") (css . "
-div, p { width: 60px; height: 60px; background: #abc;
-         border: 2px solid black; margin: 10px; float: left; }
-.after { border-color: red; }
+  div, p {
+    width: 60px;
+    height: 60px;
+    background: #abc;
+    border: 2px solid black;
+    margin: 10px;
+    float: left;
+  }
+  .after {
+    border-color: red;
+  }
 ") (text . "") (text . "200
 
-") (text . "") (html . "<p>p</p>
-<div>div</div>
-<p>p</p>
+") (text . "") (html . "
 <p>p</p>
 <div>div</div>
-
 <p>p</p>
-<div>div</div>") (text . ""))))) jquery-doc-hash)
+<p>p</p>
+<div>div</div>
+<p>p</p>
+<div>div</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "nextUntil" jquery-doc-methods)
 
@@ -11562,29 +13480,29 @@ give them a red background color. Also, find <dd> siblings that follow
 <dt id=\"term-1\"> up to <dt id=\"term-3\"> and give them a green text
 color.
 ") (text . "") (js . "
-$(\"#term-2\").nextUntil(\"dt\")
-  .css(\"background-color\", \"red\");
-
-var term3 = document.getElementById(\"term-3\");
-$(\"#term-1\").nextUntil(term3, \"dd\")
-  .css(\"color\", \"green\");
-
-") (text . "") (html . "<dl>
+$( \"#term-2\" )
+  .nextUntil( \"dt\" )
+    .css( \"background-color\", \"red\" );
+var term3 = document.getElementById( \"term-3\" );
+$( \"#term-1\" )
+  .nextUntil( term3, \"dd\" )
+    .css( \"color\", \"green\" );
+") (text . "") (html . "
+<dl>
   <dt id=\"term-1\">term 1</dt>
   <dd>definition 1-a</dd>
   <dd>definition 1-b</dd>
   <dd>definition 1-c</dd>
   <dd>definition 1-d</dd>
-
   <dt id=\"term-2\">term 2</dt>
   <dd>definition 2-a</dd>
   <dd>definition 2-b</dd>
   <dd>definition 2-c</dd>
-
   <dt id=\"term-3\">term 3</dt>
   <dd>definition 3-a</dd>
   <dd>definition 3-b</dd>
-</dl>") (text . ""))))) jquery-doc-hash)
+</dl>
+") (text . ""))))) jquery-doc-hash)
 
 (push "not" jquery-doc-methods)
 
@@ -11615,10 +13533,12 @@ elements that don`t match the selector will be included in the result.
   <li>list item 4</li>
   <li>list item 5</li>
 </ul>
-") (text . "") (text . "We can apply this method to the set of list items:
+    ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js . "$('li').not(':even').css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 2 and 4, as they
+") (text . "") (js . "
+$( \"li\" ).not( \":even\" ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for items 2 and 4, as they
 do not match the selector (recall that :even and :odd use 0-based
 indexing).
 ") (text . "") (text . " Removing Specific Elements
@@ -11636,13 +13556,13 @@ one of its items:
   <li>list item 4</li>
   <li>list item 5</li>
 </ul>
-") (text . "") (text . "We can fetch the third list item using the native JavaScript
+    ") (text . "") (text . "We can fetch the third list item using the native JavaScript
 getElementById() function, then remove it from a jQuery object:
 
 ") (text . "") (js . "
-$('li').not(document.getElementById('notli'))
-  .css('background-color', 'red');
-") (text . "") (text . "This statement changes the color of items 1, 2, 4, and 5. We could have
+$( \"li\" ).not( document.getElementById( \"notli\" ) )
+  .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This statement changes the color of items 1, 2, 4, and 5. We could have
 accomplished the same thing with a simpler jQuery expression, but this
 technique can be useful when, for example, other libraries provide
 references to plain DOM nodes.
@@ -11653,33 +13573,50 @@ included.
 ") (text . "")) ("examples" ((text . "") (text . "Adds a border to divs that are not green or blue.
 
 ") (text . "") (js . "
-$(\"div\").not(\".green, #blueone\")
-        .css(\"border-color\", \"red\");
-
+$( \"div\" ).not( \".green, #blueone\" )
+  .css( \"border-color\", \"red\" );
 ") (text . "") (css . "
-div { width:50px; height:50px; margin:10px; float:left;
-      background:yellow; border:2px solid white; }
-.green { background:#8f8; }
-.gray { background:#ccc; }
-#blueone { background:#99f; }
-") (text . "") (html . "<div></div>
+  div {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    float: left;
+    background: yellow;
+    border: 2px solid white;
+  }
+  .green {
+    background: #8f8;
+  }
+  .gray {
+    background: #ccc;
+  }
+  #blueone {
+    background: #99f;
+  }
+") (text . "") (html . "
+<div></div>
 <div id=\"blueone\"></div>
 <div></div>
 <div class=\"green\"></div>
-
 <div class=\"green\"></div>
 <div class=\"gray\"></div>
 <div></div>
 ") (text . "")) ((text . "") (text . "Removes the element with the ID \"selected\" from the set of all
 paragraphs.
 
-") (text . "") (js . "$(\"p\").not( $(\"#selected\")[0] )") (text . "")) ((text . "") (text . "Removes the element with the ID \"selected\" from the set of all
+") (text . "") (js . "
+$( \"p\" ).not( $( \"#selected\" )[ 0 ] );
+") (text . "")) ((text . "") (text . "Removes the element with the ID \"selected\" from the set of all
 paragraphs.
 
-") (text . "") (js . "$(\"p\").not(\"#selected\")") (text . "")) ((text . "") (text . "Removes all elements that match \"div p.selected\" from the total set of
+") (text . "") (js . "
+$( \"p\" ).not( \"#selected\" );
+") (text . "")) ((text . "") (text . "Removes all elements that match \"div p.selected\" from the total set of
 all paragraphs.
 
-") (text . "") (js . "$(\"p\").not($(\"div p.selected\"))") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).not( $( \"div p.selected\" ) );
+") (text . ""))))) jquery-doc-hash)
 
 (push "off" jquery-doc-methods)
 
@@ -11698,15 +13635,16 @@ functions previously attached for the event(s).
 " nil nil) ("selector" "A selector which should match the one originally passed to .on() when
 attaching event handlers.
 
-" "true" nil))) ("desc" (text . "Remove an event handler.
+" "true" nil)) nil) ("desc" (text . "Remove an event handler.
 
-")) ("longdesc" (text . "") (text . "The off() method removes event handlers that were attached with .on() .
-See the discussion of delegated and directly bound events on that page
-for more information. Specific event handlers can be removed on
-elements by providing combinations of event names, namespaces,
-selectors, or handler function names. When multiple filtering arguments
-are given, all of the arguments provided must match for the event
-handler to be removed.
+")) ("longdesc" (text . "") (text . "The .off() method removes event handlers that were attached with .on()
+. See the discussion of delegated and directly bound events on that
+page for more information. Calling .off() with no arguments removes all
+handlers attached to the elements. Specific event handlers can be
+removed on elements by providing combinations of event names,
+namespaces, selectors, or handler function names. When multiple
+filtering arguments are given, all of the arguments provided must match
+for the event handler to be removed.
 ") (text . "") (text . "If a simple event name such as \"click\" is provided, all events of that
 type (both direct and delegated) are removed from the elements in the
 jQuery set. When writing code that will be used as a plugin, or simply
@@ -11735,52 +13673,70 @@ handler functions or the special value false.
 ") (text . "")) ("examples" ((text . "") (text . "Add and remove event handlers on the colored button.
 
 ") (text . "") (js . "
-function aClick() {
-  $(\"div\").show().fadeOut(\"slow\");
+function flash() {
+  $( \"div\" ).show().fadeOut( \"slow\" );
 }
-$(\"#bind\").click(function () {
-  $(\"body\").on(\"click\", \"#theone\", aClick)
-    .find(\"#theone\").text(\"Can Click!\");
+$( \"#bind\" ).click(function() {
+  $( \"body\" )
+    .on( \"click\", \"#theone\", flash )
+    .find( \"#theone\" )
+      .text( \"Can Click!\" );
 });
-$(\"#unbind\").click(function () {
-  $(\"body\").off(\"click\", \"#theone\", aClick)
-    .find(\"#theone\").text(\"Does nothing...\");
+$( \"#unbind\" ).click(function() {
+  $( \"body\" )
+    .off( \"click\", \"#theone\", flash )
+    .find( \"#theone\" )
+      .text( \"Does nothing...\" );
 });
 ") (text . "") (css . "
-button { margin:5px; }
-button#theone { color:red; background:yellow; }
-") (text . "") (html . "<button id=\"theone\">Does nothing...</button>
+  button {
+    margin: 5px;
+  }
+  button#theone {
+    color: red;
+    background: yellow;
+  }
+") (text . "") (html . "
+<button id=\"theone\">Does nothing...</button>
 <button id=\"bind\">Add Click</button>
 <button id=\"unbind\">Remove Click</button>
-<div style=\"display:none;\">Click!</div>") (text . "")) ((text . "") (text . "Remove all event handlers from all paragraphs:
+<div style=\"display:none;\">Click!</div>
+") (text . "")) ((text . "") (text . "Remove all event handlers from all paragraphs:
 
-") (text . "") (js . "$(\"p\").off()") (text . "")) ((text . "") (text . "Remove all delegated click handlers from all paragraphs:
+") (text . "") (js . "
+$( \"p\" ).off();
+") (text . "")) ((text . "") (text . "Remove all delegated click handlers from all paragraphs:
 
-") (text . "") (js . "$(\"p\").off( \"click\", \"**\" )") (text . "")) ((text . "") (text . "Remove just one previously bound handler by passing it as the third
+") (text . "") (js . "
+$( \"p\" ).off( \"click\", \"**\" );
+") (text . "")) ((text . "") (text . "Remove just one previously bound handler by passing it as the third
 argument:
 
-") (text . "") (js . "var foo = function () {
-  // code to handle some kind of event
+") (text . "") (js . "
+var foo = function() {
+  // Code to handle some kind of event
 };
 
-// ... now foo will be called when paragraphs are clicked ...
-$(\"body\").on(\"click\", \"p\", foo);
+// ... Now foo will be called when paragraphs are clicked ...
+$( \"body\" ).on( \"click\", \"p\", foo );
 
-// ... foo will no longer be called.
-$(\"body\").off(\"click\", \"p\", foo); ") (text . "")) ((text . "") (text . "Unbind all delegated event handlers by their namespace:
+// ... Foo will no longer be called.
+$( \"body\" ).off( \"click\", \"p\", foo );
+") (text . "")) ((text . "") (text . "Unbind all delegated event handlers by their namespace:
 
-") (text . "") (js . "var validate = function () {
-  // code to validate form entries
+") (text . "") (js . "
+var validate = function() {
+  // Code to validate form entries
 };
 
-// delegate events under the \".validator\" namespace
-$(\"form\").on(\"click.validator\", \"button\", validate);
+// Delegate events under the \".validator\" namespace
+$( \"form\" ).on( \"click.validator\", \"button\", validate );
 
-$(\"form\").on(\"keypress.validator\", \"input[type='text']\", validate);
+$( \"form\" ).on( \"keypress.validator\", \"input[type='text']\", validate );
 
-// remove event handlers in the \".validator\" namespace
-
-$(\"form\").off(\".validator\");") (text . ""))))) jquery-doc-hash)
+// Remove event handlers in the \".validator\" namespace
+$( \"form\" ).off( \".validator\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "offset" jquery-doc-methods)
 
@@ -11792,48 +13748,66 @@ element relative to the document. Contrast this with .position(), which
 retrieves the current position relative to the offset parent. When
 positioning a new element on top of an existing one for global
 manipulation (in particular, for implementing drag-and-drop), .offset()
-is the more useful.
+is more useful.
 ") (text . "") (text . ".offset() returns an object containing the properties top and left.
 
 
-") (text . "") (text . "  Note: jQuery does not support getting the offset coordinates of
-  hidden elements or accounting for borders, margins, or padding set
-  on the body element.
+") (text . "") (text . "Note: jQuery does not support getting the offset coordinates of hidden
+elements or accounting for borders, margins, or padding set on the body
+element.
 
-  While it is possible to get the coordinates of elements with
-  visibility:hidden set, display:none is excluded from the rendering
-  tree and thus has a position that is undefined.
+While it is possible to get the coordinates of elements with
+visibility:hidden set, display:none is excluded from the rendering tree
+and thus has a position that is undefined.
 ") (text . "")) ("examples" ((text . "") (text . "Access the offset of the second paragraph:
 
-") (text . "") (js . "var p = $(\"p:last\");
+") (text . "") (js . "
+var p = $( \"p:last\" );
 var offset = p.offset();
-p.html( \"left: \" + offset.left + \", top: \" + offset.top );") (text . "") (css . "
-p { margin-left:10px; }
-  ") (text . "") (html . "<p>Hello</p><p>2nd Paragraph</p>") (text . "")) ((text . "") (text . "Click to see the offset.
+p.html( \"left: \" + offset.left + \", top: \" + offset.top );
+") (text . "") (css . "
+  p {
+    margin-left: 10px;
+  }
+") (text . "") (html . "
+<p>Hello</p><p>2nd Paragraph</p>
+") (text . "")) ((text . "") (text . "Click to see the offset.
 
 ") (text . "") (js . "
-$(\"*\", document.body).click(function (e) {
-  var offset = $(this).offset();
-  e.stopPropagation();
-  $(\"#result\").text(this.tagName + \" coords ( \" + offset.left + \", \" +
-                                  offset.top + \" )\");
+$( \"*\", document.body ).click(function( event ) {
+  var offset = $( this ).offset();
+  event.stopPropagation();
+  $( \"#result\" ).text( this.tagName +
+    \" coords ( \" + offset.left + \", \" + offset.top + \" )\" );
 });
-
 ") (text . "") (css . "
-p { margin-left:10px; color:blue; width:200px;
-    cursor:pointer; }
-span { color:red; cursor:pointer; }
-div.abs { width:50px; height:50px; position:absolute;
-          left:220px; top:35px; background-color:green;
-          cursor:pointer; }
-  ") (text . "") (html . "<div id=\"result\">Click an element.</div>
+  p {
+    margin-left: 10px;
+    color: blue;
+    width: 200px;
+    cursor: pointer;
+  }
+  span {
+    color: red;
+    cursor: pointer;
+  }
+  div.abs {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 220px;
+    top: 35px;
+    background-color: green;
+    cursor: pointer;
+  }
+") (text . "") (html . "
+<div id=\"result\">Click an element.</div>
 <p>
   This is the best way to <span>find</span> an offset.
 </p>
-
 <div class=\"abs\">
 </div>
-  ") (text . ""))))) jquery-doc-hash)
+") (text . ""))))) jquery-doc-hash)
 
 (push "offset" jquery-doc-methods)
 
@@ -11853,7 +13827,15 @@ element`s position style property is currently static, it will be set
 to relative to allow for this repositioning.
 ") (text . "")) ("examples" ((text . "") (text . "Set the offset of the second paragraph:
 
-") (text . "") (js . "$(\"p:last\").offset({ top: 10, left: 30 });") (text . "") (css . "p { margin-left:10px; } ") (text . "") (html . "<p>Hello</p><p>2nd Paragraph</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p:last\" ).offset({ top: 10, left: 30 });
+") (text . "") (css . "
+  p {
+    margin-left: 10px;
+  }
+") (text . "") (html . "
+<p>Hello</p><p>2nd Paragraph</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "offsetParent" jquery-doc-methods)
 
@@ -11890,14 +13872,16 @@ element:
     ") (text . "") (text . "If we begin at item A, we can find its positioned ancestor:
 
 
-") (text . "") (js . "$('li.item-a').offsetParent().css('background-color', 'red');") (text . "") (text . "This will change the color of list item II, which is positioned.
+") (text . "") (js . "
+$( \"li.item-a\" ).offsetParent().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This will change the color of list item II, which is positioned.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Find the offsetParent of item \"A.\"
 
 ") (text . "") (text . "250
 
-") (text . "") (js . "$('li.item-a').offsetParent().css('background-color', 'red');") (text . "") (html . "
+") (text . "") (js . "$( \"li.item-a\" ).offsetParent().css( \"background-color\", \"red\" );") (text . "") (html . "
 <ul class=\"level-1\">
   <li class=\"item-i\">I</li>
   <li class=\"item-ii\" style=\"position: relative;\">II
@@ -11914,7 +13898,8 @@ element:
     </ul>
   </li>
   <li class=\"item-iii\">III</li>
-</ul>") (text . ""))))) jquery-doc-hash)
+</ul>
+") (text . ""))))) jquery-doc-hash)
 
 (push "on" jquery-doc-methods)
 
@@ -11956,7 +13941,8 @@ through the browser`s standard JavaScript event types, calling the
 handler function when the browser generates events due to user actions
 such as click. In addition, the .trigger() method can trigger both
 standard browser event names and custom event names to call attached
-handlers.
+handlers. Event names should only contain alphanumerics, underscore,
+and colon chraracters.
 ") (text . "") (text . "An event name can be qualified by event namespaces that simplify
 removing or triggering the event. For example, \"click.myPlugin.simple\"
 defines both the myPlugin and simple namespaces for this particular
@@ -12017,17 +14003,17 @@ potential for much lower overhead when many elements must be monitored.
 On a data table with 1,000 rows in its tbody, this example attaches a
 handler to 1,000 elements:
 ") (text . "") (js . "
-$(\"#dataTable tbody tr\").on(\"click\", function(event){
-  alert($(this).text());
+$( \"#dataTable tbody tr\" ).on( \"click\", function() {
+  alert( $( this ).text() );
 });
-") (text . "") (text . "A delegated-events approach attaches an event handler to only one
+    ") (text . "") (text . "A delegated-events approach attaches an event handler to only one
 element, the tbody, and the event only needs to bubble up one level
 (from the clicked tr to tbody):
 ") (text . "") (js . "
-$(\"#dataTable tbody\").on(\"click\", \"tr\", function(event){
-  alert($(this).text());
+$( \"#dataTable tbody\" ).on( \"click\", \"tr\", function() {
+  alert( $( this ).text() );
 });
-") (text . "") (text . "Note: Delegated events do not work for SVG.
+    ") (text . "") (text . "Note: Delegated events do not work for SVG.
 
 
 ") (text . "") (text . "The event handler and its environment
@@ -12039,9 +14025,11 @@ provide an anonymous handler function at the point of the .on() call,
 as the examples have done above, or declare a named function and pass
 its name:
 ") (text . "") (js . "
-function notify() { alert(\"clicked\"); }
-$(\"button\").on(\"click\", notify);
-") (text . "") (text . "When the browser triggers an event or other JavaScript calls jQuery`s
+function notify() {
+  alert( \"clicked\" );
+}
+$( \"button\" ).on( \"click\", notify );
+    ") (text . "") (text . "When the browser triggers an event or other JavaScript calls jQuery`s
 .trigger() method, jQuery passes the handler an event object it can use
 to analyze and change the status of the event. This object is a
 normalized subset of data provided by the browser; the browser`s
@@ -12066,7 +14054,7 @@ canceled. See the W3C Events Specification for details.
 ") (text . "") (text . "Returning false from an event handler will automatically call
 event.stopPropagation() and event.preventDefault(). A false value can
 also be passed for the handler as a shorthand for function(){ return
-false; }. So, $(\"a.disabled\").on(\"click\", false); attaches an event
+false; }. So, $( \"a.disabled\" ).on( \"click\", false ); attaches an event
 handler to all links with class \"disabled\" that prevents them from
 being followed when they are clicked and also stops the event from
 bubbling.
@@ -12076,7 +14064,7 @@ this is the element where the event was attached and for delegated
 events this is an element matching selector. (Note that this may not be
 equal to event.target if the event has bubbled from a descendant
 element.) To create a jQuery object from the element so that it can be
-used with jQuery methods, use $(this).
+used with jQuery methods, use $( this ).
 ") (text . "") (text . "Passing data to the handler
 
 
@@ -12092,10 +14080,16 @@ multiple times. This is especially useful when the event.data feature
 is being used, or when other unique data resides in a closure around
 the event handler function. For example:
 ") (text . "") (js . "
-function greet(event) { alert(\"Hello \"+event.data.name); }
-$(\"button\").on(\"click\", { name: \"Karl\" }, greet);
-$(\"button\").on(\"click\", { name: \"Addy\" }, greet);
-") (text . "") (text . "The above code will generate two different alerts when the button is
+function greet( event ) {
+  alert( \"Hello \" + event.data.name );
+}
+$( \"button\" ).on( \"click\", {
+  name: \"Karl\"
+}, greet );
+$( \"button\" ).on( \"click\", {
+  name: \"Addy\"
+}, greet );
+    ") (text . "") (text . "The above code will generate two different alerts when the button is
 clicked.
 
 ") (text . "") (text . "As an alternative or in addition to the data argument provided to the
@@ -12127,20 +14121,21 @@ that use more complex selectors, particularly hierarchical ones, can be
 several times slower--although they are still fast enough for most
 applications. Hierarchical selectors can often be avoided simply by
 attaching the handler to a more appropriate point in the document. For
-example, instead of $(\"body\").on(\"click\", \"#commentForm .addNew\",
-addComment) use $(\"#commentForm\").on(\"click\", \".addNew\", addComment).
+example, instead of $( \"body\" ).on( \"click\", \"#commentForm .addNew\",
+addComment ) use $( \"#commentForm\" ).on( \"click\", \".addNew\", addComment
+).
 ") (text . "") (text . "Additional notes
 
 
 ") (text . "") (text . "There are shorthand methods for some events such as .click() that can
 be used to attach or trigger event handlers. For a complete list of
 shorthand methods, see the events category.
-") (text . "") (text . "Deprecated as of jQuery 1.8: The name \"hover\" used as a shorthand for
-the string \"mouseenter mouseleave\". It attaches a single event handler
-for those two events, and the handler must examine event.type to
-determine whether the event is mouseenter or mouseleave. Do not confuse
-the \"hover\" pseudo-event-name with the .hover() method, which accepts
-one or two functions.
+") (text . "") (text . "Deprecated in jQuery 1.8, removed in 1.9: The name \"hover\" used as a
+shorthand for the string \"mouseenter mouseleave\". It attaches a single
+event handler for those two events, and the handler must examine
+event.type to determine whether the event is mouseenter or mouseleave.
+Do not confuse the \"hover\" pseudo-event-name with the .hover() method,
+which accepts one or two functions.
 ") (text . "") (text . "jQuery`s event system requires that a DOM element allow attaching data
 via a property on the element, so that events can be tracked and
 delivered. The object, embed, and applet elements cannot attach data,
@@ -12161,81 +14156,124 @@ return value conventions, so it is not supported by jQuery. Instead,
 assign a handler function directly to the window.onerror property.
 ") (text . "")) ("examples" ((text . "") (text . "Display a paragraph`s text in an alert when it is clicked:
 
-") (text . "") (js . "$(\"p\").on(\"click\", function(){
-alert( $(this).text() );
-});") (text . "")) ((text . "") (text . "Pass data to the event handler, which is specified here by name:
-
-") (text . "") (js . "function myHandler(event) {
-  alert(event.data.foo);
-}
-$(\"p\").on(\"click\", {foo: \"bar\"}, myHandler)") (text . "")) ((text . "") (text . "Cancel a form submit action and prevent the event from bubbling up by
-returning false:
-
-") (text . "") (js . "$(\"form\").on(\"submit\", false)") (text . "")) ((text . "") (text . "Cancel only the default action by using .preventDefault().
-
-") (text . "") (js . "$(\"form\").on(\"submit\", function(event) {
-  event.preventDefault();
-});") (text . "")) ((text . "") (text . "Stop submit events from bubbling without preventing form submit, using
-.stopPropagation().
-
-") (text . "") (js . "$(\"form\").on(\"submit\", function(event) {
-  event.stopPropagation();
-});") (text . "")) ((text . "") (text . "Attach and trigger custom (non-browser) events.
+") (text . "") (js . "
+$( \"p\" ).on( \"click\", function() {
+  alert( $( this ).text() );
+});
+") (text . "")) ((text . "") (text . "Pass data to the event handler, which is specified here by name:
 
 ") (text . "") (js . "
-$(\"p\").on(\"myCustomEvent\", function(e, myName, myValue){
-  $(this).text(myName + \", hi there!\");
-  $(\"span\").stop().css(\"opacity\", 1)
-    .text(\"myName = \" + myName)
-    .fadeIn(30).fadeOut(1000);
+function myHandler( event ) {
+  alert( event.data.foo );
+}
+$( \"p\" ).on( \"click\", { foo: \"bar\" }, myHandler );
+") (text . "")) ((text . "") (text . "Cancel a form submit action and prevent the event from bubbling up by
+returning false:
+
+") (text . "") (js . "
+$( \"form\" ).on( \"submit\", false );
+") (text . "")) ((text . "") (text . "Cancel only the default action by using .preventDefault().
+
+") (text . "") (js . "
+$( \"form\" ).on( \"submit\", function( event ) {
+  event.preventDefault();
 });
-$(\"button\").click(function () {
-  $(\"p\").trigger(\"myCustomEvent\", [ \"John\" ]);
+") (text . "")) ((text . "") (text . "Stop submit events from bubbling without preventing form submit, using
+.stopPropagation().
+
+") (text . "") (js . "
+$( \"form\" ).on( \"submit\", function( event ) {
+  event.stopPropagation();
+});
+") (text . "")) ((text . "") (text . "Attach and trigger custom (non-browser) events.
+
+") (text . "") (js . "
+$( \"p\" ).on( \"myCustomEvent\", function( event, myName ) {
+  $( this ).text( myName + \", hi there!\" );
+  $( \"span\" )
+    .stop()
+    .css( \"opacity\", 1 )
+    .text( \"myName = \" + myName )
+    .fadeIn( 30 )
+    .fadeOut( 1000 );
+});
+$( \"button\" ).click(function () {
+  $( \"p\" ).trigger( \"myCustomEvent\", [ \"John\" ] );
 });
 ") (text . "") (css . "
-p { color:red; }
-span { color:blue; }
-") (text . "") (html . "<p>Has an attached custom event.</p>
-<button>Trigger custom event</button>
-<span style=\"display:none;\"></span>") (text . "")) ((text . "") (text . "Attach multiple event handlers simultaneously using a plain object.
-
-") (text . "") (html . "<div class=\"test\">test div</div>") (text . "") (css . "
-.test { color: #000; padding: .5em; border: 1px solid #444; }
-.active { color: #900;}
-.inside { background-color: aqua; }
-") (text . "") (js . "$(\"div.test\").on({
-  click: function(){
-    $(this).toggleClass(\"active\");
-  },
-  mouseenter: function(){
-    $(this).addClass(\"inside\");
-  },
-  mouseleave: function(){
-    $(this).removeClass(\"inside\");
+  p {
+    color: red;
   }
-});") (text . "")) ((text . "") (text . "Click any paragraph to add another after it. Note that .on() allows a
+  span {
+    color: blue;
+  }
+") (text . "") (html . "
+<p>Has an attached custom event.</p>
+<button>Trigger custom event</button>
+<span style=\"display:none;\"></span>
+") (text . "")) ((text . "") (text . "Attach multiple event handlers simultaneously using a plain object.
+
+") (text . "") (html . "
+<div class=\"test\">test div</div>
+") (text . "") (css . "
+  .test {
+    color: #000;
+    padding: .5em;
+    border: 1px solid #444;
+  }
+  .active {
+    color: #900;
+  }
+  .inside {
+    background-color: aqua;
+  }
+") (text . "") (js . "
+$( \"div.test\" ).on({
+  click: function() {
+    $( this ).toggleClass( \"active\" );
+  }, mouseenter: function() {
+    $( this ).addClass( \"inside\" );
+  }, mouseleave: function() {
+    $( this ).removeClass( \"inside\" );
+  }
+});
+") (text . "")) ((text . "") (text . "Click any paragraph to add another after it. Note that .on() allows a
 click event on any paragraph--even new ones--since the event is handled
 by the ever-present body element after it bubbles to there.
 ") (text . "") (js . "
 var count = 0;
-$(\"body\").on(\"click\", \"p\", function(){
-  $(this).after(\"<p>Another paragraph! \"+(++count)+\"</p>\");
+$( \"body\" ).on( \"click\", \"p\", function() {
+  $( this ).after( \"<p>Another paragraph! \" + (++count) + \"</p>\" );
 });
 ") (text . "") (css . "
-p { background:yellow; font-weight:bold; cursor:pointer;
-    padding:5px; }
-p.over { background: #ccc; }
-span { color:red; }
-") (text . "") (html . "<p>Click me!</p>
-<span></span>") (text . "")) ((text . "") (text . "Display each paragraph`s text in an alert box whenever it is clicked:
+  p {
+    background: yellow;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+  }
+  p.over {
+    background: #ccc;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Click me!</p>
+<span></span>
+") (text . "")) ((text . "") (text . "Display each paragraph`s text in an alert box whenever it is clicked:
 
-") (text . "") (js . "$(\"body\").on(\"click\", \"p\", function(){
-  alert( $(this).text() );
-});") (text . "")) ((text . "") (text . "Cancel a link`s default action using the preventDefault method.
+") (text . "") (js . "
+$( \"body\" ).on( \"click\", \"p\", function() {
+  alert( $( this ).text() );
+});
+") (text . "")) ((text . "") (text . "Cancel a link`s default action using the preventDefault method.
 
-") (text . "") (js . "$(\"body\").on(\"click\", \"a\", function(event){
+") (text . "") (js . "
+$( \"body\" ).on( \"click\", \"a\", function( event ) {
   event.preventDefault();
-});") (text . ""))))) jquery-doc-hash)
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "one" jquery-doc-methods)
 
@@ -12267,7 +14305,7 @@ handler is always called when it reaches the selected element.
 " "true" nil) ("data" "Data to be passed to the handler in event.data when an event occurs.
 
 " "true" nil))) ("desc" (text . "Attach a handler to an event for the elements. The handler is executed
-at most once per element.
+at most once per element per event type.
 
 ")) ("longdesc" (text . "") (text . "The first form of this method is identical to .bind(), except that the
 handler is unbound after its first invocation. The second two forms,
@@ -12275,20 +14313,22 @@ introduced in jQuery 1.7, are identical to .on() except that the
 handler is removed after the first time the event occurs at the
 delegated element, whether the selector matched anything or not. For
 example:
-") (text . "") (js . "$(\"#foo\").one(\"click\", function() {
-  alert(\"This will be displayed only once.\");
+") (text . "") (js . "
+$( \"#foo\" ).one( \"click\", function() {
+  alert( \"This will be displayed only once.\" );
 });
-$(\"body\").one(\"click\", \"#foo\", function() {
-  alert(\"This displays if #foo is the first thing clicked in the body.\");
+$( \"body\" ).one( \"click\", \"#foo\", function() {
+  alert( \"This displays if #foo is the first thing clicked in the body.\" );
 });
-") (text . "") (text . "After the code is executed, a click on the element with ID foo will
+    ") (text . "") (text . "After the code is executed, a click on the element with ID foo will
 display the alert. Subsequent clicks will do nothing. This code is
 equivalent to:
-") (text . "") (js . "$(\"#foo\").on(\"click\", function( event ) {
-  alert(\"This will be displayed only once.\");
-  $(this).off( event );
+") (text . "") (js . "
+$( \"#foo\" ).on( \"click\", function( event ) {
+  alert( \"This will be displayed only once.\" );
+  $( this ).off( event );
 });
-") (text . "") (text . "In other words, explicitly calling .off() from within a regularly-bound
+    ") (text . "") (text . "In other words, explicitly calling .off() from within a regularly-bound
 handler has exactly the same effect.
 
 ") (text . "") (text . "If the first argument contains more than one space-separated event
@@ -12298,35 +14338,55 @@ types, the event handler is called once for each event type.
 
 ") (text . "") (js . "
 var n = 0;
-$(\"div\").one(\"click\", function() {
-  var index = $(\"div\").index(this);
-  $(this).css({
-    borderStyle:\"inset\",
-    cursor:\"auto\"
+$( \"div\" ).one( \"click\", function() {
+  var index = $( \"div\" ).index( this );
+  $( this ).css({
+    borderStyle: \"inset\",
+    cursor: \"auto\"
   });
-  $(\"p\").text(\"Div at index #\" + index + \" clicked.\" +
-      \"  That's \" + ++n + \" total clicks.\");
+  $( \"p\" ).text( \"Div at index #\" + index + \" clicked.\" +
+    \" That's \" + (++n) + \" total clicks.\" );
 });
-
 ") (text . "") (css . "
-div { width:60px; height:60px; margin:5px; float:left;
-background:green; border:10px outset;
-cursor:pointer; }
-p { color:red; margin:0; clear:left; }
+  div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    float: left;
+    background: green;
+    border: 10px outset;
+    cursor:pointer;
+  }
+  p {
+    color: red;
+    margin: 0;
+    clear: left;
+  }
 ") (text . "") (html . "
 <div></div>
 <div></div>
 <div></div>
 <div></div>
 <div></div>
-
 <p>Click a green square...</p>
 ") (text . "")) ((text . "") (text . "To display the text of all paragraphs in an alert box the first time
 each of them is clicked:
 
-") (text . "") (js . "$(\"p\").one(\"click\", function(){
-alert( $(this).text() );
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).one( \"click\", function() {
+  alert( $( this ).text() );
+});
+") (text . "")) ((text . "") (text . "Event handlers will trigger once per element per event type
+
+") (text . "") (js . "
+var n = 0;
+$(\".target\").one(\"click mouseenter\", function() {
+  $(\".count\").html(++n);
+});
+") (text . "") (html . "
+<div class=\"count\">0</div>
+<div class=\"target\">Hover/click me</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "outerHeight" jquery-doc-methods)
 
@@ -12348,8 +14408,20 @@ these, use .height() instead.
 
 ") (text . "")) ("examples" ((text . "") (text . "Get the outerHeight of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"outerHeight:\" + p.outerHeight() + \" , outerHeight(true):\" + p.outerHeight(true) );") (text . "") (css . "p { margin:10px;padding:5px;border:2px solid #666; } ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text(
+  \"outerHeight:\" + p.outerHeight() +
+  \" , outerHeight( true ):\" + p.outerHeight( true ) );
+") (text . "") (css . "
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p><p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "outerWidth" jquery-doc-methods)
 
@@ -12366,18 +14438,28 @@ border, and optionally margin, in pixels.
 included in the calculation; if true, the margin is also included.
 
 ") (text . "") (text . "This method is not applicable to window and document objects; for
-these, use .width() instead.
-
+these, use .width() instead. Although .outerWidth() can be used on
+table elements, it may give unexpected results on tables using the
+border-collapse: collapse CSS property.
 ") (text . "") (text . "[0042_04_06.png]
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Get the outerWidth of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"outerWidth:\" + p.outerWidth()+ \" , outerWidth(true):\" + p.outerWidth(true) );
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text(
+  \"outerWidth:\" + p.outerWidth() +
+  \" , outerWidth( true ):\" + p.outerWidth( true ) );
 ") (text . "") (css . "
-  p { margin:10px;padding:5px;border:2px solid #666; }
-") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p><p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "parent" jquery-doc-methods)
 
@@ -12389,8 +14471,11 @@ optionally filtered by a selector.
 ")) ("longdesc" (text . "") (text . "Given a jQuery object that represents a set of DOM elements, the
 .parent() method allows us to search through the parents of these
 elements in the DOM tree and construct a new jQuery object from the
-matching elements. The .parents() and .parent() methods are similar,
-except that the latter only travels a single level up the DOM tree.
+matching elements.
+") (text . "") (text . "The .parents() and .parent() methods are similar, except that the
+latter only travels a single level up the DOM tree. Also, $( \"html\"
+).parent() method returns a set containing document whereas $( \"html\"
+).parents() returns an empty set.
 ") (text . "") (text . "The method optionally accepts a selector expression of the same type
 that we can pass to the $() function. If the selector is supplied, the
 elements will be filtered by testing whether they match it.
@@ -12418,7 +14503,9 @@ elements will be filtered by testing whether they match it.
     ") (text . "") (text . "If we begin at item A, we can find its parents:
 
 
-") (text . "") (js . "$('li.item-a').parent().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list. Since
+") (text . "") (js . "
+$( \"li.item-a\" ).parent().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for the level-2 list. Since
 we do not supply a selector expression, the parent element is
 unequivocally included as part of the object. If we had supplied one,
 the element would be tested for a match before it was included.
@@ -12426,36 +14513,42 @@ the element would be tested for a match before it was included.
 Source to see the raw html.
 
 ") (text . "") (js . "
-$(\"*\", document.body).each(function () {
-  var parentTag = $(this).parent().get(0).tagName;
-  $(this).prepend(document.createTextNode(parentTag + \" > \"));
+$( \"*\", document.body ).each(function() {
+  var parentTag = $( this ).parent().get( 0 ).tagName;
+  $( this ).prepend( document.createTextNode( parentTag + \" > \" ) );
 });
 ") (text . "") (css . "
-  div,p { margin:10px; }
-  ") (text . "") (html . "<div>div,
+  div, p {
+    margin: 10px;
+  }
+") (text . "") (html . "
+<div>div,
+  <span>span, </span>
+  <b>b </b>
+</div>
+
+<p>p,
+  <span>span,
+    <em>em </em>
+  </span>
+</p>
+
+<div>div,
+  <strong>strong,
     <span>span, </span>
-    <b>b </b>
+    <em>em,
+      <b>b, </b>
+    </em>
+  </strong>
+  <b>b </b>
+</div>
+") (text . "")) ((text . "") (text . "Find the parent element of each paragraph with a class \"selected\".
 
-  </div>
-  <p>p,
-    <span>span,
-      <em>em </em>
-    </span>
-  </p>
-
-  <div>div,
-    <strong>strong,
-      <span>span, </span>
-      <em>em,
-        <b>b, </b>
-      </em>
-
-    </strong>
-    <b>b </b>
-  </div>") (text . "")) ((text . "") (text . "Find the parent element of each paragraph with a class \"selected\".
-
-") (text . "") (js . "$(\"p\").parent(\".selected\").css(\"background\", \"yellow\");") (text . "") (html . "<div><p>Hello</p></div>
-  <div class=\"selected\"><p>Hello Again</p></div>
+") (text . "") (js . "
+$( \"p\" ).parent( \".selected\" ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<div><p>Hello</p></div>
+<div class=\"selected\"><p>Hello Again</p></div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "parents" jquery-doc-methods)
@@ -12469,9 +14562,14 @@ elements, optionally filtered by a selector.
 .parents() method allows us to search through the ancestors of these
 elements in the DOM tree and construct a new jQuery object from the
 matching elements ordered from immediate parent on up; the elements are
-returned in order from the closest parent to the outer ones. The
-.parents() and .parent() methods are similar, except that the latter
-only travels a single level up the DOM tree.
+returned in order from the closest parent to the outer ones. When
+multiple DOM elements are in the original set, the resulting set will
+be in reverse order of the original elements as well, with duplicates
+removed.
+") (text . "") (text . "The .parents() and .parent() methods are similar, except that the
+latter only travels a single level up the DOM tree. Also, $( \"html\"
+).parent() method returns a set containing document whereas $( \"html\"
+).parents() returns an empty set.
 ") (text . "") (text . "The method optionally accepts a selector expression of the same type
 that we can pass to the $() function. If the selector is supplied, the
 elements will be filtered by testing whether they match it.
@@ -12496,10 +14594,12 @@ elements will be filtered by testing whether they match it.
   </li>
   <li class=\"item-iii\">III</li>
 </ul>
-") (text . "") (text . "If we begin at item A, we can find its ancestors:
+    ") (text . "") (text . "If we begin at item A, we can find its ancestors:
 
 
-") (text . "") (js . "$('li.item-a').parents().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for the level-2 list, item
+") (text . "") (js . "
+$( \"li.item-a\" ).parents().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for the level-2 list, item
 II, and the level-1 list (and on up the DOM tree all the way to the
 <html> element). Since we do not supply a selector expression, all of
 the ancestors are part of the returned jQuery object. If we had
@@ -12507,58 +14607,79 @@ supplied one, only the matching items among these would be included.
 ") (text . "")) ("examples" ((text . "") (text . "Find all parent elements of each b.
 
 ") (text . "") (js . "
-var parentEls = $(\"b\").parents()
-            .map(function () {
-                  return this.tagName;
-                })
-            .get().join(\", \");
-$(\"b\").append(\"<strong>\" + parentEls + \"</strong>\");
+var parentEls = $( \"b\" ).parents()
+  .map(function() {
+    return this.tagName;
+  })
+  .get()
+  .join( \", \" );
+$( \"b\" ).append( \"<strong>\" + parentEls + \"</strong>\" );
 ") (text . "") (css . "
   b, span, p, html body {
     padding: .5em;
     border: 1px solid;
   }
-  b { color:blue; }
-  strong { color:red; }
-  ") (text . "") (html . "<div>
-    <p>
-      <span>
-        <b>My parents are: </b>
-      </span>
-    </p>
-  </div>") (text . "")) ((text . "") (text . "Click to find all unique div parent elements of each span.
+  b {
+    color: blue;
+  }
+  strong {
+    color: red;
+  }
+") (text . "") (html . "
+<div>
+  <p>
+    <span>
+      <b>My parents are: </b>
+    </span>
+  </p>
+</div>
+") (text . "")) ((text . "") (text . "Click to find all unique div parent elements of each span.
 
 ") (text . "") (js . "
 function showParents() {
-  $(\"div\").css(\"border-color\", \"white\");
-  var len = $(\"span.selected\")
-                   .parents(\"div\")
-                   .css(\"border\", \"2px red solid\")
-                   .length;
-  $(\"b\").text(\"Unique div parents: \" + len);
+  $( \"div\" ).css( \"border-color\", \"white\" );
+  var len = $( \"span.selected\" )
+    .parents( \"div\" )
+      .css( \"border\", \"2px red solid\" )
+      .length;
+  $( \"b\" ).text( \"Unique div parents: \" + len );
 }
-$(\"span\").click(function () {
-  $(this).toggleClass(\"selected\");
+$( \"span\" ).click(function() {
+  $( this ).toggleClass( \"selected\" );
   showParents();
-});") (text . "") (css . "
-
-  p, div, span {margin:2px; padding:1px; }
-  div { border:2px white solid; }
-  span { cursor:pointer; font-size:12px; }
-  .selected { color:blue; }
-  b { color:red; display:block; font-size:14px; }
-  ") (text . "") (html . "<p>
-    <div>
-      <div><span>Hello</span></div>
+});
+") (text . "") (css . "
+  p, div, span {
+    margin: 2px;
+    padding: 1px;
+  }
+  div {
+    border: 2px white solid;
+  }
+  span {
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .selected {
+    color: blue;
+  }
+  b {
+    color: red;
+    display: block;
+    font-size: 14px;
+  }
+") (text . "") (html . "
+<p>
+  <div>
+    <div><span>Hello</span></div>
       <span>Hello Again</span>
-
     </div>
     <div>
       <span>And Hello Again</span>
     </div>
   </p>
-
-  <b>Click Hellos to toggle their parents.</b>") (text . ""))))) jquery-doc-hash)
+  <b>Click Hellos to toggle their parents.</b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "parentsUntil" jquery-doc-methods)
 
@@ -12597,12 +14718,13 @@ and give them a red background color. Also, find ancestors of <li
 class=\"item-2\"> that have a class of \"yes\" up to <ul class=\"level-1\">
 and give them a green border.
 ") (text . "") (js . "
-$(\"li.item-a\").parentsUntil(\".level-1\")
-  .css(\"background-color\", \"red\");
+$( \"li.item-a\" )
+  .parentsUntil( \".level-1\" )
+    .css( \"background-color\", \"red\" );
 
-$(\"li.item-2\").parentsUntil( $(\"ul.level-1\"), \".yes\" )
-  .css(\"border\", \"3px solid green\");
-
+$( \"li.item-2\" )
+  .parentsUntil( $( \"ul.level-1\" ), \".yes\" )
+    .css( \"border\", \"3px solid green\" );
 ") (text . "") (html . "
 <ul class=\"level-1 yes\">
   <li class=\"item-i\">I</li>
@@ -12620,7 +14742,8 @@ $(\"li.item-2\").parentsUntil( $(\"ul.level-1\"), \".yes\" )
     </ul>
   </li>
   <li class=\"item-iii\">III</li>
-</ul>") (text . ""))))) jquery-doc-hash)
+</ul>
+") (text . ""))))) jquery-doc-hash)
 
 (push "position" jquery-doc-methods)
 
@@ -12635,20 +14758,23 @@ containing DOM element, .position() is the more useful.
 ") (text . "") (text . "Returns an object containing the properties top and left.
 
 
-") (text . "") (text . "  Note: jQuery does not support getting the position coordinates of
-  hidden elements or accounting for borders, margins, or padding set
-  on the body element.
+") (text . "") (text . "Note: jQuery does not support getting the position coordinates of
+hidden elements or accounting for borders, margins, or padding set on
+the body element.
 ") (text . "")) ("examples" ((text . "") (text . "Access the position of the second paragraph:
 
 ") (text . "") (js . "
-var p = $(\"p:first\");
+var p = $( \"p:first\" );
 var position = p.position();
-$(\"p:last\").text( \"left: \" + position.left + \", top: \" + position.top );
+$( \"p:last\" ).text( \"left: \" + position.left + \", top: \" + position.top );
 ") (text . "") (css . "
-
-  div { padding: 15px;}
-  p { margin-left:10px; }
-  ") (text . "") (html . "
+  div {
+    padding: 15px;
+  }
+  p {
+    margin-left: 10px;
+  }
+") (text . "") (html . "
 <div>
   <p>Hello</p>
 </div>
@@ -12684,17 +14810,22 @@ fly, and it is inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "You can create content and insert it into several elements at once:
+</div>
+    ") (text . "") (text . "You can create content and insert it into several elements at once:
 
 
-") (text . "") (js . "$('.inner').prepend('<p>Test</p>');") (text . "") (text . "Each <div class=\"inner\"> element gets this new content:
+") (text . "") (js . "
+$( \".inner\" ).prepend( \"<p>Test</p>\" );
+    ") (text . "") (text . "Each <div class=\"inner\"> element gets this new content:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     <p>Test</p>
@@ -12704,17 +14835,22 @@ fly, and it is inserted into the target container.
     <p>Test</p>
     Goodbye
   </div>
-</div>") (text . "") (text . "You can also select an element on the page and insert it into another:
+</div>
+") (text . "") (text . "You can also select an element on the page and insert it into another:
 
 
-") (text . "") (js . "$('.container').prepend($('h2'));") (text . "") (text . "If a single element selected this way is inserted into a single
+") (text . "") (js . "
+$( \".container\" ).prepend( $( \"h2\" ) );
+    ") (text . "") (text . "If a single element selected this way is inserted into a single
 location elsewhere in the DOM, it will be moved into the target ( not
 cloned):
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
     <h2>Greetings</h2>
     <div class=\"inner\">Hello</div>
     <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "Important: If there is more than one target element, however, cloned
+</div>
+") (text . "") (text . "Important: If there is more than one target element, however, cloned
 copies of the inserted element will be created for each target after
 the first.
 ") (text . "") (text . " Additional Arguments
@@ -12727,33 +14863,57 @@ and arrays of DOM elements.
 ") (text . "") (text . "For example, the following will insert two new <div>s and an existing
 <div> as the first three child nodes of the body:
 
-") (text . "") (js . "var $newdiv1 = $('<div id=\"object1\"/>'),
-    newdiv2 = document.createElement('div'),
-    existingdiv1 = document.getElementById('foo');
+") (text . "") (js . "
+var $newdiv1 = $( \"<div id='object1'/>\"),
+  newdiv2 = document.createElement( \"div\" ),
+  existingdiv1 = document.getElementById( \"foo\" );
 
-$('body').prepend($newdiv1, [newdiv2, existingdiv1]);
-") (text . "") (text . "Since .prepend() can accept any number of additional arguments, the
+$( \"body\" ).prepend( $newdiv1, [ newdiv2, existingdiv1 ] );
+    ") (text . "") (text . "Since .prepend() can accept any number of additional arguments, the
 same result can be achieved by passing in the three <div>s as three
-separate arguments, like so: $(`body`).prepend($newdiv1, newdiv2,
-existingdiv1). The type and number of arguments will largely depend on
+separate arguments, like so: $( \"body\" ).prepend( $newdiv1, newdiv2,
+existingdiv1 ). The type and number of arguments will largely depend on
 how you collect the elements in your code.
 ") (text . "")) ("examples" ((text . "") (text . "Prepends some HTML to all paragraphs.
 
-") (text . "") (js . "$(\"p\").prepend(\"<b>Hello </b>\");") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p>there, friend!</p>
+") (text . "") (js . "
+$( \"p\" ).prepend( \"<b>Hello </b>\" );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>there, friend!</p>
+<p>amigo!</p>
+") (text . "")) ((text . "") (text . "Prepends a DOM Element to all paragraphs.
 
-<p>amigo!</p>") (text . "")) ((text . "") (text . "Prepends a DOM Element to all paragraphs.
-
-") (text . "") (js . "$(\"p\").prepend(document.createTextNode(\"Hello \"));") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p>is what I'd say</p>
-<p>is what I said</p>") (text . "")) ((text . "") (text . "Prepends a jQuery object (similar to an Array of DOM Elements) to all
+") (text . "") (js . "
+$( \"p\" ).prepend( document.createTextNode( \"Hello \" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p>is what I'd say</p>
+<p>is what I said</p>
+") (text . "")) ((text . "") (text . "Prepends a jQuery object (similar to an Array of DOM Elements) to all
 paragraphs.
 
-") (text . "") (js . "$(\"p\").prepend( $(\"b\") );") (text . "") (css . "p { background:yellow; }") (text . "") (html . "<p> is what was said.</p><b>Hello</b>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).prepend( $( \"b\" ) );
+") (text . "") (css . "
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p> is what was said.</p><b>Hello</b>
+") (text . ""))))) jquery-doc-hash)
 
 (push "prependTo" jquery-doc-methods)
 
-(puthash "prependTo" (quote (("name" . "prependTo") ("signatures" "prependTo" (("target" "A selector, element, HTML string, or jQuery object; the matched set of
-elements will be inserted at the beginning of the element(s) specified
-by this parameter.
+(puthash "prependTo" (quote (("name" . "prependTo") ("signatures" "prependTo" (("target" "A selector, element, HTML string, array of elements, or jQuery object;
+the matched set of elements will be inserted at the beginning of the
+element(s) specified by this parameter.
 " nil nil))) ("desc" (text . "Insert every element in the set of matched elements to the beginning of
 the target.
 
@@ -12767,17 +14927,22 @@ is inserted into the target container.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "We can create content and insert it into several elements at once:
+</div>
+    ") (text . "") (text . "We can create content and insert it into several elements at once:
 
 
-") (text . "") (js . "$('<p>Test</p>').prependTo('.inner');") (text . "") (text . "Each inner <div> element gets this new content:
+") (text . "") (js . "
+$( \"<p>Test</p>\" ).prependTo( \".inner\" );
+    ") (text . "") (text . "Each inner <div> element gets this new content:
 
 
-") (text . "") (html . "<h2>Greetings</h2>
+") (text . "") (html . "
+<h2>Greetings</h2>
 <div class=\"container\">
   <div class=\"inner\">
     <p>Test</p>
@@ -12787,27 +14952,37 @@ is inserted into the target container.
     <p>Test</p>
     Goodbye
   </div>
-</div>") (text . "") (text . "We can also select an element on the page and insert it into another:
+</div>
+    ") (text . "") (text . "We can also select an element on the page and insert it into another:
 
 
-") (text . "") (js . "$('h2').prependTo($('.container'));") (text . "") (text . "If an element selected this way is inserted into a single location
+") (text . "") (js . "
+$( \"h2\" ).prependTo( $( \".container\" ) );
+    ") (text . "") (text . "If an element selected this way is inserted into a single location
 elsewhere in the DOM, it will be moved into the target (not cloned):
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>Greetings</h2>
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "If there is more than one target element, however, cloned copies of the
+</div>
+    ") (text . "") (text . "If there is more than one target element, however, cloned copies of the
 inserted element will be created for each target after the first.
 
 ") (text . "")) ("examples" ((text . "") (text . "Prepend all spans to the element with the ID \"foo\" (Check .prepend()
 documentation for more examples)
 
-") (text . "") (css . "div { background:yellow; }") (text . "") (js . "
-$(\"span\").prependTo(\"#foo\");
-") (text . "") (html . "<div id=\"foo\">FOO!</div>
-
-  <span>I have something to say... </span>") (text . ""))))) jquery-doc-hash)
+") (text . "") (css . "
+  div {
+    background: yellow;
+  }
+") (text . "") (js . "
+$( \"span\" ).prependTo( \"#foo\" );
+") (text . "") (html . "
+<div id=\"foo\">FOO!</div>
+<span>I have something to say... </span>
+") (text . ""))))) jquery-doc-hash)
 
 (push "prev" jquery-doc-methods)
 
@@ -12829,16 +15004,18 @@ selector.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
     ") (text . "") (text . "To select the element that comes immediately before item three:
 
 
-") (text . "") (js . "$('li.third-item').prev().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind item 2. Since no
+") (text . "") (js . "
+$( \"li.third-item\" ).prev().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind item 2. Since no
 selector expression is supplied, this preceding element is
 unequivocally included as part of the object. If one had been supplied,
 the element would be tested for a match before it was included.
@@ -12851,37 +15028,49 @@ preceding adjacent sibling, use the .prevAll() method.
 ") (text . "")) ("examples" ((text . "") (text . "Find the very previous sibling of each div.
 
 ") (text . "") (js . "
-    var $curr = $(\"#start\");
-    $curr.css(\"background\", \"#f99\");
-    $(\"button\").click(function () {
-      $curr = $curr.prev();
-      $(\"div\").css(\"background\", \"\");
-      $curr.css(\"background\", \"#f99\");
-    });
-
+var $curr = $( \"#start\" );
+$curr.css( \"background\", \"#f99\" );
+$( \"button\" ).click(function() {
+  $curr = $curr.prev();
+  $( \"div\" ).css( \"background\", \"\" );
+  $curr.css( \"background\", \"#f99\" );
+});
 ") (text . "") (css . "
-  div { width:40px; height:40px; margin:10px;
-        float:left; border:2px blue solid; 
-        padding:2px; }
-  span { font-size:14px; }
-  p { clear:left; margin:10px; }
-  ") (text . "") (html . "<div></div>
-  <div></div>
-  <div><span>has child</span></div>
-
-  <div></div>
-  <div></div>
-  <div></div>
-  <div id=\"start\"></div>
-
-  <div></div>
-  <p><button>Go to Prev</button></p>") (text . "")) ((text . "") (text . "For each paragraph, find the very previous sibling that has a class
+  div {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    float: left;
+    border: 2px blue solid;
+    padding: 2px;
+  }
+  span {
+    font-size: 14px;
+  }
+  p {
+    clear: left;
+    margin: 10px;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div><span>has child</span></div>
+<div></div>
+<div></div>
+<div></div>
+<div id=\"start\"></div>
+<div></div>
+<p><button>Go to Prev</button></p>
+") (text . "")) ((text . "") (text . "For each paragraph, find the very previous sibling that has a class
 \"selected\".
 
-") (text . "") (js . "$(\"p\").prev(\".selected\").css(\"background\", \"yellow\");") (text . "") (html . "<div><span>Hello</span></div>
-
-  <p class=\"selected\">Hello Again</p>
-  <p>And Again</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).prev( \".selected\" ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<div><span>Hello</span></div>
+<p class=\"selected\">Hello Again</p>
+<p>And Again</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "prevAll" jquery-doc-methods)
 
@@ -12903,30 +15092,43 @@ elements will be filtered by testing whether they match it.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
-") (text . "") (text . "If we begin at the third item, we can find the elements which come
+    ") (text . "") (text . "If we begin at the third item, we can find the elements which come
 before it:
 
-") (text . "") (js . "$('li.third-item').prevAll().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1 and 2. Since
+") (text . "") (js . "
+$( \"li.third-item\" ).prevAll().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind items 1 and 2. Since
 we do not supply a selector expression, these preceding elements are
 unequivocally included as part of the object. If we had supplied one,
 the elements would be tested for a match before they were included.
 ") (text . "")) ("examples" ((text . "") (text . "Locate all the divs preceding the last div and give them a class.
 
-") (text . "") (js . "$(\"div:last\").prevAll().addClass(\"before\");") (text . "") (css . "
-
-  div { width:70px; height:70px; background:#abc;
-        border:2px solid black; margin:10px; float:left; }
-  div.before { border-color: red; }
-  ") (text . "") (html . "<div></div>
-  <div></div>
-  <div></div>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"div:last\" ).prevAll().addClass( \"before\" );
+") (text . "") (css . "
+  div {
+    width: 70px;
+    height: 70px;
+    background: #abc;
+    border: 2px solid black;
+    margin: 10px;
+    float: left;
+  }
+  div.before {
+    border-color: red;
+  }
+") (text . "") (html . "
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "prevUntil" jquery-doc-methods)
 
@@ -12966,13 +15168,14 @@ by testing whether they match it.
 siblings of <dt id=\"term-3\"> up to <dt id=\"term-1\"> and give them a
 green text color.
 ") (text . "") (js . "
-$(\"#term-2\").prevUntil(\"dt\")
-  .css(\"background-color\", \"red\");
+$( \"#term-2\" ).prevUntil( \"dt\" )
+  .css( \"background-color\", \"red\" );
 
-var term1 = document.getElementById('term-1');
-$(\"#term-3\").prevUntil(term1, \"dd\")
-  .css(\"color\", \"green\");
-") (text . "") (html . "<dl>
+var term1 = document.getElementById( \"term-1\" );
+$( \"#term-3\" ).prevUntil( term1, \"dd\" )
+  .css( \"color\", \"green\" );
+") (text . "") (html . "
+<dl>
   <dt id=\"term-1\">term 1</dt>
   <dd>definition 1-a</dd>
   <dd>definition 1-b</dd>
@@ -12987,7 +15190,8 @@ $(\"#term-3\").prevUntil(term1, \"dd\")
   <dt id=\"term-3\">term 3</dt>
   <dd>definition 3-a</dd>
   <dd>definition 3-b</dd>
-</dl>") (text . ""))))) jquery-doc-hash)
+</dl>
+") (text . ""))))) jquery-doc-hash)
 
 (push "promise" jquery-doc-methods)
 
@@ -13010,32 +15214,34 @@ when all animations of the selected elements have completed.
 ") (text . "") (text . " If target is provided, .promise() will attach the methods onto it and
 then return this object rather than create a new one. This can be
 useful to attach the Promise behavior to an object that already exists.
-") (text . "") (text . "  Note: The returned Promise is linked to a Deferred object stored on
-  the .data() for an element. Since the .remove() method removes the
-  element`s data as well as the element itself, it will prevent any of
-  the element`s unresolved Promises from resolving. If it is necessary
-  to remove an element from the DOM before its Promise is resolved,
-  use .detach() instead and follow with .removeData() after
-  resolution.
+") (text . "") (text . "Note: The returned Promise is linked to a Deferred object stored on the
+.data() for an element. Since the .remove() method removes the
+element`s data as well as the element itself, it will prevent any of
+the element`s unresolved Promises from resolving. If it is necessary to
+remove an element from the DOM before its Promise is resolved, use
+.detach() instead and follow with .removeData() after resolution.
 ") (text . "")) ("examples" ((text . "") (text . "Using .promise() on a collection with no active animation returns a
 resolved Promise:
 
 ") (text . "") (js . "
-var div = $( \"<div />\" );
+var div = $( \"<div>\" );
 
 div.promise().done(function( arg1 ) {
-  // will fire right away and alert \"true\"
+  // Will fire right away and alert \"true\"
   alert( this === div && arg1 === div );
 });
 ") (text . "")) ((text . "") (text . "Resolve the returned Promise when all animations have ended (including
 those initiated in the animation callback or added later on):
 
 ") (text . "") (css . "
-div {
-  height: 50px; width: 50px;
-  float: left; margin-right: 10px;
-  display: none; background-color: #090;
-}
+  div {
+    height: 50px;
+    width: 50px;
+    float: left;
+    margin-right: 10px;
+    display: none;
+    background-color: #090;
+  }
 ") (text . "") (html . "
 <button>Go</button>
 <p>Ready...</p>
@@ -13043,13 +15249,12 @@ div {
 <div></div>
 <div></div>
 <div></div>
-
 ") (text . "") (js . "
-$(\"button\").on( \"click\", function() {
-  $(\"p\").append( \"Started...\");
+$( \"button\" ).on( \"click\", function() {
+  $( \"p\" ).append( \"Started...\" );
 
-  $(\"div\").each(function( i ) {
-    $( this ).fadeIn().fadeOut( 1000 * (i+1) );
+  $( \"div\" ).each(function( i ) {
+    $( this ).fadeIn().fadeOut( 1000 * ( i + 1 ) );
   });
 
   $( \"div\" ).promise().done(function() {
@@ -13060,11 +15265,14 @@ $(\"button\").on( \"click\", function() {
 method makes it possible to do this with jQuery collections):
 
 ") (text . "") (css . "
-div {
-  height: 50px; width: 50px;
-  float: left; margin-right: 10px;
-  display: none; background-color: #090;
-}
+  div {
+    height: 50px;
+    width: 50px;
+    float: left;
+    margin-right: 10px;
+    display: none;
+    background-color: #090;
+  }
 ") (text . "") (html . "
 <button>Go</button>
 <p>Ready...</p>
@@ -13072,20 +15280,18 @@ div {
 <div></div>
 <div></div>
 <div></div>
-
 ") (text . "") (js . "
 var effect = function() {
-  return $(\"div\").fadeIn(800).delay(1200).fadeOut();
+  return $( \"div\" ).fadeIn( 800 ).delay( 1200 ).fadeOut();
 };
 
-$(\"button\").on( \"click\", function() {
-  $(\"p\").append( \" Started... \");
+$( \"button\" ).on( \"click\", function() {
+  $( \"p\" ).append( \" Started... \" );
 
   $.when( effect() ).done(function() {
-    $(\"p\").append(\" Finished! \");
+    $( \"p\" ).append( \" Finished! \" );
   });
 });
-
 ") (text . ""))))) jquery-doc-hash)
 
 (push "prop" jquery-doc-methods)
@@ -13100,6 +15306,12 @@ in the matched set. It returns undefined for the value of a property
 that has not been set, or if the matched set has no elements. To get
 the value for each element individually, use a looping construct such
 as jQuery`s .each() or .map() method.
+") (text . "") (text . "Note: Attempting to change the type property (or attribute) of an input
+element created via HTML or already in an HTML document will result in
+an error being thrown by Internet Explorer 6, 7, or 8.
+") (text . "") (text . " Attributes vs. Properties
+
+
 ") (text . "") (text . "The difference between attributes and properties can be important in
 specific situations. Before jQuery 1.6, the .attr() method sometimes
 took property values into account when retrieving some attributes,
@@ -13116,48 +15328,55 @@ properties.
 HTML markup <input type=\"checkbox\" checked=\"checked\" />, and assume it
 is in a JavaScript variable named elem:
 ") (text . "") (text . "elem.checked true (Boolean) Will change with checkbox state
-$(elem).prop(\"checked\") true (Boolean) Will change with checkbox state
-elem.getAttribute(\"checked\") \"checked\" (String) Initial state of the
-checkbox; does not change
-$(elem).attr(\"checked\") (1.6) \"checked\" (String) Initial state of the
-checkbox; does not change
-$(elem).attr(\"checked\") (1.6.1+) \"checked\" (String) Will change with
-checkbox state
-$(elem).attr(\"checked\") (pre-1.6) true (Boolean) Changed with checkbox
+$( elem ).prop( \"checked\" ) true (Boolean) Will change with checkbox
 state
+elem.getAttribute( \"checked\" ) \"checked\" (String) Initial state of the
+checkbox; does not change
+$( elem ).attr( \"checked\" ) (1.6) \"checked\" (String) Initial state of
+the checkbox; does not change
+$( elem ).attr( \"checked\" ) (1.6.1+) \"checked\" (String) Will change
+with checkbox state
+$( elem ).attr( \"checked\" ) (pre-1.6) true (Boolean) Changed with
+checkbox state
+") (text . "") (text . "
+
 ") (text . "") (text . "According to the W3C forms specification, the checked attribute is a
 boolean attribute , which means the corresponding property is true if
 the attribute is present at all--even if, for example, the attribute
-has no value or an empty string value. The preferred
+has no value or is set to empty string value or even \"false\". This is
+true of all boolean attributes.
+") (text . "") (text . "Nevertheless, the most important concept to remember about the checked
+attribute is that it does not correspond to the checked property. The
+attribute actually corresponds to the defaultChecked property and
+should be used only to set the initial value of the checkbox. The
+checked attribute value does not change with the state of the checkbox,
+while the checked property does. Therefore, the
 cross-browser-compatible way to determine if a checkbox is checked is
-to check for a \"truthy\" value on the element`s property using one of
-the following:
+to use the property:
 ") (text . "") (text . "  * if ( elem.checked )
-  * if ( $(elem).prop(\"checked\") )
-  * if ( $(elem).is(\":checked\") )
-") (text . "") (text . "If using jQuery 1.6, the code if ( $(elem).attr(\"checked\") ) will
-retrieve the actual content attribute, which does not change as the
-checkbox is checked and unchecked. It is meant only to store the
-default or initial value of the checked property. To maintain backwards
-compatability, the .attr() method in jQuery 1.6.1+ will retrieve and
-update the property for you so no code for boolean attributes is
-required to be changed to .prop(). Nevertheless, the preferred way to
-retrieve a checked value is with one of the options listed above. To
-see how this works in the latest jQuery, check/uncheck the checkbox in
-the example below.
+  * if ( $( elem ).prop( \"checked\" ) )
+  * if ( $( elem ).is( \":checked\" ) )
+") (text . "") (text . "The same is true for other dynamic attributes, such as selected and
+value.
+
 ") (text . "")) ("examples" ((text . "") (text . "Display the checked property and attribute of a checkbox as it changes.
 
 
 ") (text . "") (js . "
-$(\"input\").change(function() {
-  var $input = $(this);
-  $(\"p\").html(\".attr('checked'): <b>\" + $input.attr('checked') + \"</b><br>\"
-              + \".prop('checked'): <b>\" + $input.prop('checked') + \"</b><br>\"
-              + \".is(':checked'): <b>\" + $input.is(':checked') ) + \"</b>\";
+$( \"input\" ).change(function() {
+  var $input = $( this );
+  $( \"p\" ).html(
+    \".attr( \\\"checked\\\" ): <b>\" + $input.attr( \"checked\" ) + \"</b><br>\" +
+    \".prop( \\\"checked\\\" ): <b>\" + $input.prop( \"checked\" ) + \"</b><br>\" +
+    \".is( \\\":checked\\\" ): <b>\" + $input.is( \":checked\" ) ) + \"</b>\";
 }).change();
 ") (text . "") (css . "
-  p { margin: 20px 0 0 }
-  b { color: blue; }
+  p {
+    margin: 20px 0 0;
+  }
+  b {
+    color: blue;
+  }
 ") (text . "") (html . "
 <input id=\"check1\" type=\"checkbox\" checked=\"checked\">
 <label for=\"check1\">Check me</label>
@@ -13194,10 +15413,10 @@ buttons, or the checked property of a checkbox. The .prop() method
 should be used to set disabled and checked instead of the .attr()
 method. The .val() method should be used for getting and setting value.
 ") (text . "") (js . "
-$(\"input\").prop(\"disabled\", false);
-$(\"input\").prop(\"checked\", true);
-$(\"input\").val(\"someValue\");
-") (text . "") (text . "Important: the .removeProp() method should not be used to set these
+$( \"input\" ).prop( \"disabled\", false );
+$( \"input\" ).prop( \"checked\", true );
+$( \"input\" ).val( \"someValue\" );
+      ") (text . "") (text . "Important: the .removeProp() method should not be used to set these
 properties to false. Once a native property is removed, it cannot be
 added again. See .removeProp() for more information.
 ") (text . "") (text . " Computed property values
@@ -13206,26 +15425,33 @@ added again. See .removeProp() for more information.
 ") (text . "") (text . "By using a function to set properties, you can compute the value based
 on other properties of the element. For example, to toggle all
 checkboxes based off their individual values:
-") (text . "") (js . "$(\"input[type='checkbox']\").prop(\"checked\", function( i, val ) {
+") (text . "") (js . "
+$( \"input[type='checkbox']\" ).prop( \"checked\", function( i, val ) {
   return !val;
-});") (text . "") (text . "Note: If nothing is returned in the setter function (ie.
-function(index, prop){}), or if undefined is returned, the current
-value is not changed. This is useful for selectively setting values
-only when certain criteria are met.
+});
+      ") (text . "") (text . "Note: If nothing is returned in the setter function (ie. function(
+index, prop ){}), or if undefined is returned, the current value is not
+changed. This is useful for selectively setting values only when
+certain criteria are met.
 ") (text . "")) ("examples" ((text . "") (text . "Disable all checkboxes on the page.
 
 ") (text . "") (js . "
-$(\"input[type='checkbox']\").prop({
+$( \"input[type='checkbox']\" ).prop({
   disabled: true
 });
 ") (text . "") (css . "
-  img { padding:10px; }
-  div { color:red; font-size:24px; }
+  img {
+    padding: 10px;
+  }
+  div {
+    color: red;
+    font-size: 24px;
+  }
 ") (text . "") (html . "
-  <input type=\"checkbox\" checked=\"checked\" />
-  <input type=\"checkbox\" />
-  <input type=\"checkbox\" />
-  <input type=\"checkbox\"  checked=\"checked\" />
+  <input type=\"checkbox\" checked=\"checked\">
+  <input type=\"checkbox\">
+  <input type=\"checkbox\">
+  <input type=\"checkbox\" checked=\"checked\">
 ") (text . ""))))) jquery-doc-hash)
 
 (push "pushStack" jquery-doc-methods)
@@ -13245,10 +15471,12 @@ serialization).
 
 ")) ("longdesc") ("examples" ((text . "") (text . "Add some elements onto the jQuery stack, then pop back off again.
 
-") (text . "") (js . "jQuery([])
-    .pushStack( document.getElementsByTagName(\"div\") )
-        .remove()
-    .end();") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+jQuery([])
+  .pushStack( document.getElementsByTagName( \"div\" ) )
+  .remove()
+  .end();
+") (text . ""))))) jquery-doc-hash)
 
 (push "queue" jquery-doc-methods)
 
@@ -13260,34 +15488,49 @@ effects queue.
 ")) ("longdesc") ("examples" ((text . "") (text . "Show the length of the queue.
 
 ") (text . "") (js . "
-var div = $(\"div\");
+var div = $( \"div\" );
 
 function runIt() {
-  div.show(\"slow\");
-  div.animate({left:'+=200'},2000);
-  div.slideToggle(1000);
-  div.slideToggle(\"fast\");
-  div.animate({left:'-=200'},1500);
-  div.hide(\"slow\");
-  div.show(1200);
-  div.slideUp(\"normal\", runIt);
+  div
+    .show( \"slow\" )
+    .animate({ left: \"+=200\" }, 2000 )
+    .slideToggle( 1000 )
+    .slideToggle( \"fast\" )
+    .animate({ left: \"-=200\" }, 1500 )
+    .hide( \"slow\" )
+    .show( 1200 )
+    .slideUp( \"normal\", runIt );
 }
 
 function showIt() {
-  var n = div.queue(\"fx\");
-  $(\"span\").text( n.length );
-  setTimeout(showIt, 100);
+  var n = div.queue( \"fx\" );
+  $( \"span\" ).text( n.length );
+  setTimeout( showIt, 100 );
 }
 
 runIt();
 showIt();
-") (text . "") (css . "div { margin:3px; width:40px; height:40px;
-        position:absolute; left:0px; top:60px;
-        background:green; display:none; }
-  div.newcolor { background:blue; }
-  p { color:red; }  ") (text . "") (html . "
-  <p>The queue length is: <span></span></p>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 60px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+  p {
+    color: red;
+  }
+") (text . "") (html . "
+<p>The queue length is: <span></span></p>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "queue" jquery-doc-methods)
 
@@ -13311,7 +15554,9 @@ Queues allow a sequence of actions to be called on an element
 asynchronously, without halting program execution. The typical example
 of this is calling multiple animation methods on an element. For
 example:
-") (text . "") (js . "$('#foo').slideUp().fadeIn();") (text . "") (text . "When this statement is executed, the element begins its sliding
+") (text . "") (js . "
+$( \"#foo\" ).slideUp().fadeIn();
+      ") (text . "") (text . "When this statement is executed, the element begins its sliding
 animation immediately, but the fading transition is placed on the fx
 queue to be called only once the sliding transition is complete.
 ") (text . "") (text . "The .queue() method allows us to directly manipulate this queue of
@@ -13321,72 +15566,103 @@ function is executed once for each element in the jQuery set.
 ") (text . "") (text . "This feature is similar to providing a callback function with an
 animation method, but does not require the callback to be given at the
 time the animation is performed.
-") (text . "") (js . "$('#foo').slideUp();
-$('#foo').queue(function() {
-  alert('Animation complete.');
-  $(this).dequeue();
-});") (text . "") (text . "This is equivalent to:
+") (text . "") (js . "
+$( \"#foo\" ).slideUp();
+$( \"#foo\" ).queue(function() {
+  alert( \"Animation complete.\" );
+  $( this ).dequeue();
+});
+      ") (text . "") (text . "This is equivalent to:
 
 
-") (text . "") (js . "$('#foo').slideUp(function() {
-  alert('Animation complete.');
-});") (text . "") (text . "Note that when adding a function with .queue(), we should ensure that
+") (text . "") (js . "
+$( \"#foo\" ).slideUp(function() {
+  alert( \"Animation complete.\" );
+});
+      ") (text . "") (text . "Note that when adding a function with .queue(), we should ensure that
 .dequeue() is eventually called so that the next function in line
 executes.
 ") (text . "") (text . "As of jQuery 1.4, the function that`s called is passed another function
 as the first argument. When called, this automatically dequeues the
 next item and keeps the queue moving. We use it as follows:
-") (text . "") (js . "$(\"#test\").queue(function(next) {
+") (text . "") (js . "
+$( \"#test\" ).queue(function( next ) {
     // Do some stuff...
     next();
-});") (text . "")) ("examples" ((text . "") (text . "Queue a custom function.
+});
+    ") (text . "")) ("examples" ((text . "") (text . "Queue a custom function.
 
-") (text . "") (js . "$(document.body).click(function () {
-      $(\"div\").show(\"slow\");
-      $(\"div\").animate({left:'+=200'},2000);
-      $(\"div\").queue(function () {
-        $(this).addClass(\"newcolor\");
-        $(this).dequeue();
-      });
-      $(\"div\").animate({left:'-=200'},500);
-      $(\"div\").queue(function () {
-        $(this).removeClass(\"newcolor\");
-        $(this).dequeue();
-      });
-      $(\"div\").slideUp();
-    });") (text . "") (css . "
-  div { margin:3px; width:40px; height:40px;
-        position:absolute; left:0px; top:30px;
-        background:green; display:none; }
-  div.newcolor { background:blue; }
-  ") (text . "") (html . "Click here...
-  <div></div>") (text . "")) ((text . "") (text . "Set a queue array to delete the queue.
+") (text . "") (js . "
+$( document.body ).click(function() {
+  $( \"div\" )
+    .show( \"slow\" )
+    .animate({ left: \"+=200\" }, 2000 )
+    .queue(function() {
+      $( this ).addClass( \"newcolor\" ).dequeue();
+    })
+    .animate({ left: \"-=200\" }, 500 )
+    .queue(function() {
+      $( this ).removeClass( \"newcolor\" ).dequeue();
+    })
+    .slideUp();
+});
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+") (text . "") (html . "
+Click here...
+<div></div>
+") (text . "")) ((text . "") (text . "Set a queue array to delete the queue.
 
-") (text . "") (js . "$(\"#start\").click(function () {
-      $(\"div\").show(\"slow\");
-      $(\"div\").animate({left:'+=200'},5000);
-      $(\"div\").queue(function () {
-        $(this).addClass(\"newcolor\");
-        $(this).dequeue();
-      });
-      $(\"div\").animate({left:'-=200'},1500);
-      $(\"div\").queue(function () {
-        $(this).removeClass(\"newcolor\");
-        $(this).dequeue();
-      });
-      $(\"div\").slideUp();
-    });
-    $(\"#stop\").click(function () {
-      $(\"div\").queue(\"fx\", []);
-      $(\"div\").stop();
-    });") (text . "") (css . "
-  div { margin:3px; width:40px; height:40px;
-        position:absolute; left:0px; top:30px;
-        background:green; display:none; }
-  div.newcolor { background:blue; }
-  ") (text . "") (html . "<button id=\"start\">Start</button>
-  <button id=\"stop\">Stop</button>
-  <div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"#start\" ).click(function() {
+  $( \"div\" )
+    .show( \"slow\" )
+    .animate({ left: \"+=200\" }, 5000 )
+    .queue(function() {
+      $( this ).addClass( \"newcolor\" ).dequeue();
+    })
+    .animate({ left: '-=200' }, 1500 )
+    .queue(function() {
+      $( this ).removeClass( \"newcolor\" ).dequeue();
+    })
+    .slideUp();
+});
+$( \"#stop\" ).click(function() {
+  $( \"div\" )
+    .queue( \"fx\", [] )
+    .stop();
+});
+") (text . "") (css . "
+  div {
+    margin: 3px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    background: green;
+    display: none;
+  }
+  div.newcolor {
+    background: blue;
+  }
+") (text . "") (html . "
+<button id=\"start\">Start</button>
+<button id=\"stop\">Stop</button>
+<div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "ready" jquery-doc-methods)
 
@@ -13406,35 +15682,39 @@ stylesheets or embed style elements before referencing the scripts.
 ") (text . "") (text . "In cases where code relies on loaded assets (for example, if the
 dimensions of an image are required), the code should be placed in a
 handler for the load event instead.
-") (text . "") (text . "  The .ready() method is generally incompatible with the <body
-  onload=\"\"> attribute. If load must be used, either do not use
-  .ready() or use jQuery`s .load() method to attach load event
-  handlers to the window or to more specific items, like images.
+") (text . "") (text . "The .ready() method is generally incompatible with the <body onload=\"\">
+attribute. If load must be used, either do not use .ready() or use
+jQuery`s .load() method to attach load event handlers to the window or
+to more specific items, like images.
 ") (text . "") (text . "All three of the following syntaxes are equivalent:
 
 
-") (text . "") (text . "  * $(document).ready(handler)
-  * $().ready(handler) (this is not recommended)
-  * $(handler)
-") (text . "") (text . "There is also $(document).on(\"ready\", handler), deprecated as of jQuery
-1.8. This behaves similarly to the ready method but if the ready event
-has already fired and you try to .on(\"ready\") the bound handler will
-not be executed. Ready handlers bound this way are executed after any
-bound by the other three methods above.
+") (text . "") (text . "  * $( document ).ready( handler )
+  * $().ready( handler ) (this is not recommended)
+  * $( handler )
+") (text . "") (text . "There is also $(document).on( \"ready\", handler ), deprecated as of
+jQuery 1.8. This behaves similarly to the ready method but if the ready
+event has already fired and you try to .on( \"ready\" ) the bound handler
+will not be executed. Ready handlers bound this way are executed after
+any bound by the other three methods above.
 ") (text . "") (text . "The .ready() method can only be called on a jQuery object matching the
 current document, so the selector can be omitted.
 
 ") (text . "") (text . "The .ready() method is typically used with an anonymous function:
 
 
-") (text . "") (js . "$(document).ready(function() {
+") (text . "") (js . "
+$( document ).ready(function() {
   // Handler for .ready() called.
-});") (text . "") (text . "Which is equivalent to calling:
+});
+    ") (text . "") (text . "Which is equivalent to calling:
 
 
-") (text . "") (js . "$(function() {
-     // Handler for .ready() called.
-    });") (text . "") (text . "If .ready() is called after the DOM has been initialized, the new
+") (text . "") (js . "
+$(function() {
+  // Handler for .ready() called.
+});
+    ") (text . "") (text . "If .ready() is called after the DOM has been initialized, the new
 handler passed in will be executed immediately.
 
 ") (text . "") (text . " Aliasing the jQuery Namespace
@@ -13447,13 +15727,23 @@ jQuery each time we would normally write $. However, the handler passed
 to the .ready() method can take an argument, which is passed the global
 jQuery object. This means we can rename the object within the context
 of our .ready() handler without affecting other code:
-") (text . "") (js . "jQuery(document).ready(function($) {
+") (text . "") (js . "
+jQuery( document ).ready(function( $ ) {
   // Code using $ as usual goes here.
-});") (text . "")) ("examples" ((text . "") (text . "Display a message when the DOM is loaded.
+});
+    ") (text . "")) ("examples" ((text . "") (text . "Display a message when the DOM is loaded.
 
-") (text . "") (js . "$(document).ready(function () {
-  $(\"p\").text(\"The DOM is now loaded and can be manipulated.\");
-});") (text . "") (css . "p { color:red; }") (text . "") (html . "<p>Not loaded yet.</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+  $( document ).ready(function() {
+    $( \"p\" ).text( \"The DOM is now loaded and can be manipulated.\" );
+  });
+") (text . "") (css . "
+  p {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Not loaded yet.</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "remove" jquery-doc-methods)
 
@@ -13471,49 +15761,72 @@ instead.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"hello\">Hello</div>
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "") (text . "We can target any element for removal:
+</div>
+    ") (text . "") (text . "We can target any element for removal:
 
 
-") (text . "") (js . "$('.hello').remove();") (text . "") (text . "This will result in a DOM structure with the <div> element deleted:
+") (text . "") (js . "
+$( \".hello\" ).remove();
+    ") (text . "") (text . "This will result in a DOM structure with the <div> element deleted:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
+</div>
+    ") (text . "") (text . "If we had any number of nested elements inside <div class=\"hello\">,
 they would be removed, too. Other jQuery constructs such as data or
 event handlers are erased as well.
 ") (text . "") (text . "We can also include a selector as an optional parameter. For example,
 we could rewrite the previous DOM removal code as follows:
 
-") (text . "") (js . "$('div').remove('.hello');") (text . "") (text . "This would result in the same DOM structure:
+") (text . "") (js . "
+$( \"div\" ).remove( \".hello\" );
+    ") (text . "") (text . "This would result in the same DOM structure:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"goodbye\">Goodbye</div>
-</div>") (text . "")) ("examples" ((text . "") (text . "Removes all paragraphs from the DOM
+</div>
+    ") (text . "")) ("examples" ((text . "") (text . "Removes all paragraphs from the DOM
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-  $(\"p\").remove();
+$( \"button\" ).click(function() {
+  $( \"p\" ).remove();
 });
-") (text . "") (css . "p { background:yellow; margin:6px 0; }") (text . "") (html . "<p>Hello</p>
-  how are
-  <p>you?</p>
-  <button>Call remove() on paragraphs</button>") (text . "")) ((text . "") (text . "Removes all paragraphs that contain \"Hello\" from the DOM. Analogous to
+") (text . "") (css . "
+  p {
+    background: yellow;
+    margin: 6px 0;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+how are
+<p>you?</p>
+<button>Call remove() on paragraphs</button>
+") (text . "")) ((text . "") (text . "Removes all paragraphs that contain \"Hello\" from the DOM. Analogous to
 doing $(\"p\").filter(\":contains(`Hello`)\").remove().
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-  $(\"p\").remove(\":contains('Hello')\");
+$( \"button\" ).click(function() {
+  $( \"p\" ).remove( \":contains('Hello')\" );
 });
-") (text . "") (css . "p { background:yellow; margin:6px 0; }") (text . "") (html . "<p class=\"hello\">Hello</p>
-  how are
-  <p>you?</p>
-
-  <button>Call remove(\":contains('Hello')\") on paragraphs</button>") (text . ""))))) jquery-doc-hash)
+") (text . "") (css . "
+  p {
+    background: yellow;
+    margin: 6px 0;
+  }
+") (text . "") (html . "
+<p class=\"hello\">Hello</p>
+how are
+<p>you?</p>
+<button>Call remove( \":contains('Hello')\" ) on paragraphs</button>
+") (text . ""))))) jquery-doc-hash)
 
 (push "removeAttr" jquery-doc-methods)
 
@@ -13530,27 +15843,29 @@ across browsers.
 doesn`t achieve the desired effect in Internet Explorer 6, 7, or 8. To
 avoid potential problems, use .prop() instead:
 ") (text . "") (js . "
-$element.prop(\"onclick\", null);
-console.log(\"onclick property: \", $element[0].onclick);
-    ") (text . "")) ("examples" ((text . "") (text . "Clicking the button enables the input next to it.
-
+$element.prop( \"onclick\", null );
+console.log( \"onclick property: \", $element[ 0 ].onclick );
+    ") (text . "")) ("examples" ((text . "") (text . "Clicking the button changes the title of the input next to it. Move the
+mouse pointer over the text input to see the effect of adding and
+removing the title attribute.
 ") (text . "") (js . "
 (function() {
-  var inputTitle = $(\"input\").attr(\"title\");
-  $(\"button\").click(function () {
-    var input = $(this).next();
+  var inputTitle = $( \"input\" ).attr( \"title\" );
+  $( \"button\" ).click(function() {
+    var input = $( this ).next();
 
-    if ( input.attr(\"title\") == inputTitle ) {
-      input.removeAttr(\"title\")
+    if ( input.attr( \"title\" ) === inputTitle ) {
+      input.removeAttr( \"title\" )
     } else {
-      input.attr(\"title\", inputTitle);
+      input.attr( \"title\", inputTitle );
     }
 
-    $(\"#log\").html( \"input title is now \" + input.attr(\"title\") );
+    $( \"#log\" ).html( \"input title is now \" + input.attr( \"title\" ) );
   });
 })();
-") (text . "") (html . "<button>Enable</button>
-<input type=\"text\" title=\"hello there\" />
+") (text . "") (html . "
+<button>Change title</button>
+<input type=\"text\" title=\"hello there\">
 <div id=\"log\"></div>
 ") (text . ""))))) jquery-doc-hash)
 
@@ -13571,59 +15886,102 @@ specified in the parameter, all classes will be removed.
 ") (text . "") (text . "More than one class may be removed at a time, separated by a space,
 from the set of matched elements, like so:
 
-") (text . "") (js . "$('p').removeClass('myClass yourClass')") (text . "") (text . "This method is often used with .addClass() to switch elements` classes
+") (text . "") (js . "
+$( \"p\" ).removeClass( \"myClass yourClass\" )
+    ") (text . "") (text . "This method is often used with .addClass() to switch elements` classes
 from one to another, like so:
 
-") (text . "") (js . "$('p').removeClass('myClass noClass').addClass('yourClass');") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
+") (text . "") (js . "
+$( \"p\" ).removeClass( \"myClass noClass\" ).addClass( \"yourClass\" );
+    ") (text . "") (text . "Here, the myClass and noClass classes are removed from all paragraphs,
 while yourClass is added.
 
-") (text . "") (text . "To replace all existing classes with another class, we can use
-.attr(`class`, `newClass`) instead.
+") (text . "") (text . "To replace all existing classes with another class, we can use .attr(
+\"class\", \"newClass\" ) instead.
 
 ") (text . "") (text . "As of jQuery 1.4, the .removeClass() method allows us to indicate the
 class to be removed by passing in a function.
 
-") (text . "") (js . "$('li:last').removeClass(function() {
-  return $(this).prev().attr('class');
-});") (text . "") (text . "This example removes the class name of the penultimate <li> from the
+") (text . "") (js . "
+$( \"li:last\" ).removeClass(function() {
+  return $( this ).prev().attr( \"class\" );
+});
+    ") (text . "") (text . "This example removes the class name of the penultimate <li> from the
 last <li>.
 
 ") (text . "")) ("examples" ((text . "") (text . "Remove the class `blue` from the matched elements.
 
-") (text . "") (js . "$(\"p:even\").removeClass(\"blue\");") (text . "") (css . "
+") (text . "") (js . "
+$( \"p:even\" ).removeClass( \"blue\" );
+") (text . "") (css . "
+  p {
+    margin: 4px;
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .blue {
+    color: blue;
+  }
+  .under {
+    text-decoration: underline;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p class=\"blue under\">Hello</p>
+<p class=\"blue under highlight\">and</p>
+<p class=\"blue under\">then</p>
+<p class=\"blue under\">Goodbye</p>
+") (text . "")) ((text . "") (text . "Remove the class `blue` and `under` from the matched elements.
 
-  p { margin: 4px; font-size:16px; font-weight:bolder; }
-  .blue { color:blue; }
-  .under { text-decoration:underline; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "<p class=\"blue under\">Hello</p>
-  <p class=\"blue under highlight\">and</p>
-  <p class=\"blue under\">then</p>
+") (text . "") (js . "
+$( \"p:odd\" ).removeClass( \"blue under\" );
+") (text . "") (css . "
+  p {
+    margin: 4px;
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .blue {
+    color: blue;
+  }
+  .under {
+    text-decoration: underline;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p class=\"blue under\">Hello</p>
+<p class=\"blue under highlight\">and</p>
+<p class=\"blue under\">then</p>
+<p class=\"blue under\">Goodbye</p>
+") (text . "")) ((text . "") (text . "Remove all the classes from the matched elements.
 
-  <p class=\"blue under\">Goodbye</p>") (text . "")) ((text . "") (text . "Remove the class `blue` and `under` from the matched elements.
-
-") (text . "") (js . "$(\"p:odd\").removeClass(\"blue under\");") (text . "") (css . "
-  p { margin: 4px; font-size:16px; font-weight:bolder; }
-  .blue { color:blue; }
-  .under { text-decoration:underline; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "<p class=\"blue under\">Hello</p>
-
-  <p class=\"blue under highlight\">and</p>
-  <p class=\"blue under\">then</p>
-  <p class=\"blue under\">Goodbye</p>") (text . "")) ((text . "") (text . "Remove all the classes from the matched elements.
-
-") (text . "") (js . "$(\"p:eq(1)\").removeClass();") (text . "") (css . "
-
-  p { margin: 4px; font-size:16px; font-weight:bolder; }
-  .blue { color:blue; }
-  .under { text-decoration:underline; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "<p class=\"blue under\">Hello</p>
-  <p class=\"blue under highlight\">and</p>
-  <p class=\"blue under\">then</p>
-
-  <p class=\"blue under\">Goodbye</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p:eq(1)\" ).removeClass();
+") (text . "") (css . "
+  p {
+    margin: 4px;
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .blue {
+    color: blue;
+  }
+  .under {
+    text-decoration: underline;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p class=\"blue under\">Hello</p>
+<p class=\"blue under highlight\">and</p>
+<p class=\"blue under\">then</p>
+<p class=\"blue under\">Goodbye</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "removeData" jquery-doc-methods)
 
@@ -13654,23 +16012,27 @@ the same name in the DOM, rather than being set to undefined.
 ") (text . "")) ("examples" ((text . "") (text . "Set a data store for 2 names then remove one of them.
 
 ") (text . "") (js . "
-
-    $(\"span:eq(0)\").text(\"\" + $(\"div\").data(\"test1\"));
-    $(\"div\").data(\"test1\", \"VALUE-1\");
-    $(\"div\").data(\"test2\", \"VALUE-2\");
-    $(\"span:eq(1)\").text(\"\" + $(\"div\").data(\"test1\"));
-    $(\"div\").removeData(\"test1\");
-    $(\"span:eq(2)\").text(\"\" + $(\"div\").data(\"test1\"));
-    $(\"span:eq(3)\").text(\"\" + $(\"div\").data(\"test2\"));
-
+$( \"span:eq(0)\" ).text( \"\" + $( \"div\" ).data( \"test1\" ) );
+$( \"div\" ).data( \"test1\", \"VALUE-1\" );
+$( \"div\" ).data( \"test2\", \"VALUE-2\" );
+$( \"span:eq(1)\" ).text( \"\" + $( \"div\").data( \"test1\" ) );
+$( \"div\" ).removeData( \"test1\" );
+$( \"span:eq(2)\" ).text( \"\" + $( \"div\" ).data( \"test1\" ) );
+$( \"span:eq(3)\" ).text( \"\" + $( \"div\" ).data( \"test2\" ) );
 ") (text . "") (css . "
-  div { margin:2px; color:blue; }
-  span { color:red; }
-  ") (text . "") (html . "<div>value1 before creation: <span></span></div>
-  <div>value1 after creation: <span></span></div>
-  <div>value1 after removal: <span></span></div>
-
-  <div>value2 after removal: <span></span></div>") (text . ""))))) jquery-doc-hash)
+  div {
+    margin: 2px;
+    color: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<div>value1 before creation: <span></span></div>
+<div>value1 after creation: <span></span></div>
+<div>value1 after removal: <span></span></div>
+<div>value2 after removal: <span></span></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "removeProp" jquery-doc-methods)
 
@@ -13694,64 +16056,81 @@ completely and, once removed, cannot be added again to element. Use
 ") (text . "")) ("examples" ((text . "") (text . "Set a numeric property on a paragraph and then remove it.
 
 ") (text . "") (js . "
-var $para = $(\"p\");
-$para.prop(\"luggageCode\", 1234);
-$para.append(\"The secret luggage code is: \", String($para.prop(\"luggageCode\")), \". \");
-$para.removeProp(\"luggageCode\");
-$para.append(\"Now the secret luggage code is: \", String($para.prop(\"luggageCode\")), \". \");
-
+$( \"p\" )
+  .prop( \"luggageCode\", 1234 )
+  .append( \"The secret luggage code is: \", String( $para.prop( \"luggageCode\" ) ), \". \" )
+  .removeProp( \"luggageCode\" );
+  .append( \"Now the secret luggage code is: \", String( $para.prop( \"luggageCode\" ) ), \". \" );
 ") (text . "") (css . "
-  img { padding:10px; }
-  div { color:red; font-size:24px; }
+  img {
+    padding: 10px;
+  }
+  div {
+    color: red;
+    font-size: 24px;
+  }
 ") (text . "") (html . "
   <p></p>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "replaceAll" jquery-doc-methods)
 
-(puthash "replaceAll" (quote (("name" . "replaceAll") ("signatures" "replaceAll" (("target" "A selector expression indicating which element(s) to replace.
+(puthash "replaceAll" (quote (("name" . "replaceAll") ("signatures" "replaceAll" (("target" "A selector string, jQuery object, DOM element, or array of elements
+indicating which element(s) to replace.
 
 " nil nil))) ("desc" (text . "Replace each target element with the set of matched elements.
 
 ")) ("longdesc" (text . "") (text . "The .replaceAll() method is corollary to .replaceWith() , but with the
 source and target reversed. Consider this DOM structure:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <div class=\"inner second\">And</div>
   <div class=\"inner third\">Goodbye</div>
-</div>") (text . "") (text . "We can create an element, then replace other elements with it:
+</div>
+    ") (text . "") (text . "We can create an element, then replace other elements with it:
 
 
-") (text . "") (js . "$('<h2>New heading</h2>').replaceAll('.inner');") (text . "") (text . "This causes all of them to be replaced:
+") (text . "") (js . "$( \"<h2>New heading</h2>\" ).replaceAll( \".inner\" );") (text . "") (text . "This causes all of them to be replaced:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <h2>New heading</h2>
   <h2>New heading</h2>
   <h2>New heading</h2>
-</div>") (text . "") (text . "Or, we could select an element to use as the replacement:
+</div>
+    ") (text . "") (text . "Or, we could select an element to use as the replacement:
 
 
-") (text . "") (js . "$('.first').replaceAll('.third');") (text . "") (text . "This results in the DOM structure:
+") (text . "") (js . "
+$( \".first\" ).replaceAll( \".third\" );
+    ") (text . "") (text . "This results in the DOM structure:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner second\">And</div>
   <div class=\"inner first\">Hello</div>
-</div>") (text . "") (text . "From this example, we can see that the selected element replaces the
+</div>
+    ") (text . "") (text . "From this example, we can see that the selected element replaces the
 target by being moved from its old location, not by being cloned.
 
 ") (text . "")) ("examples" ((text . "") (text . "Replace all the paragraphs with bold words.
 
-") (text . "") (js . "$(\"<b>Paragraph. </b>\").replaceAll(\"p\");") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"<b>Paragraph. </b>\" ).replaceAll( \"p\" );
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "replaceWith" jquery-doc-methods)
 
-(puthash "replaceWith" (quote (("name" . "replaceWith") ("signatures" "replaceWith" (("newContent" "The content to insert. May be an HTML string, DOM element, or jQuery
-object.
+(puthash "replaceWith" (quote (("name" . "replaceWith") ("signatures" "replaceWith" (("newContent" "The content to insert. May be an HTML string, DOM element, array of DOM
+elements, or jQuery object.
 
 " nil nil)) (("function" "A function that returns content with which to replace the set of
 matched elements.
@@ -13762,40 +16141,53 @@ new content and return the set of elements that was removed.
 ")) ("longdesc" (text . "") (text . "The .replaceWith() method removes content from the DOM and inserts new
 content in its place with a single call. Consider this DOM structure:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <div class=\"inner second\">And</div>
   <div class=\"inner third\">Goodbye</div>
-</div>") (text . "") (text . "The second inner <div> could be replaced with the specified HTML:
+</div>
+    ") (text . "") (text . "The second inner <div> could be replaced with the specified HTML:
 
 
-") (text . "") (js . "$('div.second').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This results in the structure:
+") (text . "") (js . "
+$( \"div.second\" ).replaceWith( \"<h2>New heading</h2>\" );
+    ") (text . "") (text . "This results in the structure:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner first\">Hello</div>
   <h2>New heading</h2>
   <div class=\"inner third\">Goodbye</div>
-</div>") (text . "") (text . "All inner <div> elements could be targeted at once:
+</div>
+    ") (text . "") (text . "All inner <div> elements could be targeted at once:
 
 
-") (text . "") (js . "$('div.inner').replaceWith('<h2>New heading</h2>');") (text . "") (text . "This causes all of them to be replaced:
-
-
-") (text . "") (html . "<div class=\"container\">
-  <h2>New heading</h2>
-  <h2>New heading</h2>
-  <h2>New heading</h2>
-</div>") (text . "") (text . "An element could also be selected as the replacement:
-
-
-") (text . "") (js . "$('div.third').replaceWith($('.first'));") (text . "") (text . "This results in the DOM structure:
+") (text . "") (js . "
+$( \"div.inner\" ).replaceWith( \"<h2>New heading</h2>\" );
+    ") (text . "") (text . "This causes all of them to be replaced:
 
 
 ") (text . "") (html . "<div class=\"container\">
+  <h2>New heading</h2>
+  <h2>New heading</h2>
+  <h2>New heading</h2>
+</div>
+    ") (text . "") (text . "An element could also be selected as the replacement:
+
+
+") (text . "") (js . "
+$( \"div.third\" ).replaceWith( $( \".first\" ) );
+    ") (text . "") (text . "This results in the DOM structure:
+
+
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner second\">And</div>
   <div class=\"inner first\">Hello</div>
-</div>") (text . "") (text . "This example demonstrates that the selected element replaces the target
+</div>
+    ") (text . "") (text . "This example demonstrates that the selected element replaces the target
 by being moved from its old location, not by being cloned.
 
 ") (text . "") (text . "The .replaceWith() method, like most jQuery methods, returns the jQuery
@@ -13806,32 +16198,46 @@ element that has replaced it.
 ") (text . "") (text . "As of jQuery 1.4, .replaceWith() can also work on disconnected DOM
 nodes. For example, with the following code, .replaceWith() returns a
 jQuery set containing only a paragraph.:
-") (text . "") (js . "$(\"<div/>\").replaceWith(\"<p></p>\");") (text . "") (text . "The .replaceWith() method can also take a function as its argument:
+") (text . "") (js . "
+$( \"<div/>\" ).replaceWith( \"<p></p>\" );
+    ") (text . "") (text . "The .replaceWith() method can also take a function as its argument:
 
 
-") (text . "") (js . "$('div.container').replaceWith(function() {
-  return $(this).contents();
-});") (text . "") (text . "This results in <div class=\"container\"> being replaced by its three
+") (text . "") (js . "
+$( \"div.container\" ).replaceWith(function() {
+  return $( this ).contents();
+});
+    ") (text . "") (text . "This results in <div class=\"container\"> being replaced by its three
 child <div>s. The return value of the function may be an HTML string,
 DOM element, or jQuery object.
 ") (text . "")) ("examples" ((text . "") (text . "On click, replace the button with a div containing the same word.
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-  $(this).replaceWith( \"<div>\" + $(this).text() + \"</div>\" );
+$( \"button\" ).click(function() {
+  $( this ).replaceWith( \"<div>\" + $( this ).text() + \"</div>\" );
 });
 ") (text . "") (css . "
-  button { display:block; margin:3px; color:red; width:200px; }
-  div { color:red; border:2px solid blue; width:200px;
-      margin:3px; text-align:center; }
-  ") (text . "") (html . "
+  button {
+    display: block;
+    margin: 3px;
+    color: red;
+    width: 200px;
+  }
+  div {
+    color: red;
+    border: 2px solid blue;
+    width: 200px;
+    margin: 3px;
+    text-align: center;
+  }
+") (text . "") (html . "
 <button>First</button>
 <button>Second</button>
 <button>Third</button>
 ") (text . "")) ((text . "") (text . "Replace all paragraphs with bold words.
 
 ") (text . "") (js . "
-$(\"p\").replaceWith( \"<b>Paragraph. </b>\" );
+$( \"p\" ).replaceWith( \"<b>Paragraph. </b>\" );
 ") (text . "") (html . "
 <p>Hello</p>
 <p>cruel</p>
@@ -13840,33 +16246,45 @@ $(\"p\").replaceWith( \"<b>Paragraph. </b>\" );
 and selected with the $() function. Notice it doesn`t clone the object
 but rather moves it to replace the paragraph.
 ") (text . "") (js . "
-$(\"p\").click(function () {
-  $(this).replaceWith( $(\"div\") );
+$( \"p\" ).click(function() {
+  $( this ).replaceWith( $( \"div\" ) );
 });
 ") (text . "") (css . "
-  div { border:2px solid blue; color:red; margin:3px; }
-  p { border:2px solid red; color:blue; margin:3px; cursor:pointer; }
-  ") (text . "") (html . "
+  div {
+    border: 2px solid blue;
+    color: red;
+    margin: 3px;
+  }
+  p {
+    border: 2px solid red;
+    color: blue;
+    margin: 3px;
+    cursor: pointer;
+  }
+") (text . "") (html . "
   <p>Hello</p>
   <p>cruel</p>
   <p>World</p>
-
   <div>Replaced!</div>
 ") (text . "")) ((text . "") (text . "On button click, replace the containing div with its child divs and
 append the class name of the selected element to the paragraph.
 
 ") (text . "") (js . "
-$('button').on(\"click\", function() {
-  var $container = $(\"div.container\").replaceWith(function() {
-    return $(this).contents();
+$( \"button\" ).on( \"click\", function() {
+  var $container = $( \"div.container\" ).replaceWith(function() {
+    return $( this ).contents();
   });
 
-  $(\"p\").append( $container.attr(\"class\") );
+  $( \"p\" ).append( $container.attr( \"class\" ) );
 });
 ") (text . "") (css . "
-  .container { background-color: #991; }
-  .inner { color: #911; }
-  ") (text . "") (html . "
+  .container {
+    background-color: #991;
+  }
+  .inner {
+    color: #911;
+  }
+") (text . "") (html . "
 <p>
   <button>Replace!</button>
 </p>
@@ -13889,13 +16307,14 @@ $('button').on(\"click\", function() {
 event on an element.
 
 ")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`resize`, handler) in the first and
-second variations, and .trigger(`resize`) in the third.
+second variations, and .trigger( \"resize\" ) in the third.
 
 ") (text . "") (text . "The resize event is sent to the window element when the size of the
 browser window changes:
 
-") (text . "") (js . "$(window).resize(function() {
-  $('#log').append('<div>Handler for .resize() called.</div>');
+") (text . "") (js . "
+$( window ).resize(function() {
+  $( \"#log\" ).append( \"<div>Handler for .resize() called.</div>\" );
 });
     ") (text . "") (text . "Now whenever the browser window`s size is changed, the message is
 appended to <div id=\"log\"> one or more times, depending on the browser.
@@ -13909,9 +16328,10 @@ behavior in some other browsers such as Opera).
 ") (text . "")) ("examples" ((text . "") (text . "To see the window width while (or after) it is resized, try:
 
 ") (text . "") (js . "
-$(window).resize(function() {
-  $('body').prepend('<div>' + $(window).width() + '</div>');
-});") (text . ""))))) jquery-doc-hash)
+$( window ).resize(function() {
+  $( \"body\" ).prepend( \"<div>\" + $( window ).width() + \"</div>\" );
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "scroll" jquery-doc-methods)
 
@@ -13924,8 +16344,8 @@ $(window).resize(function() {
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"scroll\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`scroll`, handler) in the first and
-second variations, and .trigger(`scroll`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"scroll\", handler ) in the first and
+second variations, and .trigger( \"scroll\" ) in the third.
 
 ") (text . "") (text . "The scroll event is sent to an element when the user scrolls to a
 different place in the element. It applies to window objects, but also
@@ -13935,7 +16355,8 @@ than the height or width of its contents).
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (html . "<div id=\"target\" style=\"overflow: scroll; width: 200px; height: 100px;\">
+") (text . "") (html . "
+<div id=\"target\" style=\"overflow: scroll; width: 200px; height: 100px;\">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit,
   sed do eiusmod tempor incididunt ut labore et dolore magna
   aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -13948,7 +16369,8 @@ than the height or width of its contents).
 <div id=\"other\">
   Trigger the handler
 </div>
-<div id=\"log\"></div>") (text . "") (text . "The style definition is present to make the target element small enough
+<div id=\"log\"></div>
+") (text . "") (text . "The style definition is present to make the target element small enough
 to be scrollable:
 
 ") (text . "") (text . "
@@ -13956,9 +16378,11 @@ to be scrollable:
 ") (text . "") (text . "The scroll event handler can be bound to this element:
 
 
-") (text . "") (js . "$('#target').scroll(function() {
-  $('#log').append('<div>Handler for .scroll() called.</div>');
-});") (text . "") (text . "Now when the user scrolls the text up or down, one or more messages are
+") (text . "") (js . "
+$( \"#target\" ).scroll(function() {
+  $( \"#log\" ).append( \"<div>Handler for .scroll() called.</div>\" );
+});
+    ") (text . "") (text . "Now when the user scrolls the text up or down, one or more messages are
 appended to <div id=\"log\"></div>:
 
 ") (text . "") (text . "Handler for .scroll() called.
@@ -13967,9 +16391,11 @@ appended to <div id=\"log\"></div>:
 ") (text . "") (text . "To trigger the event manually, apply .scroll() without an argument:
 
 
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').scroll();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).scroll();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 append the message.
 
 ") (text . "") (text . "A scroll event is sent whenever the element`s scroll position changes,
@@ -13979,18 +16405,27 @@ mouse`s scroll wheel could cause this event.
 ") (text . "")) ("examples" ((text . "") (text . "To do something when your page is scrolled:
 
 ") (text . "") (js . "
-$(\"p\").clone().appendTo(document.body);
-$(\"p\").clone().appendTo(document.body);
-$(\"p\").clone().appendTo(document.body);
-$(window).scroll(function () {
-  $(\"span\").css(\"display\", \"inline\").fadeOut(\"slow\");
+$( \"p\" ).clone().appendTo( document.body );
+$( \"p\" ).clone().appendTo( document.body );
+$( \"p\" ).clone().appendTo( document.body );
+$( window ).scroll(function() {
+  $( \"span\" ).css( \"display\", \"inline\" ).fadeOut( \"slow\" );
 });
 ") (text . "") (css . "
-  div { color:blue; }
-  p { color:green; }
-  span { color:red; display:none; }
-  ") (text . "") (html . "<div>Try scrolling the iframe.</div>
-  <p>Paragraph - <span>Scroll happened!</span></p>") (text . ""))))) jquery-doc-hash)
+  div {
+    color: blue;
+  }
+  p {
+    color: green;
+  }
+  span {
+    color: red;
+    display: none;
+  }
+") (text . "") (html . "
+<div>Try scrolling the iframe.</div>
+<p>Paragraph - <span>Scroll happened!</span></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "scrollLeft" jquery-doc-methods)
 
@@ -14001,16 +16436,23 @@ element in the set of matched elements.
 are hidden from view to the left of the scrollable area. If the scroll
 bar is at the very left, or if the element is not scrollable, this
 number will be 0.
-") (text . "") (text . "  Note: .scrollLeft(), when called directly or animated as a property
-  using .animate(), will not work if the element it is being applied
-  to is hidden.
+") (text . "") (text . "Note: .scrollLeft(), when called directly or animated as a property
+using .animate(), will not work if the element it is being applied to
+is hidden.
 ") (text . "")) ("examples" ((text . "") (text . "Get the scrollLeft of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"scrollLeft:\" + p.scrollLeft() );
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text( \"scrollLeft:\" + p.scrollLeft() );
 ") (text . "") (css . "
-    p { margin:10px;padding:5px;border:2px solid #666; }
-") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p><p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "scrollLeft" jquery-doc-methods)
 
@@ -14024,20 +16466,29 @@ are hidden from view above the scrollable area. Setting the scrollLeft
 positions the horizontal scroll of each matched element.
 ") (text . "")) ("examples" ((text . "") (text . "Set the scrollLeft of a div.
 
-") (text . "") (js . "$(\"div.demo\").scrollLeft(300);
+") (text . "") (js . "
+$( \"div.demo\" ).scrollLeft( 300 );
 ") (text . "") (css . "
   div.demo {
-  background:#CCCCCC none repeat scroll 0 0;
-  border:3px solid #666666;
-  margin:5px;
-  padding:5px;
-  position:relative;
-  width:200px;
-  height:100px;
-  overflow:auto;
+    background: #ccc none repeat scroll 0 0;
+    border: 3px solid #666;
+    margin: 5px;
+    padding: 5px;
+    position: relative;
+    width: 200px;
+    height: 100px;
+    overflow: auto;
   }
-  p { margin:10px;padding:5px;border:2px solid #666;width:1000px;height:1000px; }
-  ") (text . "") (html . "<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>") (text . ""))))) jquery-doc-hash)
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+    width: 1000px;
+    height: 1000px;
+  }
+") (text . "") (html . "
+<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "scrollTop" jquery-doc-methods)
 
@@ -14050,11 +16501,18 @@ the very top, or if the element is not scrollable, this number will be
 0.
 ") (text . "")) ("examples" ((text . "") (text . "Get the scrollTop of a paragraph.
 
-") (text . "") (js . "var p = $(\"p:first\");
-$(\"p:last\").text( \"scrollTop:\" + p.scrollTop() );
+") (text . "") (js . "
+var p = $( \"p:first\" );
+$( \"p:last\" ).text( \"scrollTop:\" + p.scrollTop() );
 ") (text . "") (css . "
-  p { margin:10px;padding:5px;border:2px solid #666; }
-  ") (text . "") (html . "<p>Hello</p><p></p>") (text . ""))))) jquery-doc-hash)
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+  }
+") (text . "") (html . "
+<p>Hello</p><p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "scrollTop" jquery-doc-methods)
 
@@ -14068,20 +16526,29 @@ are hidden from view above the scrollable area. Setting the scrollTop
 positions the vertical scroll of each matched element.
 ") (text . "")) ("examples" ((text . "") (text . "Set the scrollTop of a div.
 
-") (text . "") (js . "$(\"div.demo\").scrollTop(300);
+") (text . "") (js . "
+$( \"div.demo\" ).scrollTop( 300 );
 ") (text . "") (css . "
-div.demo {
-background:#CCCCCC none repeat scroll 0 0;
-border:3px solid #666666;
-margin:5px;
-padding:5px;
-position:relative;
-width:200px;
-height:100px;
-overflow:auto;
-}
-  p { margin:10px;padding:5px;border:2px solid #666;width:1000px;height:1000px; }
-  ") (text . "") (html . "<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>") (text . ""))))) jquery-doc-hash)
+  div.demo {
+    background: #ccc none repeat scroll 0 0;
+    border: 3px solid #666;
+    margin: 5px;
+    padding: 5px;
+    position: relative;
+    width: 200px;
+    height: 100px;
+    overflow: auto;
+  }
+  p {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #666;
+    width: 1000px;
+    height: 1000px;
+  }
+") (text . "") (html . "
+<div class=\"demo\"><h1>lalala</h1><p>Hello</p></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "select" jquery-doc-methods)
 
@@ -14094,8 +16561,8 @@ overflow:auto;
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"select\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`select`, handler) in the first two
-variations, and .trigger(`select`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"select\", handler ) in the first two
+variations, and .trigger( \"select\" ) in the third.
 
 ") (text . "") (text . "The select event is sent to an element when the user makes a text
 selection inside it. This event is limited to <input type=\"text\">
@@ -14103,23 +16570,28 @@ fields and <textarea> boxes.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form>
-  <input id=\"target\" type=\"text\" value=\"Hello there\" />
+") (text . "") (js . "
+<form>
+  <input id=\"target\" type=\"text\" value=\"Hello there\">
 </form>
 <div id=\"other\">
   Trigger the handler
 </div>") (text . "") (text . "The event handler can be bound to the text input:
 
 
-") (text . "") (js . "$('#target').select(function() {
-  alert('Handler for .select() called.');
-});") (text . "") (text . "Now when any portion of the text is selected, the alert is displayed.
+") (text . "") (js . "
+$( \"#target\" ).select(function() {
+  alert( \"Handler for .select() called.\" );
+});
+    ") (text . "") (text . "Now when any portion of the text is selected, the alert is displayed.
 Merely setting the location of the insertion point will not trigger the
 event. To trigger the event manually, apply .select() without an
 argument:
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').select();
-});") (text . "") (text . "After this code executes, clicks on the Trigger button will also alert
+") (text . "") (js . "
+$( \"#other\").click(function() {
+  $( \"#target\" ).select();
+});
+    ") (text . "") (text . "After this code executes, clicks on the Trigger button will also alert
 the message:
 
 ") (text . "") (text . "Handler for .select() called.
@@ -14128,67 +16600,54 @@ the message:
 ") (text . "") (text . "In addition, the default select action on the field will be fired, so
 the entire text field will be selected.
 
-") (text . "") (text . "  The method for retrieving the current selected text differs from one
-  browser to another. A number of jQuery plug-ins offer cross-platform
-  solutions.
+") (text . "") (text . "The method for retrieving the current selected text differs from one
+browser to another. A number of jQuery plug-ins offer cross-platform
+solutions.
 ") (text . "")) ("examples" ((text . "") (text . "To do something when text in input boxes is selected:
 
 ") (text . "") (js . "
-$(\":input\").select( function () {
-  $(\"div\").text(\"Something was selected\").show().fadeOut(1000);
+$( \":input\" ).select(function() {
+  $( \"div\" ).text( \"Something was selected\" ).show().fadeOut( 1000 );
 });
 ") (text . "") (css . "
-  p { color:blue; }
-  div { color:red; }
-  ") (text . "") (html . "
-  <p>
-    Click and drag the mouse to select text in the inputs.
-  </p>
-  <input type=\"text\" value=\"Some text\" />
-  <input type=\"text\" value=\"to test on\" />
+  p {
+    color: blue;
+  }
+  div {
+    color: red;
+  }
+") (text . "") (html . "
+  <p>Click and drag the mouse to select text in the inputs.</p>
+  <input type=\"text\" value=\"Some text\">
+  <input type=\"text\" value=\"to test on\">
+  <div></div>
+  ") (text . "")) ((text . "") (text . "To trigger the select event on all input elements, try:
 
-  <div></div>") (text . "")) ((text . "") (text . "To trigger the select event on all input elements, try:
-
-") (text . "") (js . "$(\"input\").select();") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"input\" ).select();
+") (text . ""))))) jquery-doc-hash)
 
 (push "serialize" jquery-doc-methods)
 
 (puthash "serialize" (quote (("name" . "serialize") ("signatures" "serialize" nil) ("desc" (text . "Encode a set of form elements as a string for submission.
 
 ")) ("longdesc" (text . "") (text . "The .serialize() method creates a text string in standard URL-encoded
-notation. It operates on a jQuery object representing a set of form
-elements. The form elements can be of several types:
-") (text . "") (html . "<form>
-  <div><input type=\"text\" name=\"a\" value=\"1\" id=\"a\" /></div>
-  <div><input type=\"text\" name=\"b\" value=\"2\" id=\"b\" /></div>
-  <div><input type=\"hidden\" name=\"c\" value=\"3\" id=\"c\" /></div>
-  <div>
-    <textarea name=\"d\" rows=\"8\" cols=\"40\">4</textarea>
-  </div>
-  <div><select name=\"e\">
-    <option value=\"5\" selected=\"selected\">5</option>
-    <option value=\"6\">6</option>
-    <option value=\"7\">7</option>
-  </select></div>
-  <div>
-    <input type=\"checkbox\" name=\"f\" value=\"8\" id=\"f\" />
-  </div>
-  <div>
-    <input type=\"submit\" name=\"g\" value=\"Submit\" id=\"g\" />
-  </div>
-</form>") (text . "") (text . "The .serialize() method can act on a jQuery object that has selected
-individual form elements, such as <input>, <textarea>, and <select>.
-However, it is typically easier to select the <form> tag itself for
+notation. It can act on a jQuery object that has selected individual
+form controls, such as <input>, <textarea>, and <select>: $( \"input,
+textarea, select\" ).serialize();
+") (text . "") (text . "It is typically easier, however, to select the <form> itself for
 serialization:
-") (text . "") (js . "$('form').submit(function() {
-  alert($(this).serialize());
-  return false;
-});") (text . "") (text . "This produces a standard-looking query string:
 
-
-") (text . "") (js . "a=1&b=2&c=3&d=4&e=5") (text . "") (text . "Warning: selecting both the form and its children will cause duplicates
-in the serialized string.
-
+") (text . "") (js . "
+$( \"form\" ).on( \"submit\", function( event ) {
+  event.preventDefault();
+  console.log( $( this ).serialize() );
+});
+    ") (text . "") (text . "In this case, jQuery serializes the successful controls within the
+form. Only form elements are examined for inputs they contain, in all
+other cases the input elements to be serialized should be part of the
+set passed to the .serialize() method. Selecting both the form and its
+children in a set will cause duplicates in the serialized string.
 ") (text . "") (text . "Note: Only \"successful controls\" are serialized to the string. No
 submit button value is serialized since the form was not submitted
 using a button. For a form element`s value to be included in the
@@ -14196,56 +16655,63 @@ serialized string, the element must have a name attribute. Values from
 checkboxes and radio buttons ( inputs of type \"radio\" or \"checkbox\")
 are included only if they are checked. Data from file select elements
 is not serialized.
-") (text . "")) ("examples" ((text . "") (text . "Serialize a form to a query string, that could be sent to a server in
-an Ajax request.
+") (text . "")) ("examples" ((text . "") (text . "Serialize a form to a query string that could be sent to a server in an
+Ajax request.
 
 ") (text . "") (js . "
-    function showValues() {
-      var str = $(\"form\").serialize();
-      $(\"#results\").text(str);
-    }
-    $(\":checkbox, :radio\").click(showValues);
-    $(\"select\").change(showValues);
-    showValues();
+  function showValues() {
+    var str = $( \"form\" ).serialize();
+    $( \"#results\" ).text( str );
+  }
+  $( \"input[type='checkbox'], input[type='radio']\" ).on( \"click\", showValues );
+  $( \"select\" ).on( \"change\", showValues );
+  showValues();
 ") (text . "") (css . "
-  body, select { font-size:12px; }
-  form { margin:5px; }
-  p { color:red; margin:5px; font-size:14px; }
-  b { color:blue; }
-  ") (text . "") (text . "200
+  body, select {
+    font-size: 12px;
+  }
+  form {
+    margin: 5px;
+  }
+  p {
+    color: red;
+    margin: 5px;
+    font-size: 14px;
+  }
+  b {
+    color: blue;
+  }
+") (text . "") (text . "200
 
 ") (text . "") (html . "
-
 <form>
   <select name=\"single\">
     <option>Single</option>
     <option>Single2</option>
   </select>
 
-  <br />
+  <br>
   <select name=\"multiple\" multiple=\"multiple\">
     <option selected=\"selected\">Multiple</option>
     <option>Multiple2</option>
-
     <option selected=\"selected\">Multiple3</option>
   </select>
-  <br/>
-  <input type=\"checkbox\" name=\"check\" value=\"check1\" id=\"ch1\"/>
 
+  <br>
+  <input type=\"checkbox\" name=\"check\" value=\"check1\" id=\"ch1\">
   <label for=\"ch1\">check1</label>
-
-  <input type=\"checkbox\" name=\"check\" value=\"check2\" checked=\"checked\" id=\"ch2\"/>
-
+  <input type=\"checkbox\" name=\"check\" value=\"check2\" checked=\"checked\" id=\"ch2\">
   <label for=\"ch2\">check2</label>
-  <br />
-  <input type=\"radio\" name=\"radio\" value=\"radio1\" checked=\"checked\" id=\"r1\"/>
 
+  <br>
+  <input type=\"radio\" name=\"radio\" value=\"radio1\" checked=\"checked\" id=\"r1\">
   <label for=\"r1\">radio1</label>
-  <input type=\"radio\" name=\"radio\" value=\"radio2\" id=\"r2\"/>
-
+  <input type=\"radio\" name=\"radio\" value=\"radio2\" id=\"r2\">
   <label for=\"r2\">radio2</label>
 </form>
-<p><tt id=\"results\"></tt></p>") (text . ""))))) jquery-doc-hash)
+
+<p><tt id=\"results\"></tt></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "serializeArray" jquery-doc-methods)
 
@@ -14255,10 +16721,11 @@ an Ajax request.
 ready to be encoded as a JSON string. It operates on a jQuery object
 representing a set of form elements. The form elements can be of
 several types:
-") (text . "") (html . "<form>
-  <div><input type=\"text\" name=\"a\" value=\"1\" id=\"a\" /></div>
-  <div><input type=\"text\" name=\"b\" value=\"2\" id=\"b\" /></div>
-  <div><input type=\"hidden\" name=\"c\" value=\"3\" id=\"c\" /></div>
+") (text . "") (html . "
+<form>
+  <div><input type=\"text\" name=\"a\" value=\"1\" id=\"a\"></div>
+  <div><input type=\"text\" name=\"b\" value=\"2\" id=\"b\"></div>
+  <div><input type=\"hidden\" name=\"c\" value=\"3\" id=\"c\"></div>
   <div>
     <textarea name=\"d\" rows=\"8\" cols=\"40\">4</textarea>
   </div>
@@ -14268,12 +16735,13 @@ several types:
     <option value=\"7\">7</option>
   </select></div>
   <div>
-    <input type=\"checkbox\" name=\"f\" value=\"8\" id=\"f\" />
+    <input type=\"checkbox\" name=\"f\" value=\"8\" id=\"f\">
   </div>
   <div>
-    <input type=\"submit\" name=\"g\" value=\"Submit\" id=\"g\" />
+    <input type=\"submit\" name=\"g\" value=\"Submit\" id=\"g\">
   </div>
-</form>") (text . "") (text . "The .serializeArray() method uses the standard W3C rules for successful
+</form>
+    ") (text . "") (text . "The .serializeArray() method uses the standard W3C rules for successful
 controls to determine which elements it should include; in particular
 the element cannot be disabled and must contain a name attribute. No
 submit button value is serialized since the form was not submitted
@@ -14281,13 +16749,16 @@ using a button. Data from file select elements is not serialized.
 ") (text . "") (text . "This method can act on a jQuery object that has selected individual
 form elements, such as <input>, <textarea>, and <select>. However, it
 is typically easier to select the <form> tag itself for serialization:
-") (text . "") (js . "$('form').submit(function() {
-  console.log($(this).serializeArray());
-  return false;
-});") (text . "") (text . "This produces the following data structure (provided that the browser
+") (text . "") (js . "
+$( \"form\" ).submit(function( event ) {
+  console.log( $( this ).serializeArray() );
+  event.preventDefault();
+});
+    ") (text . "") (text . "This produces the following data structure (provided that the browser
 supports console.log):
 
-") (text . "") (js . "[
+") (text . "") (js . "
+[
   {
     name: \"a\",
     value: \"1\"
@@ -14308,53 +16779,59 @@ supports console.log):
     name: \"e\",
     value: \"5\"
   }
-]") (text . "")) ("examples" ((text . "") (text . "Get the values from a form, iterate through them, and append them to a
+]
+    ") (text . "")) ("examples" ((text . "") (text . "Get the values from a form, iterate through them, and append them to a
 results display.
 
 ") (text . "") (js . "
   function showValues() {
-    var fields = $(\":input\").serializeArray();
-    $(\"#results\").empty();
-    jQuery.each(fields, function(i, field){
-      $(\"#results\").append(field.value + \" \");
+    var fields = $( \":input\" ).serializeArray();
+    $( \"#results\" ).empty();
+    jQuery.each( fields, function( i, field ) {
+      $( \"#results\" ).append( field.value + \" \" );
     });
   }
 
-  $(\":checkbox, :radio\").click(showValues);
-  $(\"select\").change(showValues);
+  $( \":checkbox, :radio\" ).click( showValues );
+  $( \"select\" ).change( showValues );
   showValues();
 ") (text . "") (css . "
-  body, select { font-size:14px; }
-  form { margin:5px; }
-  p { color:red; margin:5px; }
-  b { color:blue; }
-  ") (text . "") (html . "<p><b>Results:</b> <span id=\"results\"></span></p>
-
-  <form>
-    <select name=\"single\">
-      <option>Single</option>
-      <option>Single2</option>
-
-    </select>
-    <select name=\"multiple\" multiple=\"multiple\">
-      <option selected=\"selected\">Multiple</option>
-      <option>Multiple2</option>
-
-      <option selected=\"selected\">Multiple3</option>
-    </select><br/>
-    <input type=\"checkbox\" name=\"check\" value=\"check1\" id=\"ch1\"/>
-
-    <label for=\"ch1\">check1</label>
-    <input type=\"checkbox\" name=\"check\" value=\"check2\" checked=\"checked\" id=\"ch2\"/>
-
-    <label for=\"ch2\">check2</label>
-    <input type=\"radio\" name=\"radio\" value=\"radio1\" checked=\"checked\" id=\"r1\"/>
-
-    <label for=\"r1\">radio1</label>
-    <input type=\"radio\" name=\"radio\" value=\"radio2\" id=\"r2\"/>
-
-    <label for=\"r2\">radio2</label>
-  </form>") (text . ""))))) jquery-doc-hash)
+  body, select {
+    font-size: 14px;
+  }
+  form {
+    margin: 5px;
+  }
+  p {
+    color: red;
+    margin: 5px;
+  }
+  b {
+    color: blue;
+  }
+") (text . "") (html . "
+<p><b>Results:</b> <span id=\"results\"></span></p>
+<form>
+  <select name=\"single\">
+    <option>Single</option>
+    <option>Single2</option>
+  </select>
+  <select name=\"multiple\" multiple=\"multiple\">
+    <option selected=\"selected\">Multiple</option>
+    <option>Multiple2</option>
+    <option selected=\"selected\">Multiple3</option>
+  </select>
+  <br>
+  <input type=\"checkbox\" name=\"check\" value=\"check1\" id=\"ch1\">
+  <label for=\"ch1\">check1</label>
+  <input type=\"checkbox\" name=\"check\" value=\"check2\" checked=\"checked\" id=\"ch2\">
+  <label for=\"ch2\">check2</label>
+  <input type=\"radio\" name=\"radio\" value=\"radio1\" checked=\"checked\" id=\"r1\">
+  <label for=\"r1\">radio1</label>
+  <input type=\"radio\" name=\"radio\" value=\"radio2\" id=\"r2\">
+  <label for=\"r2\">radio2</label>
+</form>
+") (text . ""))))) jquery-doc-hash)
 
 (push "show" jquery-doc-methods)
 
@@ -14366,7 +16843,7 @@ results display.
 
 " nil nil)) (("duration" "A string or number determining how long the animation will run.
 
-" "true" nil) ("easing" "A string indicating which easing function to use for the transition.
+" nil nil) ("easing" "A string indicating which easing function to use for the transition.
 
 " "true" nil) ("complete" "A function to call once the animation is complete.
 
@@ -14375,15 +16852,17 @@ results display.
 ")) ("longdesc" (text . "") (text . "With no parameters, the .show() method is the simplest way to display
 an element:
 
-") (text . "") (js . "$('.target').show();
+") (text . "") (js . "
+$( \".target\" ).show();
     ") (text . "") (text . "The matched elements will be revealed immediately, with no animation.
-This is roughly equivalent to calling .css(`display`, `block`), except
+This is roughly equivalent to calling .css( \"display\", \"block\"), except
 that the display property is restored to whatever it was initially. If
 an element has a display value of inline, then is hidden and shown, it
 will once again be displayed inline.
 ") (text . "") (text . "Note: If using !important in your styles, such as display: none
-!important, it is necessary to override the style using .css(`display`,
-`block !important`) should you wish for .show() to function correctly.
+!important, it is necessary to override the style using .css(
+\"display\", \"block !important\") should you wish for .show() to function
+correctly.
 ") (text . "") (text . "When a duration, a plain object, or a \"complete\" function is provided,
 .show() becomes an animation method. The .show() method animates the
 width, height, and opacity of the matched elements simultaneously.
@@ -14407,80 +16886,100 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
 With the element initially hidden, we can show it slowly:
-$('#clickme').click(function() {
-  $('#book').show('slow', function() {
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).show( \"slow\", function() {
     // Animation complete.
   });
-});") (text . "") (text . "
+});
+    ") (text . "") (text . "
 
 ") (text . "")) ("examples" ((text . "") (text . "Animates all hidden paragraphs to show slowly, completing the animation
 within 600 milliseconds.
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-  $(\"p\").show(\"slow\");
+$( \"button\" ).click(function() {
+  $( \"p\" ).show( \"slow\" );
 });
 ") (text . "") (css . "
-p { background:yellow; }
-") (text . "") (html . "<button>Show it</button>
-      <p style=\"display: none\">Hello  2</p>") (text . "")) ((text . "") (text . "Show the first div, followed by each next adjacent sibling div in
+  p {
+    background: yellow;
+  }
+") (text . "") (html . "
+<button>Show it</button>
+<p style=\"display: none\">Hello  2</p>
+") (text . "")) ((text . "") (text . "Show the first div, followed by each next adjacent sibling div in
 order, with a 200ms animation. Each animation starts when the previous
 sibling div`s animation ends.
 ") (text . "") (js . "
-$(\"#showr\").click(function () {
-  $(\"div\").first().show(\"fast\", function showNext() {
-    $(this).next(\"div\").show(\"fast\", showNext);
+$( \"#showr\" ).click(function() {
+  $( \"div\" ).first().show( \"fast\", function showNext() {
+    $( this ).next( \"div\" ).show( \"fast\", showNext );
   });
 });
 
-$(\"#hidr\").click(function () {
-  $(\"div\").hide(1000);
+$( \"#hidr\" ).click(function() {
+  $( \"div\" ).hide( 1000 );
 });
 ") (text . "") (css . "
-  div { background:#def3ca; margin:3px; width:80px;
-  display:none; float:left; text-align:center; }
-  ") (text . "") (html . "
-  <button id=\"showr\">Show</button>
-  <button id=\"hidr\">Hide</button>
-  <div>Hello 3,</div>
-
-  <div>how</div>
-  <div>are</div>
-  <div>you?</div>") (text . "")) ((text . "") (text . "Show all span and input elements with an animation. Change the text
+  div {
+    background: #def3ca;
+    margin: 3px;
+    width: 80px;
+    display: none;
+    float: left;
+    text-align: center;
+  }
+") (text . "") (html . "
+<button id=\"showr\">Show</button>
+<button id=\"hidr\">Hide</button>
+<div>Hello 3,</div>
+<div>how</div>
+<div>are</div>
+<div>you?</div>
+") (text . "")) ((text . "") (text . "Show all span and input elements with an animation. Change the text
 once the animation is done.
 
 ") (text . "") (js . "
 function doIt() {
-  $(\"span,div\").show(\"slow\");
+  $( \"span,div\" ).show( \"slow\" );
 }
-/* can pass in function name */
-$(\"button\").click(doIt);
+// Can pass in function name
+$( \"button\" ).click( doIt );
 
-$(\"form\").submit(function () {
-  if ($(\"input\").val() == \"yes\") {
-    $(\"p\").show(4000, function () {
-      $(this).text(\"Ok, DONE! (now showing)\");
+$( \"form\" ).submit(function( event ) {
+  if ( $( \"input\" ).val() === \"yes\" ) {
+    $( \"p\" ).show( 4000, function() {
+      $( this ).text( \"Ok, DONE! (now showing)\" );
     });
   }
-  $(\"span,div\").hide(\"fast\");
-  /* to stop the submit */
-  return false;
+  $( \"span,div\" ).hide( \"fast\" );
+
+  // Prevent form submission
+  event.preventDefault();
 });
 ") (text . "") (css . "
-  span { display:none; }
-  div { display:none; }
-  p { font-weight:bold; background-color:#fcd; }
-  ") (text . "") (html . "
+  span {
+    display: none;
+  }
+  div {
+    display: none;
+  }
+  p {
+    font-weight: bold;
+    background-color: #fcd;
+  }
+") (text . "") (html . "
 <button>Do it!</button>
 <span>Are you sure? (type 'yes' if you are) </span>
 <div>
   <form>
-    <input type=\"text\"  value=\"as;ldkfjalsdf\"/>
+    <input type=\"text\"  value=\"as;ldkfjalsdf\">
   </form>
 </div>
 <p style=\"display:none;\">I'm hidden...</p>
@@ -14505,16 +17004,18 @@ elements will be filtered by testing whether they match it.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
     ") (text . "") (text . "If we begin at the third item, we can find its siblings:
 
 
-") (text . "") (js . "$('li.third-item').siblings().css('background-color', 'red');") (text . "") (text . "The result of this call is a red background behind items 1, 2, 4, and
+") (text . "") (js . "
+$( \"li.third-item\" ).siblings().css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background behind items 1, 2, 4, and
 5. Since we do not supply a selector expression, all of the siblings
 are part of the object. If we had supplied one, only the matching items
 among these four would be included.
@@ -14525,16 +17026,29 @@ level of the DOM tree.
 (including other yellow li elements if appropriate).
 
 ") (text . "") (js . "
-var len = $(\".hilite\").siblings()
-                      .css(\"color\", \"red\")
-                      .length;
-$(\"b\").text(len);
+var len = $( \".hilite\" ).siblings()
+  .css( \"color\", \"red\" )
+  .length;
+$( \"b\" ).text( len );
 ") (text . "") (css . "
-  ul { float:left; margin:5px; font-size:16px; font-weight:bold; }
-  p { color:blue; margin:10px 20px; font-size:16px; padding:5px;
-      font-weight:bolder; }
-  .hilite { background:yellow; }
-") (text . "") (html . "<ul>
+  ul {
+    float: left;
+    margin: 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  p {
+    color: blue;
+    margin: 10px 20px;
+    font-size: 16px;
+    padding: 5px;
+    font-weight: bolder;
+  }
+  .hilite {
+    background: yellow;
+  }
+") (text . "") (html . "
+<ul>
   <li>One</li>
   <li>Two</li>
   <li class=\"hilite\">Three</li>
@@ -14546,18 +17060,24 @@ $(\"b\").text(len);
   <li>Six</li>
   <li>Seven</li>
 </ul>
+
 <ul>
   <li>Eight</li>
   <li class=\"hilite\">Nine</li>
   <li>Ten</li>
   <li class=\"hilite\">Eleven</li>
 </ul>
-<p>Unique siblings: <b></b></p>") (text . "")) ((text . "") (text . "Find all siblings with a class \"selected\" of each div.
 
-") (text . "") (js . "$(\"p\").siblings(\".selected\").css(\"background\", \"yellow\");") (text . "") (html . "<div><span>Hello</span></div>
+<p>Unique siblings: <b></b></p>
+") (text . "")) ((text . "") (text . "Find all siblings with a class \"selected\" of each div.
 
-  <p class=\"selected\">Hello Again</p>
-  <p>And Again</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).siblings( \".selected\" ).css( \"background\", \"yellow\" );
+") (text . "") (html . "
+<div><span>Hello</span></div>
+<p class=\"selected\">Hello Again</p>
+<p>And Again</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "size" jquery-doc-methods)
 
@@ -14580,8 +17100,10 @@ overhead of a function call.
     ") (text . "") (text . "Both .size() and .length identify the number of items:
 
 
-") (text . "") (js . "alert( \"Size: \" + $(\"li\").size() );
-alert( \"Size: \" + $(\"li\").length );") (text . "") (text . "This results in two alerts:
+") (text . "") (js . "
+alert( \"Size: \" + $( \"li\" ).size() );
+alert( \"Size: \" + $( \"li\" ).length );
+    ") (text . "") (text . "This results in two alerts:
 
 
 ") (text . "") (text . "Size: 2
@@ -14593,22 +17115,33 @@ alert( \"Size: \" + $(\"li\").length );") (text . "") (text . "This results in t
 ") (text . "")) ("examples" ((text . "") (text . "Count the divs. Click to add more.
 
 ") (text . "") (js . "
-$(document.body)
-.click(function() {
-  $(this).append( $(\"<div>\") );
-  var n = $(\"div\").size();
-  $(\"span\").text(\"There are \" + n + \" divs. Click to add more.\");
-})
-// trigger the click to start
-.click();
+$( document.body )
+  .click(function() {
+    $( this ).append( $( \"<div>\" ) );
+    var n = $( \"div\" ).size();
+    $( \"span\" ).text( \"There are \" + n + \" divs. Click to add more.\" );
+  })
+
+  // Trigger the click to start
+  .click();
 ") (text . "") (css . "
-  body { cursor:pointer; min-height: 100px; }
-  div { width:50px; height:30px; margin:5px;
-        float:left; background:blue; }
-  span { color:red; }
- ") (text . "") (html . "
+  body {
+    cursor: pointer;
+    min-height: 100px;
+  }
+  div {
+    width: 50px;
+    height: 30px;
+    margin: 5px;
+    float: left;
+    background: blue;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
 <span></span>
- <div></div>
+<div></div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "slice" jquery-doc-methods)
@@ -14642,13 +17175,17 @@ included in the result.
     ") (text . "") (text . "We can apply this method to the set of list items:
 
 
-") (text . "") (js . "$('li').slice(2).css('background-color', 'red');") (text . "") (text . "The result of this call is a red background for items 3, 4, and 5. Note
+") (text . "") (js . "
+$( \"li\" ).slice( 2 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "The result of this call is a red background for items 3, 4, and 5. Note
 that the supplied index is zero-based, and refers to the position of
 elements within the jQuery object, not within the DOM tree.
 ") (text . "") (text . "The end parameter allows us to limit the selected range even further.
 For example:
 
-") (text . "") (js . "$('li').slice(2, 4).css('background-color', 'red');") (text . "") (text . "Now only items 3 and 4 are selected. The index is once again
+") (text . "") (js . "
+$( \"li\" ).slice( 2, 4 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "Now only items 3 and 4 are selected. The index is once again
 zero-based; the range extends up to but not including the specified
 index.
 ") (text . "") (text . " Negative Indices
@@ -14659,67 +17196,89 @@ method for arrays. One of the features that it mimics is the ability
 for negative numbers to be passed as either the start or end parameter.
 If a negative number is provided, this indicates a position starting
 from the end of the set, rather than the beginning. For example:
-") (text . "") (js . "$('li').slice(-2, -1).css('background-color', 'red');") (text . "") (text . "This time only list item 4 is turned red, since it is the only item in
+") (text . "") (js . "
+$( \"li\" ).slice( -2, -1 ).css( \"background-color\", \"red\" );
+    ") (text . "") (text . "This time only list item 4 is turned red, since it is the only item in
 the range between two from the end ( -2) and one from the end ( -1).
 
 ") (text . "")) ("examples" ((text . "") (text . "Turns divs yellow based on a random slice.
 
 ") (text . "") (js . "
 function colorEm() {
-  var $div = $(\"div\");
-  var start = Math.floor(Math.random() *
-                         $div.length);
-  var end = Math.floor(Math.random() *
-                       ($div.length - start)) +
-                       start + 1;
-  if (end == $div.length) end = undefined;
-  $div.css(\"background\", \"\");
-  if (end)
-    $div.slice(start, end).css(\"background\", \"yellow\");
-   else
-    $div.slice(start).css(\"background\", \"yellow\");
-
-  $(\"span\").text('$(\"div\").slice(' + start +
-                 (end ? ', ' + end : '') +
-                 ').css(\"background\", \"yellow\");');
+  var $div = $( \"div\" );
+  var start = Math.floor( Math.random() * $div.length );
+  var end = Math.floor( Math.random() * ( $div.length - start ) ) +
+    start + 1;
+  if ( end === $div.length ) {
+    end = undefined;
+  }
+  $div.css( \"background\", \"\" );
+  if ( end ) {
+    $div.slice( start, end ).css( \"background\", \"yellow\" );
+  } else {
+    $div.slice( start ).css( \"background\", \"yellow\" );
+  }
+  $( \"span\" ).text( \"$( 'div' ).slice( \" + start +
+    (end ? \", \" + end : \"\") +
+    \").css( 'background', 'yellow' );\" );
 }
 
-$(\"button\").click(colorEm);
+$( \"button\" ).click( colorEm );
 ") (text . "") (css . "
-  div { width:40px; height:40px; margin:10px; float:left;
-        border:2px solid blue; }
-  span { color:red; font-weight:bold; }
-  button { margin:5px; }
-  ") (text . "") (text . "240
+  div {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    float: left;
+    border: 2px solid blue;
+  }
+  span {
+    color: red;
+    font-weight: bold;
+  }
+  button {
+    margin: 5px;
+  }
+") (text . "") (text . "240
 
-") (text . "") (html . "<p><button>Turn slice yellow</button>
+") (text . "") (html . "
+<p><button>Turn slice yellow</button>
   <span>Click the button!</span></p>
   <div></div>
   <div></div>
-
   <div></div>
   <div></div>
   <div></div>
   <div></div>
   <div></div>
-
   <div></div>
-  <div></div>") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
+  <div></div>
+  ") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
 first element.
 
-") (text . "") (js . "$(\"p\").slice(0, 1).wrapInner(\"<b></b>\");") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
+") (text . "") (js . "
+$( \"p\" ).slice( 0, 1 ).wrapInner( \"<b></b>\" );
+") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
 first and second element.
 
-") (text . "") (js . "$(\"p\").slice(0, 2).wrapInner(\"<b></b>\");") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
+") (text . "") (js . "
+$( \"p\" ).slice( 0, 2 ).wrapInner( \"<b></b>\" );
+") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
 second element.
 
-") (text . "") (js . "$(\"p\").slice(1, 2).wrapInner(\"<b></b>\");") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
+") (text . "") (js . "
+$( \"p\" ).slice( 1, 2 ).wrapInner( \"<b></b>\" );
+") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
 second and third element.
 
-") (text . "") (js . "$(\"p\").slice(1).wrapInner(\"<b></b>\");") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
+") (text . "") (js . "
+$( \"p\" ).slice( 1 ).wrapInner( \"<b></b>\" );
+") (text . "")) ((text . "") (text . "Selects all paragraphs, then slices the selection to include only the
 third element.
 
-") (text . "") (js . "$(\"p\").slice(-1).wrapInner(\"<b></b>\");") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).slice( -1 ).wrapInner( \"<b></b>\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "slideDown" jquery-doc-methods)
 
@@ -14748,17 +17307,21 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially hidden, we can show it slowly:
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (text . "With the element initially hidden, we can show it slowly:
 
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').slideDown('slow', function() {
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).slideDown( \"slow\", function() {
     // Animation complete.
   });
-});") (text . "") (text . "
+});
+    ") (text . "") (text . "
 
 ") (text . "") (text . " Easing
 
@@ -14787,46 +17350,69 @@ animations ( See the example for .promise() ).
 milliseconds.
 
 ") (text . "") (js . "
-$(document.body).click(function () {
-if ($(\"div:first\").is(\":hidden\")) {
-$(\"div\").slideDown(\"slow\");
-} else {
-$(\"div\").hide();
-}
+$( document.body ).click(function () {
+  if ( $( \"div:first\" ).is( \":hidden\" ) ) {
+    $( \"div\" ).slideDown( \"slow\" );
+  } else {
+    $( \"div\" ).hide();
+  }
 });
-
 ") (text . "") (css . "
-div { background:#de9a44; margin:3px; width:80px;
-height:40px; display:none; float:left; }
-") (text . "") (html . "Click me!
+  div {
+    background: #de9a44;
+    margin: 3px;
+    width: 80px;
+    height: 40px;
+    display: none;
+    float: left;
+  }
+") (text . "") (html . "
+Click me!
 <div></div>
 <div></div>
-<div></div>") (text . "")) ((text . "") (text . "Animates all inputs to slide down, completing the animation within 1000
+<div></div>
+") (text . "")) ((text . "") (text . "Animates all inputs to slide down, completing the animation within 1000
 milliseconds. Once the animation is done, the input look is changed
 especially if it is the middle input which gets the focus.
 ") (text . "") (js . "
-$(\"div\").click(function () {
-$(this).css({ borderStyle:\"inset\", cursor:\"wait\" });
-$(\"input\").slideDown(1000,function(){
-$(this).css(\"border\", \"2px red inset\")
-.filter(\".middle\")
- .css(\"background\", \"yellow\")
- .focus();
-$(\"div\").css(\"visibility\", \"hidden\");
-});
+$( \"div\" ).click(function() {
+  $( this ).css({
+    borderStyle: \"inset\",
+    cursor: \"wait\"
+  });
+  $( \"input\" ).slideDown( 1000, function() {
+    $( this )
+      .css( \"border\", \"2px red inset\" )
+      .filter( \".middle\" )
+        .css( \"background\", \"yellow\" )
+        .focus();
+    $( \"div\" ).css( \"visibility\", \"hidden\" );
+  });
 });
 
 ") (text . "") (css . "
-div { background:#cfd; margin:3px; width:50px;
-text-align:center; float:left; cursor:pointer;
-border:2px outset black; font-weight:bolder; }
-input { display:none; width:120px; float:left;
-margin:10px; }
-") (text . "") (html . "<div>Push!</div>
-<input type=\"text\" />
-<input type=\"text\" class=\"middle\" />
-
-<input type=\"text\" />") (text . ""))))) jquery-doc-hash)
+  div {
+    background: #cfd;
+    margin: 3px;
+    width: 50px;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+    border: 2px outset black;
+    font-weight: bolder;
+  }
+  input {
+    display: none;
+    width: 120px;
+    float: left;
+    margin: 10px;
+  }
+") (text . "") (html . "
+<div>Push!</div>
+<input type=\"text\">
+<input type=\"text\" class=\"middle\">
+<input type=\"text\">
+  ") (text . ""))))) jquery-doc-hash)
 
 (push "slideToggle" jquery-doc-methods)
 
@@ -14860,17 +17446,21 @@ respectively.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "We will cause .slideToggle() to be called when another element is
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (text . "We will cause .slideToggle() to be called when another element is
 clicked:
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').slideToggle('slow', function() {
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).slideToggle( \"slow\", function() {
     // Animation complete.
   });
-});") (text . "") (text . "With the element initially shown, we can hide it slowly with the first
+});
+    ") (text . "") (text . "With the element initially shown, we can hide it slowly with the first
 click:
 
 ") (text . "") (text . "
@@ -14907,35 +17497,53 @@ animations ( See the example for .promise() ).
 within 600 milliseconds.
 
 ") (text . "") (js . "
-    $(\"button\").click(function () {
-      $(\"p\").slideToggle(\"slow\");
-    });
+$( \"button\" ).click(function() {
+  $( \"p\" ).slideToggle( \"slow\" );
+});
 ") (text . "") (css . "
-  p { width:400px; }
-  ") (text . "") (html . "<button>Toggle</button>
-
-  <p>
-    This is the paragraph to end all paragraphs.  You
-    should feel <em>lucky</em> to have seen such a paragraph in
-    your life.  Congratulations!
-  </p>") (text . "")) ((text . "") (text . "Animates divs between dividers with a toggle that makes some appear and
+  p {
+    width: 400px;
+  }
+") (text . "") (html . "
+<button>Toggle</button>
+<p>
+  This is the paragraph to end all paragraphs.  You
+  should feel <em>lucky</em> to have seen such a paragraph in
+  your life.  Congratulations!
+</p>
+") (text . "")) ((text . "") (text . "Animates divs between dividers with a toggle that makes some appear and
 some disappear.
 
 ") (text . "") (js . "
-  $(\"#aa\").click(function () {
-    $(\"div:not(.still)\").slideToggle(\"slow\", function () {
-      var n = parseInt($(\"span\").text(), 10);
-      $(\"span\").text(n + 1);
-    });
+$( \"#aa\" ).click(function() {
+  $( \"div:not(.still)\" ).slideToggle( \"slow\", function() {
+    var n = parseInt( $( \"span\" ).text(), 10 );
+    $( \"span\" ).text( n + 1 );
   });
-
+});
 ") (text . "") (css . "
-  div { background:#b977d1; margin:3px; width:60px;
-        height:60px; float:left; }
-  div.still { background:#345; width:5px; }
-  div.hider { display:none; }
-  span { color:red; }
-  p { clear: left; }") (text . "") (html . "<div></div>
+  div {
+    background: #b977d1;
+    margin: 3px;
+    width: 60px;
+    height: 60px;
+    float: left;
+  }
+  div.still {
+    background: #345;
+    width: 5px;
+  }
+  div.hider {
+    display: none;
+  }
+  span {
+    color: red;
+  }
+  p {
+    clear: left;
+  }
+") (text . "") (html . "
+<div></div>
 <div class=\"still\"></div>
 <div style=\"display:none;\">
 </div><div class=\"still\"></div>
@@ -14946,7 +17554,8 @@ some disappear.
 <div class=\"hider\"></div>
 <div class=\"still\"></div>
 <div></div>
-<p><button id=\"aa\">Toggle</button> There have been <span>0</span> toggled divs.</p>") (text . ""))))) jquery-doc-hash)
+<p><button id=\"aa\">Toggle</button> There have been <span>0</span> toggled divs.</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "slideUp" jquery-doc-methods)
 
@@ -14977,18 +17586,21 @@ parameter is omitted, the default duration of 400 milliseconds is used.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />") (text . "") (text . "With the element initially shown, we can hide it slowly:
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (text . "With the element initially shown, we can hide it slowly:
 
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').slideUp('slow', function() {
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).slideUp( \"slow\", function() {
     // Animation complete.
   });
 });
-  ") (text . "") (text . "
+    ") (text . "") (text . "
 
 ") (text . "") (text . " Easing
 
@@ -15017,51 +17629,59 @@ animations ( See the example for .promise() ).
 milliseconds.
 
 ") (text . "") (js . "
-  $(document.body).click(function () {
-    if ($(\"div:first\").is(\":hidden\")) {
-      $(\"div\").show(\"slow\");
-    } else {
-      $(\"div\").slideUp();
-    }
-  });
-
-  ") (text . "") (css . "
-  div { background:#3d9a44; margin:3px; width:80px;
-    height:40px; float:left; }
-  ") (text . "") (html . "Click me!
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-
-  <div></div>") (text . "")) ((text . "") (text . "Animates the parent paragraph to slide up, completing the animation
+$( document.body ).click(function() {
+  if ( $( \"div:first\" ).is( \":hidden\" ) ) {
+    $( \"div\" ).show( \"slow\" );
+  } else {
+    $( \"div\" ).slideUp();
+  }
+});
+") (text . "") (css . "
+  div {
+    background: #3d9a44;
+    margin: 3px;
+    width: 80px;
+    height: 40px;
+    float: left;
+  }
+") (text . "") (html . "
+Click me!
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+") (text . "")) ((text . "") (text . "Animates the parent paragraph to slide up, completing the animation
 within 200 milliseconds. Once the animation is done, it displays an
 alert.
 ") (text . "") (js . "
-  $(\"button\").click(function () {
-    $(this).parent().slideUp(\"slow\", function () {
-      $(\"#msg\").text($(\"button\", this).text() + \" has completed.\");
-    });
+$( \"button\" ).click(function() {
+  $( this ).parent().slideUp( \"slow\", function() {
+    $( \"#msg\" ).text( $( \"button\", this ).text() + \" has completed.\" );
   });
-
+});
 ") (text . "") (css . "
- div { margin:2px; }
-") (text . "") (html . "<div>
+ div {
+   margin: 2px;
+  }
+") (text . "") (html . "
+<div>
   <button>Hide One</button>
-  <input type=\"text\" value=\"One\" />
-
+  <input type=\"text\" value=\"One\">
 </div>
+
 <div>
   <button>Hide Two</button>
-  <input type=\"text\" value=\"Two\" />
-
+  <input type=\"text\" value=\"Two\">
 </div>
+
 <div>
   <button>Hide Three</button>
-  <input type=\"text\" value=\"Three\" />
-
+  <input type=\"text\" value=\"Three\">
 </div>
-<div id=\"msg\"></div>") (text . ""))))) jquery-doc-hash)
+
+<div id=\"msg\"></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "stop" jquery-doc-methods)
 
@@ -15103,17 +17723,21 @@ the animations in the queue represented by that string will be stopped.
 ") (text . "") (text . "The usefulness of the .stop() method is evident when we need to animate
 an element on mouseenter and mouseleave:
 
-") (text . "") (js . "<div id=\"hoverme\">
+") (text . "") (js . "
+<div id=\"hoverme\">
   Hover me
-  <img id=\"hoverme\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
-</div>") (text . "") (text . "We can create a nice fade effect without the common problem of multiple
+  <img id=\"hoverme\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+</div>
+    ") (text . "") (text . "We can create a nice fade effect without the common problem of multiple
 queued animations by adding .stop(true, true) to the chain:
 
-") (text . "") (js . "$('#hoverme-stop-2').hover(function() {
-  $(this).find('img').stop(true, true).fadeOut();
+") (text . "") (js . "
+$( \"#hoverme-stop-2\" ).hover(function() {
+  $( this ).find( \"img\" ).stop( true, true ).fadeOut();
 }, function() {
-  $(this).find('img').stop(true, true).fadeIn();
-});") (text . "") (text . "Toggling Animations
+  $( this ).find( \"img\" ).stop( true, true ).fadeIn();
+});
+    ") (text . "") (text . "Toggling Animations
 
 
 ") (text . "") (text . "As of jQuery 1.7, stopping a toggled animation prematurely with .stop()
@@ -15123,59 +17747,65 @@ would cause the animation to lose track of its state (if jumpToEnd was
 false). Any subsequent animations would start at a new \"half-way\"
 state, sometimes resulting in the element disappearing. To observe the
 new behavior, see the final example below.
-") (text . "") (text . "  Animations may be stopped globally by setting the property $.fx.off
-  to true. When this is done, all animation methods will immediately
-  set elements to their final state when called, rather than
-  displaying an effect.
+") (text . "") (text . "Animations may be stopped globally by setting the property $.fx.off to
+true. When this is done, all animation methods will immediately set
+elements to their final state when called, rather than displaying an
+effect.
 ") (text . "")) ("examples" ((text . "") (text . "Click the Go button once to start the animation, then click the STOP
 button to stop it where it`s currently positioned. Another option is to
 click several buttons to queue them up and see that stop just kills the
 currently playing one.
 ") (text . "") (js . "
-/* Start animation */
-$(\"#go\").click(function(){
-$(\".block\").animate({left: '+=100px'}, 2000);
+// Start animation
+$( \"#go\" ).click(function() {
+  $( \".block\" ).animate({ left: \"+=100px\" }, 2000 );
 });
 
-/* Stop animation when button is clicked */
-$(\"#stop\").click(function(){
-$(\".block\").stop();
+// Stop animation when button is clicked
+$( \"#stop\" ).click(function() {
+  $( \".block\" ).stop();
 });
 
-/* Start animation in the opposite direction */
-$(\"#back\").click(function(){
-$(\".block\").animate({left: '-=100px'}, 2000);
+// Start animation in the opposite direction
+$( \"#back\" ).click(function() {
+  $( \".block\" ).animate({ left: \"-=100px\" }, 2000 );
 });
-
-") (text . "") (html . "<button id=\"go\">Go</button>
+") (text . "") (html . "
+<button id=\"go\">Go</button>
 <button id=\"stop\">STOP!</button>
 <button id=\"back\">Back</button>
-<div class=\"block\"></div>") (text . "") (css . "div {
-position: absolute;
-background-color: #abc;
-left: 0px;
-top:30px;
-width: 60px;
-height: 60px;
-margin: 5px;
-}
+<div class=\"block\"></div>
+") (text . "") (css . "
+  div {
+    position: absolute;
+    background-color: #abc;
+    left: 0px;
+    top: 30px;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+  }
 ") (text . "")) ((text . "") (text . "Click the slideToggle button to start the animation, then click again
 before the animation is completed. The animation will toggle the other
 direction from the saved starting point.
 ") (text . "") (js . "
-var $block = $('.block');
-/* Toggle a sliding animation animation */
-$('#toggle').on('click', function() {
-    $block.stop().slideToggle(1000);
+var $block = $( \".block\" );
+
+// Toggle a sliding animation animation
+$( \"#toggle\" ).on( \"click\", function() {
+  $block.stop().slideToggle( 1000 );
 });
-") (text . "") (html . "<button id=\"toggle\">slideToggle</button>
-<div class=\"block\"></div>") (text . "") (css . ".block {
-background-color: #abc;
-border: 2px solid black;
-width: 200px;
-height: 80px;
-margin: 10px;
-}
+") (text . "") (html . "
+<button id=\"toggle\">slideToggle</button>
+<div class=\"block\"></div>
+") (text . "") (css . "
+  .block {
+    background-color: #abc;
+    border: 2px solid black;
+    width: 200px;
+    height: 80px;
+    margin: 10px;
+  }
 ") (text . ""))))) jquery-doc-hash)
 
 (push "submit" jquery-doc-methods)
@@ -15189,42 +17819,47 @@ margin: 10px;
 " nil nil)) nil) ("desc" (text . "Bind an event handler to the \"submit\" JavaScript event, or trigger that
 event on an element.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`submit`, handler) in the first
-variation, and .trigger(`submit`) in the third.
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"submit\", handler ) in the first
+variation, and .trigger( \"submit\" ) in the third.
 
 ") (text . "") (text . "The submit event is sent to an element when the user is attempting to
 submit a form. It can only be attached to <form> elements. Forms can be
 submitted either by clicking an explicit <input type=\"submit\">, <input
 type=\"image\">, or <button type=\"submit\">, or by pressing Enter when
 certain form elements have focus.
-") (text . "") (text . "  Depending on the browser, the Enter key may only cause a form
-  submission if the form has exactly one text field, or only when
-  there is a submit button present. The interface should not rely on a
-  particular behavior for this key unless the issue is forced by
-  observing the keypress event for presses of the Enter key.
+") (text . "") (text . "Depending on the browser, the Enter key may only cause a form
+submission if the form has exactly one text field, or only when there
+is a submit button present. The interface should not rely on a
+particular behavior for this key unless the issue is forced by
+observing the keypress event for presses of the Enter key.
 ") (text . "") (text . "For example, consider the HTML:
 
 
-") (text . "") (js . "<form id=\"target\" action=\"destination.html\">
-  <input type=\"text\" value=\"Hello there\" />
-  <input type=\"submit\" value=\"Go\" />
+") (text . "") (js . "
+<form id=\"target\" action=\"destination.html\">
+  <input type=\"text\" value=\"Hello there\">
+  <input type=\"submit\" value=\"Go\">
 </form>
 <div id=\"other\">
   Trigger the handler
 </div>") (text . "") (text . "The event handler can be bound to the form:
 
 
-") (text . "") (js . "$('#target').submit(function() {
-  alert('Handler for .submit() called.');
-  return false;
-});") (text . "") (text . "Now when the form is submitted, the message is alerted. This happens
+") (text . "") (js . "
+$( \"#target\" ).submit(function( event ) {
+  alert( \"Handler for .submit() called.\" );
+  event.preventDefault();
+});
+    ") (text . "") (text . "Now when the form is submitted, the message is alerted. This happens
 prior to the actual submission, so we can cancel the submit action by
 calling .preventDefault() on the event object or by returning false
 from our handler. We can trigger the event manually when another
 element is clicked:
-") (text . "") (js . "$('#other').click(function() {
-  $('#target').submit();
-});") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
+") (text . "") (js . "
+$( \"#other\" ).click(function() {
+  $( \"#target\" ).submit();
+});
+    ") (text . "") (text . "After this code executes, clicks on Trigger the handler will also
 display the message. In addition, the default submit action on the form
 will be fired, so the form will be submitted.
 ") (text . "") (text . "The JavaScript submit event does not bubble in Internet Explorer.
@@ -15235,36 +17870,47 @@ normalized the event`s behavior.
 variable is set, try:
 
 ") (text . "") (js . "
-
-$(\"form\").submit(function() {
-  if ($(\"input:first\").val() == \"correct\") {
-    $(\"span\").text(\"Validated...\").show();
-    return true;
+$( \"form\" ).submit(function( event ) {
+  if ( $( \"input:first\" ).val() === \"correct\" ) {
+    $( \"span\" ).text( \"Validated...\" ).show();
+    return;
   }
-  $(\"span\").text(\"Not valid!\").show().fadeOut(1000);
-  return false;
+
+  $( \"span\" ).text( \"Not valid!\" ).show().fadeOut( 1000 );
+  event.preventDefault();
 });
 ") (text . "") (css . "
-
-  p { margin:0; color:blue; }
-  div,p { margin-left:10px; }
-  span { color:red; }
-  ") (text . "") (html . "<p>Type 'correct' to validate.</p>
-  <form action=\"javascript:alert('success!');\">
-    <div>
-      <input type=\"text\" />
-
-      <input type=\"submit\" />
-    </div>
-  </form>
-  <span></span>") (text . "")) ((text . "") (text . "If you`d like to prevent forms from being submitted unless a flag
+  p {
+    margin: 0;
+    color: blue;
+  }
+  div,p {
+    margin-left: 10px;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Type 'correct' to validate.</p>
+<form action=\"javascript:alert( 'success!' );\">
+  <div>
+    <input type=\"text\">
+    <input type=\"submit\">
+  </div>
+</form>
+<span></span>
+") (text . "")) ((text . "") (text . "If you`d like to prevent forms from being submitted unless a flag
 variable is set, try:
 
-") (text . "") (js . "$(\"form\").submit( function () {
+") (text . "") (js . "
+$( \"form\" ).submit(function() {
   return this.some_flag_variable;
-} );") (text . "")) ((text . "") (text . "To trigger the submit event on the first form on the page, try:
+});
+") (text . "")) ((text . "") (text . "To trigger the submit event on the first form on the page, try:
 
-") (text . "") (js . "$(\"form:first\").submit();") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"form:first\" ).submit();
+") (text . ""))))) jquery-doc-hash)
 
 (push "text" jquery-doc-methods)
 
@@ -15276,14 +17922,15 @@ documents. The result of the .text() method is a string containing the
 combined text of all matched elements. (Due to variations in the HTML
 parsers in different browsers, the text returned may vary in newlines
 and other white space.) Consider the following HTML:
-") (text . "") (html . "<div class=\"demo-container\">
-      <div class=\"demo-box\">Demonstration Box</div>
+") (text . "") (html . "
+<div class=\"demo-container\">
+  <div class=\"demo-box\">Demonstration Box</div>
   <ul>
-  <li>list item 1</li>
-  <li>list <strong>item</strong> 2</li>
+    <li>list item 1</li>
+    <li>list <strong>item</strong> 2</li>
   </ul>
-  </div>
-") (text . "") (text . "The code $(`div.demo-container`).text() would produce the following
+</div>
+      ") (text . "") (text . "The code $( \"div.demo-container\" ).text() would produce the following
 result:
 
 ") (text . "") (text . "Demonstration Box list item 1 list item 2
@@ -15299,13 +17946,20 @@ CDATA nodes as well as element nodes.
 the html of the last paragraph to show it is just text (the red bold is
 gone).
 ") (text . "") (js . "
-var str = $(\"p:first\").text();
-$(\"p:last\").html(str);
+var str = $( \"p:first\" ).text();
+$( \"p:last\" ).html( str );
 ") (text . "") (css . "
-  p { color:blue; margin:8px; }
-  b { color:red; }
-  ") (text . "") (html . "<p><b>Test</b> Paragraph.</p>
-  <p></p>") (text . ""))))) jquery-doc-hash)
+  p {
+    color: blue;
+    margin: 8px;
+  }
+  b {
+    color: red;
+  }
+") (text . "") (html . "
+<p><b>Test</b> Paragraph.</p>
+<p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "text" jquery-doc-methods)
 
@@ -15322,46 +17976,59 @@ documents.
 
 ") (text . "") (text . "We need to be aware that this method escapes the string provided as
 necessary so that it will render correctly in HTML. To do so, it calls
-the DOM method .createTextNode(), which replaces special characters
-with their HTML entity equivalents (such as &lt; for <). Consider the
-following HTML:
-") (text . "") (html . "<div class=\"demo-container\">
+the DOM method .createTextNode(), does not interpret the string as
+HTML. Consider the following HTML:
+") (text . "") (html . "
+<div class=\"demo-container\">
   <div class=\"demo-box\">Demonstration Box</div>
   <ul>
     <li>list item 1</li>
     <li>list <strong>item</strong> 2</li>
   </ul>
 </div>
-") (text . "") (text . "The code $(`div.demo-container`).text(`<p>This is a test.</p>`); will
-produce the following DOM output:
+      ") (text . "") (text . "The code $( \"div.demo-container\" ).text( \"<p>This is a test.</p>\" );
+will produce the following DOM output:
 
-") (text . "") (js . "<div class=\"demo-container\">
-&lt;p&gt;This is a test.&lt;/p&gt;
-</div>") (text . "") (text . "It will appear on a rendered page as though the tags were exposed, like
+") (text . "") (js . "
+<div class=\"demo-container\">
+  &lt;p&gt;This is a test.&lt;/p&gt;
+</div>
+      ") (text . "") (text . "It will appear on a rendered page as though the tags were exposed, like
 this:
 
-") (text . "") (html . "<p>This is a test</p>") (text . "") (text . "The .text() method cannot be used on input elements. For input field
+") (text . "") (html . "
+<p>This is a test</p>
+      ") (text . "") (text . "The .text() method cannot be used on input elements. For input field
 text, use the .val() method.
 
 ") (text . "") (text . "As of jQuery 1.4, the .text() method allows us to set the text content
 by passing in a function.
 
-") (text . "") (js . "$('ul li').text(function(index) {
-  return 'item number ' + (index + 1);
-});") (text . "") (text . "Given an unordered list with three <li> elements, this example will
+") (text . "") (js . "
+$( \"ul li\" ).text(function( index ) {
+  return \"item number \" + ( index + 1 );
+});
+      ") (text . "") (text . "Given an unordered list with three <li> elements, this example will
 produce the following DOM output:
 
-") (text . "") (html . "<ul>
+") (text . "") (html . "
+<ul>
   <li>item number 1</li>
   <li>item number 2</li>
   <li>item number 3</li>
 </ul>
-") (text . "")) ("examples" ((text . "") (text . "Add text to the paragraph (notice the bold tag is escaped).
+      ") (text . "")) ("examples" ((text . "") (text . "Add text to the paragraph (notice the bold tag is escaped).
 
-") (text . "") (js . "$(\"p\").text(\"<b>Some</b> new text.\");") (text . "") (css . "
-
-  p { color:blue; margin:8px; }
-  ") (text . "") (html . "<p>Test Paragraph.</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).text( \"<b>Some</b> new text.\" );
+") (text . "") (css . "
+  p {
+    color: blue;
+    margin: 8px;
+  }
+") (text . "") (html . "
+<p>Test Paragraph.</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "toArray" jquery-doc-methods)
 
@@ -15371,7 +18038,9 @@ produce the following DOM output:
 ")) ("longdesc" (text . "") (text . ".toArray() returns all of the elements in the jQuery set:
 
 
-") (text . "") (js . "alert($('li').toArray());") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
+") (text . "") (js . "
+alert( $( \"li\" ).toArray() );
+    ") (text . "") (text . "All of the matched DOM nodes are returned by this call, contained in a
 standard array:
 
 ") (text . "") (text . "[<li id=\"foo\">, <li id=\"bar\">]
@@ -15381,22 +18050,26 @@ standard array:
 Array, then uses the built-in reverse-method to reverse that array.
 
 ") (text . "") (js . "
-function disp(divs) {
+function disp( divs ) {
   var a = [];
-  for (var i = 0; i < divs.length; i++) {
-    a.push(divs[i].innerHTML);
+  for ( var i = 0; i < divs.length; i++ ) {
+    a.push( divs[ i ].innerHTML );
   }
-  $(\"span\").text(a.join(\" \"));
+  $( \"span\" ).text( a.join( \" \" ) );
 }
 
-disp( $(\"div\").toArray().reverse() );
+disp( $( \"div\" ).toArray().reverse() );
 ") (text . "") (css . "
-  span { color:red; }
-  ") (text . "") (html . "Reversed - <span></span>
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+Reversed - <span></span>
 
-  <div>One</div>
-  <div>Two</div>
-  <div>Three</div>") (text . ""))))) jquery-doc-hash)
+<div>One</div>
+<div>Two</div>
+<div>Three</div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "toggle" jquery-doc-methods)
 
@@ -15409,23 +18082,30 @@ disp( $(\"div\").toArray().reverse() );
 " "true" nil))) ("desc" (text . "Bind two or more handlers to the matched elements, to be executed on
 alternate clicks.
 
-")) ("longdesc" (text . "") (text . "  Note: jQuery also provides an animation method named .toggle() that
-  toggles the visibility of elements. Whether the animation or the
-  event method is fired depends on the set of arguments passed.
+")) ("longdesc" (text . "") (text . "Note: This method signature was deprecated in jQuery 1.8 and removed in
+jQuery 1.9. jQuery also provides an animation method named .toggle()
+that toggles the visibility of elements. Whether the animation or the
+event method is fired depends on the set of arguments passed.
 ") (text . "") (text . "The .toggle() method binds a handler for the click event, so the rules
 outlined for the triggering of click apply here as well.
 
-") (text . "") (js . "For example, consider the HTML:
+") (text . "") (text . "For example, consider the HTML:
+
+
+") (text . "") (js . "
 <div id=\"target\">
   Click here
-</div>") (text . "") (text . "Event handlers can then be bound to the <div>:
+</div>
+    ") (text . "") (text . "Event handlers can then be bound to the <div>:
 
 
-") (text . "") (js . "$('#target').toggle(function() {
-  alert('First handler for .toggle() called.');
+") (text . "") (js . "
+$( \"#target\" ).toggle(function() {
+  alert( \"First handler for .toggle() called.\" );
 }, function() {
-  alert('Second handler for .toggle() called.');
-});") (text . "") (text . "As the element is clicked repeatedly, the messages alternate:
+  alert( \"Second handler for .toggle() called.\" );
+});
+    ") (text . "") (text . "As the element is clicked repeatedly, the messages alternate:
 
 
 ") (text . "") (text . "First handler for .toggle() called.
@@ -15450,14 +18130,15 @@ called on the element.
 ") (text . "")) ("examples" ((text . "") (text . "Toggle a style on table cells. (Not recommended. Use .toggleClass()
 instead.):
 
-") (text . "") (js . "$(\"td\").toggle(
-  function () {
-    $(this).addClass(\"selected\");
-  },
-  function () {
-    $(this).removeClass(\"selected\");
+") (text . "") (js . "
+$( \"td\" ).toggle(
+  function() {
+    $( this ).addClass( \"selected\" );
+  }, function() {
+    $( this ).removeClass( \"selected\" );
   }
-);") (text . ""))))) jquery-doc-hash)
+);
+") (text . ""))))) jquery-doc-hash)
 
 (push "toggle" jquery-doc-methods)
 
@@ -15469,7 +18150,7 @@ instead.):
 
 " nil nil)) (("duration" "A string or number determining how long the animation will run.
 
-" "true" nil) ("easing" "A string indicating which easing function to use for the transition.
+" nil nil) ("easing" "A string indicating which easing function to use for the transition.
 
 " "true" nil) ("complete" "A function to call once the animation is complete.
 
@@ -15477,13 +18158,15 @@ instead.):
 
 " nil nil))) ("desc" (text . "Display or hide the matched elements.
 
-")) ("longdesc" (text . "") (text . "  Note: The event handling suite also has a method named .toggle().
-  Which one is fired depends on the set of arguments passed.
+")) ("longdesc" (text . "") (text . "Note: The event handling suite also has a method named .toggle(). Which
+one is fired depends on the set of arguments passed.
 
 ") (text . "") (text . "With no parameters, the .toggle() method simply toggles the visibility
 of elements:
 
-") (text . "") (js . "$('.target').toggle();") (text . "") (text . "The matched elements will be revealed or hidden immediately, with no
+") (text . "") (js . "
+$( \".target\" ).toggle();
+    ") (text . "") (text . "The matched elements will be revealed or hidden immediately, with no
 animation, by changing the CSS display property. If the element is
 initially displayed, it will be hidden; if hidden, it will be shown.
 The display property is saved and restored as needed. If an element has
@@ -15515,19 +18198,21 @@ element, not once for the animation as a whole.
 ") (text . "") (text . "We can animate any element, such as a simple image:
 
 
-") (text . "") (js . "<div id=\"clickme\">
+") (text . "") (js . "
+<div id=\"clickme\">
   Click here
 </div>
-<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\" />
-") (text . "") (text . "We will cause .toggle() to be called when another element is clicked:
+<img id=\"book\" src=\"book.png\" alt=\"\" width=\"100\" height=\"123\">
+    ") (text . "") (text . "We will cause .toggle() to be called when another element is clicked:
 
 
-") (text . "") (js . "$('#clickme').click(function() {
-  $('#book').toggle('slow', function() {
+") (text . "") (js . "
+$( \"#clickme\" ).click(function() {
+  $( \"#book\" ).toggle( \"slow\", function() {
     // Animation complete.
   });
 });
-") (text . "") (text . "With the element initially shown, we can hide it slowly with the first
+    ") (text . "") (text . "With the element initially shown, we can hide it slowly with the first
 click:
 
 ") (text . "") (text . "
@@ -15540,47 +18225,56 @@ click:
 ") (text . "") (text . "The second version of the method accepts a Boolean parameter. If this
 parameter is true, then the matched elements are shown; if false, the
 elements are hidden. In essence, the statement:
-") (text . "") (js . "$('#foo').toggle(showOrHide);") (text . "") (text . "is equivalent to:
+") (text . "") (js . "
+$( \"#foo\" ).toggle( showOrHide );
+    ") (text . "") (text . "is equivalent to:
 
-
-") (text . "") (js . "if ( showOrHide == true ) {
-  $('#foo').show();
-} else if ( showOrHide == false ) {
-  $('#foo').hide();
-}
-") (text . "")) ("examples" ((text . "") (text . "Toggles all paragraphs.
 
 ") (text . "") (js . "
+if ( showOrHide === true ) {
+  $( \"#foo\" ).show();
+} else if ( showOrHide === false ) {
+  $( \"#foo\" ).hide();
+}
+    ") (text . "")) ("examples" ((text . "") (text . "Toggles all paragraphs.
 
-$(\"button\").click(function () {
-$(\"p\").toggle();
+") (text . "") (js . "
+$( \"button\" ).click(function() {
+  $( \"p\" ).toggle();
 });
-") (text . "") (html . "<button>Toggle</button>
+") (text . "") (html . "
+<button>Toggle</button>
 <p>Hello</p>
-<p style=\"display: none\">Good Bye</p>") (text . "")) ((text . "") (text . "Animates all paragraphs to be shown if they are hidden and hidden if
+<p style=\"display: none\">Good Bye</p>
+") (text . "")) ((text . "") (text . "Animates all paragraphs to be shown if they are hidden and hidden if
 they are visible, completing the animation within 600 milliseconds.
 
 ") (text . "") (js . "
-$(\"button\").click(function () {
-$(\"p\").toggle(\"slow\");
+$( \"button\" ).click(function() {
+  $( \"p\" ).toggle( \"slow\" );
 });
 ") (text . "") (css . "
-p { background:#dad;
-font-weight:bold;
-font-size:16px; }
-") (text . "") (html . "<button>Toggle 'em</button>
-
+  p {
+    background: #dad;
+    font-weight: bold;
+    font-size: 16px;
+  }
+") (text . "") (html . "
+<button>Toggle 'em</button>
 <p>Hiya</p>
-<p>Such interesting text, eh?</p>") (text . "")) ((text . "") (text . "Shows all paragraphs, then hides them all, back and forth.
+<p>Such interesting text, eh?</p>
+") (text . "")) ((text . "") (text . "Shows all paragraphs, then hides them all, back and forth.
 
 ") (text . "") (js . "
 var flip = 0;
-$(\"button\").click(function () {
-$(\"p\").toggle( flip++ % 2 == 0 );
+$( \"button\" ).click(function() {
+  $( \"p\" ).toggle( flip++ % 2 === 0 );
 });
-") (text . "") (html . "<button>Toggle</button>
+") (text . "") (html . "
+<button>Toggle</button>
 <p>Hello</p>
-<p style=\"display: none\">Good Bye</p>") (text . ""))))) jquery-doc-hash)
+<p style=\"display: none\">Good Bye</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "toggleClass" jquery-doc-methods)
 
@@ -15611,90 +18305,124 @@ first version, if an element in the matched set of elements already has
 the class, then it is removed; if an element does not have the class,
 then it is added. For example, we can apply .toggleClass() to a simple
 <div>:
-") (text . "") (html . "<div class=\"tumble\">Some text.</div>
-    ") (text . "") (text . "The first time we apply $(`div.tumble`).toggleClass(`bounce`), we get
-the following:
+") (text . "") (html . "
+<div class=\"tumble\">Some text.</div>
+    ") (text . "") (text . "The first time we apply $( \"div.tumble\" ).toggleClass( \"bounce\" ), we
+get the following:
 
-") (text . "") (html . "<div class=\"tumble bounce\">Some text.</div>
-    ") (text . "") (text . "The second time we apply $(`div.tumble`).toggleClass(`bounce`), the
+") (text . "") (html . "
+<div class=\"tumble bounce\">Some text.</div>
+    ") (text . "") (text . "The second time we apply $( \"div.tumble\" ).toggleClass( \"bounce\" ), the
 <div> class is returned to the single tumble value:
 
-") (text . "") (html . "<div class=\"tumble\">Some text.</div>") (text . "") (text . "Applying .toggleClass(`bounce spin`) to the same <div> alternates
+") (text . "") (html . "<div class=\"tumble\">Some text.</div>") (text . "") (text . "Applying .toggleClass( \"bounce spin\" ) to the same <div> alternates
 between <div class=\"tumble bounce spin\"> and <div class=\"tumble\">.
 
 ") (text . "") (text . "The second version of .toggleClass() uses the second parameter for
 determining whether the class should be added or removed. If this
 parameter`s value is true, then the class is added; if false, the class
 is removed. In essence, the statement:
-") (text . "") (js . "$('#foo').toggleClass(className, addOrRemove);") (text . "") (text . "is equivalent to:
+") (text . "") (js . "
+$( \"#foo\" ).toggleClass( className, addOrRemove );
+    ") (text . "") (text . "is equivalent to:
 
 
-") (text . "") (js . "if (addOrRemove) {
-    $('#foo').addClass(className);
-  }
-  else {
-    $('#foo').removeClass(className);
-  }
-  ") (text . "") (text . "As of jQuery 1.4, if no arguments are passed to .toggleClass(), all
+") (text . "") (js . "
+if ( addOrRemove ) {
+  $( \"#foo\" ).addClass( className );
+} else {
+  $( \"#foo\" ).removeClass( className );
+}
+    ") (text . "") (text . "As of jQuery 1.4, if no arguments are passed to .toggleClass(), all
 class names on the element the first time .toggleClass() is called will
 be toggled. Also as of jQuery 1.4, the class name to be toggled can be
 determined by passing in a function.
-") (text . "") (js . "$('div.foo').toggleClass(function() {
-  if ($(this).parent().is('.bar')) {
-    return 'happy';
+") (text . "") (js . "
+$( \"div.foo\" ).toggleClass(function() {
+  if ( $( this ).parent().is( \".bar\" ) ) {
+    return \"happy\";
   } else {
-    return 'sad';
+    return \"sad\";
   }
-});") (text . "") (text . "This example will toggle the happy class for <div class=\"foo\"> elements
+});
+") (text . "") (text . "This example will toggle the happy class for <div class=\"foo\"> elements
 if their parent element has a class of bar; otherwise, it will toggle
 the sad class.
 ") (text . "")) ("examples" ((text . "") (text . "Toggle the class `highlight` when a paragraph is clicked.
 
 ") (text . "") (js . "
-    $(\"p\").click(function () {
-      $(this).toggleClass(\"highlight\");
-    });
+$( \"p\" ).click(function() {
+  $( this ).toggleClass( \"highlight\" );
+});
 ") (text . "") (css . "
-
-  p { margin: 4px; font-size:16px; font-weight:bolder;
-      cursor:pointer; }
-  .blue { color:blue; }
-  .highlight { background:yellow; }
-  ") (text . "") (html . "<p class=\"blue\">Click to toggle</p>
-  <p class=\"blue highlight\">highlight</p>
-  <p class=\"blue\">on these</p>
-  <p class=\"blue\">paragraphs</p>") (text . "")) ((text . "") (text . "Add the \"highlight\" class to the clicked paragraph on every third click
+  p {
+    margin: 4px;
+    font-size: 16px;
+    font-weight: bolder;
+    cursor: pointer;
+  }
+  .blue {
+    color: blue;
+  }
+  .highlight {
+    background: yellow;
+  }
+") (text . "") (html . "
+<p class=\"blue\">Click to toggle</p>
+<p class=\"blue highlight\">highlight</p>
+<p class=\"blue\">on these</p>
+<p class=\"blue\">paragraphs</p>
+") (text . "")) ((text . "") (text . "Add the \"highlight\" class to the clicked paragraph on every third click
 of that paragraph, remove it every first and second click.
 
 ") (text . "") (js . "
 var count = 0;
-$(\"p\").each(function() {
-  var $thisParagraph = $(this);
+$( \"p\" ).each(function() {
+  var $thisParagraph = $( this );
   var count = 0;
   $thisParagraph.click(function() {
     count++;
-    $thisParagraph.find(\"span\").text('clicks: ' + count);
-    $thisParagraph.toggleClass(\"highlight\", count % 3 == 0);
+    $thisParagraph.find( \"span\" ).text( \"clicks: \" + count );
+    $thisParagraph.toggleClass( \"highlight\", count % 3 === 0 );
   });
 });
+") (text . "") (css . "
+  p {
+    margin: 4px;
+    font-size: 16px;
+    font-weight: bolder;
+    cursor: pointer;
+  }
+  .blue {
+    color: blue;
+  }
+  .highlight {
+    background: red;
+  }
+") (text . "") (html . "
+<p class=\"blue\">Click to toggle (<span>clicks: 0</span>)</p>
+<p class=\"blue highlight\">highlight (<span>clicks: 0</span>)</p>
+<p class=\"blue\">on these (<span>clicks: 0</span>)</p>
+<p class=\"blue\">paragraphs (<span>clicks: 0</span>)</p>
+") (text . "")) ((text . "") (text . "Toggle the class name(s) indicated on the buttons for each div.
 
 ") (text . "") (css . "
-  p { margin: 4px; font-size:16px; font-weight:bolder;
-      cursor:pointer; }
-  .blue { color:blue; }
-  .highlight { background:red; }
-  ") (text . "") (html . "<p class=\"blue\">Click to toggle (<span>clicks: 0</span>)</p>
-  <p class=\"blue highlight\">highlight (<span>clicks: 0</span>)</p>
-  <p class=\"blue\">on these (<span>clicks: 0</span>)</p>
-
-  <p class=\"blue\">paragraphs (<span>clicks: 0</span>)</p>") (text . "")) ((text . "") (text . "Toggle the class name(s) indicated on the buttons for each div.
-
-") (text . "") (css . "
-.wrap > div { float: left; width: 100px; margin: 1em 1em 0 0;
-              padding=left: 3px; border: 1px solid #abc; }
-div.a { background-color: aqua; }
-div.b { background-color: burlywood; }
-div.c { background-color: cornsilk; }
+  .wrap > div {
+    float: left;
+    width: 100px;
+    margin: 1em 1em 0 0;
+    padding=left: 3px;
+    border: 1px solid #abc;
+  }
+  div.a {
+    background-color: aqua;
+  }
+  div.b {
+    background-color: burlywood;
+  }
+  div.c {
+    background-color: cornsilk;
+  }
 ") (text . "") (html . "
 <div class=\"buttons\">
   <button>toggle</button>
@@ -15710,26 +18438,26 @@ div.c { background-color: cornsilk; }
   <div class=\"a c\"></div>
 </div>
 ") (text . "") (js . "
-var cls = ['', 'a', 'a b', 'a b c'];
-var divs = $('div.wrap').children();
+var cls = [ \"\", \"a\", \"a b\", \"a b c\" ];
+var divs = $( \"div.wrap\" ).children();
 var appendClass = function() {
   divs.append(function() {
-    return '<div>' + (this.className || 'none') + '</div>';
+    return \"<div>\" + ( this.className || \"none\" ) + \"</div>\";
   });
 };
 
 appendClass();
 
-$('button').on('click', function() {
+$( \"button\" ).on( \"click\", function() {
   var tc = this.className || undefined;
-  divs.toggleClass(tc);
+  divs.toggleClass( tc );
   appendClass();
 });
 
-$('a').on('click', function(event) {
+$( \"a\" ).on( \"click\", function( event ) {
   event.preventDefault();
-  divs.empty().each(function(i) {
-    this.className = cls[i];
+  divs.empty().each(function( i ) {
+    this.className = cls[ i ];
   });
   appendClass();
 });
@@ -15743,7 +18471,9 @@ $('a').on('click', function(event) {
 
 " "true" nil)) (("event" "A jQuery.Event object.
 
-" nil nil))) ("desc" (text . "Execute all handlers and behaviors attached to the matched elements for
+" nil nil) ("extraParameters" "Additional parameters to pass along to the event handler.
+
+" "true" nil))) ("desc" (text . "Execute all handlers and behaviors attached to the matched elements for
 the given event type.
 
 ")) ("longdesc" (text . "") (text . "Any event handlers attached with .on() or one of its shortcut methods
@@ -15751,10 +18481,12 @@ are triggered when the corresponding event occurs. They can be fired
 manually, however, with the .trigger() method. A call to .trigger()
 executes the handlers in the same order they would be if the event were
 triggered naturally by the user:
-") (text . "") (js . "$('#foo').on('click', function() {
-      alert($(this).text());
-    });
-    $('#foo').trigger('click');") (text . "") (text . "As of jQuery 1.3, .trigger()ed events bubble up the DOM tree; an event
+") (text . "") (js . "
+$( \"#foo\" ).on( \"click\", function() {
+  alert( $( this ).text() );
+});
+$( \"#foo\" ).trigger( \"click\" );
+   ") (text . "") (text . "As of jQuery 1.3, .trigger()ed events bubble up the DOM tree; an event
 handler can stop the bubbling by returning false from the handler or
 calling the .stopPropagation() method on the event object passed into
 the event. Although .trigger() simulates an event activation, complete
@@ -15767,17 +18499,18 @@ event, use .triggerHandler() instead.
 argument to .trigger() can become useful. For example, suppose we have
 bound a handler for the custom event to our element instead of the
 built-in click event as we did above:
-") (text . "") (js . "$('#foo').on('custom', function(event, param1, param2) {
-  alert(param1 + \"\\n\" + param2);
+") (text . "") (js . "
+$( \"#foo\" ).on( \"custom\", function( event, param1, param2 ) {
+  alert( param1 + \"\\n\" + param2 );
 });
-$('#foo').trigger('custom', ['Custom', 'Event']);
-") (text . "") (text . "The event object is always passed as the first parameter to an event
-handler, but if additional parameters are specified during a .trigger()
-call, these parameters will be passed along to the handler as well. To
-pass more than one parameter, use an array as shown here. As of jQuery
-1.6.2, a single parameter can be passed without using an array.
-") (text . "") (text . "Note the difference between the extra parameters we`re passing here and
-the eventData parameter to the .on() method. Both are mechanisms for
+$( \"#foo\").trigger( \"custom\", [ \"Custom\", \"Event\" ] );
+    ") (text . "") (text . "The event object is always passed as the first parameter to an event
+handler. An array of arguments can also be passed to the .trigger()
+call, and these parameters will be passed along to the handler as well
+following the event object. As of jQuery 1.6.2, single string or
+numeric argument can be passed without being wrapped in an array.
+") (text . "") (text . "Note the difference between the extra parameters passed here and the
+eventData parameter to the .on() method. Both are mechanisms for
 passing information to an event handler, but the extraParameters
 argument to .trigger() allows information to be determined at the time
 the event is triggered, while the eventData argument to .on() requires
@@ -15786,63 +18519,80 @@ bound.
 ") (text . "") (text . "The .trigger() method can be used on jQuery collections that wrap plain
 JavaScript objects similar to a pub/sub mechanism; any event handlers
 bound to the object will be called when the event is triggered.
-") (text . "") (text . "  Note: For both plain objects and DOM objects, if a triggered event
-  name matches the name of a property on the object, jQuery will
-  attempt to invoke the property as a method if no event handler calls
-  event.preventDefault(). If this behavior is not desired, use
-  .triggerHandler() instead.
+") (text . "") (text . "Note: For both plain objects and DOM objects other than window, if a
+triggered event name matches the name of a property on the object,
+jQuery will attempt to invoke the property as a method if no event
+handler calls event.preventDefault(). If this behavior is not desired,
+use .triggerHandler() instead.
 ") (text . "")) ("examples" ((text . "") (text . "Clicks to button #2 also trigger a click for button #1.
 
 ") (text . "") (js . "
-$(\"button:first\").click(function () {
-update($(\"span:first\"));
-});
-$(\"button:last\").click(function () {
-$(\"button:first\").trigger('click');
-
-update($(\"span:last\"));
+$( \"button:first\" ).click(function() {
+  update( $( \"span:first\" ) );
 });
 
-function update(j) {
-var n = parseInt(j.text(), 10);
-j.text(n + 1);
+$( \"button:last\" ).click(function() {
+  $( \"button:first\" ).trigger( \"click\" );
+  update( $( \"span:last\" ) );
+});
+
+function update( j ) {
+  var n = parseInt( j.text(), 10 );
+  j.text( n + 1 );
 }
 ") (text . "") (css . "
-
-button { margin:10px; }
-div { color:blue; font-weight:bold; }
-span { color:red; }
-") (text . "") (html . "<button>Button #1</button>
+  button {
+    margin: 10px;
+  }
+  div {
+    color: blue;
+    font-weight: bold;
+  }
+  span {
+    color: red;
+  }
+") (text . "") (html . "
+<button>Button #1</button>
 <button>Button #2</button>
 <div><span>0</span> button #1 clicks.</div>
+<div><span>0</span> button #2 clicks.</div>
+") (text . "")) ((text . "") (text . "To submit the first form without using the submit() function, try:
 
-<div><span>0</span> button #2 clicks.</div>") (text . "")) ((text . "") (text . "To submit the first form without using the submit() function, try:
+") (text . "") (js . "
+$( \"form:first\" ).trigger( \"submit\" );
+") (text . "")) ((text . "") (text . "To submit the first form without using the submit() function, try:
 
-") (text . "") (js . "$(\"form:first\").trigger(\"submit\")") (text . "")) ((text . "") (text . "To submit the first form without using the submit() function, try:
-
-") (text . "") (js . "var event = jQuery.Event(\"submit\");
-$(\"form:first\").trigger(event);
+") (text . "") (js . "
+var event = jQuery.Event( \"submit\" );
+$( \"form:first\" ).trigger( event );
 if ( event.isDefaultPrevented() ) {
-// Perform an action...
-}") (text . "")) ((text . "") (text . "To pass arbitrary data to an event:
+  // Perform an action...
+}
+") (text . "")) ((text . "") (text . "To pass arbitrary data to an event:
 
-") (text . "") (js . "$(\"p\").click( function (event, a, b) {
-// when a normal click fires, a and b are undefined
-// for a trigger like below a refers to \"foo\" and b refers to \"bar\"
+") (text . "") (js . "
+$( \"p\" )
+  .click(function( event, a, b ) {
+    // When a normal click fires, a and b are undefined
+    // for a trigger like below a refers to \"foo\" and b refers to \"bar\"
+  })
+  .trigger( \"click\", [ \"foo\", \"bar\" ] );
+") (text . "")) ((text . "") (text . "To pass arbitrary data through an event object:
 
-} ).trigger(\"click\", [\"foo\", \"bar\"]);") (text . "")) ((text . "") (text . "To pass arbitrary data through an event object:
-
-") (text . "") (js . "var event = jQuery.Event(\"logged\");
+") (text . "") (js . "
+var event = jQuery.Event( \"logged\" );
 event.user = \"foo\";
 event.pass = \"bar\";
-$(\"body\").trigger(event);") (text . "")) ((text . "") (text . "Alternative way to pass data through an event object:
+$( \"body\" ).trigger( event );
+") (text . "")) ((text . "") (text . "Alternative way to pass data through an event object:
 
-") (text . "") (js . "$(\"body\").trigger({
-type:\"logged\",
-user:\"foo\",
-pass:\"bar\"
-
-});") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"body\" ).trigger({
+  type:\"logged\",
+  user:\"foo\",
+  pass:\"bar\"
+});
+") (text . ""))))) jquery-doc-hash)
 
 (push "triggerHandler" jquery-doc-methods)
 
@@ -15873,27 +18623,27 @@ following exceptions:
 default focus action would not be triggered, only the event handlers
 bound to the focus event.
 ") (text . "") (js . "
-
-$(\"#old\").click(function(){
-$(\"input\").trigger(\"focus\");
+$( \"#old\" ).click(function() {
+  $( \"input\" ).trigger( \"focus\" );
 });
-$(\"#new\").click(function(){
-$(\"input\").triggerHandler(\"focus\");
+$( \"#new\" ).click(function() {
+  $( \"input\" ).triggerHandler( \"focus\" );
 });
-$(\"input\").focus(function(){
-$(\"<span>Focused!</span>\").appendTo(\"body\").fadeOut(1000);
+$( \"input\" ).focus(function() {
+  $( \"<span>Focused!</span>\" ).appendTo( \"body\" ).fadeOut( 1000 );
 });
+") (text . "") (html . "
+<button id=\"old\">.trigger( \"focus\" )</button>
+<button id=\"new\">.triggerHandler( \"focus\" )</button><br><br>
 
-") (text . "") (html . "<button id=\"old\">.trigger(\"focus\")</button>
-<button id=\"new\">.triggerHandler(\"focus\")</button><br/><br/>
-
-<input type=\"text\" value=\"To Be Focused\"/>") (text . ""))))) jquery-doc-hash)
+<input type=\"text\" value=\"To Be Focused\">
+") (text . ""))))) jquery-doc-hash)
 
 (push "unbind" jquery-doc-methods)
 
 (puthash "unbind" (quote (("name" . "unbind") ("signatures" "unbind" (("eventType" "A string containing a JavaScript event type, such as click or submit.
 
-" "true" nil) ("handler(eventObject)" "The function that is to be no longer executed.
+" nil nil) ("handler(eventObject)" "The function that is to be no longer executed.
 
 " "true" nil)) (("eventType" "A string containing a JavaScript event type, such as click or submit.
 
@@ -15902,45 +18652,52 @@ $(\"<span>Focused!</span>\").appendTo(\"body\").fadeOut(1000);
 
 " nil nil)) (("event" "A JavaScript event object as passed to an event handler.
 
-" nil nil))) ("desc" (text . "Remove a previously-attached event handler from the elements.
+" nil nil)) nil) ("desc" (text . "Remove a previously-attached event handler from the elements.
 
 ")) ("longdesc" (text . "") (text . "Event handlers attached with .bind() can be removed with .unbind(). (As
 of jQuery 1.7, the .on() and .off() methods are preferred to attach and
 remove event handlers on elements.) In the simplest case, with no
 arguments, .unbind() removes all handlers attached to the elements:
-") (text . "") (js . "$('#foo').unbind();") (text . "") (text . "This version removes the handlers regardless of type. To be more
+") (text . "") (js . "
+$( \"#foo\" ).unbind();
+    ") (text . "") (text . "This version removes the handlers regardless of type. To be more
 precise, we can pass an event type:
 
-") (text . "") (js . "$('#foo').unbind('click');") (text . "") (text . "By specifying the click event type, only handlers for that event type
+") (text . "") (js . "
+$( \"#foo\").unbind( \"click\" );
+    ") (text . "") (text . "By specifying the click event type, only handlers for that event type
 will be unbound. This approach can still have negative ramifications if
 other scripts might be attaching behaviors to the same element,
 however. Robust and extensible applications typically demand the
 two-argument version for this reason:
-") (text . "") (js . "var handler = function() {
-  alert('The quick brown fox jumps over the lazy dog.');
+") (text . "") (js . "
+var handler = function() {
+  alert( \"The quick brown fox jumps over the lazy dog.\" );
 };
-$('#foo').bind('click', handler);
-$('#foo').unbind('click', handler);
-") (text . "") (text . "By naming the handler, we can be assured that no other functions are
+$( \"#foo\" ).bind( \"click\", handler );
+$( \"#foo\" ).unbind( \"click\", handler );
+    ") (text . "") (text . "By naming the handler, we can be assured that no other functions are
 accidentally removed. Note that the following will not work:
 
-") (text . "") (js . "$('#foo').bind('click', function() {
-  alert('The quick brown fox jumps over the lazy dog.');
+") (text . "") (js . "
+$( \"#foo\" ).bind( \"click\", function() {
+  alert( \"The quick brown fox jumps over the lazy dog.\" );
 });
 
-// will NOT work
-$('#foo').unbind('click', function() {
-  alert('The quick brown fox jumps over the lazy dog.');
-});") (text . "") (text . "Even though the two functions are identical in content, they are
+// Will NOT work
+$( \"#foo\" ).unbind( \"click\", function() {
+  alert( \"The quick brown fox jumps over the lazy dog.\" );
+});
+    ") (text . "") (text . "Even though the two functions are identical in content, they are
 created separately and so JavaScript is free to keep them as distinct
 function objects. To unbind a particular handler, we need a reference
 to that function and not a different one that happens to do the same
 thing.
-") (text . "") (text . "  Note: Using a proxied function to unbind an event on an element will
-  unbind all proxied functions on that element, as the same proxy
-  function is used for all proxied events. To allow unbinding a
-  specific event, use unique class names on the event (e.g.
-  click.proxy1, click.proxy2) when attaching them.
+") (text . "") (text . "Note: Using a proxied function to unbind an event on an element will
+unbind all proxied functions on that element, as the same proxy
+function is used for all proxied events. To allow unbinding a specific
+event, use unique class names on the event (e.g. click.proxy1,
+click.proxy2) when attaching them.
 ") (text . "") (text . " Using Namespaces
 
 
@@ -15949,16 +18706,24 @@ we can namespace the events and use this capability to narrow the scope
 of our unbinding actions. As shown in the discussion for the .bind()
 method, namespaces are defined by using a period ( .) character when
 binding a handler:
-") (text . "") (js . "$('#foo').bind('click.myEvents', handler);") (text . "") (text . "When a handler is bound in this fashion, we can still unbind it the
+") (text . "") (js . "
+$( \"#foo\" ).bind( \"click.myEvents\", handler );
+    ") (text . "") (text . "When a handler is bound in this fashion, we can still unbind it the
 normal way:
 
-") (text . "") (js . "$('#foo').unbind('click');") (text . "") (text . "However, if we want to avoid affecting other handlers, we can be more
+") (text . "") (js . "
+$( \"#foo\" ).unbind( \"click\" );
+    ") (text . "") (text . "However, if we want to avoid affecting other handlers, we can be more
 specific:
 
-") (text . "") (js . "$('#foo').unbind('click.myEvents');") (text . "") (text . "We can also unbind all of the handlers in a namespace, regardless of
+") (text . "") (js . "
+$( \"#foo\" ).unbind( \"click.myEvents\" );
+    ") (text . "") (text . "We can also unbind all of the handlers in a namespace, regardless of
 event type:
 
-") (text . "") (js . "$('#foo').unbind('.myEvents');") (text . "") (text . "It is particularly useful to attach namespaces to event bindings when
+") (text . "") (js . "
+$( \"#foo\" ).unbind( \".myEvents\" );
+    ") (text . "") (text . "It is particularly useful to attach namespaces to event bindings when
 we are developing plug-ins or otherwise writing code that may interact
 with other event-handling code in the future.
 ") (text . "") (text . " Using the Event Object
@@ -15967,15 +18732,16 @@ with other event-handling code in the future.
 ") (text . "") (text . "The third form of the .unbind() method is used when we wish to unbind a
 handler from within itself. For example, suppose we wish to trigger an
 event handler only three times:
-") (text . "") (js . "var timesClicked = 0;
-$('#foo').bind('click', function(event) {
-  alert('The quick brown fox jumps over the lazy dog.');
+") (text . "") (js . "
+var timesClicked = 0;
+$( \"#foo\" ).bind( \"click\", function( event ) {
+  alert( \"The quick brown fox jumps over the lazy dog.\" );
   timesClicked++;
-  if (timesClicked >= 3) {
-    $(this).unbind(event);
+  if ( timesClicked >= 3 ) {
+    $( this ).unbind( event );
   }
 });
-") (text . "") (text . "The handler in this case must take a parameter, so that we can capture
+    ") (text . "") (text . "The handler in this case must take a parameter, so that we can capture
 the event object and use it to unbind the handler after the third
 click. The event object contains the context necessary for .unbind() to
 know which handler to remove. This example is also an illustration of a
@@ -15986,39 +18752,51 @@ effect even between invocations of the handler.
 
 ") (text . "") (js . "
 function aClick() {
-$(\"div\").show().fadeOut(\"slow\");
+  $( \"div\" ).show().fadeOut( \"slow\" );
 }
-$(\"#bind\").click(function () {
-// could use .bind('click', aClick) instead but for variety...
-$(\"#theone\").click(aClick)
-  .text(\"Can Click!\");
+$( \"#bind\" ).click(function() {
+  $( \"#theone\" )
+    .bind( \"click\", aClick )
+    .text( \"Can Click!\" );
 });
-$(\"#unbind\").click(function () {
-$(\"#theone\").unbind('click', aClick)
-  .text(\"Does nothing...\");
+$( \"#unbind\" ).click(function() {
+  $( \"#theone\" )
+    .unbind( \"click\", aClick )
+    .text( \"Does nothing...\" );
 });
-
 ") (text . "") (css . "
-button { margin:5px; }
-button#theone { color:red; background:yellow; }
-") (text . "") (html . "<button id=\"theone\">Does nothing...</button>
+  button {
+    margin: 5px;
+  }
+  button#theone {
+    color: red;
+    background: yellow;
+  }
+") (text . "") (html . "
+<button id=\"theone\">Does nothing...</button>
 <button id=\"bind\">Bind Click</button>
 <button id=\"unbind\">Unbind Click</button>
+<div style=\"display:none;\">Click!</div>
+") (text . "")) ((text . "") (text . "To unbind all events from all paragraphs, write:
 
-<div style=\"display:none;\">Click!</div>") (text . "")) ((text . "") (text . "To unbind all events from all paragraphs, write:
+") (text . "") (js . "
+$( \"p\" ).unbind();
+") (text . "")) ((text . "") (text . "To unbind all click events from all paragraphs, write:
 
-") (text . "") (js . "$(\"p\").unbind()") (text . "")) ((text . "") (text . "To unbind all click events from all paragraphs, write:
-
-") (text . "") (js . "$(\"p\").unbind( \"click\" )") (text . "")) ((text . "") (text . "To unbind just one previously bound handler, pass the function in as
+") (text . "") (js . "
+$( \"p\" ).unbind( \"click\" );
+") (text . "")) ((text . "") (text . "To unbind just one previously bound handler, pass the function in as
 the second argument:
 
-") (text . "") (js . "var foo = function () {
-// code to handle some kind of event
+") (text . "") (js . "
+var foo = function() {
+  // Code to handle some kind of event
 };
 
-$(\"p\").bind(\"click\", foo); // ... now foo will be called when paragraphs are clicked ...
+$( \"p\" ).bind( \"click\", foo ); // ... Now foo will be called when paragraphs are clicked ...
 
-$(\"p\").unbind(\"click\", foo); // ... foo will no longer be called.") (text . ""))))) jquery-doc-hash)
+$( \"p\" ).unbind( \"click\", foo ); // ... foo will no longer be called.
+") (text . ""))))) jquery-doc-hash)
 
 (push "undelegate" jquery-doc-methods)
 
@@ -16051,52 +18829,67 @@ methods are preferred for attaching and removing event handlers.
 
 ") (text . "") (js . "
 function aClick() {
-  $(\"div\").show().fadeOut(\"slow\");
+  $( \"div\" ).show().fadeOut( \"slow\" );
 }
-$(\"#bind\").click(function () {
-  $(\"body\").delegate(\"#theone\", \"click\", aClick)
-    .find(\"#theone\").text(\"Can Click!\");
+$( \"#bind\" ).click(function() {
+  $( \"body\" )
+    .delegate( \"#theone\", \"click\", aClick )
+    .find( \"#theone\" ).text( \"Can Click!\" );
 });
-$(\"#unbind\").click(function () {
-  $(\"body\").undelegate(\"#theone\", \"click\", aClick)
-    .find(\"#theone\").text(\"Does nothing...\");
+$( \"#unbind\" ).click(function() {
+  $( \"body\" )
+    .undelegate( \"#theone\", \"click\", aClick )
+    .find( \"#theone\" ).text( \"Does nothing...\" );
 });
 ") (text . "") (css . "
-button { margin:5px; }
-button#theone { color:red; background:yellow; }
-") (text . "") (html . "<button id=\"theone\">Does nothing...</button>
+  button {
+    margin: 5px;
+  }
+  button#theone {
+    color: red;
+    background: yellow;
+  }
+") (text . "") (html . "
+<button id=\"theone\">Does nothing...</button>
 <button id=\"bind\">Bind Click</button>
 <button id=\"unbind\">Unbind Click</button>
-<div style=\"display:none;\">Click!</div>") (text . "")) ((text . "") (text . "To unbind all delegated events from all paragraphs, write:
+<div style=\"display:none;\">Click!</div>
+") (text . "")) ((text . "") (text . "To unbind all delegated events from all paragraphs, write:
 
-") (text . "") (js . "$(\"p\").undelegate()") (text . "")) ((text . "") (text . "To unbind all delegated click events from all paragraphs, write:
+") (text . "") (js . "
+$( \"p\" ).undelegate();
+") (text . "")) ((text . "") (text . "To unbind all delegated click events from all paragraphs, write:
 
-") (text . "") (js . "$(\"p\").undelegate( \"click\" )") (text . "")) ((text . "") (text . "To undelegate just one previously bound handler, pass the function in
+") (text . "") (js . "
+$( \"p\" ).undelegate( \"click\" );
+") (text . "")) ((text . "") (text . "To undelegate just one previously bound handler, pass the function in
 as the third argument:
 
-") (text . "") (js . "var foo = function () {
-  // code to handle some kind of event
+") (text . "") (js . "
+var foo = function () {
+  // Code to handle some kind of event
 };
 
-// ... now foo will be called when paragraphs are clicked ...
-$(\"body\").delegate(\"p\", \"click\", foo);
-
+// ... Now foo will be called when paragraphs are clicked ...
+$( \"body\" ).delegate( \"p\", \"click\", foo );
 
 // ... foo will no longer be called.
-$(\"body\").undelegate(\"p\", \"click\", foo); ") (text . "")) ((text . "") (text . "To unbind all delegated events by their namespace:
+$( \"body\" ).undelegate( \"p\", \"click\", foo );
+") (text . "")) ((text . "") (text . "To unbind all delegated events by their namespace:
 
-") (text . "") (js . "var foo = function () {
-  // code to handle some kind of event
+") (text . "") (js . "
+var foo = function() {
+  // Code to handle some kind of event
 };
 
-// delegate events under the \".whatever\" namespace
-$(\"form\").delegate(\":button\", \"click.whatever\", foo);
+// Delegate events under the \".whatever\" namespace
+$( \"form\" ).delegate( \":button\", \"click.whatever\", foo );
 
-$(\"form\").delegate(\"input[type='text']\", \"keypress.whatever\", foo);
+$( \"form\" ).delegate( \"input[type='text'] \", \"keypress.whatever\", foo );
 
-// unbind all events delegated under the \".whatever\" namespace
-
-$(\"form\").undelegate(\".whatever\");") (text . ""))))) jquery-doc-hash)
+// Unbind all events delegated under the \".whatever\" namespace
+$( \"form\" ).undelegate( \".whatever\" );
+") (text . ""))))) jquery-doc-hash)
 
 (push "unload" jquery-doc-methods)
 
@@ -16108,7 +18901,7 @@ $(\"form\").undelegate(\".whatever\");") (text . ""))))) jquery-doc-hash)
 
 " nil nil))) ("desc" (text . "Bind an event handler to the \"unload\" JavaScript event.
 
-")) ("longdesc" (text . "") (text . "This method is a shortcut for .on(`unload`, handler).
+")) ("longdesc" (text . "") (text . "This method is a shortcut for .on( \"unload\", handler ).
 
 
 ") (text . "") (text . "The unload event is sent to the window element when the user navigates
@@ -16117,25 +18910,29 @@ have clicked on a link to leave the page, or typed in a new URL in the
 address bar. The forward and back buttons will trigger the event.
 Closing the browser window will cause the event to be triggered. Even a
 page reload will first create an unload event.
-") (text . "") (text . "  The exact handling of the unload event has varied from version to
-  version of browsers. For example, some versions of Firefox trigger
-  the event when a link is followed, but not when the window is
-  closed. In practical usage, behavior should be tested on all
-  supported browsers, and contrasted with the proprietary beforeunload
-  event.
+") (text . "") (text . "The exact handling of the unload event has varied from version to
+version of browsers. For example, some versions of Firefox trigger the
+event when a link is followed, but not when the window is closed. In
+practical usage, behavior should be tested on all supported browsers,
+and contrasted with the proprietary beforeunload event.
 ") (text . "") (text . "Any unload event handler should be bound to the window object:
 
 
-") (text . "") (js . "$(window).unload(function() {
-  alert('Handler for .unload() called.');
+") (text . "") (js . "
+$( window ).unload(function() {
+  alert( \"Handler for .unload() called.\" );
 });
-") (text . "") (text . "After this code executes, the alert will be displayed whenever the
+    ") (text . "") (text . "After this code executes, the alert will be displayed whenever the
 browser leaves the current page. It is not possible to cancel the
 unload event with .preventDefault(). This event is available so that
 scripts can perform cleanup when the user leaves the page.
 ") (text . "")) ("examples" ((text . "") (text . "To display an alert when a page is unloaded:
 
-") (text . "") (js . "$(window).unload( function () { alert(\"Bye now!\"); } );") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( window ).unload(function() {
+  alert( \"Bye now!\" );
+});
+  ") (text . ""))))) jquery-doc-hash)
 
 (push "unwrap" jquery-doc-methods)
 
@@ -16148,17 +18945,23 @@ siblings, if any) replace their parents within the DOM structure.
 ") (text . "")) ("examples" ((text . "") (text . "Wrap/unwrap a div around each of the paragraphs.
 
 ") (text . "") (js . "
-var pTags = $(\"p\");
-$(\"button\").click( function(){
-  if ( pTags.parent().is(\"div\") ) {
+var pTags = $( \"p\" );
+$( \"button\" ).click(function() {
+  if ( pTags.parent().is( \"div\" ) ) {
     pTags.unwrap();
   } else {
-    pTags.wrap(\"<div></div>\");
+    pTags.wrap( \"<div></div>\" );
   }
-});") (text . "") (css . "
-  div { border: 2px solid blue; }
-  p { background:yellow; margin:4px; }
-  ") (text . "") (html . "<button>wrap/unwrap</button>
+});
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+  }
+") (text . "") (html . "<button>wrap/unwrap</button>
 <p>Hello</p>
 <p>cruel</p>
 <p>World</p>") (text . ""))))) jquery-doc-hash)
@@ -16176,64 +18979,81 @@ null.
 ") (text . "") (text . "For selects and checkboxes, you can also use the :selected and :checked
 selectors to get at values, for example:
 
-") (text . "") (js . "$('select.foo option:selected').val();    // get the value from a dropdown select
-$('select.foo').val();                    // get the value from a dropdown select even easier
-$('input:checkbox:checked').val();        // get the value from a checked checkbox
-$('input:radio[name=bar]:checked').val(); // get the value from a set of radio buttons") (text . "") (text . "  Note: At present, using .val() on textarea elements strips carriage
-  return characters from the browser-reported value. When this value
-  is sent to the server via XHR however, carriage returns are
-  preserved (or added by browsers which do not include them in the raw
-  value). A workaround for this issue can be achieved using a valHook
-  as follows:
+") (text . "") (js . "
+// Get the value from a dropdown select
+$( \"select.foo option:selected\").val();
+
+// Get the value from a dropdown select even easier
+$( \"select.foo\" ).val();
+
+// Get the value from a checked checkbox
+$( \"input:checkbox:checked\" ).val();
+
+// Get the value from a set of radio buttons
+$( \"input:radio[name=bar]:checked\" ).val();
+      ") (text . "") (text . "Note: At present, using .val() on textarea elements strips carriage
+return characters from the browser-reported value. When this value is
+sent to the server via XHR however, carriage returns are preserved (or
+added by browsers which do not include them in the raw value). A
+workaround for this issue can be achieved using a valHook as follows:
 ") (text . "") (js . "
 $.valHooks.textarea = {
   get: function( elem ) {
     return elem.value.replace( /\\r?\\n/g, \"\\r\\n\" );
   }
 };
-") (text . "")) ("examples" ((text . "") (text . "Get the single value from a single select and an array of values from a
+    ") (text . "")) ("examples" ((text . "") (text . "Get the single value from a single select and an array of values from a
 multiple select and display their values.
 
 ") (text . "") (js . "
-    function displayVals() {
-      var singleValues = $(\"#single\").val();
-      var multipleValues = $(\"#multiple\").val() || [];
-      $(\"p\").html(\"<b>Single:</b> \" +
-                  singleValues +
-                  \" <b>Multiple:</b> \" +
-                  multipleValues.join(\", \"));
-    }
+function displayVals() {
+  var singleValues = $( \"#single\" ).val();
+  var multipleValues = $( \"#multiple\" ).val() || [];
+  $( \"p\" ).html( \"<b>Single:</b> \" + singleValues +
+    \" <b>Multiple:</b> \" + multipleValues.join( \", \" ) );
+}
 
-    $(\"select\").change(displayVals);
-    displayVals();
-
+$( \"select\" ).change( displayVals );
+displayVals();
 ") (text . "") (css . "
-  p { color:red; margin:4px; }
-  b { color:blue; }
-  ") (text . "") (html . "<p></p>
+  p {
+    color: red;
+    margin: 4px;
+  }
+  b {
+    color: blue;
+  }
+") (text . "") (html . "
+<p></p>
 
-  <select id=\"single\">
-    <option>Single</option>
-    <option>Single2</option>
-  </select>
+<select id=\"single\">
+  <option>Single</option>
+  <option>Single2</option>
+</select>
 
-  <select id=\"multiple\" multiple=\"multiple\">
-    <option selected=\"selected\">Multiple</option>
-    <option>Multiple2</option>
-    <option selected=\"selected\">Multiple3</option>
-  </select>
+<select id=\"multiple\" multiple=\"multiple\">
+  <option selected=\"selected\">Multiple</option>
+  <option>Multiple2</option>
+  <option selected=\"selected\">Multiple3</option>
+</select>
 ") (text . "")) ((text . "") (text . "Find the value of an input box.
 
 ") (text . "") (js . "
-    $(\"input\").keyup(function () {
-      var value = $(this).val();
-      $(\"p\").text(value);
-    }).keyup();
+$( \"input\" )
+  .keyup(function() {
+    var value = $( this ).val();
+    $( \"p\" ).text( value );
+  })
+  .keyup();
 ") (text . "") (css . "
-
-  p { color:blue; margin:8px; }
-  ") (text . "") (html . "<input type=\"text\" value=\"some text\"/>
-  <p></p>") (text . ""))))) jquery-doc-hash)
+  p {
+    color: blue;
+    margin: 8px;
+  }
+") (text . "") (html . "
+<input type=\"text\" value=\"some text\">
+<p></p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "val" jquery-doc-methods)
 
@@ -16256,63 +19076,76 @@ multiple=\"multiple\"> the other elements will be deselected.
 ") (text . "") (text . "The .val() method allows us to set the value by passing in a function.
 As of jQuery 1.4, the function is passed two arguments, the current
 element`s index and its current value:
-") (text . "") (js . "$('input:text.items').val(function( index, value ) {
-  return value + ' ' + this.className;
+") (text . "") (js . "
+$( \"input:text.items\" ).val(function( index, value ) {
+  return value + \" \" + this.className;
 });
-") (text . "") (text . "This example appends the string \" items\" to the text inputs` values.
+      ") (text . "") (text . "This example appends the string \" items\" to the text inputs` values.
 
 
 ") (text . "")) ("examples" ((text . "") (text . "Set the value of an input box.
 
 ") (text . "") (js . "
-    $(\"button\").click(function () {
-      var text = $(this).text();
-      $(\"input\").val(text);
-    });
+$( \"button\" ).click(function() {
+  var text = $( this ).text();
+  $( \"input\" ).val( text );
+});
 ") (text . "") (css . "
-  button { margin:4px; cursor:pointer; }
-  input { margin:4px; color:blue; }
-  ") (text . "") (html . "<div>
-    <button>Feed</button>
-    <button>the</button>
-    <button>Input</button>
-  </div>
-  <input type=\"text\" value=\"click a button\" />") (text . "")) ((text . "") (text . "Use the function argument to modify the value of an input box.
+  button {
+    margin: 4px;
+    cursor: pointer;
+  }
+  input {
+    margin: 4px;
+    color: blue;
+  }
+") (text . "") (html . "
+<div>
+  <button>Feed</button>
+  <button>the</button>
+  <button>Input</button>
+</div>
+<input type=\"text\" value=\"click a button\">
+") (text . "")) ((text . "") (text . "Use the function argument to modify the value of an input box.
 
 ") (text . "") (js . "
-  $('input').on('blur', function() {
-    $(this).val(function( i, val ) {
-      return val.toUpperCase();
-    });
+$( \"input\" ).on( \"blur\", function() {
+  $( this ).val(function( i, val ) {
+    return val.toUpperCase();
   });
-  ") (text . "") (html . "
-  <p>Type something and then click or tab out of the input.</p>
-  <input type=\"text\" value=\"type something\" />
+});
+") (text . "") (html . "
+<p>Type something and then click or tab out of the input.</p>
+<input type=\"text\" value=\"type something\">
 ") (text . "")) ((text . "") (text . "Set a single select, a multiple select, checkboxes and a radio button .
 
 
 ") (text . "") (js . "
-
-    $(\"#single\").val(\"Single2\");
-    $(\"#multiple\").val([\"Multiple2\", \"Multiple3\"]);
-    $(\"input\").val([\"check1\",\"check2\", \"radio1\" ]);
-
+$( \"#single\" ).val( \"Single2\" );
+$( \"#multiple\" ).val([ \"Multiple2\", \"Multiple3\" ]);
+$( \"input\").val([ \"check1\", \"check2\", \"radio1\" ]);
 ") (text . "") (css . "
-  body { color:blue; }
-  ") (text . "") (html . "<select id=\"single\">
-    <option>Single</option>
-    <option>Single2</option>
-  </select>
+  body {
+    color: blue;
+  }
+") (text . "") (html . "
+<select id=\"single\">
+  <option>Single</option>
+  <option>Single2</option>
+</select>
 
-  <select id=\"multiple\" multiple=\"multiple\">
-    <option selected=\"selected\">Multiple</option>
-    <option>Multiple2</option>
-    <option selected=\"selected\">Multiple3</option>
-  </select><br/>
-  <input type=\"checkbox\" name=\"checkboxname\" value=\"check1\"/> check1
-  <input type=\"checkbox\" name=\"checkboxname\" value=\"check2\"/> check2
-  <input type=\"radio\"  name=\"r\" value=\"radio1\"/> radio1
-  <input type=\"radio\"  name=\"r\" value=\"radio2\"/> radio2") (text . ""))))) jquery-doc-hash)
+<select id=\"multiple\" multiple=\"multiple\">
+  <option selected=\"selected\">Multiple</option>
+  <option>Multiple2</option>
+  <option selected=\"selected\">Multiple3</option>
+</select>
+
+<br>
+<input type=\"checkbox\" name=\"checkboxname\" value=\"check1\"> check1
+<input type=\"checkbox\" name=\"checkboxname\" value=\"check2\"> check2
+<input type=\"radio\" name=\"r\" value=\"radio1\"> radio1
+<input type=\"radio\" name=\"r\" value=\"radio2\"> radio2
+") (text . ""))))) jquery-doc-hash)
 
 (push "width" jquery-doc-methods)
 
@@ -16330,41 +19163,59 @@ mathematical calculation.
 ") (text . "") (text . "This method is also able to find the width of the window and document.
 
 
-") (text . "") (js . "$(window).width();   // returns width of browser viewport
-      $(document).width(); // returns width of HTML document") (text . "") (text . "Note that .width() will always return the content width, regardless of
-the value of the CSS box-sizing property.
+") (text . "") (js . "
+// Returns width of browser viewport
+$( window ).width();
 
+// Returns width of HTML document
+$( document ).width();
+      ") (text . "") (text . "Note that .width() will always return the content width, regardless of
+the value of the CSS box-sizing property. As of jQuery 1.8, this may
+require retrieving the CSS width plus box-sizing property and then
+subtracting any potential border and padding on each element when the
+element has box-sizing: border-box. To avoid this penalty, use .css(
+\"width\" ) rather than .width().
 ") (text . "")) ("examples" ((text . "") (text . "Show various widths. Note the values are from the iframe so might be
 smaller than you expected. The yellow highlight shows the iframe body.
 
 ") (text . "") (js . "
-function showWidth(ele, w) {
-  $(\"div\").text(\"The width for the \" + ele +
-                \" is \" + w + \"px.\");
+function showWidth( ele, w ) {
+  $( \"div\" ).text( \"The width for the \" + ele + \" is \" + w + \"px.\" );
 }
-$(\"#getp\").click(function () {
-  showWidth(\"paragraph\", $(\"p\").width());
+$( \"#getp\" ).click(function() {
+  showWidth( \"paragraph\", $( \"p\" ).width() );
 });
-$(\"#getd\").click(function () {
-  showWidth(\"document\", $(document).width());
+$( \"#getd\" ).click(function() {
+  showWidth( \"document\", $( document ).width() );
 });
-$(\"#getw\").click(function () {
-  showWidth(\"window\", $(window).width());
+$(\"#getw\").click(function() {
+  showWidth( \"window\", $( window ).width() );
 });
-
 ") (text . "") (css . "
-  body { background:yellow; }
-  button { font-size:12px; margin:2px; }
-  p { width:150px; border:1px red solid; }
-  div { color:red; font-weight:bold;  }
-  ") (text . "") (html . "<button id=\"getp\">Get Paragraph Width</button>
-  <button id=\"getd\">Get Document Width</button>
-  <button id=\"getw\">Get Window Width</button>
-
-  <div>&nbsp;</div>
-  <p>
-    Sample paragraph to test width
-  </p>") (text . ""))))) jquery-doc-hash)
+  body {
+    background: yellow;
+  }
+  button {
+    font-size: 12px;
+    margin: 2px;
+  }
+  p {
+    width: 150px;
+    border: 1px red solid;
+  }
+  div {
+    color: red;
+    font-weight: bold;
+  }
+") (text . "") (html . "
+<button id=\"getp\">Get Paragraph Width</button>
+<button id=\"getd\">Get Document Width</button>
+<button id=\"getw\">Get Window Width</button>
+<div>&nbsp;</div>
+<p>
+  Sample paragraph to test width
+</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "width" jquery-doc-methods)
 
@@ -16393,23 +19244,30 @@ of the value of the CSS box-sizing property.
 its color).
 
 ") (text . "") (js . "
-(function() {
-  var modWidth = 50;
-  $(\"div\").one('click', function () {
-    $(this).width(modWidth).addClass(\"mod\");
+var modWidth = 50;
+$( \"div\" ).one( \"click\", function() {
+  $( this ).width( modWidth ).addClass( \"mod\" );
   modWidth -= 8;
-  });
-})();
+});
 ") (text . "") (css . "
-div { width: 70px; height: 50px; float:left; margin: 5px;
-        background: red; cursor: pointer; }
-.mod { background: blue; cursor: default; }
-  ") (text . "") (html . "
-  <div>d</div>
-  <div>d</div>
-  <div>d</div>
-  <div>d</div>
-  <div>d</div>
+  div {
+    width: 70px;
+    height: 50px;
+    float: left;
+    margin: 5px;
+    background: red;
+    cursor: pointer;
+  }
+  .mod {
+    background: blue;
+    cursor: default;
+  }
+") (text . "") (html . "
+<div>d</div>
+<div>d</div>
+<div>d</div>
+<div>d</div>
+<div>d</div>
 ") (text . ""))))) jquery-doc-hash)
 
 (push "wrap" jquery-doc-methods)
@@ -16433,77 +19291,129 @@ original set of elements for chaining purposes.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "Using .wrap(), we can insert an HTML structure around the inner <div>
+</div>
+    ") (text . "") (text . "Using .wrap(), we can insert an HTML structure around the inner <div>
 elements like so:
 
-") (text . "") (js . "$('.inner').wrap('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "
+$( \".inner\" ).wrap( \"<div class='new'></div>\" );
+    ") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around each matched element:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"new\">
     <div class=\"inner\">Hello</div>
   </div>
   <div class=\"new\">
     <div class=\"inner\">Goodbye</div>
   </div>
-</div>") (text . "") (text . "The second version of this method allows us to instead specify a
+</div>
+    ") (text . "") (text . "The second version of this method allows us to instead specify a
 callback function. This callback function will be called once for every
 matched element; it should return a DOM element, jQuery object, or HTML
 snippet in which to wrap the corresponding element. For example:
-") (text . "") (js . "$('.inner').wrap(function() {
-  return '<div class=\"' + $(this).text() + '\" />';
-});") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
+") (text . "") (js . "
+$( \".inner\" ).wrap(function() {
+  return \"<div class='\" + $( this ).text() + \"'></div>\";
+});
+    ") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
 wraps:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"Hello\">
     <div class=\"inner\">Hello</div>
   </div>
   <div class=\"Goodbye\">
     <div class=\"inner\">Goodbye</div>
   </div>
-</div>") (text . "")) ("examples" ((text . "") (text . "Wrap a new div around all of the paragraphs.
+</div>
+    ") (text . "")) ("examples" ((text . "") (text . "Wrap a new div around all of the paragraphs.
 
-") (text . "") (js . "$(\"p\").wrap(\"<div></div>\");") (text . "") (css . "
-
-  div { border: 2px solid blue; }
-  p { background:yellow; margin:4px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the spans. Notice anything
+") (text . "") (js . "
+$( \"p\" ).wrap( \"<div></div>\" );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the spans. Notice anything
 in between the spans gets left out like the <strong> (red text) in this
 example. Even the white space between spans is left out. Click View
-Source to see the original html.
-") (text . "") (js . "$(\"span\").wrap(\"<div><div><p><em><b></b></em></p></div></div>\");") (text . "") (css . "
+Source to see the original html.>
+") (text . "") (js . "
+$( \"span\" ).wrap( \"<div><div><p><em><b></b></em></p></div></div>\" );
+") (text . "") (css . "
+  div {
+    border: 2px blue solid;
+    margin: 2px;
+    padding: 2px;
+  }
+  p {
+    background: yellow;
+    margin: 2px;
+    padding: 2px;
+  }
+  strong {
+    color: red;
+  }
+") (text . "") (html . "
+<span>Span Text</span>
+<strong>What about me?</strong>
+<span>Another One</span>
+") (text . "")) ((text . "") (text . "Wrap a new div around all of the paragraphs.
 
-  div { border:2px blue solid; margin:2px; padding:2px; }
-  p { background:yellow; margin:2px; padding:2px; }
-  strong { color:red; }
-  ") (text . "") (html . "<span>Span Text</span>
-  <strong>What about me?</strong>
-  <span>Another One</span>") (text . "")) ((text . "") (text . "Wrap a new div around all of the paragraphs.
-
-") (text . "") (js . "$(\"p\").wrap(document.createElement(\"div\"));") (text . "") (css . "
-
-  div { border: 2px solid blue; }
-  p { background:yellow; margin:4px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Wrap a jQuery object double depth div around all of the paragraphs.
+") (text . "") (js . "
+$( \"p\" ).wrap( document.createElement( \"div\" ) );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Wrap a jQuery object double depth div around all of the paragraphs.
 Notice it doesn`t move the object but just clones it to wrap around its
 target.
-") (text . "") (js . "$(\"p\").wrap($(\".doublediv\"));") (text . "") (css . "
-
-  div { border: 2px solid blue; margin:2px; padding:2px; }
-  .doublediv { border-color:red; }
-  p { background:yellow; margin:4px; font-size:14px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>
-  <div class=\"doublediv\"><div></div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).wrap( $( \".doublediv\" ) );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+    margin: 2px;
+    padding: 2px;
+  }
+  .doublediv {
+    border-color: red;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+    font-size: 14px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+<div class=\"doublediv\"><div></div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "wrapAll" jquery-doc-methods)
 
@@ -16521,59 +19431,107 @@ the set of matched elements, as a single group.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "Using .wrapAll(), we can insert an HTML structure around the inner
+</div>
+    ") (text . "") (text . "Using .wrapAll(), we can insert an HTML structure around the inner
 <div> elements like so:
 
-") (text . "") (js . "$('.inner').wrapAll('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "
+$( \".inner\" ).wrapAll( \"<div class='new' />\");
+    ") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around all matched elements:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"new\">
     <div class=\"inner\">Hello</div>
     <div class=\"inner\">Goodbye</div>
   </div>
-</div>") (text . "")) ("examples" ((text . "") (text . "Wrap a new div around all of the paragraphs.
+</div>
+    ") (text . "")) ("examples" ((text . "") (text . "Wrap a new div around all of the paragraphs.
 
-") (text . "") (js . "$(\"p\").wrapAll(\"<div></div>\");") (text . "") (css . "
-
-  div { border: 2px solid blue; }
-  p { background:yellow; margin:4px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the spans. Notice anything
+") (text . "") (js . "
+$( \"p\" ).wrapAll( \"<div></div>\" );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the spans. Notice anything
 in between the spans gets left out like the <strong> (red text) in this
 example. Even the white space between spans is left out. Click View
 Source to see the original html.
-") (text . "") (js . "$(\"span\").wrapAll(\"<div><div><p><em><b></b></em></p></div></div>\");") (text . "") (css . "
+") (text . "") (js . "
+$( \"span\").wrapAll( \"<div><div><p><em><b></b></em></p></div></div>\" );
+") (text . "") (css . "
+  div {
+    border: 2px blue solid;
+    margin: 2px;
+    padding: 2px;
+  }
+  p {
+    background: yellow;
+    margin: 2px;
+    padding: 2px;
+  }
+  strong {
+    color: red;
+  }
+") (text . "") (html . "
+<span>Span Text</span>
+<strong>What about me?</strong>
+<span>Another One</span>
+") (text . "")) ((text . "") (text . "Wrap a new div around all of the paragraphs.
 
-  div { border:2px blue solid; margin:2px; padding:2px; }
-  p { background:yellow; margin:2px; padding:2px; }
-  strong { color:red; }
-  ") (text . "") (html . "<span>Span Text</span>
-  <strong>What about me?</strong>
-  <span>Another One</span>") (text . "")) ((text . "") (text . "Wrap a new div around all of the paragraphs.
-
-") (text . "") (js . "$(\"p\").wrapAll(document.createElement(\"div\"));") (text . "") (css . "
-
-  div { border: 2px solid blue; }
-  p { background:yellow; margin:4px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Wrap a jQuery object double depth div around all of the paragraphs.
+") (text . "") (js . "
+$( \"p\" ).wrapAll( document.createElement( \"div\" ) );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Wrap a jQuery object double depth div around all of the paragraphs.
 Notice it doesn`t move the object but just clones it to wrap around its
 target.
-") (text . "") (js . "$(\"p\").wrapAll($(\".doublediv\"));") (text . "") (css . "
-
-  div { border: 2px solid blue; margin:2px; padding:2px; }
-  .doublediv { border-color:red; }
-  p { background:yellow; margin:4px; font-size:14px; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>
-  <div class=\"doublediv\"><div></div></div>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).wrapAll( $( \".doublediv\" ) );
+") (text . "") (css . "
+  div {
+    border: 2px solid blue;
+    margin: 2px;
+    padding: 2px;
+  }
+  .doublediv {
+    border-color: red;
+  }
+  p {
+    background: yellow;
+    margin: 4px;
+    font-size: 14px;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+<div class=\"doublediv\"><div></div></div>
+") (text . ""))))) jquery-doc-hash)
 
 (push "wrapInner" jquery-doc-methods)
 
@@ -16595,74 +19553,115 @@ each of the elements in the set of matched elements.
 ") (text . "") (text . "Consider the following HTML:
 
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">Hello</div>
   <div class=\"inner\">Goodbye</div>
-</div>") (text . "") (text . "Using .wrapInner(), we can insert an HTML structure around the content
+</div>
+    ") (text . "") (text . "Using .wrapInner(), we can insert an HTML structure around the content
 of each inner <div> elements like so:
 
-") (text . "") (js . "$('.inner').wrapInner('<div class=\"new\" />');") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
+") (text . "") (js . "
+$( \".inner\" ).wrapInner( \"<div class='new'></div>\");
+    ") (text . "") (text . "The new <div> element is created on the fly and added to the DOM. The
 result is a new <div> wrapped around the content of each matched
 element:
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">
     <div class=\"new\">Hello</div>
   </div>
   <div class=\"inner\">
     <div class=\"new\">Goodbye</div>
   </div>
-</div>") (text . "") (text . "The second version of this method allows us to instead specify a
+</div>
+    ") (text . "") (text . "The second version of this method allows us to instead specify a
 callback function. This callback function will be called once for every
 matched element; it should return a DOM element, jQuery object, or HTML
 snippet in which to wrap the content of the corresponding element. For
 example:
-") (text . "") (js . "$('.inner').wrapInner(function() {
-  return '<div class=\"' + this.nodeValue + '\" />';
-});") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
+") (text . "") (js . "
+$( \".inner\" ).wrapInner(function() {
+  return \"<div class='\" + this.nodeValue + \"'></div>\";
+});
+    ") (text . "") (text . "This will cause each <div> to have a class corresponding to the text it
 wraps:
 
-") (text . "") (html . "<div class=\"container\">
+") (text . "") (html . "
+<div class=\"container\">
   <div class=\"inner\">
     <div class=\"Hello\">Hello</div>
   </div>
   <div class=\"inner\">
     <div class=\"Goodbye\">Goodbye</div>
   </div>
-</div>") (text . "") (text . "Note: When passing a selector string to the .wrapInner() function, the
+</div>
+    ") (text . "") (text . "Note: When passing a selector string to the .wrapInner() function, the
 expected input is well formed HTML with correctly closed tags. Examples
 of valid input include:
 ") (text . "") (js . "
-$(elem).wrapInner(\"<div class='test' />\");
-$(elem).wrapInner(\"<div class='test'></div>\");
-$(elem).wrapInner(\"<div class=\\\"test\\\"></div>\");
+$( elem ).wrapInner( \"<div class='test'></div>\" );
+$( elem ).wrapInner( \"<div class=\\\"test\\\"></div>\" );
     ") (text . "")) ("examples" ((text . "") (text . "Selects all paragraphs and wraps a bold tag around each of its
 contents.
 
-") (text . "") (js . "$(\"p\").wrapInner(\"<b></b>\");") (text . "") (css . "p { background:#bbf; }") (text . "") (html . "<p>Hello</p>
+") (text . "") (js . "
+$( \"p\" ).wrapInner( \"<b></b>\" );
+") (text . "") (css . "
+  p {
+    background: #bbf;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the inside of the body.
 
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Wraps a newly created tree of objects around the inside of the body.
-
-") (text . "") (js . "$(\"body\").wrapInner(\"<div><div><p><em><b></b></em></p></div></div>\");") (text . "") (css . "
-
-  div { border:2px green solid; margin:2px; padding:2px; }
-  p { background:yellow; margin:2px; padding:2px; }
-  ") (text . "") (html . "Plain old text, or is it?") (text . "")) ((text . "") (text . "Selects all paragraphs and wraps a bold tag around each of its
+") (text . "") (js . "
+$( \"body\" ).wrapInner( \"<div><div><p><em><b></b></em></p></div></div>\" );
+") (text . "") (css . "
+  div {
+    border: 2px green solid;
+    margin: 2px;
+    padding: 2px;
+  }
+  p {
+    background: yellow;
+    margin: 2px;
+    padding: 2px;
+  }
+") (text . "") (html . "
+Plain old text, or is it?
+") (text . "")) ((text . "") (text . "Selects all paragraphs and wraps a bold tag around each of its
 contents.
 
-") (text . "") (js . "$(\"p\").wrapInner(document.createElement(\"b\"));") (text . "") (css . "p { background:#9f9; }") (text . "") (html . "<p>Hello</p>
-
-  <p>cruel</p>
-  <p>World</p>") (text . "")) ((text . "") (text . "Selects all paragraphs and wraps a jQuery object around each of its
+") (text . "") (js . "
+$( \"p\" ).wrapInner( document.createElement( \"b\" ) );
+") (text . "") (css . "
+  p {
+    background: #9f9;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . "")) ((text . "") (text . "Selects all paragraphs and wraps a jQuery object around each of its
 contents.
 
-") (text . "") (js . "$(\"p\").wrapInner($(\"<span class='red'></span>\"));") (text . "") (css . "
-
-  p { background:#9f9; }
-  .red { color:red; }
-  ") (text . "") (html . "<p>Hello</p>
-  <p>cruel</p>
-  <p>World</p>") (text . ""))))) jquery-doc-hash)
+") (text . "") (js . "
+$( \"p\" ).wrapInner( $( \"<span class='red'></span>\" ) );
+") (text . "") (css . "
+  p {
+    background: #9f9;
+  }
+  .red {
+    color: red;
+  }
+") (text . "") (html . "
+<p>Hello</p>
+<p>cruel</p>
+<p>World</p>
+") (text . ""))))) jquery-doc-hash)
 
 (push "addBack" jquery-doc-methods)
 
@@ -16682,18 +19681,19 @@ is desired as well, .addBack() can help.
 
 ") (text . "") (html . "
 <ul>
-   <li>list item 1</li>
-   <li>list item 2</li>
-   <li class=\"third-item\">list item 3</li>
-   <li>list item 4</li>
-   <li>list item 5</li>
+  <li>list item 1</li>
+  <li>list item 2</li>
+  <li class=\"third-item\">list item 3</li>
+  <li>list item 4</li>
+  <li>list item 5</li>
 </ul>
-") (text . "") (text . "The result of the following code is a red background behind items 3, 4
+    ") (text . "") (text . "The result of the following code is a red background behind items 3, 4
 and 5:
 
-") (text . "") (js . "$('li.third-item').nextAll().addBack()
-  .css('background-color', 'red');
-") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
+") (text . "") (js . "
+$( \"li.third-item\" ).nextAll().addBack()
+  .css( \"background-color\", \"red\" );
+    ") (text . "") (text . "First, the initial selector locates item 3, initializing the stack with
 the set containing just this item. The call to .nextAll() then pushes
 the set of items 4 and 5 onto the stack. Finally, the .addBack()
 invocation merges these two sets together, creating a jQuery object
@@ -16706,20 +19706,32 @@ example, .addBack() adds the previous set of elements on the stack --
 in this case $(\"div.after-addback\") -- to the current set, selecting
 both the div and its enclosed paragraphs.
 ") (text . "") (js . "
-$(\"div.left, div.right\").find(\"div, div > p\").addClass(\"border\");
+$( \"div.left, div.right\" ).find( \"div, div > p\" ).addClass( \"border\" );
 
 // First Example
-$(\"div.before-addback\").find(\"p\").addClass(\"background\");
+$( \"div.before-addback\" ).find( \"p\" ).addClass( \"background\" );
 
 // Second Example
-$(\"div.after-addback\").find(\"p\").addBack().addClass(\"background\");
+$( \"div.after-addback\" ).find( \"p\" ).addBack().addClass( \"background\" );
 ") (text . "") (css . "
-p, div { margin:5px; padding:5px; }
-.border { border: 2px solid red; }
-.background { background:yellow; }
-.left, .right { width: 45%; float: left;}
-.right { margin-left:3%; }
-    ") (text . "") (html . "
+  p, div {
+    margin: 5px;
+    padding: 5px;
+  }
+  .border {
+    border: 2px solid red;
+  }
+  .background {
+    background: yellow;
+  }
+  .left, .right {
+    width: 45%;
+    float: left;
+  }
+  .right {
+    margin-left: 3%;
+  }
+") (text . "") (html . "
 <div class=\"left\">
   <p><strong>Before <code>addBack()</code></strong></p>
   <div class=\"before-addback\">
@@ -16743,27 +19755,28 @@ p, div { margin:5px; padding:5px; }
 ")) ("longdesc") ("examples" ((text . "") (text . "Use callbacks.disabled() to determine if the callbacks list has been
 disabled:
 
-") (text . "") (js . "// a sample logging function to be added to a callbacks list
-  var foo = function( value ) {
-    console.log( \"foo:\" + value );
-  };
+") (text . "") (js . "
+// A sample logging function to be added to a callbacks list
+var foo = function( value ) {
+  console.log( \"foo:\" + value );
+};
 
-  var callbacks = $.Callbacks();
+var callbacks = $.Callbacks();
 
-  // add the logging function to the callback list
-  callbacks.add( foo );
+// Add the logging function to the callback list
+callbacks.add( foo );
 
-  // fire the items on the list, passing an argument
-  callbacks.fire( \"hello\" );
-  // outputs \"foo: hello\"
+// Fire the items on the list, passing an argument
+callbacks.fire( \"hello\" );
+// Outputs \"foo: hello\"
 
-  // disable the callbacks list
-  callbacks.disable();
+// Disable the callbacks list
+callbacks.disable();
 
-  // test the disabled state of the list
-  console.log ( callbacks.disabled() );
-  // outputs: true
-  ") (text . ""))))) jquery-doc-hash)
+// Test the disabled state of the list
+console.log ( callbacks.disabled() );
+// Outputs: true
+") (text . ""))))) jquery-doc-hash)
 
 (push "$.Deferred" jquery-doc-methods)
 
@@ -16828,8 +19841,8 @@ causing the appropriate callbacks to run.
 
 (puthash "$.parseHTML" (quote (("name" . "$.parseHTML") ("signatures" "$.parseHTML" (("data" "HTML string to be parsed
 
-" nil nil) ("context" "DOM element to serve as the context in which the HTML fragment will be
-created
+" nil nil) ("context" "Document element to serve as the context in which the HTML fragment
+will be created
 
 " "true" nil) ("keepScripts" "A Boolean indicating whether to include scripts passed in the HTML
 string
@@ -16839,6 +19852,9 @@ string
 ")) ("longdesc" (text . "") (text . "jQuery.parseHTML uses a native DOM element creation function to convert
 the string to a set of DOM elements, which can then be inserted into
 the document.
+") (text . "") (text . "By default, the context is the current document if not specified or
+given as null or undefined. If the HTML was to be used in another
+document such as an iframe, that frame`s document could be used.
 ") (text . "")) ("examples" ((text . "") (text . "Create an array of Dom nodes using an HTML string and insert it into a
 div.
 
@@ -16848,16 +19864,16 @@ div.
 </div>
 ") (text . "") (js . "
 var $log = $( \"#log\" ),
-    str = \"hello, <b>my name is</b> jQuery.\",
-    html = $.parseHTML( str ),
-    nodeNames = [];
+  str = \"hello, <b>my name is</b> jQuery.\",
+  html = $.parseHTML( str ),
+  nodeNames = [];
 
 // Append the parsed HTML
 $log.append( html );
 
 // Gather the parsed HTML's node names
 $.each( html, function( i, el ) {
-    nodeNames[i] = \"<li>\" + el.nodeName + \"</li>\";
+  nodeNames[ i ] = \"<li>\" + el.nodeName + \"</li>\";
 });
 
 // Insert the node names
@@ -16865,7 +19881,6 @@ $log.append( \"<h3>Node Names:</h3>\" );
 $( \"<ol></ol>\" )
   .append( nodeNames.join( \"\" ) )
   .appendTo( $log );
-
 ") (text . ""))))) jquery-doc-hash)
 
 (push "finish" jquery-doc-methods)
@@ -16886,105 +19901,142 @@ represented by that string will be stopped.
 the queue and the current animation jumps to its end value. It differs,
 however, in that .finish() also causes the CSS property of all queued
 animations to jump to their end values, as well.
-") (text . "") (text . "  Animations may be stopped globally by setting the property $.fx.off
-  to true. When this is done, all animation methods will immediately
-  set elements to their final state when called, rather than
-  displaying an effect.
+") (text . "") (text . "Animations may be stopped globally by setting the property $.fx.off to
+true. When this is done, all animation methods will immediately set
+elements to their final state when called, rather than displaying an
+effect.
 ") (text . "")) ("examples" ((text . "") (text . "Click the Go button once to start the animation, and then click the
 other buttons to see how they affect the current and queued animations.
 
 ") (text . "") (js . "
-var horiz = $(\"#path\").width() - 20,
-    vert = $(\"#path\").height() - 20;
+var horiz = $( \"#path\" ).width() - 20,
+  vert = $( \"#path\" ).height() - 20;
 
 var btns = {
-  bstt: function () {
-    $(\"div.box\").stop(true, true);
+  bstt: function() {
+    $( \"div.box\" ).stop( true, true );
   },
-  bs: function () {
-    $(\"div.box\").stop();
+  bs: function() {
+    $( \"div.box\" ).stop();
   },
-  bsft: function () {
-    $(\"div.box\").stop(false, true);
+  bsft: function() {
+    $( \"div.box\" ).stop( false, true );
   },
-  bf: function () {
-    $(\"div.box\").finish();
+  bf: function() {
+    $( \"div.box\" ).finish();
   },
-  bcf: function () {
-    $(\"div.box\").clearQueue().finish();
+  bcf: function() {
+    $( \"div.box\" ).clearQueue().finish();
   },
-  bsff: function () {
-    $(\"div.box\").stop(false, false);
+  bsff: function() {
+    $( \"div.box\" ).stop( false, false );
   },
-  bstf: function () {
-    $(\"div.box\").stop(true, false);
+  bstf: function() {
+    $( \"div.box\" ).stop( true, false );
   },
-  bcs: function () {
-    $(\"div.box\").clearQueue().stop();
+  bcs: function() {
+    $( \"div.box\" ).clearQueue().stop();
   }
 };
 
-
-$(\"button.b\").on(\"click\", function () {
-  btns[this.id]();
+$( \"button.b\" ).on( \"click\", function() {
+  btns[ this.id ]();
 });
 
-$(\"#go\").on(\"click\", function () {
-  $(\".box\")
+$( \"#go\" ).on( \"click\", function() {
+  $( \".box\" )
     .clearQueue()
     .stop()
     .css({
-    left: 10,
-    top: 10
-  })
+      left: 10,
+      top: 10
+    })
     .animate({
-    top: vert
-  }, 3000)
+      top: vert
+    }, 3000 )
     .animate({
-    left: horiz
-  }, 3000)
+      left: horiz
+    }, 3000 )
     .animate({
-    top: 10
-  }, 3000);
+      top: 10
+    }, 3000 );
 });
-") (text . "") (html . "<div class=\"box\"></div>
+") (text . "") (html . "
+<div class=\"box\"></div>
 <div id=\"path\">
   <button id=\"go\">Go</button>
   <br>
-  <button id=\"bstt\" class=\"b\">.stop(true,true)</button>
+  <button id=\"bstt\" class=\"b\">.stop( true,true )</button>
   <button id=\"bcf\" class=\"b\">.clearQueue().finish()</button>
   <br>
-  <button id=\"bstf\" class=\"b\">.stop(true, false)</button>
+  <button id=\"bstf\" class=\"b\">.stop( true, false )</button>
   <button id=\"bcs\" class=\"b\">.clearQueue().stop()</button>
   <br>
-  <button id=\"bsff\" class=\"b\">.stop(false, false)</button>
+  <button id=\"bsff\" class=\"b\">.stop( false, false )</button>
   <button id=\"bs\" class=\"b\">.stop()</button>
   <br>
-  <button id=\"bsft\" class=\"b\">.stop(false, true)</button>
+  <button id=\"bsft\" class=\"b\">.stop( false, true )</button>
   <br>
   <button id=\"bf\" class=\"b\">.finish()</button>
 </div>
-") (text . "") (css . ".box {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 15px;
-  height: 15px;
-  background: black;
-}
-#path {
-  height: 244px;
-  font-size: 70%;
-  border-left: 2px dashed red;
-  border-bottom: 2px dashed green;
-  border-right: 2px dashed blue;
-}
-button {
-  width: 12em;
-  display: block;
-  text-align: left;
-  margin: 0 auto;
-}
+") (text . "") (css . "
+  .box {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 15px;
+    height: 15px;
+    background: black;
+  }
+  #path {
+    height: 244px;
+    font-size: 70%;
+    border-left: 2px dashed red;
+    border-bottom: 2px dashed green;
+    border-right: 2px dashed blue;
+  }
+  button {
+    width: 12em;
+    display: block;
+    text-align: left;
+    margin: 0 auto;
+  }
+") (text . ""))))) jquery-doc-hash)
+
+(push "$.fn.extend" jquery-doc-methods)
+
+(puthash "$.fn.extend" (quote (("name" . "$.fn.extend") ("signatures" "$.fn.extend" (("object" "An object to merge onto the jQuery prototype.
+
+" nil nil))) ("desc" (text . "Merge the contents of an object onto the jQuery prototype to provide
+new jQuery instance methods.
+
+")) ("longdesc" (text . "") (js . "jQuery.fn.extend()") (text . "") (js . "$.fn") (text . "") (js . "jQuery()") (text . "")) ("examples" ((text . "") (text . "Add two methods to the jQuery prototype ( $.fn) object and then use one
+of them.
+
+") (text . "") (js . "
+jQuery.fn.extend({
+  check: function() {
+    return this.each(function() {
+      this.checked = true;
+    });
+  },
+  uncheck: function() {
+    return this.each(function() {
+      this.checked = false;
+    });
+  }
+});
+
+// Use the newly created .check() method
+$( \"input[type='checkbox']\" ).check();
+") (text . "") (css . "
+  label {
+    display: block;
+    margin: .5em;
+  }
+") (text . "") (html . "
+<label><input type=\"checkbox\" name=\"foo\"> Foo</label>
+<label><input type=\"checkbox\" name=\"bar\"> Bar</label>
 ") (text . ""))))) jquery-doc-hash)
 
 (provide (quote jquery-doc-data))
