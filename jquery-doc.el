@@ -27,6 +27,7 @@
 
 (require 'auto-complete nil t)
 (require 'company nil t)
+(require 'find-func)
 (require 'jquery-doc-data)
 (require 'cl)
 (require 'xml)
@@ -150,13 +151,43 @@
 	   (xml-get-children (car (xml-get-children node 'plugins))
 			     'entry))))
 
+(defvar jquery-doc-api-xml-url
+  "http://api.jquery.com/resources/api.xml"
+  "Default source used to download the API xml data.")
+
+(defun jquery-doc-ensure-api-xml (&optional update)
+  "Ensure api.xml locally.
+Downloads api.xml from `jquery-doc-api-xml-url' if it is not
+already in the system, otherwise return the path of the local
+copy.  When optional argument UPDATE is non-nil, always downloads
+a fresh copy of the xml API."
+  (let ((to (expand-file-name "api.xml"
+                              (file-name-directory
+                               (find-library-name "jquery-doc")))))
+    (if (and (not update) (file-exists-p to))
+        to
+      (if (url-copy-file jquery-doc-api-xml-url to t)
+          to
+        (error "jquery-doc: Cannot download api data.")))))
+
+(defun jquery-doc-fetch-and-generate-data (&optional update)
+  "Download and generate doc data from API xml.
+Uses `jquery-doc-ensure-api-xml' to ensure the local copy of
+api.xml is available before trying to generate data.  When
+optional argument UPDATE is non-nil, always downloads a fresh
+copy of the xml API."
+  (interactive "P")
+  (jquery-doc-generate-data (jquery-doc-ensure-api-xml update)))
+
 (defun jquery-doc-generate-data (file)
   "Extract data from FILE and write it to `jquery-doc-data.el'.
 
 This function takes long time(it makes many calls to lynx) to finish"
   (let* ((api (car (xml-parse-file file)))
 	 (entries (jquery-doc-entries api)))
-    (with-temp-file "jquery-doc-data.el"
+    (with-temp-file (expand-file-name "jquery-doc-data.el"
+                                      (file-name-directory
+                                       (find-library-name "jquery-doc")))
       (insert
        (with-output-to-string
 	 (print `(defvar jquery-doc-hash))
