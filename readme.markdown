@@ -16,3 +16,11 @@ Installation
 (require 'jquery-doc)
 (add-hook 'js2-mode-hook 'jquery-doc-setup)
 ```
+
+Updating API data
+=================
+
+If you'd like to update the API data to the latest version available
+you can use the `jquery-doc-fetch-and-generate-data` command.
+
+Warning: it may take a few seconds to parse all the data.
