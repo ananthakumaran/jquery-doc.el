@@ -415,7 +415,7 @@ Optional argument JQUERY-METHOD method-name."
                   buf))))
 
 ;; common
-
+;;;###autoload
 (defun jquery-doc-setup ()
   (when (boundp 'ac-sources)
     (pushnew 'ac-source-jquery ac-sources))
